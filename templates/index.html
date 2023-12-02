@@ -7,7 +7,7 @@
 </head>
 <body>
   <h1>formtitle: {{ formtitle }}</h1>
-  <p>abiftool_output: {{ abiftool_output }}</p>
+  <p>abiftool_output: {{ abiftool_output | safe}}</p>
   <p>abifinput: {{ abifinput }}</p>
   <form action="/" method="POST">
     <textarea name="abifinput" rows="10" cols="50" placeholder="Enter your text here"></textarea>

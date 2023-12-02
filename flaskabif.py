@@ -3,11 +3,11 @@ from pathlib import Path
 
 app = Flask(__name__)
 
-TESTFILEDIR='/home/robla/abiftool/testdata'
+TESTFILEDIR='/home/robla/tags/abiftool/testdata'
 # EXAMPLEFILENAME='burl2009/burl2009.abif'
 EXAMPLEFILENAME='tennessee-example/tennessee-example-scores.abif'
 example_abif = Path(TESTFILEDIR, EXAMPLEFILENAME).read_text()
-from abiflib import htmltable_pairwise_and_winlosstie
+from abiflib import convert_abif_to_jabmod, htmltable_pairwise_and_winlosstie
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -16,11 +16,11 @@ def index():
         submission_title = '(unknown abif title)'
         thisformtitle = f'abiftool for the web {submission_title}'
         abifinput = request.form['abifinput']
-        #abifout = htmltable_pairwise_and_winlosstie(abifinput,
-        #                          snippet = True,
-        #                          validate = True,
-        #                          modlimit = 2500)
-        abifout = "<hr>FIXMEsrsly<hr>"
+        abifmodel = convert_abif_to_jabmod(abifinput)
+        abifout = htmltable_pairwise_and_winlosstie(abifmodel,
+                                  snippet = True,
+                                  validate = True,
+                                  modlimit = 2500)
 
         return render_template('index.html',
                                abifinput=abifinput,
