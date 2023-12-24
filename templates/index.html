@@ -1,20 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>formtitle: {{ formtitle }}</title>
+  <title>{{ formtitle }}</title>
 </head>
 <body>
-  <h1>formtitle: {{ formtitle }}</h1>
-  <p>abiftool_output: {{ abiftool_output | safe}}</p>
-  <p>abifinput: {{ abifinput }}</p>
+  <h1>{{ formtitle }}</h1>
+  {% if abiftool_output is none %}
+  <p>"ABIF" stands for "Aggregated Ballot Information Format".  See the <a href="https://electowiki.org/wiki/ABIF">"ABIF" electowiki article</a> for more information about it.</p>
+  {% else %}
+  <p>Your .abif has been processed.  See <a href="#results">results below</a></p>  <p>"ABIF" stands for "Aggregated Ballot Information Format".  See the <a href="https://electowiki.org/wiki/ABIF">"ABIF" electowiki article</a> for more information about it.</p>
+  {% endif %}
+  <p>To tally election results expressed using ABIF, enter valid abif below...</p>
   <form action="/" method="POST">
-    <textarea name="abifinput" rows="10" cols="50" placeholder="Enter your text here"></textarea>
+    <textarea name="abifinput" rows="{{ rows }}" cols="{{ cols }}" placeholder="{{ placeholder }}"></textarea>
     <input type="submit" value="Submit">
   </form>
-  <p>abif_to_display:<br/>
-    <pre>{{ abif_to_display }}</pre>
-  </p>
+  {% if abiftool_output is none %}
+  <h2 id="example">{{ lower_abif_caption }}</h2>
+  {% else %}
+  <h2>Results</h2>
+  <p>Below is the abiftool output from the abif input at the bottom of this page (in <a href="#input">the "Input" section</a>).</p>
+  <h3 id="output">Output</h3>
+  <p>{{ abiftool_output | safe}}</p>
+  <h3 id="input">{{ lower_abif_caption }}</h3>
+  {% endif %}
+  <pre>{{ lower_abif_text | safe }}</pre>
+  {% if abiftool_output is not none %}
+  <p>(<a href="./">clear results</a>)</p>
+  {% endif %}
+  <h2>Also note</h2>
+  <p>One may find other examples in both the
+  <a href="https://github.com/electorama/abif/tree/main/testfiles">abif repository test files</a> and the
+  <a href="https://github.com/electorama/abiftool/tree/main/testdata">abiftool repository test files</a>.</p>
+  <p>The web version of abiftool is very restricted compared to the Python application you may download here:</p>
+  <ul>
+    <li><a href="https://github.com/electorama/abiftool">https://github.com/electorama/abiftool</a></li>
+  </ul>
 </body>
 </html>

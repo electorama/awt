@@ -13,28 +13,35 @@ from abiflib import convert_abif_to_jabmod, htmltable_pairwise_and_winlosstie
 def index():
     # abiftool.py -f abif -t html_snippet abiftool/testdata/burl2009/burl2009.abif
     if request.method == 'POST':
-        submission_title = '(unknown abif title)'
-        thisformtitle = f'abiftool for the web {submission_title}'
+        thisformtitle = f'abiftool for the web'
         abifinput = request.form['abifinput']
         abifmodel = convert_abif_to_jabmod(abifinput)
         abifout = htmltable_pairwise_and_winlosstie(abifmodel,
-                                  snippet = True,
-                                  validate = True,
-                                  modlimit = 2500)
-
+                                                    snippet = True,
+                                                    validate = True,
+                                                    modlimit = 2500)
+        placeholder = "Try other ABIF, or try tweaking your input (see below)...."
         return render_template('index.html',
                                abifinput=abifinput,
                                formtitle=thisformtitle,
                                abiftool_output=abifout,
-                               abif_to_display=abifinput)
+                               lower_abif_caption="Input",
+                               lower_abif_text=abifinput,
+                               rows=10,
+                               cols=80,
+                               placeholder=placeholder)
     else:
-        submission_title = '(empty form)'
-        thisformtitle = f'abiftool for the web {submission_title}'
+        thisformtitle = f'abiftool for the web'
+        placeholder = "Enter ABIF here, possibly using example below..."
         return render_template('index.html',
                                abifinput='',
                                formtitle=thisformtitle,
-                               abiftool_output='(no output yet FIXME)',
-                               abif_to_display=example_abif)
+                               abiftool_output=None,
+                               lower_abif_caption="Example ABIF file",
+                               lower_abif_text=example_abif,
+                               rows=30,
+                               cols=80,
+                               placeholder=placeholder)
 
 if __name__ == '__main__':
     app.run(debug=True)
