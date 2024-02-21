@@ -21,14 +21,14 @@
   <p>Your .abif has been processed.  See <a href="#results">results below</a></p>  <p>"ABIF" stands for "Aggregated Ballot Information Format".  See the <a href="https://electowiki.org/wiki/ABIF">"ABIF" electowiki article</a> for more information about it.</p>
   {% endif %}
   <p>To tally election results expressed using ABIF, enter valid abif below...</p>
-  <form action="/" method="POST">
+  <form action="/#results" method="POST">
     <textarea name="abifinput" rows="{{ rows }}" cols="{{ cols }}" placeholder="{{ placeholder }}"></textarea>
     <input type="submit" value="Submit">
   </form>
   {% if abiftool_output is none %}
   <h2 id="example">{{ lower_abif_caption }}</h2>
   {% else %}
-  <h2>Results</h2>
+  <h2 id="results">Results</h2>
   <p>Below is the abiftool output from the abif input at the bottom of this page (in <a href="#input">the "Input" section</a>).</p>
   <h3 id="output">Output</h3>
   <p>{{ abiftool_output | safe}}</p>

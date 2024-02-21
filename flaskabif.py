@@ -13,7 +13,7 @@ from abiflib import convert_abif_to_jabmod, htmltable_pairwise_and_winlosstie
 def index():
     # abiftool.py -f abif -t html_snippet abiftool/testdata/burl2009/burl2009.abif
     if request.method == 'POST':
-        thisformtitle = f'abiftool for the web'
+        thisformtitle = f'abiftool web form (Electorama)'
         abifinput = request.form['abifinput']
         abifmodel = convert_abif_to_jabmod(abifinput)
         abifout = htmltable_pairwise_and_winlosstie(abifmodel,
@@ -31,7 +31,7 @@ def index():
                                cols=80,
                                placeholder=placeholder)
     else:
-        thisformtitle = f'abiftool for the web'
+        thisformtitle = f'abiftool web tool (Electorama)'
         placeholder = "Enter ABIF here, possibly using example below..."
         return render_template('index.html',
                                abifinput='',

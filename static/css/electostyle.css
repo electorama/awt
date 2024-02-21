@@ -6,9 +6,6 @@ body {
   background-color: #ceeff6; /* Light cyan for the main background */
   color: #333; /* Slightly softer than pure black */
   box-sizing: border-box;
-  background-image: linear-gradient(180deg, #97dbec 1px, transparent 1px),
-                    linear-gradient(180deg, #ceeff6 1px, transparent 1px);
-  background-size: 100% 6px; /* Creates horizontal pinstripes */
 }
 
 a, a:visited {
@@ -26,14 +23,17 @@ a:hover {
   padding: 20px;
   background-color: #fff; /* White background for content */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  border: 3px solid #d02929; /* Electorama red border */
+  border: 2px solid #d02929; /* Electorama red border */
 }
 
 header {
-  background: #901414;
+  background: #ceeff6;
   padding: 10px 0;
   text-align: center;
-  border-bottom: 3px solid #d02929;
+  border-bottom: 2px solid #d02929;
+  background-image: linear-gradient(180deg, #97dbec 1px, transparent 1px),
+                    linear-gradient(180deg, #ceeff6 1px, transparent 1px);
+  background-size: 100% 5px; /* Creates horizontal pinstripes */
 }
 
 header img {
