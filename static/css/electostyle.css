@@ -1,0 +1,92 @@
+body {
+  font-family: 'Open Serif', serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  background-color: #ceeff6; /* Light cyan for the main background */
+  color: #333; /* Slightly softer than pure black */
+  box-sizing: border-box;
+  background-image: linear-gradient(180deg, #97dbec 1px, transparent 1px),
+                    linear-gradient(180deg, #ceeff6 1px, transparent 1px);
+  background-size: 100% 6px; /* Creates horizontal pinstripes */
+}
+
+a, a:visited {
+  color: #d02929; /* Electorama red */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#content {
+  max-width: calc(100vw - 20vw); /* 1 vw is 1% of the viewport's width */
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff; /* White background for content */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  border: 3px solid #d02929; /* Electorama red border */
+}
+
+header {
+  background: #901414;
+  padding: 10px 0;
+  text-align: center;
+  border-bottom: 3px solid #d02929;
+}
+
+header img {
+  max-height: 60px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #d02929;
+  color: #fff;
+}
+
+input[type="submit"] {
+  background-color: #d02929;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #bb2525;
+}
+
+textarea {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+pre {
+  white-space: pre-wrap; /* Allows text to wrap within container */
+  overflow-x: auto; /* Provides a horizontal scrollbar if needed */
+  background-color: #f8f8f8; /* Light background for the pre element */
+  border: 1px solid #ddd; /* Border to match other inputs */
+  padding: 10px;
+  margin: 0 20px 20px 20px; /* Margin to match the #content padding */
+}
+
+@media (min-width: 768px) {
+  #content {
+    margin: 20px auto;
+  }
+}

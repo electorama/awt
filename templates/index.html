@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>{{ formtitle }}</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/electostyle.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
+  <header>
+    <a href="https://electorama.com">
+      <img src="https://electorama.com/img/electodrop.svg" alt="Electorama Logo">
+    </a>
+  </header>
+  <div id="content">
+
   <h1>{{ formtitle }}</h1>
   {% if abiftool_output is none %}
   <p>"ABIF" stands for "Aggregated Ballot Information Format".  See the <a href="https://electowiki.org/wiki/ABIF">"ABIF" electowiki article</a> for more information about it.</p>
