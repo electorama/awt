@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from markupsafe import escape
 from pathlib import Path
 
 app = Flask(__name__)
@@ -26,7 +27,7 @@ def index():
                                formtitle=thisformtitle,
                                abiftool_output=abifout,
                                lower_abif_caption="Input",
-                               lower_abif_text=abifinput,
+                               lower_abif_text=escape(abifinput),
                                rows=10,
                                cols=80,
                                placeholder=placeholder)
@@ -38,7 +39,7 @@ def index():
                                formtitle=thisformtitle,
                                abiftool_output=None,
                                lower_abif_caption="Example ABIF file",
-                               lower_abif_text=example_abif,
+                               lower_abif_text=escape(example_abif),
                                rows=30,
                                cols=80,
                                placeholder=placeholder)
