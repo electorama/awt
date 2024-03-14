@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from flask import Flask, render_template, request
 from markupsafe import escape
 from pathlib import Path
@@ -5,22 +6,34 @@ from pathlib import Path
 app = Flask(__name__)
 
 TESTFILEDIR='/home/robla/tags/abiftool/testdata'
-# EXAMPLEFILENAME='burl2009/burl2009.abif'
 EXAMPLEFILENAME='tennessee-example/tennessee-example-scores.abif'
 example_abif = Path(TESTFILEDIR, EXAMPLEFILENAME).read_text()
-from abiflib import convert_abif_to_jabmod, htmltable_pairwise_and_winlosstie
+from abiflib import (
+    convert_abif_to_jabmod,
+    htmltable_pairwise_and_winlosstie,
+    ABIFVotelineException
+    )
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # abiftool.py -f abif -t html_snippet abiftool/testdata/burl2009/burl2009.abif
+    abifinput = ""
+    hasPostedData = False
     if request.method == 'POST':
-        thisformtitle = f'abiftool web form (Electorama)'
         abifinput = request.form['abifinput']
-        abifmodel = convert_abif_to_jabmod(abifinput)
-        abifout = htmltable_pairwise_and_winlosstie(abifmodel,
-                                                    snippet = True,
-                                                    validate = True,
-                                                    modlimit = 2500)
+        if len(abifinput) > 0:
+            hasPostedData = True
+
+    thisformtitle = f'abif web tool (Electorama)'
+    if hasPostedData:
+        try:
+            abifmodel = convert_abif_to_jabmod(abifinput)
+            abifout = htmltable_pairwise_and_winlosstie(abifmodel,
+                                                        snippet = True,
+                                                        validate = True,
+                                                        modlimit = 2500)
+        except ABIFVotelineException as e:
+            abifmodel = None
+            abifout = e.message
         placeholder = "Try other ABIF, or try tweaking your input (see below)...."
         return render_template('index.html',
                                abifinput=abifinput,
@@ -32,7 +45,6 @@ def index():
                                cols=80,
                                placeholder=placeholder)
     else:
-        thisformtitle = f'abiftool web tool (Electorama)'
         placeholder = "Enter ABIF here, possibly using example below..."
         return render_template('index.html',
                                abifinput='',
