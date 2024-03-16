@@ -7,7 +7,9 @@ app = Flask(__name__)
 
 TESTFILEDIR='/home/robla/tags/abiftool/testdata'
 EXAMPLEFILENAME='tenn-example/tennessee-example-simple.abif'
+EXAMPLEFILENAME2='tenn-example/tennessee-example-scores.abif'
 example_abif = Path(TESTFILEDIR, EXAMPLEFILENAME).read_text()
+example_abif2 = Path(TESTFILEDIR, EXAMPLEFILENAME2).read_text()
 from abiflib import (
     convert_abif_to_jabmod,
     htmltable_pairwise_and_winlosstie,
@@ -50,8 +52,9 @@ def index():
                                abifinput='',
                                formtitle=thisformtitle,
                                abiftool_output=None,
-                               lower_abif_caption="Example ABIF file",
+                               lower_abif_caption="Example ABIF files",
                                lower_abif_text=escape(example_abif),
+                               lower_abif_text2=escape(example_abif2),
                                rows=30,
                                cols=80,
                                placeholder=placeholder)
