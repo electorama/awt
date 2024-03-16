@@ -6,7 +6,7 @@ from pathlib import Path
 app = Flask(__name__)
 
 TESTFILEDIR='/home/robla/tags/abiftool/testdata'
-EXAMPLEFILENAME='tennessee-example/tennessee-example-scores.abif'
+EXAMPLEFILENAME='tenn-example/tennessee-example-simple.abif'
 example_abif = Path(TESTFILEDIR, EXAMPLEFILENAME).read_text()
 from abiflib import (
     convert_abif_to_jabmod,
