@@ -42,7 +42,8 @@ def index_post():
     abifinput = ""
     abifinput = request.form['abifinput']
     try:
-        abifmodel = convert_abif_to_jabmod(abifinput)
+        abifmodel = convert_abif_to_jabmod(abifinput,
+                                           cleanws = True)
         abifout = htmltable_pairwise_and_winlosstie(abifmodel,
                                                     snippet = True,
                                                     validate = True,

@@ -1,16 +1,14 @@
 {% extends "base.html" %}
   {% block content %}
-  <h1>{{ pagetitle }}</h1>
-  <p>"ABIF" stands for "Aggregated Ballot Information Format".  See the <a href="https://electowiki.org/wiki/ABIF">"ABIF" electowiki article</a> for more information about it.</p>
-  <p>Your .abif has been processed.  See <a href="#results">results below</a></p>  <p>"ABIF" stands for "Aggregated Ballot Information Format".  See the <a href="https://electowiki.org/wiki/ABIF">"ABIF" electowiki article</a> for more information about it.</p>
-  <form action="/#results" method="POST">
-    <textarea name="abifinput" rows="{{ rows }}" cols="{{ cols }}" placeholder="{{ placeholder }}"></textarea>
-    <input type="submit" value="Submit">
-  </form>
-  <h2 id="results">Results</h2>
-  <p>Below is the abiftool output from the abif input at the bottom of this page (in <a href="#input">the "Input" section</a>).</p>
-  <h3 id="output">Output</h3>
-  <p>{{ abiftool_output | safe}}</p>
+    <p>Your .abif has been processed.  See <a href="#results">results below</a></p>
+    <form action="/#results" method="POST">
+      <textarea name="abifinput" rows="{{ rows }}" cols="{{ cols }}" placeholder="{{ placeholder }}"></textarea>
+      <input type="submit" value="Submit">
+    </form>
+    <h2 id="results">Results</h2>
+    <p>Below is the abiftool output from the abif input at the bottom of this page (in <a href="#input">the "Input" section</a>).</p>
+    <h3 id="output">Output</h3>
+<p>{{ abiftool_output | safe}}</p>
   <h3 id="input">{{ lower_abif_caption }}</h3>
   <pre>{{ lower_abif_text | safe }}</pre>
   <p>(<a href="./">clear results</a>)</p>
