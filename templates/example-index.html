@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+  {% block content %}
+  <h1>{{ pagetitle }}</h1>
+  <p>"ABIF" stands for "Aggregated Ballot Information Format".  See the <a href="https://electowiki.org/wiki/ABIF">"ABIF" electowiki article</a> for more information about it.</p>
+  <p>To tally election results expressed using ABIF, enter valid abif below...</p>
+  <form action="/#results" method="POST">
+    <textarea name="abifinput" rows="{{ rows }}" cols="{{ cols }}" placeholder="{{ placeholder }}"></textarea>
+    <input type="submit" value="Submit">
+  </form>
+  <h2 id="examples">Examples</h2>
+  <h3 id="example1">Example 1 &mdash; simple example</h3>
+  <p>This example is compatible with many web election tools.</p>
+  <pre>{{ example_array[0] | safe }}</pre>
+  <h3 id="example2">Example 2 &mdash; embedded scores</h3>
+  <p>This example is a more ornate example, which shows off how to
+  embed metadata in an ABIF file, as well as scores for the competing
+  candidates.</p>
+  <pre>{{ example_array[1] | safe }}</pre>
+  {% endblock content %}
