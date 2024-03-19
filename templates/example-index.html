@@ -6,12 +6,9 @@
     <input type="submit" value="Submit">
   </form>
   <h2 id="examples">ABIF Examples</h2>
-  <h3 id="example1">Example 1 &mdash; simple example</h3>
-  <p>This example is compatible with many web election tools.</p>
-  <pre>{{ example_array[0] | safe }}</pre>
-  <h3 id="example2">Example 2 &mdash; embedded scores</h3>
-  <p>This example is a more ornate example, which shows off how to
-  embed metadata in an ABIF file, as well as scores for the competing
-  candidates.</p>
-  <pre>{{ example_array[1] | safe }}</pre>
+  {% for item in example_array %}
+  <h3 id="example1">Example {{ loop.index }} &mdash; {{item.title}}</h3>
+  <p>{{ item.desc }}</p>
+  <pre>{{ item.text | safe }}</pre>
+  {% endfor %}
   {% endblock content %}

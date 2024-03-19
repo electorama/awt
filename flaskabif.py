@@ -15,14 +15,24 @@ from abiflib import (
     )
 
 def build_example_array():
-    EXAMPLEFILENAME='tenn-example/tennessee-example-simple.abif'
-    EXAMPLEFILENAME2='tenn-example/tennessee-example-scores.abif'
-    example_abif = Path(TESTFILEDIR, EXAMPLEFILENAME).read_text()
-    example_abif2 = Path(TESTFILEDIR, EXAMPLEFILENAME2).read_text()
-    return [
-        escape(example_abif),
-        escape(example_abif2)
-    ]
+    retval = [
+        {'filename': 'tenn-example/tennessee-example-simple.abif',
+         'title': 'Simple example (Tennessee capitol)',
+         'desc': 'This example is compatible with many web election tools.'},
+        {'filename': 'tenn-example/tennessee-example-scores.abif',
+         'title': 'More complicated example (Tennessee capitol)',
+         'desc': ( 'This example is a more ornate example, which shows off ' +
+                   'how to embed metadata in an ABIF file, as well as' +
+                   'scores for the competing candidates.' ) },
+        {'filename': 'burl2009/burl2009.abif',
+         'title': 'A real-world example (Burlington)',
+         'desc': ( 'This example is based on the electoral results ' +
+                   'from the Burlington mayoral race in 2009.') }
+         ]
+    for i, f in enumerate(retval):
+        retval[i]['text'] = escape(Path(TESTFILEDIR,
+                                        f['filename']).read_text())
+    return retval
 
 
 # TODO - split the index function into index_get and index_post
