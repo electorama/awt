@@ -90,3 +90,13 @@ pre {
     margin: 20px auto;
   }
 }
+
+.hscroll {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.vscroll {
+    height: 22.5em;
+    overflow-y: auto;
+}

@@ -9,6 +9,6 @@
   {% for item in example_array %}
   <h3 id="example1">Example {{ loop.index }} &mdash; {{item.title}}</h3>
   <p>{{ item.desc }}</p>
-  <pre>{{ item.text | safe }}</pre>
+  <textarea readonly class="vscroll">{{ item.text | safe }}</textarea>
   {% endfor %}
   {% endblock content %}
