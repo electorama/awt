@@ -9,7 +9,9 @@ TESTFILEDIR='/home/robla/tags/abiftool/testdata'
 from abiflib import (
     convert_abif_to_jabmod,
     htmltable_pairwise_and_winlosstie,
-    ABIFVotelineException
+    ABIFVotelineException,
+    full_copecount_from_abifmodel,
+    copecount_diagram
     )
 
 def build_example_array():
@@ -44,10 +46,13 @@ def index_post():
     try:
         abifmodel = convert_abif_to_jabmod(abifinput,
                                            cleanws = True)
+        copecount = full_copecount_from_abifmodel(abifmodel)
+        svg_text = copecount_diagram(copecount, outformat='svg')
         abifout = htmltable_pairwise_and_winlosstie(abifmodel,
                                                     snippet = True,
                                                     validate = True,
-                                                    modlimit = 2500)
+                                                    modlimit = 2500,
+                                                    svg_text=svg_text)
     except ABIFVotelineException as e:
         abifmodel = None
         abifout = e.message
