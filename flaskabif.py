@@ -9,6 +9,7 @@ TESTFILEDIR='/home/robla/tags/abiftool/testdata'
 from abiflib import (
     convert_abif_to_jabmod,
     htmltable_pairwise_and_winlosstie,
+    html_score_and_star,
     ABIFVotelineException,
     full_copecount_from_abifmodel,
     copecount_diagram
@@ -27,7 +28,11 @@ def build_example_array():
         {'filename': 'burl2009/burl2009.abif',
          'title': 'A real-world example (Burlington)',
          'desc': ( 'This example is based on the electoral results ' +
-                   'from the Burlington mayoral race in 2009.') }
+                   'from the Burlington mayoral race in 2009.') },
+        {'filename': 'tenn-example/tennessee-example-STAR.abif',
+         'title': 'Example with STAR voting (Tennessee capitol)',
+         'desc': ( 'This is the TN capitol example with embedded scores' +
+                   '(with 0-5 "stars").') }
          ]
     for i, f in enumerate(retval):
         retval[i]['text'] = escape(Path(TESTFILEDIR,
@@ -35,7 +40,6 @@ def build_example_array():
     return retval
 
 
-# TODO - split the index function into index_get and index_post
 @app.route('/', methods=['GET'])
 def index_get():
     placeholder = "Enter ABIF here, possibly using example below..."
@@ -53,23 +57,34 @@ def index_get():
 def index_post():
     abifinput = ""
     abifinput = request.form['abifinput']
+    pairwise_html = None
+    dotsvg_html = None
+    STAR_html = None
+    placeholder = "Try other ABIF, or try tweaking your input (see below)...."
     try:
         abifmodel = convert_abif_to_jabmod(abifinput,
                                            cleanws = True)
-        copecount = full_copecount_from_abifmodel(abifmodel)
-        svg_text = copecount_diagram(copecount, outformat='svg')
-        abifout = htmltable_pairwise_and_winlosstie(abifmodel,
-                                                    snippet = True,
-                                                    validate = True,
-                                                    modlimit = 2500,
-                                                    svg_text=svg_text)
+        error_html = None
     except ABIFVotelineException as e:
         abifmodel = None
-        abifout = e.message
-    placeholder = "Try other ABIF, or try tweaking your input (see below)...."
+        error_html = e.message
+    if abifmodel:
+        if request.form.get('include_dotsvg'):
+            copecount = full_copecount_from_abifmodel(abifmodel)
+            dotsvg_html = copecount_diagram(copecount, outformat='svg')
+        if request.form.get('include_pairtable'):
+            pairwise_html = htmltable_pairwise_and_winlosstie(abifmodel,
+                                                              snippet = True,
+                                                              validate = True,
+                                                              modlimit = 2500)
+        if request.form.get('include_STAR'):
+            STAR_html = html_score_and_star(abifmodel)
     return render_template('results-index.html',
                            abifinput=abifinput,
-                           abiftool_output=abifout,
+                           pairwise_html=pairwise_html,
+                           dotsvg_html=dotsvg_html,
+                           STAR_html=STAR_html,
+                           error_html=error_html,
                            example_array=build_example_array(),
                            lower_abif_caption="Input",
                            lower_abif_text=escape(abifinput),

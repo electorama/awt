@@ -3,6 +3,9 @@
   <p>See the <a href="#examples">ABIF examples</a> section at the bottom of this page</a> to see. To tally election results expressed using ABIF, enter valid abif below...</p>
   <form action="/#results" method="POST">
     <textarea name="abifinput" rows="{{ rows }}" cols="{{ cols }}" placeholder="{{ placeholder }}"></textarea>
+    <input type="checkbox" name="include_pairtable" value="yes">pairwise table?&nbsp;
+    <input type="checkbox" name="include_dotsvg" value="yes">pairwise dot diagram?&nbsp;
+    <input type="checkbox" name="include_STAR" value="yes">STAR results?&nbsp;
     <input type="submit" value="Submit">
   </form>
   <h2 id="examples">ABIF Examples</h2>
