@@ -42,8 +42,8 @@ def build_example_array():
 
 @app.route('/', methods=['GET'])
 def index_get():
-    placeholder = "Enter ABIF here, possibly using example below..."
-    return render_template('example-index.html',
+    placeholder = "Enter ABIF here, possibly using one of the examples below..."
+    return render_template('default-index.html',
                            abifinput='',
                            abiftool_output=None,
                            example_array=build_example_array(),

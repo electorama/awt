@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+  {% block content %}
+  <p>See the <a href="#examples">ABIF examples</a> section at the bottom of this page</a> to see. To tally election results expressed using ABIF, enter valid abif below...</p>
+  {% include 'abifbox-snippet.html' %}
+  <h2 id="examples">ABIF Examples</h2>
+  {% for item in example_array %}
+  <h3 id="example1">Example {{ loop.index }} &mdash; {{item.title}}</h3>
+  <p>{{ item.desc }}</p>
+  <textarea readonly class="vscroll">{{ item.text }}</textarea>
+  {% endfor %}
+  {% endblock content %}
