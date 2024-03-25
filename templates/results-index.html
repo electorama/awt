@@ -7,11 +7,11 @@
   of this page (in <a href="#input">the "Input" section</a>).</p>
 <h3 id="output">Output</h3>
 <h4>Pairwise Diagram</h4>
-<p>{{ dotsvg_html }}</p>
+<p>{{ dotsvg_html | safe }}</p>
 <h4>Win-loss-tie table</h4>
-<p>{{ pairwise_html }}</p>
+<p>{{ pairwise_html | safe }}</p>
 <h4>STAR output</h4>
-<p>{{ STAR_html }}</p>
+<p>{{ STAR_html | safe }}</p>
 <h3 id="input">{{ lower_abif_caption }}</h3>
 <pre>{{ lower_abif_text }}</pre>
 <p>(<a href="./">clear results</a>)</p>
