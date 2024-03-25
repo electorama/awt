@@ -78,7 +78,10 @@ def index_post():
                                                               validate = True,
                                                               modlimit = 2500)
         if request.form.get('include_STAR'):
-            STAR_html = html_score_and_star(abifmodel)
+            scoremodel = convert_abif_to_jabmod(abifinput,
+                                                cleanws = True,
+                                                add_ratings = True)
+            STAR_html = html_score_and_star(scoremodel)
     return render_template('results-index.html',
                            abifinput=abifinput,
                            pairwise_html=pairwise_html,
