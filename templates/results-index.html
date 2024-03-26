@@ -3,16 +3,20 @@
 <p>Your .abif has been processed.  See <a href="#results">results below</a></p>
 {% include 'abifbox-snippet.html' %}
 <h2 id="results">Results</h2>
-<p>Below is the abiftool output from the abif input at the bottom
-  of this page (in <a href="#input">the "Input" section</a>).</p>
-<h3 id="output">Output</h3>
-<h4>Pairwise Diagram</h4>
+<p>Below is various abiftool output blocks that you requested from the ABIF you submitted.</p>
+{% if dotsvg_html %}
+<h3>Pairwise Diagram</h3>
 <p>{{ dotsvg_html | safe }}</p>
-<h4>Win-loss-tie table</h4>
-<p>{{ pairwise_html | safe }}</p>
-<h4>STAR output</h4>
+{% endif %}
+{% if pairwise_html %}
+<h3>Win-loss-tie table</h3>
+<div class="scaletable">
+  {{ pairwise_html | safe }}
+</div>
+{% endif %}
+{% if STAR_html %}
+<h3>STAR output</h3>
 <p>{{ STAR_html | safe }}</p>
-<h3 id="input">{{ lower_abif_caption }}</h3>
-<pre>{{ lower_abif_text }}</pre>
+{% endif %}
 <p>(<a href="./">clear results</a>)</p>
 {% endblock content %}

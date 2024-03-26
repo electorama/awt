@@ -76,6 +76,11 @@ textarea {
   border-radius: 5px;
 }
 
+textarea.examplearea {
+    background-color: #fff0f0;
+    border: 1px dashed #333;
+}
+
 pre {
   white-space: pre-wrap; /* Allows text to wrap within container */
   overflow-x: auto; /* Provides a horizontal scrollbar if needed */
@@ -99,4 +104,18 @@ pre {
 .vscroll {
     height: 22.5em;
     overflow-y: auto;
+}
+
+svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.scaletable {
+    transform: scale(0.8);
+    transform-origin: top left;
+    width: 125%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
 }
