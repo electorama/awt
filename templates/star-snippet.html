@@ -1,0 +1,19 @@
+<ul>
+  <li>Total voters: {{ scoremodel['totalvoters'] }}</li>
+  <li>Scores:
+    <ul>
+      {% for cand, info in scoremodel['scores'].items() %}
+      <li>{{ info['score'] }} stars (from {{ info['votercount'] }} voters) -- {{ info['candname'] }}
+      (rank {{ info['rank'] }})</li>
+      {% endfor %}
+    </ul>
+  </li>
+  <li>Finalists:
+    <ul>
+      <li>{{ scoremodel['fin1n'] }}  preferred by {{ scoremodel['fin1votes'] }} of  {{ scoremodel['totalvoters'] }} voters
+      <li>{{ scoremodel['fin2n'] }}  preferred by {{ scoremodel['fin2votes'] }} of  {{ scoremodel['totalvoters'] }} voters
+    </ul>
+  </li>
+  <li>Abstentions: {{ scoremodel['final_abstentions']}}</li>
+  <li>Winner: {{ scoremodel['winner']}}</li>
+</ul>

@@ -16,7 +16,7 @@
 {% endif %}
 {% if STAR_html %}
 <h3>STAR output</h3>
-<p>{{ STAR_html | safe }}</p>
+<p>{% include 'star-snippet.html' %}</p>
 {% endif %}
 <p>(<a href="./">clear results</a>)</p>
 {% endblock content %}

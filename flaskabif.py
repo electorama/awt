@@ -12,7 +12,8 @@ from abiflib import (
     html_score_and_star,
     ABIFVotelineException,
     full_copecount_from_abifmodel,
-    copecount_diagram
+    copecount_diagram,
+    STAR_result_from_abifmodel
     )
 
 def build_example_array():
@@ -78,15 +79,17 @@ def index_post():
                                                               validate = True,
                                                               modlimit = 2500)
         if request.form.get('include_STAR'):
-            scoremodel = convert_abif_to_jabmod(abifinput,
-                                                cleanws = True,
-                                                add_ratings = True)
-            STAR_html = html_score_and_star(scoremodel)
+            jabmod = convert_abif_to_jabmod(abifinput,
+                                            cleanws = True,
+                                            add_ratings = True)
+            STAR_html = html_score_and_star(jabmod)
+            scoremodel = STAR_result_from_abifmodel(jabmod)
     return render_template('results-index.html',
                            abifinput=abifinput,
                            pairwise_html=pairwise_html,
                            dotsvg_html=dotsvg_html,
                            STAR_html=STAR_html,
+                           scoremodel=scoremodel,
                            error_html=error_html,
                            example_array=build_example_array(),
                            lower_abif_caption="Input",
