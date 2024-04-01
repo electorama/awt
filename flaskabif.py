@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request
 from markupsafe import escape
 from pathlib import Path
+import json
 
 app = Flask(__name__)
 
@@ -40,6 +41,31 @@ def build_example_array():
         retval[i]['text'] = escape(Path(TESTFILEDIR,
                                         f['filename']).read_text())
     return retval
+
+
+def add_html_hints_to_stardict(scores, stardict):
+    retval = stardict
+    retval['starscaled'] = {}
+    retval['colordict'] = {}
+    retval['colorlines'] = {}
+    colors = [
+        '#d0ffce', '#cee1ff', '#ffcece', '#ffeab9', 'orange', 'yellow'
+    ]
+    curstart = 1
+    for i, candtok in enumerate(scores['ranklist']):
+        retval['colordict'][candtok] = colors[i]
+        retval['starscaled'][candtok] = \
+            round(retval['canddict'][candtok]['scaled_score'])
+        selline = ", ".join(".s%02d" % j for j in range(
+            curstart, retval['starscaled'][candtok] + curstart))
+        retval['colorlines'][candtok] = \
+            f".g{i+1}, " + selline + " { color: " + colors[i] + "; }"
+        curstart += retval['starscaled'][candtok]
+    retval['starratio'] = \
+        round(retval['total_all_scores'] / retval['scaled_total'])
+    return retval
+
+
 
 
 @app.route('/', methods=['GET'])
@@ -87,8 +113,9 @@ def index_post():
             debug_dict = {}
             scoremodel = STAR_result_from_abifmodel(jabmod)
             debug_dict['scoremodel'] = scoremodel
-            debug_dict['starscale'] = scaled_scores(jabmod, target_scale=50)
-            import json
+            stardict = scaled_scores(jabmod, target_scale=50)
+            debug_dict['starscale'] = \
+                add_html_hints_to_stardict(debug_dict['scoremodel'], stardict)
             debug_output = json.dumps(debug_dict, indent=4)
             scorestardict=debug_dict
     return render_template('results-index.html',
@@ -105,7 +132,8 @@ def index_post():
                            cols=80,
                            placeholder=placeholder,
                            pagetitle="abif web tool (results)",
-                           debug_output=debug_output)
+                           debug_output=debug_output,
+                           debug_flag=False)
 
 
 if __name__ == '__main__':

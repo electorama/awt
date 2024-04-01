@@ -42,6 +42,7 @@
     margin: 0 1px;
     -webkit-text-stroke: 1px #444;
     text-stroke: 1px #444;
+    color: grey;
 }
 </style>
 {% set scoredata = scorestardict['scoremodel'] %}
@@ -86,35 +87,33 @@
         <span class="star s45">★</span><span class="star s46">★</span><span class="star s47">★</span><span class="star s48">★</span><span class="star s49">★</span><span class="star s50">★</span>
       </div>
     </div>
-    <div class="star-caption">(one star above = approximately {{stardata['total_all_scores'] / stardata['scaled_total']}} stars allocated by voters)<br>
-      <ul>
-        {% for cand in ranklist %}
-        <li>{{cand}} {{ starscaled[cand] }} {{colordict[cand]}} {{colorlines[cand]}} </li>
-        {% endfor %}
-      </ul>
+    <div class="star-caption">(one star above is approximately {{ "{:,}".format(stardata['starratio']) }} stars allocated by voters)
     </div>
   </div>
   <div>
     <ul>
-      <li>Total voters: {{ scoredata['totalvoters'] }}</li>
-      <li>Scores:
+      <li>Total voters: {{ "{:,}".format(scoredata['totalvoters']) }}</li>
+      <li>Total stars allocated: {{ "{:,}".format(scoredata['total_all_scores']) }}
+      
+      <li>First round:
         <ul>
           {% for cand in ranklist %}
           {% set j = scoredata['scores'][cand] %}
-          <!-- scoredata['scores'].items() -->
-          <li><span class="star g{{ j['rank'] }}">★</span>#{{ j['rank'] }}: {{cand}} {{ j['score'] }} stars (from {{ j['votercount'] }} voters) -- {{ j['candname'] }}</li>
+          <li><span class="star g{{ j['rank'] }}">★</span>#{{ j['rank'] }}: {{ j['candname'] }} received {{ "{:,}".format(j['score']) }} stars from {{ "{:,}".format(j['votercount']) }} voters</li>
           {% endfor %}
         </ul>
       </li>
       <li>Finalists:
         <ul>
-          <li>{{ scoredata['fin1n'] }}  preferred by {{ scoredata['fin1votes'] }} of  {{ scoredata['totalvoters'] }} voters
-          <li>{{ scoredata['fin2n'] }}  preferred by {{ scoredata['fin2votes'] }} of  {{ scoredata['totalvoters'] }} voters
+          <li>{{ scoredata['fin1n'] }}  preferred by {{ "{:,}".format(scoredata['fin1votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
+          <li>{{ scoredata['fin2n'] }}  preferred by {{ "{:,}".format(scoredata['fin2votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
         </ul>
       </li>
       <li>Abstentions: {{ scoredata['final_abstentions']}}</li>
       <li>Winner: {{ scoredata['winner']}}</li>
     </ul>
+    {% if debug_flag %}
     <div><pre>{{ debug_output }}</pre></div>
+    {% endif %}
   </div>
 </div>
