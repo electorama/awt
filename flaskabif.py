@@ -13,7 +13,8 @@ from abiflib import (
     ABIFVotelineException,
     full_copecount_from_abifmodel,
     copecount_diagram,
-    STAR_result_from_abifmodel
+    STAR_result_from_abifmodel,
+    scaled_scores
     )
 
 def build_example_array():
@@ -83,13 +84,19 @@ def index_post():
                                             cleanws = True,
                                             add_ratings = True)
             STAR_html = html_score_and_star(jabmod)
+            debug_dict = {}
             scoremodel = STAR_result_from_abifmodel(jabmod)
+            debug_dict['scoremodel'] = scoremodel
+            debug_dict['starscale'] = scaled_scores(jabmod, target_scale=50)
+            import json
+            debug_output = json.dumps(debug_dict, indent=4)
+            scorestardict=debug_dict
     return render_template('results-index.html',
                            abifinput=abifinput,
                            pairwise_html=pairwise_html,
                            dotsvg_html=dotsvg_html,
                            STAR_html=STAR_html,
-                           scoremodel=scoremodel,
+                           scorestardict=scorestardict,
                            error_html=error_html,
                            example_array=build_example_array(),
                            lower_abif_caption="Input",
@@ -97,7 +104,8 @@ def index_post():
                            rows=10,
                            cols=80,
                            placeholder=placeholder,
-                           pagetitle="abif web tool (results)")
+                           pagetitle="abif web tool (results)",
+                           debug_output=debug_output)
 
 
 if __name__ == '__main__':

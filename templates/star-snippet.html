@@ -1,19 +1,120 @@
-<ul>
-  <li>Total voters: {{ scoremodel['totalvoters'] }}</li>
-  <li>Scores:
+<style>
+.flex-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 5px;
+    text-align: center;
+}
+
+.star-caption {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 0.8em;
+    font-style: italic;
+    width: 200px;
+}
+
+.stars {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 200px;
+}
+
+.r6star {
+    width: 198px;
+}
+
+.r5star { /* 5 stars */
+    width: 165px;
+}
+
+.star {
+    font-size: 27px;
+    line-height: 1;
+    margin: 0 1px;
+    -webkit-text-stroke: 1px #444;
+    text-stroke: 1px #444;
+}
+</style>
+{% set scoredata = scorestardict['scoremodel'] %}
+{% set stardata = scorestardict['starscale'] %}
+{% set ranklist = scoredata['ranklist'] %}
+{% set colordict = stardata['colordict'] %}
+{% set starscaled = stardata['starscaled'] %}
+{% set colorlines = stardata['colorlines'] %}
+<style>
+  {% for cand in ranklist %}
+  {{colorlines[cand]}}
+  {% endfor %}
+</style>
+<div class="flex-container">
+  <div class="container">
+    <div class="stars star">
+      <div class="r6star">
+        <span class="star s01">★</span><span class="star s02">★</span><span class="star s03">★</span><span class="star s04">★</span><span class="star s05">★</span><span class="star s06">★</span>
+      </div><br>
+      <div class="r5star">
+        <span class="star s07">★</span><span class="star s08">★</span><span class="star s09">★</span><span class="star s11">★</span><span class="star s11">★</span>
+      </div><br>
+      <div class="r6star">
+        <span class="star s12">★</span><span class="star s13">★</span><span class="star s14">★</span><span class="star s15">★</span><span class="star s16">★</span><span class="star s17">★</span>
+      </div>
+      <div class="r5star">
+        <span class="star s18">★</span><span class="star s19">★</span><span class="star s20">★</span><span class="star s21">★</span><span class="star s22">★</span>
+      </div>
+      <div class="r6star">
+        <span class="star s23">★</span><span class="star s24">★</span><span class="star s25">★</span><span class="star s26">★</span><span class="star s27">★</span><span class="star s28">★</span>
+      </div>
+      <div class="r5star">
+        <span class="star s29">★</span><span class="star s30">★</span><span class="star s31">★</span><span class="star s32">★</span><span class="star s33">★</span>
+      </div>
+      <div class="r6star">
+        <span class="star s34">★</span><span class="star s35">★</span><span class="star s36">★</span><span class="star s37">★</span><span class="star s38">★</span><span class="star s39">★</span>
+      </div>
+      <div class="r5star">
+        <span class="star s40">★</span><span class="star s41">★</span><span class="star s42">★</span><span class="star s43">★</span><span class="star s44">★</span>
+      </div>
+      <div class="r6star">
+        <span class="star s45">★</span><span class="star s46">★</span><span class="star s47">★</span><span class="star s48">★</span><span class="star s49">★</span><span class="star s50">★</span>
+      </div>
+    </div>
+    <div class="star-caption">(one star above = approximately {{stardata['total_all_scores'] / stardata['scaled_total']}} stars allocated by voters)<br>
+      <ul>
+        {% for cand in ranklist %}
+        <li>{{cand}} {{ starscaled[cand] }} {{colordict[cand]}} {{colorlines[cand]}} </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div>
     <ul>
-      {% for cand, info in scoremodel['scores'].items() %}
-      <li>{{ info['score'] }} stars (from {{ info['votercount'] }} voters) -- {{ info['candname'] }}
-      (rank {{ info['rank'] }})</li>
-      {% endfor %}
+      <li>Total voters: {{ scoredata['totalvoters'] }}</li>
+      <li>Scores:
+        <ul>
+          {% for cand in ranklist %}
+          {% set j = scoredata['scores'][cand] %}
+          <!-- scoredata['scores'].items() -->
+          <li><span class="star g{{ j['rank'] }}">★</span>#{{ j['rank'] }}: {{cand}} {{ j['score'] }} stars (from {{ j['votercount'] }} voters) -- {{ j['candname'] }}</li>
+          {% endfor %}
+        </ul>
+      </li>
+      <li>Finalists:
+        <ul>
+          <li>{{ scoredata['fin1n'] }}  preferred by {{ scoredata['fin1votes'] }} of  {{ scoredata['totalvoters'] }} voters
+          <li>{{ scoredata['fin2n'] }}  preferred by {{ scoredata['fin2votes'] }} of  {{ scoredata['totalvoters'] }} voters
+        </ul>
+      </li>
+      <li>Abstentions: {{ scoredata['final_abstentions']}}</li>
+      <li>Winner: {{ scoredata['winner']}}</li>
     </ul>
-  </li>
-  <li>Finalists:
-    <ul>
-      <li>{{ scoremodel['fin1n'] }}  preferred by {{ scoremodel['fin1votes'] }} of  {{ scoremodel['totalvoters'] }} voters
-      <li>{{ scoremodel['fin2n'] }}  preferred by {{ scoremodel['fin2votes'] }} of  {{ scoremodel['totalvoters'] }} voters
-    </ul>
-  </li>
-  <li>Abstentions: {{ scoremodel['final_abstentions']}}</li>
-  <li>Winner: {{ scoremodel['winner']}}</li>
-</ul>
+    <div><pre>{{ debug_output }}</pre></div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="example-textarea-container">
+  <label for="exampleText">Example Text (copy to above):</label><br>
+  <textarea id="exampleText" rows="5" cols="50" readonly>
+    Example 1 text goes here...
+  </textarea><br>
+  <select id="exampleSelect" onchange="changeExample()">
+    <option value="Example 1">Example 1</option>
+    <option value="Example 2">Example 2</option>
+    <option value="Example 3">Example 3</option>
+  </select>
+  <button onclick="pushText()">Push example to submission area</button>
+
+  <br><br>
+</div>
+
+<script>
+  var examples = {
+    "Example 1": "Example 1 text goes here...",
+    "Example 2": "This is the text for Example 2.\n1It can be different to showcase another scenario.\n\n2It can be different to showcase another scenario.\n3It can be different to showcase another scenario.\n4It can be different to showcase another scenario.\n5It can be different to showcase another scenario.",
+    "Example 3": "Finally, Example 3's text is here to provide yet another example for copying."
+  };
+  
+  function changeExample() {
+    var selectedExample = document.getElementById("exampleSelect").value;
+    document.getElementById("exampleText").value = examples[selectedExample];
+  }
+  
+  function pushText() {
+    var exampleText = document.getElementById("exampleText").value;
+    document.getElementById("abifinput").value = exampleText;
+    document.getElementById("ABIF_submission_area").scrollIntoView({behavior: "smooth"});
+  }
+</script>
