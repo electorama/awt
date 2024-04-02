@@ -2,7 +2,7 @@
 <html>
   <head>
       <meta charset="UTF-8">
-      <title>{{ pagetitle }} - Electorama!</title>
+      <title>{{ pagetitle }} — ({{request.host}})</title>
       <link rel="stylesheet"
             type="text/css"
             href="{{ url_for('static', filename='css/electostyle.css') }}">
@@ -12,13 +12,16 @@
   </head>
   <body>
     <header>
-      <a href="https://electorama.com">
+      <a href="{{electourl}}">
         <img src="https://electorama.com/img/electodrop.svg" alt="Electorama Logo">
       </a>
     </header>
     <div id="content">
-      <h1>{{ pagetitle }}</h1>
+      <h1>{{ pagetitle }} — ({{request.host}})</h1>
       <p>"ABIF" stands for "<a href="https://electowiki.org/wiki/ABIF">Aggregated Ballot Information Format</a>".</p>
+      {% if debug_flag %}
+      (see <a href="#debug">debug output below</a>)<br>
+      {% endif %}
       {% block content %}
       REPLACEME base.html
       {% endblock content %}
@@ -26,11 +29,17 @@
       <p>One may find other examples in both the
         <a href="https://github.com/electorama/abif/tree/main/testfiles">abif repository test files</a> and the
         <a href="https://github.com/electorama/abiftool/tree/main/testdata">abiftool repository test files</a>.</p>
-      <p>The web version of abiftool is very restricted compared to the Python application you may download here:</p>
+      <p>The web version of abiftool is very restricted compared to the "abiftool" Python application:</p>
       <ul>
-        <li><a href="https://github.com/electorama/abiftool">https://github.com/electorama/abiftool</a></li>
+        <li><a href="https://electorama.com/abiftool/">electorama.com/abiftool</a></li>
       </ul>
       <p>See the <a href="https://electowiki.org/wiki/ABIF">"ABIF" electowiki article</a> for more information about ABIF.</p>
+      {% if debug_flag %}
+      <h2 id="debug">Debug output</h2>
+      <div><pre>{{ debug_output }}</pre></div>
+      {% endif %}
+      <hr>
+      {% include 'footer.snippet.html' %}
     </div>
   </body>
 </html>

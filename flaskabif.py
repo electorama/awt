@@ -39,8 +39,7 @@ def build_example_array():
         {'filename': 'tenn-example/tennessee-example-STAR-score-difference.abif',
          'title': 'Modified Tennessee example with differing results',
          'desc': ( 'This is a modified Tennesee capitol example which has ' +
-                   'differing results for score, STAR, and Copeland' +
-                   '(with 0-5 "stars").') },
+                   'differing results for score, STAR, and Copeland.') },
          ]
     for i, f in enumerate(retval):
         retval[i]['text'] = escape(Path(TESTFILEDIR,
@@ -71,6 +70,12 @@ def add_html_hints_to_stardict(scores, stardict):
     return retval
 
 
+def get_electourl():
+    if request.host == 'localhost:5000':
+        electourl='http://localhost:5000'
+    else:
+        electourl="https://abif.electorama.com"
+    return electourl
 
 
 @app.route('/', methods=['GET'])
@@ -79,11 +84,14 @@ def index_get():
     return render_template('default-index.html',
                            abifinput='',
                            abiftool_output=None,
+                           electourl=get_electourl(),
                            example_array=build_example_array(),
                            rows=30,
                            cols=80,
                            placeholder=placeholder,
-                           pagetitle="abif web tool (examples provided)")
+                           pagetitle=f"ABIF web tool on Electorama!",
+                           request_host=request.host,
+                           )
 
 
 @app.route('/', methods=['POST'])
@@ -129,6 +137,7 @@ def index_post():
                            dotsvg_html=dotsvg_html,
                            STAR_html=STAR_html,
                            scorestardict=scorestardict,
+                           electourl=get_electourl(),
                            error_html=error_html,
                            example_array=build_example_array(),
                            lower_abif_caption="Input",
@@ -136,7 +145,8 @@ def index_post():
                            rows=10,
                            cols=80,
                            placeholder=placeholder,
-                           pagetitle="abif web tool (results)",
+                           pagetitle=f"ABIF Electorama results",
+                           request_host=request.host,
                            debug_output=debug_output,
                            debug_flag=False)
 
