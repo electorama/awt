@@ -33,9 +33,14 @@ def build_example_array():
          'desc': ( 'This example is based on the electoral results ' +
                    'from the Burlington mayoral race in 2009.') },
         {'filename': 'tenn-example/tennessee-example-STAR.abif',
-         'title': 'Example with STAR voting (Tennessee capitol)',
+         'title': 'Tennessee example with STAR voting (Tennessee capitol)',
          'desc': ( 'This is the TN capitol example with embedded scores' +
-                   '(with 0-5 "stars").') }
+                   '(with 0-5 "stars").') },
+        {'filename': 'tenn-example/tennessee-example-STAR-score-difference.abif',
+         'title': 'Modified Tennessee example with differing results',
+         'desc': ( 'This is a modified Tennesee capitol example which has ' +
+                   'differing results for score, STAR, and Copeland' +
+                   '(with 0-5 "stars").') },
          ]
     for i, f in enumerate(retval):
         retval[i]['text'] = escape(Path(TESTFILEDIR,
