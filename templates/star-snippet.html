@@ -99,7 +99,7 @@
         <ul>
           {% for cand in ranklist %}
           {% set j = scoredata['scores'][cand] %}
-          <li><span class="star g{{ j['rank'] }}">★</span>#{{ j['rank'] }}: {{ j['candname'] }} received {{ "{:,}".format(j['score']) }} stars from {{ "{:,}".format(j['votercount']) }} voters</li>
+          <li><span class="star g{{ loop.index }}">★</span>#{{ j['rank'] }}: {{ j['candname'] }} received {{ "{:,}".format(j['score']) }} stars from {{ "{:,}".format(j['votercount']) }} voters</li>
           {% endfor %}
         </ul>
       </li>

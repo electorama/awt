@@ -52,9 +52,12 @@ def add_html_hints_to_stardict(scores, stardict):
     retval['starscaled'] = {}
     retval['colordict'] = {}
     retval['colorlines'] = {}
-    colors = [
-        '#d0ffce', '#cee1ff', '#ffcece', '#ffeab9', 'orange', 'yellow'
-    ]
+    colors0 = ['#d0ffce', '#cee1ff', '#ffcece', '#ffeab9']
+    colors1 = ['#cc6666', '#ccc666', '#70cc66', '#66ccbb', '#667bcc', '#b166cc', '#cc6686', '#cc8666']
+    colors2 = ['#b1cc66', '#66cc7b', '#66bbcc', '#7066cc', '#cc66c6', '#cc6666', '#cca666', '#90cc66']
+    colors3 = ['#66cc9b', '#669bcc', '#9066cc', '#cc66a6']
+    colors = colors0 + colors1 + colors2 + colors3
+
     curstart = 1
     for i, candtok in enumerate(scores['ranklist']):
         retval['colordict'][candtok] = colors[i]
