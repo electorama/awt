@@ -105,8 +105,10 @@
       </li>
       <li>Finalists:
         <ul>
-          <li>{{ scoredata['fin1n'] }}  preferred by {{ "{:,}".format(scoredata['fin1votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
-          <li>{{ scoredata['fin2n'] }}  preferred by {{ "{:,}".format(scoredata['fin2votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
+          {% set fin1n = scoredata['fin1n'] %}
+          {% set fin2n = scoredata['fin2n'] %}
+          <li><span class="star g1">★</span>{{ fin1n }}  preferred by {{ "{:,}".format(scoredata['fin1votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
+          <li><span class="star g2">★</span>{{ fin2n }}  preferred by {{ "{:,}".format(scoredata['fin2votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
         </ul>
       </li>
       <li>Abstentions: {{ scoredata['final_abstentions']}}</li>

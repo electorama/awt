@@ -40,6 +40,9 @@ def build_example_array():
          'title': 'Modified Tennessee example with differing results',
          'desc': ( 'This is a modified Tennesee capitol example which has ' +
                    'differing results for score, STAR, and Copeland.') },
+        {'filename': 'commasep/jman722-example.abif',
+         'title': '2021 comma-separated example of ABIF',
+         'desc': ( 'complicated example' ) },
          ]
     for i, f in enumerate(retval):
         retval[i]['text'] = escape(Path(TESTFILEDIR,
