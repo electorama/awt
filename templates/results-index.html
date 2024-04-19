@@ -2,8 +2,8 @@
 {% block content %}
 <p>Your .abif has been processed.  See <a href="#results">results below</a></p>
 {% include 'abifbox-snippet.html' %}
-<h2 id="results">Results</h2>
-<p>Below is various abiftool output blocks that you requested from the ABIF you submitted.</p>
+<h2 id="results">{{ my_webhost.my_statusstr }}Results</h2>
+<p>Below are various abiftool output blocks that you requested from the ABIF you submitted.</p>
 {% if dotsvg_html %}
 <h3>Pairwise Diagram</h3>
 <p>{{ dotsvg_html | safe }}</p>

@@ -3,6 +3,7 @@ from flask import Flask, render_template, request
 from markupsafe import escape
 from pathlib import Path
 import json
+import urllib
 
 app = Flask(__name__)
 
@@ -76,12 +77,17 @@ def add_html_hints_to_stardict(scores, stardict):
     return retval
 
 
-def get_electourl():
-    if request.host == 'localhost:5000':
-        electourl='http://localhost:5000'
-    else:
-        electourl="https://abif.electorama.com"
-    return electourl
+def my_webhost():
+    my_url = request.url
+    my_hostname = urllib.parse.urlsplit(my_url).hostname
+    my_statusstr = "(dev) "
+    is_dev = ( my_hostname != "abif.electorama.com" )
+    return {
+        'is_dev':  is_dev,
+        'my_statusstr': my_statusstr,
+        'my_url': my_url,
+        'my_hostname': my_hostname,
+        }
 
 
 @app.route('/', methods=['GET'])
@@ -90,13 +96,12 @@ def index_get():
     return render_template('default-index.html',
                            abifinput='',
                            abiftool_output=None,
-                           electourl=get_electourl(),
                            example_array=build_example_array(),
+                           my_webhost=my_webhost(),
                            rows=30,
                            cols=80,
                            placeholder=placeholder,
-                           pagetitle=f"ABIF web tool on Electorama!",
-                           request_host=request.host,
+                           pagetitle=f"{my_webhost()['my_statusstr']}ABIF web tool on Electorama!",
                            )
 
 
@@ -143,7 +148,7 @@ def index_post():
                            dotsvg_html=dotsvg_html,
                            STAR_html=STAR_html,
                            scorestardict=scorestardict,
-                           electourl=get_electourl(),
+                           my_webhost=my_webhost(),
                            error_html=error_html,
                            example_array=build_example_array(),
                            lower_abif_caption="Input",
@@ -151,10 +156,10 @@ def index_post():
                            rows=10,
                            cols=80,
                            placeholder=placeholder,
-                           pagetitle=f"ABIF Electorama results",
-                           request_host=request.host,
+                           pagetitle=f"{my_webhost()['my_statusstr']}ABIF Electorama results",
                            debug_output=debug_output,
-                           debug_flag=False)
+                           debug_flag=False,
+                           )
 
 
 if __name__ == '__main__':

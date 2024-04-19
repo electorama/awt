@@ -1,8 +1,11 @@
 <!DOCTYPE html>
+{% set is_dev = my_webhost.is_dev %}
+{% set statstr = my_webhost.statusstr %}
+{% set my_url = my_webhost.my_url %}
 <html>
   <head>
       <meta charset="UTF-8">
-      <title>{{ pagetitle }} — ({{request.host}})</title>
+      <title>{{pagetitle}}</title>
       <link rel="stylesheet"
             type="text/css"
             href="{{ url_for('static', filename='css/electostyle.css') }}">
@@ -12,12 +15,16 @@
   </head>
   <body>
     <header>
-      <a href="{{electourl}}">
+      <a href="{{my_url}}">
         <img src="https://electorama.com/img/electodrop.svg" alt="Electorama Logo">
       </a>
     </header>
     <div id="content">
-      <h1>{{ pagetitle }} — ({{request.host}})</h1>
+      <h1>{{pagetitle}}</h1>
+      {% if my_webhost.is_dev %}
+      <small><i>{{my_url}} {{my_webhost}}</i></small>
+      {% endif %}
+
       <p>"ABIF" stands for "<a href="https://electowiki.org/wiki/ABIF">Aggregated Ballot Information Format</a>".</p>
       {% if debug_flag %}
       (see <a href="#debug">debug output below</a>)<br>
