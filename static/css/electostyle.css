@@ -119,3 +119,32 @@ svg {
     margin-right: auto;
     overflow: hidden;
 }
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.tab-links {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.tab-links li {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.tab-links li.active {
+  background-color: #fff;
+  border-bottom: 1px solid #fff;
+}

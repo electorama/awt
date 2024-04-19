@@ -3,3 +3,27 @@ function pushTextFromID(exampleID) {
   document.getElementById("abifinput").value = exampleText;
   document.getElementById("ABIF_submission_area").scrollIntoView({behavior: "smooth"});
 }
+
+const tabLinks = document.querySelectorAll('.tab-links li');
+const tabContent = document.querySelectorAll('.tab-content');
+
+tabLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    // Remove active states
+    tabLinks.forEach(li => li.classList.remove('active'));
+    tabContent.forEach(content => content.classList.remove('active'));
+
+    // Activate clicked tab and content
+    const target = link.dataset.target;
+    link.classList.add('active');
+    document.getElementById(target).classList.add('active');
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  tabContent.forEach(content => {
+    content.classList.remove('active');
+  });
+  tabLinks[0].classList.add('active');
+  tabContent[0].classList.add('active');
+});
