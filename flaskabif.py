@@ -80,8 +80,11 @@ def add_html_hints_to_stardict(scores, stardict):
 def my_webhost():
     my_url = request.url
     my_hostname = urllib.parse.urlsplit(my_url).hostname
-    my_statusstr = "(dev) "
-    is_dev = ( my_hostname != "abif.electorama.com" )
+    is_dev = ( my_hostname == "localhost" )
+    if is_dev:
+        my_statusstr = "(ldev) "
+    else:
+        my_statusstr = ""
     return {
         'is_dev':  is_dev,
         'my_statusstr': my_statusstr,
