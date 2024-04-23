@@ -20,31 +20,9 @@ from abiflib import (
     )
 
 def build_example_array():
-    retval = [
-        {'filename': 'tenn-example/tennessee-example-simple.abif',
-         'title': 'Simple example (Tennessee capitol)',
-         'desc': 'This example is compatible with many web election tools.'},
-        {'filename': 'tenn-example/tennessee-example-scores.abif',
-         'title': 'More complicated example (Tennessee capitol)',
-         'desc': ( 'This example is a more ornate example, which shows off ' +
-                   'how to embed metadata in an ABIF file, as well as' +
-                   'scores for the competing candidates.' ) },
-        {'filename': 'burl2009/burl2009.abif',
-         'title': 'A real-world example (Burlington)',
-         'desc': ( 'This example is based on the electoral results ' +
-                   'from the Burlington mayoral race in 2009.') },
-        {'filename': 'tenn-example/tennessee-example-STAR.abif',
-         'title': 'Tennessee example with STAR voting (Tennessee capitol)',
-         'desc': ( 'This is the TN capitol example with embedded scores' +
-                   '(with 0-5 "stars").') },
-        {'filename': 'tenn-example/tennessee-example-STAR-score-difference.abif',
-         'title': 'Modified Tennessee example with differing results',
-         'desc': ( 'This is a modified Tennesee capitol example which has ' +
-                   'differing results for score, STAR, and Copeland.') },
-        {'filename': 'commasep/jman722-example.abif',
-         'title': '2021 comma-separated example of ABIF',
-         'desc': ( 'complicated example' ) },
-         ]
+    import yaml
+    with open("examplelist.yml") as fp:
+        retval = yaml.safe_load(fp)
     for i, f in enumerate(retval):
         retval[i]['text'] = escape(Path(TESTFILEDIR,
                                         f['filename']).read_text())
@@ -96,6 +74,7 @@ def my_webhost():
 @app.route('/', methods=['GET'])
 def index_get():
     placeholder = "Enter ABIF here, possibly using one of the examples below..."
+    pagetitle=f"{my_webhost()['my_statusstr']}ABIF web tool on Electorama!"
     return render_template('default-index.html',
                            abifinput='',
                            abiftool_output=None,
@@ -104,7 +83,7 @@ def index_get():
                            rows=30,
                            cols=80,
                            placeholder=placeholder,
-                           pagetitle=f"{my_webhost()['my_statusstr']}ABIF web tool on Electorama!",
+                           pagetitle=pagetitle,
                            )
 
 
