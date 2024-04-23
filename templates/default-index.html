@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-  <p>See the <a href="#examples">ABIF examples</a> section at the bottom of this page</a> to see. To tally election results expressed using ABIF, enter valid abif below...</p>
-  {% include 'abifbox-snippet.html' %}
-  <h2 id="examples">ABIF Examples</h2>
-  <ul class="tab-links">
+<p>"ABIF" stands for "<a href="https://electowiki.org/wiki/ABIF"
+                         >Aggregated Ballot Information Format</a>".</p>
+<p>See the <a href="#examples">ABIF examples</a> section at the bottom of this page</a> to see. To tally election results expressed using ABIF, enter valid abif below...</p>
+{% include 'abifbox-snippet.html' %}
+<h2 id="examples">ABIF Examples</h2>
+<ul class="tab-links">
   {% for item in example_array %}
   <li data-target="example{{loop.index}}">Example {{loop.index}}</li>
   {% endfor %}
-  </ul>
-  {% for item in example_array %}
-  <div class="tab-content active" id="example{{loop.index}}">
+</ul>
+{% for item in example_array %}
+<div class="tab-content active" id="example{{loop.index}}">
   <h3>Example {{ loop.index }} &mdash; {{item.title}}</h3>
   <p>{{ item.desc }}</p>
   <textarea readonly class="vscroll examplearea" id='formtext{{loop.index}}'>{{ item.text }}</textarea>
   <button onclick="pushTextFromID('formtext{{loop.index}}')">Push example to submission area</button>
-  </div>
-  {% endfor %}
-  {% endblock content %}
+</div>
+{% endfor %}
+{% include 'also-note-snippet.html' %}
+{% endblock content %}

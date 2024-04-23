@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from markupsafe import escape
 from pathlib import Path
 import json
@@ -71,30 +71,50 @@ def my_webhost():
         }
 
 
-@app.route('/', methods=['GET'])
-def index_get():
-    placeholder = "Enter ABIF here, possibly using one of the examples below..."
-    pagetitle=f"{my_webhost()['my_statusstr']}ABIF web tool on Electorama!"
-    return render_template('default-index.html',
-                           abifinput='',
-                           abiftool_output=None,
-                           example_array=build_example_array(),
-                           my_webhost=my_webhost(),
-                           rows=30,
-                           cols=80,
-                           placeholder=placeholder,
-                           pagetitle=pagetitle,
-                           )
+@app.route('/')
+def homepage():
+    return redirect('/awt', code=302)
 
 
-@app.route('/', methods=['POST'])
-def index_post():
+@app.route('/<toppage>', methods=['GET'])
+def awt_get(toppage):
+    msgs = {}
+    msgs['pagetitle'] = \
+        f"{my_webhost()['my_statusstr']}ABIF web tool (awt) on Electorama!"
+    msgs['placeholder'] = \
+        "Enter ABIF here, possibly using one of the examples below..."
+    msgs['lede'] = "FIXME-flaskabif.py"
+    match toppage:
+        case "awt":
+            return render_template('default-index.html',
+                                   abifinput='',
+                                   abiftool_output=None,
+                                   example_array=build_example_array(),
+                                   my_webhost=my_webhost(),
+                                   rows=15,
+                                   cols=80,
+                                   msgs=msgs
+                                   )
+        case _:
+            msgs['pagetitle'] = "NOT FOUND"
+            msgs['lede'] = (
+                "I'm not sure what you're looking for, " +
+                "but you shouldn't look here."
+            )
+            return render_template('not-found.html',
+                                   toppage=toppage,
+                                   my_webhost=my_webhost(),
+                                   msgs=msgs
+                                   ), 404
+
+
+@app.route('/awt', methods=['POST'])
+def awt_post():
     abifinput = ""
     abifinput = request.form['abifinput']
     pairwise_html = None
     dotsvg_html = None
     STAR_html = None
-    placeholder = "Try other ABIF, or try tweaking your input (see below)...."
     try:
         abifmodel = convert_abif_to_jabmod(abifinput,
                                            cleanws = True)
@@ -124,6 +144,11 @@ def index_post():
                 add_html_hints_to_stardict(debug_dict['scoremodel'], stardict)
             debug_output = json.dumps(debug_dict, indent=4)
             scorestardict=debug_dict
+    msgs={}
+    msgs['pagetitle'] = \
+        f"{my_webhost()['my_statusstr']}ABIF Electorama results"
+    msgs['placeholder'] = \
+        "Try other ABIF, or try tweaking your input (see below)...."
     return render_template('results-index.html',
                            abifinput=abifinput,
                            pairwise_html=pairwise_html,
@@ -135,10 +160,9 @@ def index_post():
                            example_array=build_example_array(),
                            lower_abif_caption="Input",
                            lower_abif_text=escape(abifinput),
-                           rows=10,
+                           rows=15,
                            cols=80,
-                           placeholder=placeholder,
-                           pagetitle=f"{my_webhost()['my_statusstr']}ABIF Electorama results",
+                           msgs=msgs,
                            debug_output=debug_output,
                            debug_flag=False,
                            )
