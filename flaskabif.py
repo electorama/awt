@@ -4,10 +4,12 @@ from markupsafe import escape
 from pathlib import Path
 import json
 import urllib
+import yaml
 
 app = Flask(__name__)
-
+SCRIPTDIR = '/home/robla/tags/awt'
 TESTFILEDIR='/home/robla/tags/abiftool/testdata'
+
 from abiflib import (
     convert_abif_to_jabmod,
     htmltable_pairwise_and_winlosstie,
@@ -20,8 +22,9 @@ from abiflib import (
     )
 
 def build_example_array():
-    import yaml
-    with open("examplelist.yml") as fp:
+    yampath = Path(SCRIPTDIR, "examplelist.yml")
+
+    with open(yampath) as fp:
         retval = yaml.safe_load(fp)
     for i, f in enumerate(retval):
         retval[i]['text'] = escape(Path(TESTFILEDIR,
