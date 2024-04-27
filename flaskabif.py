@@ -21,16 +21,22 @@ from abiflib import (
     scaled_scores
     )
 
-def build_example_array():
-    yampath = Path(SCRIPTDIR, "examplelist.yml")
 
-    with open(yampath) as fp:
-        retval = yaml.safe_load(fp)
+def build_file_array():
+    yampathlist = [
+        Path(SCRIPTDIR, "examplelist.yml")
+        ]
+
+    retval = []
+    for yampath in yampathlist:
+        with open(yampath) as fp:
+            retval.extend(yaml.safe_load(fp))
+
     for i, f in enumerate(retval):
         retval[i]['text'] = escape(Path(TESTFILEDIR,
                                         f['filename']).read_text())
     return retval
-
+    
 
 def add_html_hints_to_stardict(scores, stardict):
     retval = stardict
@@ -87,12 +93,14 @@ def awt_get(toppage):
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
     msgs['lede'] = "FIXME-flaskabif.py"
+    file_array = build_file_array()
     match toppage:
         case "awt":
             return render_template('default-index.html',
                                    abifinput='',
                                    abiftool_output=None,
-                                   example_array=build_example_array(),
+                                   main_file_array=file_array[0:5],
+                                   other_files=file_array[5:],
                                    my_webhost=my_webhost(),
                                    rows=15,
                                    cols=80,
@@ -109,6 +117,26 @@ def awt_get(toppage):
                                    my_webhost=my_webhost(),
                                    msgs=msgs
                                    ), 404
+
+
+@app.route('/id/<identifier>', methods=['GET'])
+def get_by_id(identifier):
+    msgs = {}
+    msgs['pagetitle'] = \
+        f"{my_webhost()['my_statusstr']}ABIF web tool (awt) on Electorama!"
+    msgs['placeholder'] = \
+        "Enter ABIF here, possibly using one of the examples below..."
+    msgs['lede'] = "FIXME-flaskabif.py"
+    msgs['pagetitle'] = "NOT FOUND"
+    msgs['lede'] = (
+        "I'm not sure what you're looking for, " +
+        "but you shouldn't look here."
+    )
+    return render_template('not-found.html',
+                           identifier=identifier,
+                           my_webhost=my_webhost(),
+                           msgs=msgs
+                           ), 404
 
 
 @app.route('/awt', methods=['POST'])
@@ -160,7 +188,6 @@ def awt_post():
                            scorestardict=scorestardict,
                            my_webhost=my_webhost(),
                            error_html=error_html,
-                           example_array=build_example_array(),
                            lower_abif_caption="Input",
                            lower_abif_text=escape(abifinput),
                            rows=15,
