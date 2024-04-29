@@ -22,7 +22,7 @@ from abiflib import (
     )
 
 
-def build_file_array():
+def build_examplelist():
     yampathlist = [
         Path(SCRIPTDIR, "examplelist.yml")
         ]
@@ -33,10 +33,31 @@ def build_file_array():
             retval.extend(yaml.safe_load(fp))
 
     for i, f in enumerate(retval):
-        retval[i]['text'] = escape(Path(TESTFILEDIR,
-                                        f['filename']).read_text())
+        retval[i]['text'] = Path(TESTFILEDIR, f['filename']).read_text()
     return retval
-    
+
+
+def get_fileentry_from_examplelist(filekey, examplelist):
+    """Returns entry of ABIF file matching filekey
+
+    Args:
+        examplelist: A list of dictionaries.
+        filekey: The id value to lookup.
+
+    Returns:
+        The single index if exactly one match is found.
+        None if no matches are found.
+    """
+    matchlist = [i for i, d in enumerate(examplelist)
+                 if d['id'] == filekey]
+
+    if not matchlist:
+        return None
+    elif len(matchlist) == 1:
+        return examplelist[matchlist[0]]
+    else:
+        raise ValueError("Multiple file entries found with the same id.")
+
 
 def add_html_hints_to_stardict(scores, stardict):
     retval = stardict
@@ -93,7 +114,7 @@ def awt_get(toppage):
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
     msgs['lede'] = "FIXME-flaskabif.py"
-    file_array = build_file_array()
+    file_array = build_examplelist()
     match toppage:
         case "awt":
             return render_template('default-index.html',
@@ -122,21 +143,56 @@ def awt_get(toppage):
 @app.route('/id/<identifier>', methods=['GET'])
 def get_by_id(identifier):
     msgs = {}
-    msgs['pagetitle'] = \
-        f"{my_webhost()['my_statusstr']}ABIF web tool (awt) on Electorama!"
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
-    msgs['lede'] = "FIXME-flaskabif.py"
-    msgs['pagetitle'] = "NOT FOUND"
-    msgs['lede'] = (
-        "I'm not sure what you're looking for, " +
-        "but you shouldn't look here."
-    )
-    return render_template('not-found.html',
-                           identifier=identifier,
-                           my_webhost=my_webhost(),
-                           msgs=msgs
-                           ), 404
+    debug_output = ""
+    examplelist = build_examplelist()
+    fileentry = get_fileentry_from_examplelist(identifier, examplelist)
+    if fileentry:
+        msgs['pagetitle'] = f"{fileentry['title']}"
+        msgs['lede'] = (
+            f"Below is the ABIF from the \"{fileentry['id']}\" election" +
+            f" ({fileentry['title']})"
+        )
+        msgs['results_lede'] = (
+            f"The pairwise results of {fileentry['id']} are below, and " +
+            f"can be edited in the field above."
+        )
+        try:
+            abifmodel = convert_abif_to_jabmod(fileentry['text'],
+                                               cleanws = True)
+            error_html = None
+        except ABIFVotelineException as e:
+            abifmodel = None
+            error_html = e.message
+        pairwise_html = htmltable_pairwise_and_winlosstie(abifmodel,
+                                                          snippet = True,
+                                                          validate = True,
+                                                          modlimit = 2500)
+        return render_template('results-index.html',
+                               abifinput=fileentry['text'],
+                               pairwise_html=pairwise_html,
+                               my_webhost=my_webhost(),
+                               error_html=error_html,
+                               lower_abif_caption="Input",
+                               lower_abif_text=fileentry['text'],
+                               rows=15,
+                               cols=80,
+                               msgs=msgs,
+                               debug_output=debug_output,
+                               debug_flag=False,
+                               )
+    else:
+        msgs['pagetitle'] = "NOT FOUND"
+        msgs['lede'] = (
+            "I'm not sure what you're looking for, " +
+            "but you shouldn't look here."
+        )
+        return render_template('not-found.html',
+                               identifier=identifier,
+                               my_webhost=my_webhost(),
+                               msgs=msgs
+                               ), 404
 
 
 @app.route('/awt', methods=['POST'])
