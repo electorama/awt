@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<p>"ABIF" stands for "<a href="https://electowiki.org/wiki/ABIF"
-                         >Aggregated Ballot Information Format</a>".</p>
-<p>See the <a href="#examples">ABIF examples</a> section at the bottom of this page</a> to see. To tally election results expressed using ABIF, enter valid abif below...</p>
+{% if ctrldata.toppage == 'awt' %}
+{% include 'intro-snippet.html' %}
+{% endif %}
 {% include 'abifbox-snippet.html' %}
 <h2 id="examples">ABIF Examples</h2>
 <div class="example-section">
@@ -10,7 +10,9 @@
   {% for item in main_file_array %}
   <li data-target="example{{loop.index}}">{{loop.index}}. {{item.id}}</li>
   {% endfor %}
+  {% if other_files|length > 0 %}
   <li data-target="more">More...</li>
+  {% endif %}
 </ul>
 {% for item in main_file_array %}
 <div class="tab-content active" id="example{{loop.index}}">
@@ -30,6 +32,7 @@
   <li>{{loop.index + mainsize}}. <a href="/id/{{item.id}}">{{item.id}}</a>
     &mdash; {{item.title}}</li>
   {% endfor %}
+  <li><a href="/tag">Explore by tag</a></li>
   </ul>
 </div>
 </div>

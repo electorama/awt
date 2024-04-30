@@ -5,6 +5,7 @@
     This example is compatible with many web election tools.
 - filename: tenn-example/tennessee-example-scores.abif
   id: TNexampleScores
+  tags: fictional
   title: More complicated example (Tennessee capitol)
   desc: >
     This example is a more ornate example, which shows off how to
@@ -13,43 +14,52 @@
 - filename: burl2009/burl2009.abif
   id: Burl2009
   title: Burlington mayoral 2009
+  tags: historic, VT, USA, government
   desc: >
     This example is based on the electoral results from the Burlington
     mayoral race in 2009.
 - filename: tenn-example/tennessee-example-STAR.abif
   id: TNexampleSTAR
   title: Tennessee example with STAR voting (Tennessee capitol)
+  tags: fictional
   desc: >
     This is the TN capitol example with embedded scores (with 0-5
     "stars").
 - filename: tenn-example/tennessee-example-STAR-score-difference.abif
   id: TNexampleSTARdiff
   title: Modified Tennessee example with differing results
+  tags: fictional
   desc: >
     This is a modified Tennesee capitol example which has differing
     results for score, STAR, and Copeland.
 - filename: commasep/jman722-example.abif
   id: commaSeparated2021
   title: 2021 comma-separated example of ABIF
+  tags: fictional
   desc: >
     An example posted by /u/jman722 on reddit in 2021.
 - filename: localabif/debian-elections/2002_debian_pl.abif
   id: DPL2002
   title: Debian 2002 Project Leader
+  tags: debian, historic, orgpriv
   desc: Conversion of 2002 DPL election results to ABIF 
 - filename: localabif/debian-elections/2003_debian_pl.abif
   id: DPL2003
   title: Debian 2003 Project Leader
+  tags: debian, historic, orgpriv
   desc: Conversion of 2003 DPL election results to ABIF
 - filename: localabif/debian-elections/2021_debian_general_resolution.abif
   id: GenResRMS2021
   title: Debian 2021 General Resolution about Richard Stallman
+  tags: debian, historic, orgpriv
   desc: Debian 2021 General Resolution about Richard Stallman
 - filename: localabif/debian-elections/2021_debian_pl.abif
   id: DPL2021
   title: Debian 2021 Project Leader
+  tags: debian, historic, orgpriv
   desc: Conversion of 2021 DPL election results to ABIF 
 - filename: localabif/debian-elections/2022_debian_pl.abif
   id: DPL2022
   title: Debian 2022 Project Leader
+  tags: debian, historic, orgpriv
   desc: Conversion of 2022 DPL election results to ABIF 
