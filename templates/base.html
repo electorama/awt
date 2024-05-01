@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-{% set is_dev = my_webhost.is_dev %}
-{% set statstr = my_webhost.statusstr %}
-{% set my_url = my_webhost.my_url %}
+{% set debug_flag = webenv.debugFlag %}
+{% set statstr = webenv.statusStr %}
+{% set my_url = webenv.req_url %}
 <html>
   <head>
       <meta charset="UTF-8">
@@ -21,16 +21,16 @@
     </header>
     <div id="content">
       <h1>{{msgs.pagetitle}}</h1>
-      {% if my_webhost.is_dev %}
-      <small><i>{{my_url}} {{my_webhost}}</i></small>
+      {% if webenv.debugFlag %}
+      <small><i>{{webenv.req_url}} {{webenv.hostname}}</i></small>
       {% endif %}
-      {% if debug_flag %}
+      {% if webenv.debugFlag %}
       (see <a href="#debug">debug output below</a>)<br>
       {% endif %}
       {% block content %}
       REPLACEME base.html
       {% endblock content %}
-      {% if debug_flag %}
+      {% if webenv.debugFlag %}
       <h2 id="debug">Debug output</h2>
       <div><pre>{{ debug_output }}</pre></div>
       {% endif %}

@@ -6,7 +6,7 @@
 <p>Your .abif has been processed.  See <a href="#results">results below</a></p>
 {% endif %}
 {% include 'abifbox-snippet.html' %}
-<h2 id="results">{{ my_webhost.my_statusstr }}Results</h2>
+<h2 id="results">{{ webenv.statusStr }}Results</h2>
 {% if msgs.results_lede %}
 <p>{{ msgs.results_lede | safe }}</p>
 {% else %}

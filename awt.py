@@ -26,11 +26,8 @@ from abiflib import (
 class WebEnv:
     __env = {}
 
-    __env['isDev'] = False
-    __env['debugFlag'] = True
-    __env['statusStr'] = "(WEBDEV/FIXME) "
-    __env['inputRows'] = 70
-    __env['inputCols'] = 30
+    __env['inputRows'] = 12
+    __env['inputCols'] = 80
 
     @staticmethod
     def wenv(name):
@@ -42,45 +39,20 @@ class WebEnv:
 
     @staticmethod
     def set_web_env():
-        __env['req_url'] = request.url
-        __env['hostname'] = urllib.parse.urlsplit(request.url).hostname
-        #__env['isDev'] = ( my_hostname == "localhost" )
-
-
-def my_webhost():
-    myenv = WebEnv.wenvDict()
-    if myenv['isDev']:
-        my_statusstr = "(ldev) "
-    else:
-        my_statusstr = ""
-
-    my_url = request.url
-    my_hostname = urllib.parse.urlsplit(my_url).hostname
-    is_dev = ( my_hostname == "localhost" )
-    is_dev = False
-    return {
-        'is_dev': myenv['isDev'],
-        'debugFlag': myenv['debugFlag'],
-        'my_statusstr': myenv['statusStr'],
-        'inputRows': myenv['inputRows'],
-        'inputCols': myenv['inputCols'],
-        'my_url': my_url,
-        'my_hostname': my_hostname,
-    }
-
-
-def my_ctrldata():
-    return {
-        'boxrows': 12,
-        'boxcols': 80,
-        'debugflag': True
-    }
+        WebEnv.__env['req_url'] = request.url
+        WebEnv.__env['hostname'] = urllib.parse.urlsplit(request.url).hostname
+        WebEnv.__env['debugFlag'] = ( WebEnv.__env['hostname'] == "localhost" )
+        WebEnv.__env['debugFlag'] = False
+        if WebEnv.__env['debugFlag']:
+            WebEnv.__env['statusStr'] = "(DEBUG) "
+        else:
+            WebEnv.__env['statusStr'] = ""
 
 
 def build_examplelist():
     yampathlist = [
         Path(SCRIPTDIR, "examplelist.yml")
-        ]
+    ]
 
     retval = []
     for yampath in yampathlist:
@@ -168,21 +140,21 @@ def homepage():
 @app.route('/<toppage>', methods=['GET'])
 def awt_get(toppage=None, tag=None):
     msgs = {}
+    webenv = WebEnv.wenvDict()
+    WebEnv.set_web_env()
     msgs['pagetitle'] = \
-        f"{my_webhost()['my_statusstr']}ABIF web tool (awt) on Electorama!"
+        f"{webenv['statusStr']}ABIF web tool (awt) on Electorama!"
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
     msgs['lede'] = "FIXME-flaskabif.py"
-    ctrldata = my_ctrldata()
     file_array = build_examplelist()
-    debug_flag = ctrldata['debugflag']
+    debug_flag = webenv['debugFlag']
     debug_output = "DEBUG OUTPUT:\n"
 
     if tag is not None:
         toppage = "tag"
 
-    ctrldata['toppage'] = toppage
-    debug_output += f"{ctrldata=}"
+    webenv['toppage'] = toppage
 
     match toppage:
         case "awt":
@@ -191,8 +163,7 @@ def awt_get(toppage=None, tag=None):
                                      abiftool_output=None,
                                      main_file_array=file_array[0:5],
                                      other_files=file_array[5:],
-                                     my_webhost=my_webhost(),
-                                     ctrldata=ctrldata,
+                                     webenv=webenv,
                                      msgs=msgs,
                                      debug_output=debug_output,
                                      debug_flag=debug_flag,
@@ -206,17 +177,18 @@ def awt_get(toppage=None, tag=None):
                                          abiftool_output=None,
                                          main_file_array=tag_file_array[0:5],
                                          other_files=tag_file_array[5:],
-                                         my_webhost=my_webhost(),
-                                         ctrldata=ctrldata,
+                                         webenv=webenv,
                                          msgs=msgs,
                                          debug_output=debug_output,
                                          debug_flag=debug_flag,
                                          )
             else:
                 retval = render_template('tag-index.html',
-                                         tagarray = sorted(get_all_tags_in_examplelist(file_array),
-                                                           key=str.casefold),
-                                         my_webhost=my_webhost(),
+                                         tagarray = sorted(
+                                             get_all_tags_in_examplelist(
+                                                 file_array),
+                                             key=str.casefold),
+                                         webenv=webenv,
                                          msgs=msgs
                                          )
                                          
@@ -228,7 +200,7 @@ def awt_get(toppage=None, tag=None):
             )
             retval = (render_template('not-found.html',
                                       toppage=toppage,
-                                      my_webhost=my_webhost(),
+                                      webenv=webenv,
                                       msgs=msgs,
                                       debug_output=debug_output,
                                       debug_flag=debug_flag,
@@ -243,7 +215,8 @@ def get_by_id(identifier):
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
     examplelist = build_examplelist()
-    ctrldata = my_ctrldata()
+    webenv = WebEnv.wenvDict()
+    WebEnv.set_web_env()
     fileentry = get_fileentry_from_examplelist(identifier, examplelist)
     if fileentry:
         msgs['pagetitle'] = f"{fileentry['title']}"
@@ -259,6 +232,7 @@ def get_by_id(identifier):
             abifmodel = convert_abif_to_jabmod(fileentry['text'],
                                                cleanws = True)
             error_html = None
+
         except ABIFVotelineException as e:
             abifmodel = None
             error_html = e.message
@@ -270,11 +244,10 @@ def get_by_id(identifier):
         return render_template('results-index.html',
                                abifinput=fileentry['text'],
                                pairwise_html=pairwise_html,
-                               my_webhost=my_webhost(),
                                error_html=error_html,
                                lower_abif_caption="Input",
                                lower_abif_text=fileentry['text'],
-                               ctrldata=ctrldata,
+                               webenv=webenv,
                                msgs=msgs,
                                debug_output=debug_output,
                                debug_flag=ctrldata['debugflag'],
@@ -287,8 +260,8 @@ def get_by_id(identifier):
         )
         return render_template('not-found.html',
                                identifier=identifier,
-                               my_webhost=my_webhost(),
-                               msgs=msgs
+                               msgs=msgs,
+                               webenv=webenv
                                ), 404
 
 
@@ -296,6 +269,8 @@ def get_by_id(identifier):
 def awt_post():
     abifinput = ""
     abifinput = request.form['abifinput']
+    webenv = WebEnv.wenvDict()
+    WebEnv.set_web_env()
     pairwise_html = None
     dotsvg_html = None
     STAR_html = None
@@ -330,24 +305,23 @@ def awt_post():
             scorestardict=debug_dict
     msgs={}
     msgs['pagetitle'] = \
-        f"{my_webhost()['my_statusstr']}ABIF Electorama results"
+        f"{webenv['statusStr']}ABIF Electorama results"
     msgs['placeholder'] = \
         "Try other ABIF, or try tweaking your input (see below)...."
-    ctrldata=my_ctrldata()
+    webenv = WebEnv.wenvDict()
     return render_template('results-index.html',
                            abifinput=abifinput,
                            pairwise_html=pairwise_html,
                            dotsvg_html=dotsvg_html,
                            STAR_html=STAR_html,
                            scorestardict=scorestardict,
-                           my_webhost=my_webhost(),
+                           webenv=webenv,
                            error_html=error_html,
                            lower_abif_caption="Input",
                            lower_abif_text=escape(abifinput),
-                           ctrldata=ctrldata,
                            msgs=msgs,
                            debug_output=debug_output,
-                           debug_flag=ctrldata['debugflag'],
+                           debug_flag=webenv['debugFlag'],
                            )
 
 
