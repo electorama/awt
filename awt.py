@@ -250,7 +250,7 @@ def get_by_id(identifier):
                                webenv=webenv,
                                msgs=msgs,
                                debug_output=debug_output,
-                               debug_flag=ctrldata['debugflag'],
+                               debug_flag=webenv['debugFlag'],
                                )
     else:
         msgs['pagetitle'] = "NOT FOUND"

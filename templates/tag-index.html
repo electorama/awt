@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 id="examples">ABIF examples by tag</h2>
+<ul>
+  {% for item in tagarray %}
+  <li>{{loop.index}}. <a href="/tag/{{item}}">{{item}}</a></li>
+  {% endfor %}
+</ul>
+{% endblock content %}

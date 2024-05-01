@@ -21,7 +21,7 @@
   <div class="exampleareacontainer">
     <textarea readonly class="vscroll examplearea" id='formtext{{loop.index}}'>{{ item.text }}</textarea>
   </div>
-  <button onclick="pushTextFromID('formtext{{loop.index}}')">Replace submission area with example</button>
+  <button onclick="pushTextFromID('formtext{{loop.index}}')">Replace submission area with example</button> &mdash; <a href="/id/{{item.id}}">{{item.id}} permalink</a>
 </div>
 {% endfor %}
 <div class="tab-content" id="more">
