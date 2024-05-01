@@ -4,7 +4,9 @@
 {% include 'intro-snippet.html' %}
 {% endif %}
 {% include 'abifbox-snippet.html' %}
+{% if webenv.toppage == 'awt' %}
 <h2 id="examples">ABIF Examples</h2>
+{% endif %}
 <div class="example-section">
 <ul class="tab-links">
   {% for item in main_file_array %}
@@ -21,7 +23,7 @@
   <div class="exampleareacontainer">
     <textarea readonly class="vscroll examplearea" id='formtext{{loop.index}}'>{{ item.text }}</textarea>
   </div>
-  <button onclick="pushTextFromID('formtext{{loop.index}}')">Replace submission area with example</button> &mdash; <a href="/id/{{item.id}}">{{item.id}} permalink</a>
+  <button onclick="pushTextFromID('formtext{{loop.index}}')">Replace submission area with example</button> &mdash; (<a href="/id/{{item.id}}">{{item.id}} permalink</a>)
 </div>
 {% endfor %}
 <div class="tab-content" id="more">

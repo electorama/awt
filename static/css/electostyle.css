@@ -142,6 +142,14 @@ svg {
   overflow: hidden;
 }
 
+#abifbox {
+  display: none;
+}
+
+#abifbox.active {
+  display: block;
+}
+
 .tab-content {
   display: none;
 }

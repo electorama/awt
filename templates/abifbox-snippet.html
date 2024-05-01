@@ -1,3 +1,8 @@
+{% if webenv.toppage == 'awt' %}
+<div class="active" id="abifbox">
+{% else %}
+<div id="abifbox">
+{% endif %}
 <form action="/awt#results" method="POST">
   <fieldset id="ABIF_submission_area">
     <legend>ABIF submission area</legend>
@@ -11,3 +16,4 @@
     <input type="submit" value="Submit" id="submitButton">
   </fieldset>
 </form>
+</div>

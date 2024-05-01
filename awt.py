@@ -170,6 +170,8 @@ def awt_get(toppage=None, tag=None):
                                      )
         case "tag":
             if tag:
+                msgs['pagetitle'] = \
+                    f"{webenv['statusStr']}Tag: {tag}"
                 tag_file_array = get_fileentries_by_tag(tag, file_array)
                 debug_output += f"{tag=}"
                 retval = render_template('default-index.html',
