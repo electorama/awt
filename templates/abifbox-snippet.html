@@ -1,11 +1,12 @@
-{% if webenv.toppage == 'awt' %}
-<div class="active" id="abifbox">
-{% else %}
-<div id="abifbox">
-{% endif %}
+{% set formActive = True if webenv.toppage != 'tag' else False %}
+{% set classList = "active" if formActive else "" %}
+{% set showHideText = "hide" if formActive else "show"%}
 <form action="/awt#results" method="POST">
   <fieldset id="ABIF_submission_area">
-    <legend>ABIF submission area</legend>
+    <legend>ABIF submission area
+(<a href="#" id="abifshowhide" onclick="javascript:toggleShowHide({target:'abifbox', targactive: {{"true" if formActive else "false"}}});">{{showHideText}}</a>)
+    </legend>
+    <div id="abifbox" class="{{classList}}">
     <textarea id="abifinput" name="abifinput"
               rows="{{ webenv.inputRows }}" cols="{{ webenv.inputCols }}"
               placeholder="{{ msgs.placeholder }}"
@@ -14,6 +15,6 @@
     <input type="checkbox" name="include_pairtable" value="yes" checked>pairwise table?&nbsp;
     <input type="checkbox" name="include_STAR" value="yes" checked>STAR results?&nbsp;
     <input type="submit" value="Submit" id="submitButton">
+    </div>
   </fieldset>
 </form>
-</div>

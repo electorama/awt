@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect
 from markupsafe import escape
 from pathlib import Path
 import json
+import os
 import re
 import urllib
 import yaml
@@ -41,8 +42,10 @@ class WebEnv:
     def set_web_env():
         WebEnv.__env['req_url'] = request.url
         WebEnv.__env['hostname'] = urllib.parse.urlsplit(request.url).hostname
-        WebEnv.__env['debugFlag'] = ( WebEnv.__env['hostname'] == "localhost" )
-        WebEnv.__env['debugFlag'] = False
+        WebEnv.__env['debugFlag'] = ( WebEnv.__env['hostname'] == "localhost" and
+                                      os.getenv('AWTSTATUS') != "prod")
+        WebEnv.__env['debugIntro'] = "Set AWTSTATUS=prod to turn off debug mode\n"
+
         if WebEnv.__env['debugFlag']:
             WebEnv.__env['statusStr'] = "(DEBUG) "
         else:
@@ -149,7 +152,7 @@ def awt_get(toppage=None, tag=None):
     msgs['lede'] = "FIXME-flaskabif.py"
     file_array = build_examplelist()
     debug_flag = webenv['debugFlag']
-    debug_output = "DEBUG OUTPUT:\n"
+    debug_output = webenv['debugIntro']
 
     if tag is not None:
         toppage = "tag"
@@ -213,11 +216,11 @@ def awt_get(toppage=None, tag=None):
 @app.route('/id/<identifier>', methods=['GET'])
 def get_by_id(identifier):
     msgs = {}
-    debug_output = "DEBUG OUTPUT:\n"
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
     examplelist = build_examplelist()
     webenv = WebEnv.wenvDict()
+    debug_output = webenv['debugIntro']
     WebEnv.set_web_env()
     fileentry = get_fileentry_from_examplelist(identifier, examplelist)
     if fileentry:

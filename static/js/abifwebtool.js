@@ -1,3 +1,16 @@
+
+function toggleShowHide(param) {
+  showHideElem = document.getElementById('abifshowhide');
+  targetClassList = document.getElementById(param.target).classList;
+  if (targetClassList.contains('active')) {
+    showHideElem.innerHTML = 'show';
+    targetClassList.remove('active');
+  } else {
+    showHideElem.innerHTML = 'hide';
+    targetClassList.add('active');
+  }
+}
+
 function pushTextFromID(exampleID) {
   var exampleText = document.getElementById(exampleID).value;
   document.getElementById("abifbox").classList.add('active');
