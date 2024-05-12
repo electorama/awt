@@ -63,7 +63,11 @@ def build_examplelist():
             retval.extend(yaml.safe_load(fp))
 
     for i, f in enumerate(retval):
-        retval[i]['text'] = Path(TESTFILEDIR, f['filename']).read_text()
+        try:
+            retval[i]['text'] = \
+                Path(TESTFILEDIR, f['filename']).read_text()
+        except FileNotFoundError:
+            retval[i]['text'] = ''
     return retval
 
 
@@ -220,7 +224,7 @@ def get_by_id(identifier):
         "Enter ABIF here, possibly using one of the examples below..."
     examplelist = build_examplelist()
     webenv = WebEnv.wenvDict()
-    debug_output = webenv['debugIntro']
+    debug_output = webenv.get('debugIntro')
     WebEnv.set_web_env()
     fileentry = get_fileentry_from_examplelist(identifier, examplelist)
     if fileentry:
@@ -241,11 +245,15 @@ def get_by_id(identifier):
         except ABIFVotelineException as e:
             abifmodel = None
             error_html = e.message
-        pairwise_html = htmltable_pairwise_and_winlosstie(abifmodel,
-                                                          add_desc = False,
-                                                          snippet = True,
-                                                          validate = True,
-                                                          modlimit = 2500)
+        if abifmodel:
+            pairwise_html = \
+                htmltable_pairwise_and_winlosstie(abifmodel,
+                                                  add_desc = False,
+                                                  snippet = True,
+                                                  validate = True,
+                                                  modlimit = 2500)
+        else:
+            pairwise_html = "(abifmodel is missing)"
         return render_template('results-index.html',
                                abifinput=fileentry['text'],
                                pairwise_html=pairwise_html,
