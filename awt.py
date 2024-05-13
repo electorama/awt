@@ -5,12 +5,21 @@ from pathlib import Path
 import json
 import os
 import re
+import sys
 import urllib
 import yaml
 
 app = Flask(__name__)
-SCRIPTDIR = '/home/robla/tags/awt'
-TESTFILEDIR='/home/robla/tags/abiftool/testdata'
+AWT_DIR = os.getenv('AWT_DIR')
+ABIFTOOL_DIR = os.getenv('ABIFTOOL_DIR')
+sys.path.append(ABIFTOOL_DIR)
+
+if not AWT_DIR:
+    AWT_DIR = os.getcwd()
+if not ABIFTOOL_DIR:
+    ABIFTOOL_DIR = Path(AWT_DIR) / 'abiftool'
+
+TESTFILEDIR = Path(ABIFTOOL_DIR) / 'testdata'
 
 from abiflib import (
     convert_abif_to_jabmod,
@@ -42,9 +51,8 @@ class WebEnv:
     def set_web_env():
         WebEnv.__env['req_url'] = request.url
         WebEnv.__env['hostname'] = urllib.parse.urlsplit(request.url).hostname
-        WebEnv.__env['debugFlag'] = ( WebEnv.__env['hostname'] == "localhost" and
-                                      os.getenv('AWTSTATUS') != "prod")
-        WebEnv.__env['debugIntro'] = "Set AWTSTATUS=prod to turn off debug mode\n"
+        WebEnv.__env['debugFlag'] = ( os.getenv('AWT_STATUS') == "debug" )
+        WebEnv.__env['debugIntro'] = "Set AWT_STATUS=prod to turn off debug mode\n"
 
         if WebEnv.__env['debugFlag']:
             WebEnv.__env['statusStr'] = "(DEBUG) "
@@ -54,7 +62,7 @@ class WebEnv:
 
 def build_examplelist():
     yampathlist = [
-        Path(SCRIPTDIR, "examplelist.yml")
+        Path(AWT_DIR, "examplelist.yml")
     ]
 
     retval = []
@@ -63,11 +71,11 @@ def build_examplelist():
             retval.extend(yaml.safe_load(fp))
 
     for i, f in enumerate(retval):
+        apath = Path(TESTFILEDIR, f['filename'])
         try:
-            retval[i]['text'] = \
-                Path(TESTFILEDIR, f['filename']).read_text()
+            retval[i]['text'] = apath.read_text()
         except FileNotFoundError:
-            retval[i]['text'] = ''
+            retval[i]['text'] = f'NOT FOUND: {f["filename"]}\n'
     return retval
 
 
@@ -339,5 +347,5 @@ def awt_post():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=0)
 
