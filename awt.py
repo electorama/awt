@@ -12,12 +12,13 @@ import yaml
 app = Flask(__name__)
 AWT_DIR = os.getenv('AWT_DIR')
 ABIFTOOL_DIR = os.getenv('ABIFTOOL_DIR')
+HOME_DIR = os.getenv('HOME')
 sys.path.append(ABIFTOOL_DIR)
 
 if not AWT_DIR:
-    AWT_DIR = os.getcwd()
+    AWT_DIR = Path(HOME_DIR) / 'awt'
 if not ABIFTOOL_DIR:
-    ABIFTOOL_DIR = Path(AWT_DIR) / 'abiftool'
+    ABIFTOOL_DIR = Path(HOME_DIR) / 'abiftool'
 
 TESTFILEDIR = Path(ABIFTOOL_DIR) / 'testdata'
 
