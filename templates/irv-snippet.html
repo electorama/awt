@@ -1,0 +1,27 @@
+<div>
+  <ul>
+    <li>Winner: {{ IRV_dict['winner']}}</li>
+    <li>NumRounds: {{ IRV_dict['rounds']|length}}</li>
+  </ul>
+  <table>
+    <tr>
+      {% for i in range(IRV_dict['rounds'] | length) %}
+      <th>Round {{ i + 1 }}</th>
+      {% endfor %}
+    </tr>
+    {% for cand in IRV_dict['rounds'][0] | sort(attribute=IRV_dict['rounds'][0].get, reverse=True) %}
+    <tr>
+      <td>{{ cand }}: {{ IRV_dict['rounds'][0].get(cand, ' ') }}</td>
+      {% for round_data in IRV_dict['rounds'][1:] %}
+      <td>
+        {% if round_data.get(cand) %}
+        {{ cand }}: {{ round_data.get(cand) }}
+        {% else %}
+        <s>{{ cand }}</s>
+        {% endif %}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+</div>

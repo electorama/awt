@@ -22,6 +22,10 @@
   {{ pairwise_html | safe }}
 </div>
 {% endif %}
+{% if IRV_dict %}
+<h3>IRV output</h3>
+<p>{% include 'irv-snippet.html' %}</p>
+{% endif %}
 {% if STAR_html %}
 <h3>STAR output</h3>
 <p>{% include 'star-snippet.html' %}</p>

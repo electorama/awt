@@ -29,6 +29,8 @@ from abiflib import (
     ABIFVotelineException,
     full_copecount_from_abifmodel,
     copecount_diagram,
+    IRV_count_from_jabmod,
+    get_IRV_report,
     STAR_result_from_abifmodel,
     scaled_scores
     )
@@ -296,6 +298,8 @@ def awt_post():
     pairwise_html = None
     dotsvg_html = None
     STAR_html = None
+    IRV_dict = None
+    IRV_text = None
     debug_dict = {}
     debug_output = ""
     try:
@@ -325,6 +329,13 @@ def awt_post():
             debug_dict['starscale'] = \
                 add_html_hints_to_stardict(debug_dict['scoremodel'], stardict)
             scorestardict=debug_dict
+        if request.form.get('include_IRV'):
+            jabmod = convert_abif_to_jabmod(abifinput,
+                                            cleanws = True,
+                                            add_ratings = True)
+            IRV_dict = IRV_count_from_jabmod(jabmod)
+            IRV_text = get_IRV_report(jabmod)
+
     msgs={}
     msgs['pagetitle'] = \
         f"{webenv['statusStr']}ABIF Electorama results"
@@ -336,6 +347,8 @@ def awt_post():
                            pairwise_html=pairwise_html,
                            dotsvg_html=dotsvg_html,
                            STAR_html=STAR_html,
+                           IRV_dict=IRV_dict,
+                           IRV_text=IRV_text,
                            scorestardict=scorestardict,
                            webenv=webenv,
                            error_html=error_html,
