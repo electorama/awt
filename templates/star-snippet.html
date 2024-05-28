@@ -107,11 +107,11 @@
         <ul>
           {% set fin1n = scoredata['fin1n'] %}
           {% set fin2n = scoredata['fin2n'] %}
-          <li><span class="star g1">★</span>{{ fin1n }}  preferred by {{ "{:,}".format(scoredata['fin1votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
-          <li><span class="star g2">★</span>{{ fin2n }}  preferred by {{ "{:,}".format(scoredata['fin2votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
+          <li><span class="star g1">★</span>{{ fin1n }} preferred by {{ "{:,}".format(scoredata['fin1votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
+          <li><span class="star g2">★</span>{{ fin2n }} preferred by {{ "{:,}".format(scoredata['fin2votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
+          <li><span class="star g0">★</span>No preference between the finalists: {{ scoredata['final_abstentions']}} </li>
         </ul>
       </li>
-      <li>Abstentions: {{ scoredata['final_abstentions']}}</li>
       <li>Winner: {{ scoredata['winner']}}</li>
     </ul>
   </div>

@@ -298,6 +298,7 @@ def awt_post():
     pairwise_html = None
     dotsvg_html = None
     STAR_html = None
+    scorestardict = None
     IRV_dict = None
     IRV_text = None
     debug_dict = {}
