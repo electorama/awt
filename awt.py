@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, redirect
 from markupsafe import escape
 from pathlib import Path
+from pprint import pformat
 import json
 import os
 import re
@@ -25,16 +26,17 @@ TESTFILEDIR = Path(ABIFTOOL_DIR) / 'testdata'
 from abiflib import (
     convert_abif_to_jabmod,
     htmltable_pairwise_and_winlosstie,
+    get_Copeland_winners,
     html_score_and_star,
     ABIFVotelineException,
     full_copecount_from_abifmodel,
     copecount_diagram,
     IRV_count_from_jabmod,
     get_IRV_report,
+    pairwise_count_dict,
     STAR_result_from_abifmodel,
     scaled_scores
     )
-
 
 class WebEnv:
     __env = {}
@@ -257,6 +259,7 @@ def get_by_id(identifier):
             abifmodel = None
             error_html = e.message
         if abifmodel:
+            pairwise_dict = pairwise_count_dict(abifmodel)
             pairwise_html = \
                 htmltable_pairwise_and_winlosstie(abifmodel,
                                                   add_desc = False,
@@ -264,9 +267,11 @@ def get_by_id(identifier):
                                                   validate = True,
                                                   modlimit = 2500)
         else:
+            pairwise_dict = None
             pairwise_html = "(abifmodel is missing)"
         return render_template('results-index.html',
                                abifinput=fileentry['text'],
+                               pairwise_dict=pairwise_dict,
                                pairwise_html=pairwise_html,
                                error_html=error_html,
                                lower_abif_caption="Input",
@@ -293,8 +298,10 @@ def get_by_id(identifier):
 def awt_post():
     abifinput = ""
     abifinput = request.form['abifinput']
+    copewinners = None
     webenv = WebEnv.wenvDict()
     WebEnv.set_web_env()
+    pairwise_dict = None
     pairwise_html = None
     dotsvg_html = None
     STAR_html = None
@@ -313,8 +320,18 @@ def awt_post():
     if abifmodel:
         if request.form.get('include_dotsvg'):
             copecount = full_copecount_from_abifmodel(abifmodel)
+            copewinnerstring = ", ".join(get_Copeland_winners(copecount))
+            debug_output += "\ncopecount:\n"
+            debug_output += pformat(copecount)
+            debug_output += "\ncopewinnerstring\n"
+            debug_output += copewinnerstring
+            debug_output += "\n"
             dotsvg_html = copecount_diagram(copecount, outformat='svg')
         if request.form.get('include_pairtable'):
+            pairwise_dict = pairwise_count_dict(abifmodel)
+            debug_output += "\npairwise_dict:\n"
+            debug_output += pformat(pairwise_dict)
+            debug_output += "\n"
             pairwise_html = htmltable_pairwise_and_winlosstie(abifmodel,
                                                               snippet = True,
                                                               validate = True,
@@ -345,6 +362,7 @@ def awt_post():
     webenv = WebEnv.wenvDict()
     return render_template('results-index.html',
                            abifinput=abifinput,
+                           copewinnerstring=copewinnerstring,
                            pairwise_html=pairwise_html,
                            dotsvg_html=dotsvg_html,
                            STAR_html=STAR_html,

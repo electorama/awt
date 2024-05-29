@@ -10,24 +10,40 @@
 {% if msgs.results_lede %}
 <p>{{ msgs.results_lede | safe }}</p>
 {% else %}
-<p>Below are various abiftool output blocks that you requested from the ABIF you submitted.{% endif %}
+<p>Below are various abiftool output blocks that you requested from the ABIF you submitted.
+  {% endif %}
+  <ul>
+    {% if dotsvg_html %}
+    <li><a href="#dot">Pairwise Diagram</a> &mdash; Winner: {{copewinnerstring}}</li>
+    {% endif %}
+    {% if pairwise_html %}
+    <li><a href="#wlt">Win-loss-tie table</a> &mdash; Winner: {{copewinnerstring}}</li>
+    {% endif %}
+    {% if IRV_dict %}
+    <li><a href="#IRV">IRV output</a> &mdash; Winner: {{ IRV_dict['winner']}}</li>
+    {% endif %}
+    {% if STAR_html %}
+    <li><a href="#STAR">STAR output</a> &mdash; Winner: {{ scorestardict['scoremodel']['winner'] }}</li>
+    {% endif %}
+  </ul>
 </p>
 {% if dotsvg_html %}
-<h3>Pairwise Diagram</h3>
+<h3><a name="dot"></a>Pairwise Diagram</h3>
 <p>{{ dotsvg_html | safe }}</p>
 {% endif %}
 {% if pairwise_html %}
-<h3>Win-loss-tie table</h3>
+<h3><a name="wlt"></a>Win-loss-tie table</h3>
+<p>Winner(s): {{copewinnerstring}}</p>
 <div class="scaletable">
   {{ pairwise_html | safe }}
 </div>
 {% endif %}
 {% if IRV_dict %}
-<h3>IRV output</h3>
+<h3><a name="IRV"></a>IRV output</h3>
 <p>{% include 'irv-snippet.html' %}</p>
 {% endif %}
 {% if STAR_html %}
-<h3>STAR output</h3>
+<h3><a name="STAR"></a>STAR output</h3>
 <p>{% include 'star-snippet.html' %}</p>
 {% endif %}
 <p>(<a href="/">homepage</a>)</p>
