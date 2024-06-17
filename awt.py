@@ -31,7 +31,7 @@ from abiflib import (
     ABIFVotelineException,
     full_copecount_from_abifmodel,
     copecount_diagram,
-    IRV_count_from_jabmod,
+    IRV_dict_from_jabmod,
     get_IRV_report,
     pairwise_count_dict,
     STAR_result_from_abifmodel,
@@ -351,8 +351,8 @@ def awt_post():
             jabmod = convert_abif_to_jabmod(abifinput,
                                             cleanws = True,
                                             add_ratings = True)
-            IRV_dict = IRV_count_from_jabmod(jabmod)
-            IRV_text = get_IRV_report(jabmod)
+            IRV_dict = IRV_dict_from_jabmod(jabmod)
+            IRV_text = get_IRV_report(IRV_dict)
 
     msgs={}
     msgs['pagetitle'] = \
