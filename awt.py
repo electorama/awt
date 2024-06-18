@@ -327,6 +327,8 @@ def awt_post():
             debug_output += copewinnerstring
             debug_output += "\n"
             dotsvg_html = copecount_diagram(copecount, outformat='svg')
+        else:
+            copewinnerstring = None
         if request.form.get('include_pairtable'):
             pairwise_dict = pairwise_count_dict(abifmodel)
             debug_output += "\npairwise_dict:\n"
@@ -353,6 +355,9 @@ def awt_post():
                                             add_ratings = True)
             IRV_dict = IRV_dict_from_jabmod(jabmod)
             IRV_text = get_IRV_report(IRV_dict)
+            debug_output += "\nIRV_dict:\n"
+            debug_output += pformat(IRV_dict)
+            debug_output += "\n"
 
     msgs={}
     msgs['pagetitle'] = \

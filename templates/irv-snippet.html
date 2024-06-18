@@ -1,13 +1,23 @@
 <div>
   <ul>
     <li>Winner: {{ IRV_dict['winner']}}</li>
-    <li>NumRounds: {{ IRV_dict['rounds']|length}}</li>
+    <li>Number of rounds: {{ IRV_dict['rounds']|length}}</li>
+    <li>Total voters: {{IRV_dict['roundmeta'][0]['ballotcount'] }}
   </ul>
   <div class="hscroll">
   <table>
     <tr>
       {% for i in range(IRV_dict['rounds'] | length) %}
       <th>Round {{ i + 1 }}</th>
+      {% endfor %}
+    </tr>
+    <tr>
+      {% for i in range(IRV_dict['roundmeta'] | length) %}
+      <td><b>Round {{ i + 1 }} Statistics</b>:<br>
+        Active: {{IRV_dict['roundmeta'][i]['remainingqty'] }}<br>
+        Exhausted: {{IRV_dict['roundmeta'][i]['exhaustedqty'] }}<br>
+        Overvotes: {{IRV_dict['roundmeta'][i]['overvoteqty'] }}<br>
+      </td>
       {% endfor %}
     </tr>
     {% for cand in IRV_dict['rounds'][0] | sort(attribute=IRV_dict['rounds'][0].get, reverse=True) %}
