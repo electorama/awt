@@ -2,7 +2,8 @@
   <ul>
     <li>Winner: {{ IRV_dict['winner']}}</li>
     <li>Number of rounds: {{ IRV_dict['rounds']|length}}</li>
-    <li>Total voters: {{IRV_dict['roundmeta'][0]['ballotcount'] }}
+    <li>Total ballots: {{IRV_dict['roundmeta'][0]['ballotcount'] }}
+    <li>Majority of ballots: {{ IRV_dict['roundmeta'][0]['ballotcount'] // 2 + 1 }}
   </ul>
   <div class="hscroll">
   <table>
@@ -13,10 +14,14 @@
     </tr>
     <tr>
       {% for i in range(IRV_dict['roundmeta'] | length) %}
-      <td><b>Round {{ i + 1 }} Statistics</b>:<br>
-        Active: {{IRV_dict['roundmeta'][i]['remainingqty'] }}<br>
-        Exhausted: {{IRV_dict['roundmeta'][i]['exhaustedqty'] }}<br>
-        Overvotes: {{IRV_dict['roundmeta'][i]['overvoteqty'] }}<br>
+      <td><b>Round {{ i + 1 }} Statistics</b>:
+        <ul>
+          <li>Active ballots: {{IRV_dict['roundmeta'][i]['remainingqty'] }}</li>
+          <li>Exhausted ballots: {{IRV_dict['roundmeta'][i]['exhaustedqty'] }}</li>
+          <li>Majority of active ballots: {{
+            IRV_dict['roundmeta'][i]['remainingqty'] // 2 + 1 }}</li>
+          <li>Overvotes involving uneliminated candidates: {{IRV_dict['roundmeta'][i]['overvoteqty'] }}</li>
+        </ul>
       </td>
       {% endfor %}
     </tr>
