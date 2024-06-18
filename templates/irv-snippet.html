@@ -3,6 +3,7 @@
     <li>Winner: {{ IRV_dict['winner']}}</li>
     <li>NumRounds: {{ IRV_dict['rounds']|length}}</li>
   </ul>
+  <div class="hscroll">
   <table>
     <tr>
       {% for i in range(IRV_dict['rounds'] | length) %}
@@ -24,4 +25,5 @@
     </tr>
     {% endfor %}
   </table>
+  </div>
 </div>
