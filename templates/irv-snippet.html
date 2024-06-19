@@ -13,7 +13,7 @@
     {% set numrounds =  IRV_dict['rounds']|length %}
     {% set totalballots = IRV_dict['roundmeta'][0]['ballotcount'] %}
     {% set majority = IRV_dict['roundmeta'][0]['ballotcount'] // 2 + 1 %}
-    <li>Winner: {{winner}}</li>
+    <li><b>IRV winner</b>: {{winner}}</li>
     <li>Number of rounds: {{numrounds}}</li>
     <li>Total ballots: {{totalballots}}
     <li>Majority of ballots: {{majority}}
@@ -55,7 +55,7 @@
       <td>{{ cand }}: {{ IRV_dict['rounds'][0].get(cand, ' ') }}</td>
       {% for round_data in IRV_dict['rounds'][1:] %}
       {% if cand == winner and (loop.index + 1) == IRV_dict['rounds']|length %}
-      <td><b>WINNER</b>: {{ cand }}: {{ round_data.get(cand) }}</td>
+      <td><b>IRV winner</b>:<br> {{ cand }}: {{ round_data.get(cand) }}</td>
       {% elif round_data.get(cand) %}
       <td>{{ cand }}: {{ round_data.get(cand) }}</td>
       {% else %}
