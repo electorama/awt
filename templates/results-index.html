@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% set all_results_generated = (result_types|length == 4) %}
 {% if msgs.lede %}
 <p>{{ msgs.lede | safe }}</p>
 {% else %}
@@ -7,43 +8,100 @@
 {% endif %}
 {% include 'abifbox-snippet.html' %}
 <h2 id="results">{{ webenv.statusStr }}Results</h2>
-{% if msgs.results_lede %}
+
+{% if msgs.results_name %}
+<p>The {{msgs.results_name}} of {{abif_id}} are below,
+and can be edited in the field above.</p>
+{% elif msgs.results_lede %}
+{# msgs.results_lede is DEPRECATED as of 2024-06-19 #}
 <p>{{ msgs.results_lede | safe }}</p>
 {% else %}
-<p>Below are various abiftool output blocks that you requested from the ABIF you submitted.
+<p>Below are various abiftool output blocks for the ABIF above.
   {% endif %}
   <ul>
-    {% if dotsvg_html %}
-    <li><a href="#dot">Pairwise Diagram</a> &mdash; Winner: {{copewinnerstring}}</li>
+    {% if 'dot' in result_types %}
+    <li><a href="#dot">Pairwise diagram</a> &mdash; Winner: {{copewinnerstring}}</li>
     {% endif %}
-    {% if pairwise_html %}
-    <li><a href="#wlt">Win-loss-tie table</a> &mdash; Winner: {{copewinnerstring}}</li>
+    {% if 'wlt' in result_types %}
+    <li>
+      <a href="#wlt">Win-loss-tie table</a> &mdash; Winner: {{copewinnerstring}}
+    </li>
     {% endif %}
-    {% if IRV_dict %}
-    <li><a href="#IRV">IRV output</a> &mdash; Winner: {{ IRV_dict['winner']}}</li>
+    {% if 'IRV' in result_types %}
+    <li>
+      <a href="#IRV">IRV output</a> &mdash; Winner: {{ IRV_dict['winner']}}
+    </li>
     {% endif %}
-    {% if STAR_html %}
-    <li><a href="#STAR">STAR output</a> &mdash; Winner: {{ scorestardict['scoremodel']['winner'] }}</li>
+    {% if 'STAR' in result_types %}
+    <li>
+      <a href="#STAR">STAR output</a> &mdash; Winner: {{ scorestardict['scoremodel']['winner'] }}
+    </li>
+    {% endif %}
+    {% if abif_id and not all_results_generated %}
+    <li>Generate other results for {{abif_id}}:</li>
+    <ul>
+      {% if not 'dot' in result_types %}
+      <li>
+        <a href="/id/{{abif_id}}/dot#dot">Pairwise diagram for {{abif_id}}</a>
+      </li>
+      {% endif %}
+      {% if not 'wlt' in result_types %}
+      <li>
+        <a href="/id/{{abif_id}}/wlt#wlt">Win-loss-tie table for {{abif_id}}</a>
+      </li>
+      {% endif %}
+      {% if not 'IRV' in result_types %}
+      <li>
+        <a href="/id/{{abif_id}}/IRV#IRV">IRV table for {{abif_id}}</a>
+      </li>
+      {% endif %}
+      {% if not 'STAR' in result_types %}
+      <li>
+        <a href="/id/{{abif_id}}/STAR#STAR">STAR results for {{abif_id}}</a>
+      </li>
+      {% endif %}
+    </ul>
+    <li><a href="/id/{{abif_id}}/all">Generate all results for {{abif_id}}</a></li>
     {% endif %}
   </ul>
 </p>
-{% if dotsvg_html %}
-<h3><a name="dot"></a>Pairwise Diagram</h3>
+{% if 'dot' in result_types and dotsvg_html %}
+<h3><a name="dot"></a>Pairwise diagram</h3>
+{% if abif_id %}
+<div class="hatnote">
+  (<a href="/id/{{abif_id}}/dot#dot">permalink for {{abif_id}} pairwise diagram</a>)
+</div>
+{% endif %}
 <p>{{ dotsvg_html | safe }}</p>
 {% endif %}
-{% if pairwise_html %}
+{% if 'wlt' in result_types and pairwise_html %}
 <h3><a name="wlt"></a>Win-loss-tie table</h3>
+{% if abif_id %}
+<div class="hatnote">
+  (<a href="/id/{{abif_id}}/wlt#wlt">permalink for {{abif_id}} win-loss-tie table</a>)
+</div>
+{% endif %}
 <p><b>Pairwise winner(s)</b>: {{copewinnerstring}}</p>
 <div class="scaletable">
   {{ pairwise_html | safe }}
 </div>
 {% endif %}
-{% if IRV_dict %}
+{% if 'IRV' in result_types and IRV_dict %}
 <h3><a name="IRV"></a>IRV output</h3>
+{% if abif_id %}
+<div class="hatnote">
+  (<a href="/id/{{abif_id}}/IRV#IRV">permalink for {{abif_id}} IRV</a>)
+</div>
+{% endif %}
 <p>{% include 'irv-snippet.html' %}</p>
 {% endif %}
-{% if STAR_html %}
+{% if 'STAR' in result_types and STAR_html %}
 <h3><a name="STAR"></a>STAR output</h3>
+{% if abif_id %}
+<div class="hatnote">
+  (<a href="/id/{{abif_id}}/STAR#STAR">permalink for {{abif_id}} STAR</a>)
+</div>
+{% endif %}
 <p>{% include 'star-snippet.html' %}</p>
 {% endif %}
 <p>(<a href="/">homepage</a>)</p>

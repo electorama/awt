@@ -183,3 +183,9 @@ svg {
   background-color: #fff;
   border-bottom: 1px solid #fff;
 }
+
+.hatnote {
+    margin-top: -1.4rem;
+    font-size: smaller;
+    margin-left: 2rem;
+}
