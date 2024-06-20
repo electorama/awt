@@ -22,6 +22,9 @@
     <div id="content">
       <h1>{{msgs.pagetitle}}</h1>
       {% if webenv.debugFlag %}
+      <div class="hatnote">(<a href="#debug">Debug output</a>)</div>
+      {% endif %}
+      {% if webenv.debugFlag %}
       <small><i>{{webenv.req_url}} {{webenv.hostname}}</i></small>
       {% endif %}
       {% if webenv.debugFlag %}
@@ -32,6 +35,8 @@
       {% endblock content %}
       {% if webenv.debugFlag %}
       <h2 id="debug">Debug output</h2>
+      <div class="hatnote">from {{webenv.hostname}} for
+        <a href="{{webenv.req_url}}">{{webenv.req_url}}</a></div>
       <div><pre>{{ debug_output }}</pre></div>
       {% endif %}
       <hr>
