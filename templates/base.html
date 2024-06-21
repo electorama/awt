@@ -37,7 +37,8 @@
       <h2 id="debug">Debug output</h2>
       <div class="hatnote">from {{webenv.hostname}} for
         <a href="{{webenv.req_url}}">{{webenv.req_url}}</a></div>
-      <div><pre>{{ debug_output }}</pre></div>
+      <pre>{{ debug_output }}</pre>
+      <pre>{{ webenv|pprint }}</pre>
       {% endif %}
       <hr>
       {% include 'footer.snippet.html' %}

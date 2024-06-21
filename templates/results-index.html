@@ -65,20 +65,32 @@ and can be edited in the field above.</p>
     {% endif %}
   </ul>
 </p>
+{############ dot ############}
+{% set restype="dot" %}
+{% set rellink=restype + "#" + restype %}
 {% if 'dot' in result_types and dotsvg_html %}
-<h3><a name="dot"></a>Pairwise diagram</h3>
+<h3><a name="{{restype}}"></a>Pairwise diagram</h3>
 {% if abif_id %}
+{% set pathpart="/id/" + abif_id + "/" + rellink %}
+{% set abslink=webenv.base_url + pathpart %}
 <div class="hatnote">
-  (<a href="/id/{{abif_id}}/dot#dot">permalink for {{abif_id}} pairwise diagram</a>)
+  {{abif_id}} pairwise diagram permalink:<br>
+  <a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
 <p>{{ dotsvg_html | safe }}</p>
 {% endif %}
+{############ wlt ############}
+{% set restype="wlt" %}
+{% set rellink=restype + "#" + restype %}
 {% if 'wlt' in result_types and pairwise_html %}
-<h3><a name="wlt"></a>Win-loss-tie table</h3>
+<h3><a name="{{restype}}"></a>Win-loss-tie table</h3>
 {% if abif_id %}
+{% set pathpart="/id/" + abif_id + "/" + rellink %}
+{% set abslink=webenv.base_url + pathpart %}
 <div class="hatnote">
-  (<a href="/id/{{abif_id}}/wlt#wlt">permalink for {{abif_id}} win-loss-tie table</a>)
+  {{abif_id}} w-l-t table permalink:<br>
+  <a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
 <p><b>Pairwise winner(s)</b>: {{copewinnerstring}}</p>
@@ -86,20 +98,32 @@ and can be edited in the field above.</p>
   {{ pairwise_html | safe }}
 </div>
 {% endif %}
+{############ IRV ############}
+{% set restype="IRV" %}
+{% set rellink=restype + "#" + restype %}
 {% if 'IRV' in result_types and IRV_dict %}
-<h3><a name="IRV"></a>IRV output</h3>
+<h3><a name="{{restype}}"></a>IRV table</h3>
 {% if abif_id %}
+{% set pathpart="/id/" + abif_id + "/" + rellink %}
+{% set abslink=webenv.base_url + pathpart %}
 <div class="hatnote">
-  (<a href="/id/{{abif_id}}/IRV#IRV">permalink for {{abif_id}} IRV</a>)
+  {{abif_id}} IRV table permalink:<br>
+  <a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
 <p>{% include 'irv-snippet.html' %}</p>
 {% endif %}
+{############ STAR ############}
+{% set restype="STAR" %}
+{% set rellink=restype + "#" + restype %}
 {% if 'STAR' in result_types and STAR_html %}
-<h3><a name="STAR"></a>STAR output</h3>
+<h3><a name="{{restype}}"></a>STAR results</h3>
 {% if abif_id %}
+{% set pathpart="/id/" + abif_id + "/" + rellink %}
+{% set abslink=webenv.base_url + pathpart %}
 <div class="hatnote">
-  (<a href="/id/{{abif_id}}/STAR#STAR">permalink for {{abif_id}} STAR</a>)
+  {{abif_id}} STAR results permalink:<br>
+  <a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
 <p>{% include 'star-snippet.html' %}</p>

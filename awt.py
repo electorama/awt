@@ -56,11 +56,18 @@ class WebEnv:
     def set_web_env():
         WebEnv.__env['req_url'] = request.url
         WebEnv.__env['hostname'] = urllib.parse.urlsplit(request.url).hostname
+        WebEnv.__env['hostcolonport'] = request.host
+        WebEnv.__env['protocol'] = request.scheme
+        WebEnv.__env['base_url'] = f"{request.scheme}://{request.host}"
+        WebEnv.__env['pathportion'] = request.path
+        WebEnv.__env['queryportion'] = request.args
+        WebEnv.__env['approot'] = app.config['APPLICATION_ROOT']
         WebEnv.__env['debugFlag'] = ( os.getenv('AWT_STATUS') == "debug" )
         WebEnv.__env['debugIntro'] = "Set AWT_STATUS=prod to turn off debug mode\n"
 
         if WebEnv.__env['debugFlag']:
             WebEnv.__env['statusStr'] = "(DEBUG) "
+            WebEnv.__env['environ'] = os.environ
         else:
             WebEnv.__env['statusStr'] = ""
 
