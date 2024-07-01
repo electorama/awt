@@ -23,7 +23,12 @@
   <div class="exampleareacontainer">
     <textarea readonly class="vscroll examplearea" id='formtext{{loop.index}}'>{{ item.text }}</textarea>
   </div>
-  <button onclick="pushTextFromID('formtext{{loop.index}}')">Replace submission area with example</button> &mdash; (<a href="/id/{{item.id}}">{{item.id}} permalink</a>)
+  <button onclick="pushTextFromID('formtext{{loop.index}}')">Replace submission area with example</button> &mdash;
+  (<a href="/id/{{item.id}}">{{item.id}} permalink</a>)
+  (tags: {% for t in item.taglist %}
+  <a href="/tag/{{t}}">{{t}}</a>
+  {% if not loop.last %}, {% endif %}
+  {% endfor %})
 </div>
 {% endfor %}
 <div class="tab-content" id="more">

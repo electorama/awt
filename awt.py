@@ -88,6 +88,9 @@ def build_examplelist():
             retval[i]['text'] = apath.read_text()
         except FileNotFoundError:
             retval[i]['text'] = f'NOT FOUND: {f["filename"]}\n'
+        retval[i]['taglist'] = []
+        for t in re.split('[ ,]+', retval[i]['tags']):
+            retval[i]['taglist'].append(t)
     return retval
 
 

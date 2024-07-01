@@ -1,12 +1,12 @@
 - filename: tenn-example/tennessee-example-simple.abif
   id: TNexample
   title: Simple example (Tennessee capitol)
-  tags: fictional, CondorcetVsIRV
+  tags: theoretical, CondorcetVsIRV
   desc: >
     This example is compatible with many web election tools.
 - filename: tenn-example/tennessee-example-scores.abif
   id: TNexampleScores
-  tags: fictional
+  tags: theoretical
   title: More complicated example (Tennessee capitol)
   desc: >
     This example is a more ornate example, which shows off how to
@@ -15,138 +15,138 @@
 - filename: burl2009/burl2009.abif
   id: Burl2009
   title: Burlington mayoral 2009
-  tags: historic, VT, USA, government, CondorcetVsIRV
+  tags: actual, VT, USA, government, CondorcetVsIRV
   desc: >
     This example is based on the electoral results from the Burlington
     mayoral race in 2009.
 - filename: tenn-example/tennessee-example-STAR.abif
   id: TNexampleSTAR
   title: Tennessee example with STAR voting (Tennessee capitol)
-  tags: fictional
+  tags: theoretical
   desc: >
     This is the TN capitol example with embedded scores (with 0-5
     "stars").
 - filename: tenn-example/tennessee-example-STAR-score-difference.abif
   id: TNexampleSTARdiff
   title: Modified Tennessee example with differing results
-  tags: fictional
+  tags: theoretical
   desc: >
     This is a modified Tennesee capitol example which has differing
     results for score, STAR, and Copeland.
 - filename: commasep/jman722-example.abif
   id: commaSeparated2021
   title: 2021 comma-separated example of ABIF
-  tags: fictional
+  tags: theoretical
   desc: >
     An example posted by /u/jman722 on reddit in 2021.
 - filename: localabif/debian-elections/2022_debian_pl.abif
   id: DPL2022
   title: 2022 Debian Project Leader
   desc: 2022 Debian Project Leader election, won by Jonathan Carter.
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/2021_debian_general_resolution.abif
   id: GenResRMS2021
   title: Debian 2021 General Resolution 001
   desc: Debian 2021 General Resolution about Richard Stallman
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/2021_debian_pl.abif
   id: DPL2021
   title: Debian 2021 Project Leader
   desc: 2021 Debian Project Leader election, won by Jonathan Carter.
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2020.abif
   id: DPL2020
   title: Debian 2020 Project Leader
   desc: 2020 Debian Project Leader election, won by Jonathan Carter.
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2019.abif
   id: DPL2019
   title: Debian 2019 Project Leader
   desc2: 2019 Debian Project Leader election, won by Sam Hartman
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2018.abif
   id: DPL2018
   title: Debian 2018 Project Leader
   desc2: 2018 Debian Project Leader election, won by Chris Lamb
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2017.abif
   id: DPL2017
   title: Debian 2017 Project Leader
   desc2: 2017 Debian Project Leader election, won by Chris Lamb
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2016.abif
   id: DPL2016
   title: Debian 2016 Project Leader
   desc2: 2016 Debian Project Leader election, won by Mehdi Dogguy
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2015.abif
   id: DPL2015
   title: Debian 2015 Project Leader
   desc2: 2015 Debian Project Leader election, won by Neil McGovern
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2014.abif
   id: DPL2014
   title: Debian 2014 Project Leader
   desc2: 2014 Debian Project Leader election, won by Lucas Nussbaum
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2013.abif
   id: DPL2013
   title: Debian 2013 Project Leader
   desc2: 2013 Debian Project Leader election, won by Lucas Nussbaum
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2012.abif
   id: DPL2012
   title: Debian 2012 Project Leader
   desc2: 2012 Debian Project Leader election, won by Stefano Zacchiroli
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2011.abif
   id: DPL2011
   title: Debian 2011 Project Leader
   desc2: 2011 Debian Project Leader election, won by Stefano Zacchiroli
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2010.abif
   id: DPL2010
   title: Debian 2010 Project Leader
   desc2: 2010 Debian Project Leader election, won by Stefano Zacchiroli
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2009.abif
   id: DPL2009
   title: Debian 2009 Project Leader
   desc2: 2009 Debian Project Leader election, won by Steve McIntyre
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2008.abif
   id: DPL2008
   title: Debian 2008 Project Leader
   desc: 2008 Debian Project Leader election, won by Steve McIntyre
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2007.abif
   id: DPL2007
   title: Debian 2007 Project Leader
   desc: 2007 Debian Project Leader election, won by Sam Hocevar
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2006.abif
   id: DPL2006
   title: Debian 2006 Project Leader
   desc: 2006 Debian Project Leader election, won by Anthony Towns
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2005.abif
   id: DPL2005
   title: Debian 2005 Project Leader
   desc: 2005 Debian Project Leader election, won by Branden Robinson
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2004.abif
   id: DPL2004
   title: Debian 2004 Project Leader
   desc: 2004 Debian Project Leader election, won by Martin Michlmayr
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/2003_debian_pl.abif
   id: DPL2003
   title: Debian 2003 Project Leader
   desc: 2003 Debian Project Leader election, won by Martin Michlmayr.
-  tags: debian, historic, orgpriv, CondorcetVsIRV
+  tags: debian, actual, orgpriv, CondorcetVsIRV
 - filename: localabif/debian-elections/2002_debian_pl.abif
   id: DPL2002
   title: Debian 2002 Project Leader
   desc: 2002 Debian Project Leader election, won by Bdale Garbee.
-  tags: debian, historic, orgpriv
+  tags: debian, actual, orgpriv
 
