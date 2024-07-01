@@ -29,8 +29,8 @@
       {% set flags = namespace(overvote=false) %}
       {% for i in range(IRV_dict['roundmeta'] | length) %}
       <td><b>Overview</b>:<br>
-        {% set threshold=IRV_dict['roundmeta'][i]['remainingqty'] // 2 + 1 %}
-        <small>Active ballots: {{IRV_dict['roundmeta'][i]['remainingqty'] }}
+        {% set threshold=IRV_dict['roundmeta'][i]['countedqty'] // 2 + 1 %}
+        <small>Active ballots: {{IRV_dict['roundmeta'][i]['countedqty'] }}
           {% if threshold < majority %}
           (minimum plurality: {{threshold}})
           {% endif %}<br>
@@ -38,7 +38,7 @@
                 {{IRV_dict['roundmeta'][i]['exhaustedqty'] }}<br>
           {% if IRV_dict['roundmeta'][i]['overvoteqty'] > 0 %}
           Overvotes:
-            {{IRV_dict['roundmeta'][i]['overvoteqty'] }}<sup>†</sup><br>
+            {{IRV_dict['roundmeta'][i]['overvoteqty'] }}<br>
           {% set flags.overvote=true %}
           {% endif %}
         </small>
@@ -66,7 +66,4 @@
     {% endfor %}
   </table>
   </div>
-  {% if flags.overvote %}
-  <small>† Overvotes are reevaluated in each round, and is only counted as an overvote if multiple candidates in the overvote haven't been eliminated yet.</small>
-  {% endif %}
 </div>

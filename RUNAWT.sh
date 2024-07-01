@@ -23,7 +23,7 @@ if [[ "$REPLY" =~ ^[yY] ]]; then
 else
   export AWT_STATUS=prod
 fi
-python $AWT_DIR/awt.py &
+python3 $AWT_DIR/awt.py &
 mypid="$!"
 trap kill_mypid_and_die SIGINT
 sleep 1
