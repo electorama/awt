@@ -1,6 +1,7 @@
 - filename: tenn-example/tennessee-example-simple.abif
   id: TNexample
   title: Simple example (Tennessee capitol)
+  tags: fictional, CondorcetVsIRV
   desc: >
     This example is compatible with many web election tools.
 - filename: tenn-example/tennessee-example-scores.abif
@@ -14,7 +15,7 @@
 - filename: burl2009/burl2009.abif
   id: Burl2009
   title: Burlington mayoral 2009
-  tags: historic, VT, USA, government
+  tags: historic, VT, USA, government, CondorcetVsIRV
   desc: >
     This example is based on the electoral results from the Burlington
     mayoral race in 2009.
@@ -142,7 +143,7 @@
   id: DPL2003
   title: Debian 2003 Project Leader
   desc: 2003 Debian Project Leader election, won by Martin Michlmayr.
-  tags: debian, historic, orgpriv
+  tags: debian, historic, orgpriv, CondorcetVsIRV
 - filename: localabif/debian-elections/2002_debian_pl.abif
   id: DPL2002
   title: Debian 2002 Project Leader
