@@ -1,17 +1,4 @@
 <div class="tab-content" id="all">
-{#######################  <h3>All examples</h3>
-  {% set mainsize = main_file_array|length %}
-  {% for item in main_file_array %}
-  <!--<p>{{ item.desc }}</p>-->
-  <li>{{loop.index}}. <a href="/id/{{item.id}}">{{item.id}}</a>
-    &mdash; {{item.title}}</li>
-  {% endfor %}
-
-  {% for item in other_files %}
-  <li>{{loop.index + mainsize}}. <a href="/id/{{item.id}}">{{item.id}}</a>
-    &mdash; {{item.title}}</li>
-  {% endfor %}
-  </ul> #####################}
   <h3>Examples organized by tag</h3>
   <ul>
     {% for item in tagarray %}

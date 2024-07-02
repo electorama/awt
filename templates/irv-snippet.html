@@ -9,13 +9,21 @@
 </style>
 <div>
   <ul>
+    {% set canddict = IRV_dict['canddict'] %}
     {% set winner = IRV_dict['winner'] %}
     {% set numrounds =  IRV_dict['rounds']|length %}
-    {% set totalballots = IRV_dict['roundmeta'][0]['ballotcount'] %}
-    {% set majority = IRV_dict['roundmeta'][0]['ballotcount'] // 2 + 1 %}
-    <li><b>IRV winner</b>: {{winner}}</li>
+    {% set startingqty = IRV_dict['roundmeta'][0]['startingqty'] %}
+    {% set majority = IRV_dict['roundmeta'][0]['startingqty'] // 2 + 1 %}
+    {# Loop over winners if there is a tie #}
+    <li><b>IRV winner</b>: {{winnerstr}} {% for w in winner %}
+    {{canddict[w]}} ("{{w}}")
+    {% if not loop.last %}{% if loop.revindex == 2 %} and {% else %},
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </li>
     <li>Number of rounds: {{numrounds}}</li>
-    <li>Total ballots: {{totalballots}}
+    <li>Total ballots: {{startingqty}}
     <li>Majority of ballots: {{majority}}
   </ul>
   <div class="hscroll">
@@ -30,16 +38,17 @@
       {% for i in range(IRV_dict['roundmeta'] | length) %}
       <td><b>Overview</b>:<br>
         {% set threshold=IRV_dict['roundmeta'][i]['countedqty'] // 2 + 1 %}
-        <small>Active ballots: {{IRV_dict['roundmeta'][i]['countedqty'] }}
-          {% if threshold < majority %}
-          (minimum plurality: {{threshold}})
-          {% endif %}<br>
+        <small>Starting ballots: {{IRV_dict['roundmeta'][i]['startingqty'] }}<br/>
           Exhausted ballots:
                 {{IRV_dict['roundmeta'][i]['exhaustedqty'] }}<br>
           {% if IRV_dict['roundmeta'][i]['overvoteqty'] > 0 %}
           Overvotes:
             {{IRV_dict['roundmeta'][i]['overvoteqty'] }}<br>
           {% set flags.overvote=true %}
+            {% endif %}
+            Counted ballots: {{IRV_dict['roundmeta'][i]['countedqty'] }}<br>
+          {% if threshold < majority %}
+          Minimum plurality: {{threshold}}<br/>
           {% endif %}
         </small>
       </td>
