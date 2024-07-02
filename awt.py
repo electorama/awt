@@ -186,6 +186,8 @@ def awt_get(toppage=None, tag=None):
 
     webenv['toppage'] = toppage
 
+    mytagarray = sorted(get_all_tags_in_examplelist(file_array),
+                        key=str.casefold)
     match toppage:
         case "awt":
             retval = render_template('default-index.html',
@@ -193,10 +195,12 @@ def awt_get(toppage=None, tag=None):
                                      abiftool_output=None,
                                      main_file_array=file_array[0:5],
                                      other_files=file_array[5:],
+                                     example_list=file_array,
                                      webenv=webenv,
                                      msgs=msgs,
                                      debug_output=debug_output,
                                      debug_flag=debug_flag,
+                                     tagarray = mytagarray,
                                      )
         case "tag":
             if tag:
@@ -209,19 +213,21 @@ def awt_get(toppage=None, tag=None):
                                          abiftool_output=None,
                                          main_file_array=tag_file_array[0:5],
                                          other_files=tag_file_array[5:],
+                                         example_list=file_array,
                                          webenv=webenv,
                                          msgs=msgs,
                                          debug_output=debug_output,
                                          debug_flag=debug_flag,
+                                         tag = tag,
+                                         tagarray = mytagarray
                                          )
             else:
                 retval = render_template('tag-index.html',
-                                         tagarray = sorted(
-                                             get_all_tags_in_examplelist(
-                                                 file_array),
-                                             key=str.casefold),
+                                         example_list=file_array,
                                          webenv=webenv,
-                                         msgs=msgs
+                                         msgs=msgs,
+                                         tag = tag,
+                                         tagarray = mytagarray
                                          )
                                          
         case _:
@@ -318,6 +324,7 @@ def get_by_id(identifier, resulttype=None):
         return render_template('results-index.html',
                                abifinput=fileentry['text'],
                                abif_id=identifier,
+                               example_list=examplelist,
                                copewinnerstring=eledata['copewinnerstring'],
                                dotsvg_html=eledata['dotsvg_html'],
                                eledata=eledata,

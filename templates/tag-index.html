@@ -5,5 +5,8 @@
   {% for item in tagarray %}
   <li>{{loop.index}}. <a href="/tag/{{item}}">{{item}}</a></li>
   {% endfor %}
+  <li><a href="/awt">/awt homepage</a></li>
 </ul>
+{% include 'example-list-snippet.html' %}
+<p>In addition to the above examples, one may return to the <a href="/awt">/awt homepage</a> and create one's own example.</p>
 {% endblock content %}

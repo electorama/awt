@@ -13,12 +13,20 @@
   <li data-target="example{{loop.index}}">{{loop.index}}. {{item.id}}</li>
   {% endfor %}
   {% if other_files|length > 0 %}
-  <li data-target="more">More...</li>
+  <li data-target="more">Other {{tag}} examples...</li>
   {% endif %}
+  <li data-target="all">All tags</li>
 </ul>
 {% for item in main_file_array %}
 <div class="tab-content active" id="example{{loop.index}}">
   <h3>{{ loop.index }}. {{item.title}}</h3>
+  <div class="hatnote">
+    🔗 <a href="/id/{{item.id}}">{{item.id}}</a> &nbsp; &nbsp;
+    (tags: {% for t in item.taglist %}
+    <a href="/tag/{{t}}">{{t}}</a>
+    {% if not loop.last %}, {% endif %}
+    {% endfor %})
+  </div>
   <p>{{ item.desc }}</p>
   <div class="exampleareacontainer">
     <textarea readonly class="vscroll examplearea" id='formtext{{loop.index}}'>{{ item.text }}</textarea>
@@ -42,6 +50,7 @@
   <li><a href="/tag">Explore by tag</a></li>
   </ul>
 </div>
+{% include 'all-snippet.html' %}
 </div>
 {% include 'also-note-snippet.html' %}
 {% endblock content %}

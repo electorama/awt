@@ -8,7 +8,11 @@
 {% endif %}
 {% include 'abifbox-snippet.html' %}
 <h2 id="results">{{ webenv.statusStr }}Results</h2>
-
+{% if abif_id %}
+{% set pathpart="/id/" + abif_id  %}
+{% set abslink=webenv.base_url + pathpart %}
+<div class="hatnote">🔗<a href="{{abslink}}">{{abslink}}</a></div>
+{% endif %}
 {% if msgs.results_name %}
 <p>The {{msgs.results_name}} of {{abif_id}} are below,
 and can be edited in the field above.</p>
@@ -75,7 +79,7 @@ and can be edited in the field above.</p>
 {% set abslink=webenv.base_url + pathpart %}
 <div class="hatnote">
   {{abif_id}} pairwise diagram permalink:<br>
-  <a href="{{abslink}}">{{abslink}}</a>
+  🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
 <p>{{ dotsvg_html | safe }}</p>
@@ -90,7 +94,7 @@ and can be edited in the field above.</p>
 {% set abslink=webenv.base_url + pathpart %}
 <div class="hatnote">
   {{abif_id}} w-l-t table permalink:<br>
-  <a href="{{abslink}}">{{abslink}}</a>
+  🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
 <p><b>Pairwise winner(s)</b>: {{copewinnerstring}}</p>
@@ -108,7 +112,7 @@ and can be edited in the field above.</p>
 {% set abslink=webenv.base_url + pathpart %}
 <div class="hatnote">
   {{abif_id}} IRV table permalink:<br>
-  <a href="{{abslink}}">{{abslink}}</a>
+  🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
 <p>{% include 'irv-snippet.html' %}</p>
@@ -123,7 +127,7 @@ and can be edited in the field above.</p>
 {% set abslink=webenv.base_url + pathpart %}
 <div class="hatnote">
   {{abif_id}} STAR results permalink:<br>
-  <a href="{{abslink}}">{{abslink}}</a>
+  🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
 <p>{% include 'star-snippet.html' %}</p>
