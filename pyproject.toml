@@ -1,0 +1,7 @@
+[project]
+name = "awt"
+version = "0.1"
+dependencies = [
+    "abiftool",
+    "Flask"
+]

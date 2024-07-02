@@ -1,0 +1,15 @@
+<h2>Example list</h2>
+<ul>
+    {% for item in example_list %}
+  <!--<p>{{ item.desc }}</p>-->
+  <li>{{loop.index}}. <a href="/id/{{item.id}}">{{item.id}}</a>
+    &mdash; {{item.title}} &mdash; {{ item.desc }}
+    ({% for t in item.taglist %}
+    <a href="/tag/{{t}}">{{t}}</a>
+    {% endfor %})
+                                  
+    
+  </li>
+  {% endfor %}
+
+</ul>
