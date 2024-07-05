@@ -33,7 +33,9 @@ and can be edited in the field above.</p>
     {% endif %}
     {% if 'IRV' in result_types %}
     <li>
-      <a href="#IRV">IRV output</a> &mdash; Winner: {{ IRV_dict['winner']}}
+      <a href="#IRV">IRV output</a> &mdash;
+      {{ "Winners (tie):" if IRV_dict['winner'] | length > 1 else "Winner:" }}
+      {{IRV_dict['winnerstr']}}
     </li>
     {% endif %}
     {% if 'STAR' in result_types %}

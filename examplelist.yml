@@ -149,4 +149,8 @@
   title: Debian 2002 Project Leader
   desc: 2002 Debian Project Leader election, won by Bdale Garbee.
   tags: debian, actual, orgpriv
+- filename: tenn-example/tennessee-example-irv-tie.abif
+  id: TNexampleTie
+  title: A modified version of the Tennessee example where there's a tie
+  tags: theoretical, CondorcetVsIRV
 

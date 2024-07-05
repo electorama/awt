@@ -11,17 +11,12 @@
   <ul>
     {% set canddict = IRV_dict['canddict'] %}
     {% set winner = IRV_dict['winner'] %}
+    {% set winnerstr = IRV_dict['winnerstr'] %}
+    {% set winnerintro = "IRV Winners (tie)" if winner | length > 1 else "IRV Winner" %}
     {% set numrounds =  IRV_dict['rounds']|length %}
     {% set startingqty = IRV_dict['roundmeta'][0]['startingqty'] %}
     {% set majority = IRV_dict['roundmeta'][0]['startingqty'] // 2 + 1 %}
-    {# Loop over winners if there is a tie #}
-    <li><b>IRV winner</b>: {{winnerstr}} {% for w in winner %}
-    {{canddict[w]}} ("{{w}}")
-    {% if not loop.last %}{% if loop.revindex == 2 %} and {% else %},
-    {% endif %}
-    {% endif %}
-    {% endfor %}
-    </li>
+    <li><b>{{winnerintro}}</b>: {{winnerstr}}</li>
     <li>Number of rounds: {{numrounds}}</li>
     <li>Total ballots: {{startingqty}}
     <li>Majority of ballots: {{majority}}
