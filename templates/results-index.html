@@ -1,11 +1,13 @@
 {% extends "base.html" %}
-{% block content %}
-{% set all_results_generated = (result_types|length == 4) %}
+{% block introduction %}
 {% if msgs.lede %}
 <p>{{ msgs.lede | safe }}</p>
 {% else %}
 <p>Your .abif has been processed.  See <a href="#results">results below</a></p>
 {% endif %}
+{% endblock introduction %}
+{% block content %}
+{% set all_results_generated = (result_types|length == 4) %}
 {% include 'abifbox-snippet.html' %}
 <h2 id="results">{{ webenv.statusStr }}Results</h2>
 {% if abif_id %}

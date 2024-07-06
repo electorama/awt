@@ -23,15 +23,18 @@
       <h1>{{msgs.pagetitle}}</h1>
       {% if webenv.debugFlag %}
       <div class="hatnote">(<a href="#debug">Debug output</a>)</div>
-      {% endif %}
-      {% if webenv.debugFlag %}
       <small><i>{{webenv.req_url}} {{webenv.hostname}}</i></small>
-      {% endif %}
-      {% if webenv.debugFlag %}
       (see <a href="#debug">debug output below</a>)<br>
       {% endif %}
+      {% block introduction %}
+      {% if webenv.toppage == 'awt' %}
+      {% include 'intro-snippet.html' %}
+      {% endif %}
+      {% endblock introduction %}
       {% block content %}
-      REPLACEME base.html
+      {########### vvvv THIS GETS REPLACED vvvv #########}
+      <h1>THIS OUTPUT SHOULD BE OVERRIDEN BY A JINJA SUBTEMPLATE</h1>
+      {########### ^^^^ THIS GETS REPLACED ^^^^ #########}
       {% endblock content %}
       {% if webenv.debugFlag %}
       <h2 id="debug">Debug output</h2>

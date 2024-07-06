@@ -1,0 +1,48 @@
+* awt.py
+The core script.
+* base.html
+The core/base html.  This is where <html>, <head> and <body> are.
+
+* Child pages
+** default-index.html
+This child handles requests for  "/"
+** results-index.html
+This is the driver behind "/awt" and "/id"
+** tag-index.html
+This is the driver behind "/tag"
+** not-found.html
+This gets rendered as a subtemplate of base.html when an invalid URL
+is given.
+
+
+* Snippets shown on many child pages
+** intro-snippet.html
+This is the intro at the beginning of every page, but I'm going to
+push it into base.html.
+** abifbox-snippet.html
+This is the text-entry box shown when the user is being invited to
+modify some ABIF.
+** also-note-snippet.html
+This is shown at the bottom of many pages
+** footer.snippet.html
+This is a footer that shows up on all pages
+
+
+* Snippets geared toward tag-index
+** all-snippet.html
+This is part of a subpage of tag-index.html.  It iterates from 6 until
+the end of list abif files associated with the current tag
+** example-list-snippet.html
+This is part of a subpage of tag-index.html.  It iterates through all
+of the examples and provides "/id"-based links
+
+
+* Snippets specific to certain result-types
+** irv-snippet.html
+This is part of a subpage of results-index.html This snippet that gets
+pulled in when IRV results are requested.  It contains a bit of style
+used in templates that should probably be copied elsewhere.
+** star-snippet.html
+This is part of a subpage of results-index.html This snippet that gets
+pulled in when STAR results are requested.  It contains a bit of style
+used in templates that should probably be copied elsewhere.

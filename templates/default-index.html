@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-{% if webenv.toppage == 'awt' %}
-{% include 'intro-snippet.html' %}
-{% endif %}
 {% include 'abifbox-snippet.html' %}
 {% if webenv.toppage == 'awt' %}
 <h2 id="examples">ABIF Examples</h2>
@@ -40,7 +37,7 @@
 </div>
 {% endfor %}
 <div class="tab-content" id="more">
-  <h3>...and the rest</h3>
+  <h3>The remaining ABIF examples</h3>
   {% set mainsize = main_file_array|length %}
   <ul>
   {% for item in other_files %}
