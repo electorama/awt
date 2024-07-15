@@ -53,7 +53,7 @@ class WebEnv:
         return WebEnv.__env
 
     @staticmethod
-    def set_web_env():
+    def sync_web_env():
         WebEnv.__env['req_url'] = request.url
         WebEnv.__env['hostname'] = urllib.parse.urlsplit(request.url).hostname
         WebEnv.__env['hostcolonport'] = request.host
@@ -211,7 +211,7 @@ def homepage():
 def awt_get(toppage=None, tag=None):
     msgs = {}
     webenv = WebEnv.wenvDict()
-    WebEnv.set_web_env()
+    WebEnv.sync_web_env()
     msgs['pagetitle'] = \
         f"{webenv['statusStr']}ABIF web tool (awt) on Electorama!"
     msgs['placeholder'] = \
@@ -313,7 +313,7 @@ def get_by_id(identifier, resulttype=None):
     examplelist = build_examplelist()
     webenv = WebEnv.wenvDict()
     debug_output = webenv.get('debugIntro') or ""
-    WebEnv.set_web_env()
+    WebEnv.sync_web_env()
     fileentry = get_fileentry_from_examplelist(identifier, examplelist)
     if fileentry:
         msgs['pagetitle'] = f"{webenv['statusStr']}{fileentry['title']}"
@@ -372,7 +372,7 @@ def awt_post():
     copewinners = None
     copewinnerstring = None
     webenv = WebEnv.wenvDict()
-    WebEnv.set_web_env()
+    WebEnv.sync_web_env()
     pairwise_dict = None
     pairwise_html = None
     dotsvg_html = None
