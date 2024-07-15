@@ -85,8 +85,10 @@ and can be edited in the field above.</p>
   {{abif_id}} pairwise diagram permalink:<br>
   🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
-{% endif %}
+<p><a href="/id/{{abif_id}}/dot/svg">{{ dotsvg_html | safe }}</a></p>
+{% else %}
 <p>{{ dotsvg_html | safe }}</p>
+{% endif %}
 {% endif %}
 {############ wlt ############}
 {% set restype="wlt" %}

@@ -27,7 +27,6 @@ This is shown at the bottom of many pages
 ** footer.snippet.html
 This is a footer that shows up on all pages
 
-
 * Snippets geared toward tag-index
 ** all-snippet.html
 This is part of a subpage of tag-index.html.  It iterates from 6 until
@@ -46,3 +45,36 @@ used in templates that should probably be copied elsewhere.
 This is part of a subpage of results-index.html This snippet that gets
 pulled in when STAR results are requested.  It contains a bit of style
 used in templates that should probably be copied elsewhere.
+
+* awt.py structure
+** class WebEnv (singleton):
+*** wenv(name):
+Return name named environment variable from web environment.
+*** wenvDict():
+Return dictionary with entire web environment
+*** set_web_env():
+sync web environment with WebEnv singleton
+** supporting functions
+*** build_examplelist():
+Load the list of examples from examplelist.yml
+*** get_fileentry_from_examplelist(filekey, examplelist):
+Returns entry of ABIF file matching filekey
+*** get_fileentries_by_tag(tag, examplelist):
+Returns ABIF file entries having given tag
+*** get_all_tags_in_examplelist(examplelist):
+FIXME
+*** add_html_hints_to_stardict(scores, stardict):
+FIXME
+*** _get_jabmod_to_eledata(abifstr, stuff_to_get=['dot', 'wlt', 'IRV', 'STAR']):
+called by get_by id
+** Redirect from / to /awt
+*** homepage():
+This is a really simple function
+** /<toppage> (including /awt) and /tag/<tag>
+*** awt_get(toppage=None, tag=None)
+This was the original function to handle GET requests.  It's a
+monolith that probably needs to be broken up
+** /id/<identifier> GET and /id/<identifier>/<resulttype> GET
+*** get_by_id(identifier, resulttype=None):
+** /awt POST
+*** awt_post():

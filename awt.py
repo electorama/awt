@@ -73,6 +73,7 @@ class WebEnv:
 
 
 def build_examplelist():
+    '''Load the list of examples from examplelist.yml'''
     yampathlist = [
         Path(AWT_DIR, "examplelist.yml")
     ]
@@ -161,6 +162,45 @@ def add_html_hints_to_stardict(scores, stardict):
     return retval
 
 
+def _get_jabmod_to_eledata(abifstr, stuff_to_get=['dot', 'wlt', 'IRV', 'STAR']):
+    returndata = {}
+    try:
+        jabmod = convert_abif_to_jabmod(abifstr, cleanws=True, add_ratings=True)
+        error_html = None
+    except ABIFVotelineException as e:
+        jabmod = None
+        error_html = e.message
+    returndata['jabmod'] = jabmod
+    returndata['error_html'] = error_html
+
+    if 'dot' in stuff_to_get or 'wlt' in stuff_to_get:
+        copecount = full_copecount_from_abifmodel(jabmod)
+        cwstring = ", ".join(get_Copeland_winners(copecount))
+        returndata['copewinnerstring'] = cwstring
+    if 'dot' in stuff_to_get:
+        returndata['dotsvg_html'] = copecount_diagram(copecount, outformat='svg')
+
+    if 'wlt' in stuff_to_get:
+        returndata['pairwise_dict'] = pairwise_count_dict(jabmod)
+        returndata['pairwise_html'] = htmltable_pairwise_and_winlosstie(jabmod,
+                                                                        snippet = True,
+                                                                        validate = True,
+                                                                        modlimit = 2500)
+    if 'STAR' in stuff_to_get:
+        scorestar = {}
+        returndata['STAR_html'] = html_score_and_star(jabmod)
+        scoremodel = STAR_result_from_abifmodel(jabmod)
+        scorestar['scoremodel'] = scoremodel
+        stardict = scaled_scores(jabmod, target_scale=50)
+        scorestar['starscale'] = \
+            add_html_hints_to_stardict(scorestar['scoremodel'], stardict)
+        returndata['scorestardict']=scorestar
+    if 'IRV' in stuff_to_get:
+        returndata['IRV_dict'] = IRV_dict_from_jabmod(jabmod)
+        returndata['IRV_text'] = get_IRV_report(returndata['IRV_dict'])
+    return returndata
+
+
 @app.route('/')
 def homepage():
     return redirect('/awt', code=302)
@@ -245,45 +285,14 @@ def awt_get(toppage=None, tag=None):
                                       ), 404)
     return retval
 
-
-def _get_jabmod_to_eledata(abifstr, stuff_to_get=['dot', 'wlt', 'IRV', 'STAR']):
-    returndata = {}
-    try:
-        jabmod = convert_abif_to_jabmod(abifstr, cleanws=True, add_ratings=True)
-        error_html = None
-    except ABIFVotelineException as e:
-        jabmod = None
-        error_html = e.message
-    returndata['jabmod'] = jabmod
-    returndata['error_html'] = error_html
-
-    if 'dot' in stuff_to_get or 'wlt' in stuff_to_get:
-        copecount = full_copecount_from_abifmodel(jabmod)
-        cwstring = ", ".join(get_Copeland_winners(copecount))
-        returndata['copewinnerstring'] = cwstring
-    if 'dot' in stuff_to_get:
-        returndata['dotsvg_html'] = copecount_diagram(copecount, outformat='svg')
-
-    if 'wlt' in stuff_to_get:
-        returndata['pairwise_dict'] = pairwise_count_dict(jabmod)
-        returndata['pairwise_html'] = htmltable_pairwise_and_winlosstie(jabmod,
-                                                                        snippet = True,
-                                                                        validate = True,
-                                                                        modlimit = 2500)
-    if 'STAR' in stuff_to_get:
-        scorestar = {}
-        returndata['STAR_html'] = html_score_and_star(jabmod)
-        scoremodel = STAR_result_from_abifmodel(jabmod)
-        scorestar['scoremodel'] = scoremodel
-        stardict = scaled_scores(jabmod, target_scale=50)
-        scorestar['starscale'] = \
-            add_html_hints_to_stardict(scorestar['scoremodel'], stardict)
-        returndata['scorestardict']=scorestar
-    if 'IRV' in stuff_to_get:
-        returndata['IRV_dict'] = IRV_dict_from_jabmod(jabmod)
-        returndata['IRV_text'] = get_IRV_report(returndata['IRV_dict'])
-    return returndata
-
+@app.route('/id/<identifier>/dot/svg')
+def get_svg_dotdiagram(identifier):
+    '''FIXME FIXME July 2024'''
+    examplelist = build_examplelist()
+    fileentry = get_fileentry_from_examplelist(identifier, examplelist)
+    jabmod = convert_abif_to_jabmod(fileentry['text'], cleanws = True)
+    copecount = full_copecount_from_abifmodel(jabmod)
+    return copecount_diagram(copecount, outformat='svg')
 
 @app.route('/id/<identifier>', methods=['GET'])
 @app.route('/id/<identifier>/<resulttype>', methods=['GET'])
