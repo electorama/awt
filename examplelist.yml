@@ -153,4 +153,10 @@
   id: TNexampleTie
   title: A modified version of the Tennessee example where there's a tie
   tags: theoretical, CondorcetVsIRV
-
+- filename: california/sf2018special-results.abif
+  id: sf2018special
+  title: San Francisco June 2018 Special Election
+  tags: actual, CA, USA, government
+  desc: >
+    This example is based on the electoral results from the San
+    Francisco special election for mayor in 2018.
