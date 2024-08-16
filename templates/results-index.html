@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block introduction %}
 {% if msgs.lede %}
+  <div class="hatnote">
+    🔗 <a href="/id/{{abif_id}}">{{abif_id}}</a> &nbsp; &nbsp;
+    (tags: { {% for t in msgs.taglist %}
+    <a href="/tag/{{t}}">{{t}}</a>
+    {% if not loop.last %}, {% endif %}
+    {% endfor %})
+  </div>
 <p>{{ msgs.lede | safe }}</p>
 {% else %}
 <p>Your .abif has been processed.  See <a href="#results">results below</a></p>

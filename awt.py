@@ -322,6 +322,7 @@ def get_by_id(identifier, resulttype=None):
             f" ({fileentry['title']})"
         )
         msgs['results_name'] = rtypemap.get(resulttype)
+        msgs['taglist'] = fileentry['taglist']
         # eledata was added 2024-06-19 as data to feed to templates
         # creating pages, and hopefully leads to deprecating/replacing
         # large chunks of code and hopefully simplifies passing data

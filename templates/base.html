@@ -41,6 +41,10 @@
       <div class="hatnote">from {{webenv.hostname}} for
         <a href="{{webenv.req_url}}">{{webenv.req_url}}</a></div>
       <pre>{{ debug_output }}</pre>
+      <code>eledata</code> var:
+      <pre>{{ eledata|pprint}}</pre>
+      <code>msgs</code> var:
+      <pre>{{ msgs|pprint}}</pre>
       <code>webenv</code> var:
       <pre>{{ webenv|pprint }}</pre>
       {############### IRV debug info vvvvvvvvvvvvvvv ##################}
