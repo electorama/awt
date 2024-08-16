@@ -39,6 +39,16 @@
   tags: theoretical
   desc: >
     An example posted by /u/jman722 on reddit in 2021.
+- filename: localabif/debian-elections/2024_debian_pl.abif
+  id: DPL2024
+  title: 2024 Debian Project Leader
+  desc: 2024 Debian Project Leader election, won by Andreas Tille.
+  tags: debian, actual, orgpriv
+- filename: localabif/debian-elections/2023_debian_pl.abif
+  id: DPL2023
+  title: 2023 Debian Project Leader
+  desc: 2023 Debian Project Leader election, won by Jonathan Carter.
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/2022_debian_pl.abif
   id: DPL2022
   title: 2022 Debian Project Leader
@@ -151,7 +161,7 @@
   tags: debian, actual, orgpriv
 - filename: tenn-example/tennessee-example-irv-tie.abif
   id: TNexampleTie
-  title: A modified version of the Tennessee example where there's a tie
+  title: A modified version of the Tennessee example which demonstrates an IRV tie
   tags: theoretical, CondorcetVsIRV
 - filename: california/sf2018special-results.abif
   id: sf2018special
