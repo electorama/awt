@@ -3,12 +3,20 @@
     color: darkgrey;
     background-color: lightgrey;
 }
-.highlight {
+.highblue {
     background-color: #cceff6;
 }
+.highred {
+    background-color: #ffeeee;
+}
+.highlight {
+    background-color: #ffffdd;
+}
+
 </style>
 <div>
   <ul>
+    {% set has_tie = false %}
     {% set canddict = IRV_dict['canddict'] %}
     {% set winner = IRV_dict['winner'] %}
     {% set winnerstr = IRV_dict['winnerstr'] %}
@@ -45,12 +53,15 @@
           {% if threshold < majority %}
           Minimum plurality: {{threshold}}<br/>
           {% endif %}
+          {% if IRV_dict['roundmeta'][i]['bottomtie'] %}
+          TIE(†): {{ IRV_dict['roundmeta'][i]['bottomtie'] | join(", ") }} <br/>
+          {% endif %}
         </small>
       </td>
       {% endfor %}
     </tr>
     {% for cand in IRV_dict['rounds'][0] | sort(attribute=IRV_dict['rounds'][0].get, reverse=True) %}
-    {% if cand == winner %}
+    {% if cand in winner %}
     {% set rowclass = "highlight" %}
     {% else %}
     {% set rowclass = "" %}
@@ -58,8 +69,19 @@
     <tr class="{{rowclass}}">
       <td>{{ cand }}: {{ IRV_dict['rounds'][0].get(cand, ' ') }}</td>
       {% for round_data in IRV_dict['rounds'][1:] %}
-      {% if cand == winner and (loop.index + 1) == IRV_dict['rounds']|length %}
+      {% if cand in winner and (loop.index) == IRV_dict['rounds']|length %}
       <td><b>IRV winner</b>:<br> {{ cand }}: {{ round_data.get(cand) }}</td>
+      {% elif
+      round_data.get(cand) and IRV_dict['roundmeta'][loop.index]
+      and cand in IRV_dict['roundmeta'][loop.index]['eliminated'] %}
+      <td class="highred">
+        {{ cand }}: {{ round_data.get(cand) }}
+        {% if cand in IRV_dict['roundmeta'][loop.index]['bottomtie'] %}
+        (randomly eliminated †)
+        {% else %}
+        (eliminated)
+        {% endif %}
+      </td>
       {% elif round_data.get(cand) %}
       <td>{{ cand }}: {{ round_data.get(cand) }}</td>
       {% else %}
@@ -69,5 +91,8 @@
     </tr>
     {% endfor %}
   </table>
-  </div>
+  {% if IRV_dict['has_tie'] %}
+  <span class="footnote">† - When a tie occurs, per the laws in the City and County of San Francisco and the laws in the state of Maine, the losing candidate for the round is randomly eliminated.</span>
+  {% endif %}
+ </div>
 </div>
