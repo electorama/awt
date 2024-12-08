@@ -76,8 +76,10 @@
       and cand in IRV_dict['roundmeta'][loop.index]['eliminated'] %}
       <td class="highred">
         {{ cand }}: {{ round_data.get(cand) }}
-        {% if cand in IRV_dict['roundmeta'][loop.index]['bottomtie'] %}
-        (randomly eliminated †)
+        {% if IRV_dict['roundmeta'][loop.index]['batch_elim'] %}
+        (batch eliminated †)
+        {% elif cand in IRV_dict['roundmeta'][loop.index]['bottomtie'] %}
+        (randomly eliminated ††)
         {% else %}
         (eliminated)
         {% endif %}
@@ -92,7 +94,8 @@
     {% endfor %}
   </table>
   {% if IRV_dict['has_tie'] %}
-  <span class="footnote">† - When a tie occurs, per the laws in the City and County of San Francisco and the laws in the state of Maine, the losing candidate for the round is randomly eliminated.</span>
+  <span class="footnote">† - This example employs a limited form "batch elimination", where a batch of multiple candidates who (in sum total) do not have enough remaining top preferences to defeat the next highest candidate in the rankings.</span>
+  <span class="footnote">†† - When a tie occurs, per the laws in the City and County of San Francisco and the laws in the state of Maine, the losing candidate for the round is randomly eliminated.</span>
   {% endif %}
  </div>
 </div>
