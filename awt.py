@@ -90,8 +90,12 @@ def build_examplelist():
         except FileNotFoundError:
             retval[i]['text'] = f'NOT FOUND: {f["filename"]}\n'
         retval[i]['taglist'] = []
-        for t in re.split('[ ,]+', retval[i]['tags']):
-            retval[i]['taglist'].append(t)
+        if type(retval[i].get('tags')) is str:
+            for t in re.split('[ ,]+', retval[i]['tags']):
+                retval[i]['taglist'].append(t)
+        else:
+            retval[i]['taglist'] = [ "UNTAGGED" ]
+
     return retval
 
 
