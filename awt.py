@@ -198,6 +198,11 @@ def _get_jabmod_to_eledata(abifstr, stuff_to_get=['dot', 'wlt', 'IRV', 'STAR']):
         stardict = scaled_scores(jabmod, target_scale=50)
         scorestar['starscale'] = \
             add_html_hints_to_stardict(scorestar['scoremodel'], stardict)
+        # scorestar['star_lede'] = 'STAR results follow....'
+        if jabmod['metadata'].get('is_ranking_to_rating') == True:
+            scorestar['star_foot'] = \
+                'NOTE: Since ratings or stars are not present in the provided ballots, ' + \
+                'allocated stars are estimated using a Borda-like formula.'
         returndata['scorestardict']=scorestar
     if 'IRV' in stuff_to_get:
         returndata['IRV_dict'] = IRV_dict_from_jabmod(jabmod)

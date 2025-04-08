@@ -143,7 +143,17 @@ and can be edited in the field above.</p>
   🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
+{% if scorestardict['star_lede'] %}
+<p class="description">
+   {{ scorestardict['star_lede'] }}
+</p>
+{% endif %}
 <p>{% include 'star-snippet.html' %}</p>
+{% if scorestardict['star_foot'] %}
+<p class="description">
+  {{ scorestardict['star_foot'] }}
+</p>
+{% endif %}
 {% endif %}
 <p>(<a href="/">homepage</a>)</p>
 {% endblock content %}
