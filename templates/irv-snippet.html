@@ -20,7 +20,7 @@
     {% set canddict = IRV_dict['canddict'] %}
     {% set winner = IRV_dict['winner'] %}
     {% set winnerstr = IRV_dict['winnerstr'] %}
-    {% set winnerintro = "IRV Winners (tie)" if winner | length > 1 else "IRV Winner" %}
+    {% set winnerintro = "IRV/RCV Winners (tie)" if winner | length > 1 else "IRV/RCV Winner" %}
     {% set numrounds =  IRV_dict['rounds']|length %}
     {% set startingqty = IRV_dict['roundmeta'][0]['startingqty'] %}
     {% set majority = IRV_dict['roundmeta'][0]['startingqty'] // 2 + 1 %}
@@ -70,7 +70,7 @@
       <td>{{ cand }}: {{ IRV_dict['rounds'][0].get(cand, ' ') }}</td>
       {% for round_data in IRV_dict['rounds'][1:] %}
       {% if cand in winner and (loop.index) == IRV_dict['rounds']|length %}
-      <td><b>IRV winner</b>:<br> {{ cand }}: {{ round_data.get(cand) }}</td>
+      <td><b>IRV/RCV winner</b>:<br> {{ cand }}: {{ round_data.get(cand) }}</td>
       {% elif
       round_data.get(cand) and IRV_dict['roundmeta'][loop.index]
       and cand in IRV_dict['roundmeta'][loop.index]['eliminated'] %}

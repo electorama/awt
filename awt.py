@@ -10,6 +10,8 @@ import sys
 import urllib
 import yaml
 
+import conduits
+
 app = Flask(__name__)
 AWT_DIR = os.getenv('AWT_DIR')
 ABIFTOOL_DIR = os.getenv('ABIFTOOL_DIR')
@@ -33,9 +35,12 @@ from abiflib import (
     copecount_diagram,
     IRV_dict_from_jabmod,
     get_IRV_report,
+    FPTP_result_from_abifmodel,
+    get_FPTP_report,
     pairwise_count_dict,
     STAR_result_from_abifmodel,
-    scaled_scores
+    scaled_scores,
+    add_ratings_to_jabmod_votelines
     )
 
 class WebEnv:
@@ -161,53 +166,12 @@ def add_html_hints_to_stardict(scores, stardict):
         retval['colorlines'][candtok] = \
             f".g{i+1}, " + selline + " { color: " + colors[i] + "; }"
         curstart += retval['starscaled'][candtok]
-    retval['starratio'] = \
-        round(retval['total_all_scores'] / retval['scaled_total'])
-    return retval
-
-
-def _get_jabmod_to_eledata(abifstr, stuff_to_get=['dot', 'wlt', 'IRV', 'STAR']):
-    returndata = {}
     try:
-        jabmod = convert_abif_to_jabmod(abifstr, cleanws=True, add_ratings=True)
-        error_html = None
-    except ABIFVotelineException as e:
-        jabmod = None
-        error_html = e.message
-    returndata['jabmod'] = jabmod
-    returndata['error_html'] = error_html
-
-    if 'dot' in stuff_to_get or 'wlt' in stuff_to_get:
-        copecount = full_copecount_from_abifmodel(jabmod)
-        cwstring = ", ".join(get_Copeland_winners(copecount))
-        returndata['copewinnerstring'] = cwstring
-    if 'dot' in stuff_to_get:
-        returndata['dotsvg_html'] = copecount_diagram(copecount, outformat='svg')
-
-    if 'wlt' in stuff_to_get:
-        returndata['pairwise_dict'] = pairwise_count_dict(jabmod)
-        returndata['pairwise_html'] = htmltable_pairwise_and_winlosstie(jabmod,
-                                                                        snippet = True,
-                                                                        validate = True,
-                                                                        modlimit = 2500)
-    if 'STAR' in stuff_to_get:
-        scorestar = {}
-        returndata['STAR_html'] = html_score_and_star(jabmod)
-        scoremodel = STAR_result_from_abifmodel(jabmod)
-        scorestar['scoremodel'] = scoremodel
-        stardict = scaled_scores(jabmod, target_scale=50)
-        scorestar['starscale'] = \
-            add_html_hints_to_stardict(scorestar['scoremodel'], stardict)
-        # scorestar['star_lede'] = 'STAR results follow....'
-        if jabmod['metadata'].get('is_ranking_to_rating') == True:
-            scorestar['star_foot'] = \
-                'NOTE: Since ratings or stars are not present in the provided ballots, ' + \
-                'allocated stars are estimated using a Borda-like formula.'
-        returndata['scorestardict']=scorestar
-    if 'IRV' in stuff_to_get:
-        returndata['IRV_dict'] = IRV_dict_from_jabmod(jabmod)
-        returndata['IRV_text'] = get_IRV_report(returndata['IRV_dict'])
-    return returndata
+        retval['starratio'] = \
+            round(retval['total_all_scores'] / retval['scaled_total'])
+    except ZeroDivisionError:
+        retval['starratio'] = 0
+    return retval
 
 
 @app.route('/')
@@ -306,14 +270,23 @@ def get_svg_dotdiagram(identifier):
 @app.route('/id/<identifier>', methods=['GET'])
 @app.route('/id/<identifier>/<resulttype>', methods=['GET'])
 def get_by_id(identifier, resulttype=None):
+    '''Populate template variables based on id of the election
+
+    As of May 2025, most variables should be populated via a
+    "ResultConduit" object.  Prior to May 2025, the awt templates
+    needed an ad hoc collection of variables, and probably still will
+    into the future.
+
+    '''
     rtypemap = {
         'wlt': 'win-loss-tie (pairwise) results',
         'dot': 'pairwise diagram',
         'IRV': 'RCV/IRV results',
-        'STAR': 'STAR results'
+        'STAR': 'STAR results',
+        'FPTP': 'choose-one (FPTP) results'
     }
     if not resulttype or resulttype == 'all':
-        rtypelist = ['wlt', 'dot', 'IRV', 'STAR']
+        rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
     else:
         rtypelist = [ resulttype ]
     msgs = {}
@@ -332,32 +305,43 @@ def get_by_id(identifier, resulttype=None):
         )
         msgs['results_name'] = rtypemap.get(resulttype)
         msgs['taglist'] = fileentry['taglist']
-        # eledata was added 2024-06-19 as data to feed to templates
-        # creating pages, and hopefully leads to deprecating/replacing
-        # large chunks of code and hopefully simplifies passing data
-        # to templates over the long term.
-        eledata = _get_jabmod_to_eledata(fileentry['text'])
-        debug_output += pformat(eledata.keys()) + "\n"
+
+        try:
+            jabmod = convert_abif_to_jabmod(fileentry['text'])
+            error_html = None
+        except ABIFVotelineException as e:
+            jabmod = None
+            error_html = e.message
+
+        resconduit = conduits.ResultConduit(jabmod=jabmod)
+        resconduit = resconduit.update_FPTP_result(jabmod)
+        resconduit = resconduit.update_IRV_result(jabmod)
+        resconduit = resconduit.update_pairwise_result(jabmod)
+        ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
+        resconduit = resconduit.update_STAR_result(ratedjabmod)
+        resblob = resconduit.resblob
+
+        debug_output += pformat(resblob.keys()) + "\n"
         debug_output += f"result_types: {rtypelist}\n"
 
         return render_template('results-index.html',
                                abifinput=fileentry['text'],
                                abif_id=identifier,
                                example_list=examplelist,
-                               copewinnerstring=eledata['copewinnerstring'],
-                               dotsvg_html=eledata['dotsvg_html'],
-                               eledata=eledata,
-                               error_html=eledata['error_html'],
-                               IRV_dict=eledata['IRV_dict'],
-                               IRV_text=eledata['IRV_text'],
+                               copewinnerstring=resblob['copewinnerstring'],
+                               dotsvg_html=resblob['dotsvg_html'],
+                               error_html=resblob.get('error_html'),
+                               IRV_dict=resblob['IRV_dict'],
+                               IRV_text=resblob['IRV_text'],
                                lower_abif_caption="Input",
                                lower_abif_text=fileentry['text'],
                                msgs=msgs,
-                               pairwise_dict=eledata['pairwise_dict'],
-                               pairwise_html=eledata['pairwise_html'],
+                               pairwise_dict=resblob['pairwise_dict'],
+                               pairwise_html=resblob['pairwise_html'],
+                               resblob=resblob,
                                result_types=rtypelist,
-                               STAR_html=eledata['STAR_html'],
-                               scorestardict=eledata['scorestardict'],
+                               STAR_html=resblob['STAR_html'],
+                               scorestardict=resblob['scorestardict'],
                                webenv=webenv,
                                debug_output=debug_output,
                                debug_flag=webenv['debugFlag'],
@@ -413,6 +397,10 @@ def awt_post():
             dotsvg_html = copecount_diagram(copecount, outformat='svg')
         else:
             copewinnerstring = None
+
+        resconduit = conduits.ResultConduit(jabmod=abifmodel)
+        resconduit = resconduit.update_FPTP_result(abifmodel)
+
         if request.form.get('include_pairtable'):
             rtypelist.append('wlt')
             pairwise_dict = pairwise_count_dict(abifmodel)
@@ -423,28 +411,30 @@ def awt_post():
                                                               snippet = True,
                                                               validate = True,
                                                               modlimit = 2500)
-        if request.form.get('include_STAR'):
-            rtypelist.append('STAR')
-            jabmod = convert_abif_to_jabmod(abifinput,
-                                            cleanws = True,
-                                            add_ratings = True)
-            STAR_html = html_score_and_star(jabmod)
-            scoremodel = STAR_result_from_abifmodel(jabmod)
-            debug_dict['scoremodel'] = scoremodel
-            stardict = scaled_scores(jabmod, target_scale=50)
-            debug_dict['starscale'] = \
-                add_html_hints_to_stardict(debug_dict['scoremodel'], stardict)
-            scorestardict=debug_dict
+            resconduit = resconduit.update_pairwise_result(abifmodel)
+        if request.form.get('include_FPTP'):
+            rtypelist.append('FPTP')
+            if True:
+                FPTP_result = FPTP_result_from_abifmodel(abifmodel)
+                FPTP_text = get_FPTP_report(abifmodel)
+            #debug_output += "\nFPTP_result:\n"
+            #debug_output += pformat(FPTP_result)
+            #debug_output += "\n"
+            #debug_output += pformat(FPTP_text)
+            #debug_output += "\n"
+
         if request.form.get('include_IRV'):
             rtypelist.append('IRV')
-            jabmod = convert_abif_to_jabmod(abifinput,
-                                            cleanws = True,
-                                            add_ratings = True)
-            IRV_dict = IRV_dict_from_jabmod(jabmod)
-            IRV_text = get_IRV_report(IRV_dict)
-            debug_output += "\nIRV_dict:\n"
-            debug_output += pformat(IRV_dict)
-            debug_output += "\n"
+            resconduit = resconduit.update_IRV_result(abifmodel)
+            IRV_dict = resconduit.resblob['IRV_dict']
+            IRV_text = resconduit.resblob['IRV_text']
+        if request.form.get('include_STAR'):
+            rtypelist.append('STAR')
+            ratedjabmod = add_ratings_to_jabmod_votelines(abifmodel)
+            resconduit = resconduit.update_STAR_result(ratedjabmod)
+            STAR_html = resconduit.resblob['STAR_html']
+            scorestardict = resconduit.resblob['scorestardict']
+        resblob = resconduit.resblob
 
     msgs={}
     msgs['pagetitle'] = \
@@ -452,8 +442,10 @@ def awt_post():
     msgs['placeholder'] = \
         "Try other ABIF, or try tweaking your input (see below)...."
     webenv = WebEnv.wenvDict()
+
     return render_template('results-index.html',
                            abifinput=abifinput,
+                           resblob=resblob,
                            copewinnerstring=copewinnerstring,
                            pairwise_html=pairwise_html,
                            dotsvg_html=dotsvg_html,

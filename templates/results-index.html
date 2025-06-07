@@ -40,6 +40,13 @@ and can be edited in the field above.</p>
       <a href="#wlt">Win-loss-tie table</a> &mdash; Winner: {{copewinnerstring}}
     </li>
     {% endif %}
+    {% if 'FPTP' in result_types %}
+    <li>
+      <a href="#FPTP">FPTP output</a> &mdash;
+      {{ "Winners (tie):" if resblob['FPTP_result']['winners'] | length > 1 else "Winner:" }}
+      {{resblob['FPTP_result']['winners'][0]}}
+    </li>
+    {% endif %}
     {% if 'IRV' in result_types %}
     <li>
       <a href="#IRV">IRV output</a> &mdash;
@@ -115,16 +122,34 @@ and can be edited in the field above.</p>
   {{ pairwise_html | safe }}
 </div>
 {% endif %}
-{############ IRV ############}
-{% set restype="IRV" %}
+{############ FPTP ############}
+{% set restype="FPTP" %}
 {% set rellink=restype + "#" + restype %}
-{% if 'IRV' in result_types and IRV_dict %}
-<h3><a name="{{restype}}"></a>IRV table</h3>
+{#{% if 'FPTP' in result_types and resblob['FPTP_result'] %}#}
+{% if 'FPTP' in result_types %}
+
+<h3><a name="{{restype}}"></a>FPTP result</h3>
 {% if abif_id %}
 {% set pathpart="/id/" + abif_id + "/" + rellink %}
 {% set abslink=webenv.base_url + pathpart %}
 <div class="hatnote">
-  {{abif_id}} IRV table permalink:<br>
+  "FPTP" is "First-past-the-post", also known as "plurality" or "choose-one"<br>
+  {{abif_id}} FPTP results permalink:<br>
+  🔗<a href="{{abslink}}">{{abslink}}</a><br>
+</div>
+{% endif %}
+<p>{% include 'fptp-snippet.html' %}</p>
+{% endif %}
+{############ IRV ############}
+{% set restype="IRV" %}
+{% set rellink=restype + "#" + restype %}
+{% if 'IRV' in result_types and IRV_dict %}
+<h3><a name="{{restype}}"></a>IRV/RCV results</h3>
+{% if abif_id %}
+{% set pathpart="/id/" + abif_id + "/" + rellink %}
+{% set abslink=webenv.base_url + pathpart %}
+<div class="hatnote">
+  {{abif_id}} IRV/RCV result permalink:<br>
   🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
