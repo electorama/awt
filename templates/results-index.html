@@ -14,7 +14,7 @@
 {% endif %}
 {% endblock introduction %}
 {% block content %}
-{% set all_results_generated = (result_types|length == 4) %}
+{% set all_results_generated = (result_types|length == 5) %}
 {% include 'abifbox-snippet.html' %}
 <h2 id="results">{{ webenv.statusStr }}Results</h2>
 {% if abif_id %}
@@ -70,6 +70,11 @@ and can be edited in the field above.</p>
       {% if not 'wlt' in result_types %}
       <li>
         <a href="/id/{{abif_id}}/wlt#wlt">Win-loss-tie table for {{abif_id}}</a>
+      </li>
+      {% endif %}
+      {% if not 'FPTP' in result_types %}
+      <li>
+        <a href="/id/{{abif_id}}/FPTP#FPTP">FPTP results for {{abif_id}}</a>
       </li>
       {% endif %}
       {% if not 'IRV' in result_types %}

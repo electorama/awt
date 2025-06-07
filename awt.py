@@ -285,10 +285,6 @@ def get_by_id(identifier, resulttype=None):
         'STAR': 'STAR results',
         'FPTP': 'choose-one (FPTP) results'
     }
-    if not resulttype or resulttype == 'all':
-        rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
-    else:
-        rtypelist = [ resulttype ]
     msgs = {}
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
@@ -320,6 +316,10 @@ def get_by_id(identifier, resulttype=None):
         ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
         resconduit = resconduit.update_STAR_result(ratedjabmod)
         resblob = resconduit.resblob
+        if not resulttype or resulttype == 'all':
+            rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
+        else:
+            rtypelist = [ resulttype ]
 
         debug_output += pformat(resblob.keys()) + "\n"
         debug_output += f"result_types: {rtypelist}\n"
