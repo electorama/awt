@@ -241,8 +241,10 @@ def add_html_hints_to_stardict(scores, stardict):
             round(retval['canddict'][candtok]['scaled_score'])
         selline = ", ".join(".s%02d" % j for j in range(
             curstart, retval['starscaled'][candtok] + curstart))
-        retval['colorlines'][candtok] = \
-            f".g{i+1}, " + selline + " { color: " + colors[i] + "; }"
+        retval['colorlines'][candtok] = f".g{i+1}"
+        if selline:
+            retval['colorlines'][candtok] += ", " + selline
+        retval['colorlines'][candtok] += " { color: " + colors[i] + "; }"
         curstart += retval['starscaled'][candtok]
     try:
         retval['starratio'] = \
