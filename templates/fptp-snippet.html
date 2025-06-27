@@ -1,0 +1,18 @@
+<div>
+  <ul>
+    {% set winners = resblob['FPTP_result']['winners'] %}
+    {% set winnerstr = ", ".join(winners) %}
+    {% set winnerintro = "FPTP Winners (tie)" if winners | length > 1 else "FPTP Winner" %}
+    <li><b>{{winnerintro}}</b>: {{winnerstr}}</li>
+    <li><b>First-place votes</b>
+    <ul>
+    {% for candidate, votes in resblob.FPTP_result.toppicks|dictsort(reverse=true, by='value') %}
+    <li>
+      {{ candidate }}: {{ votes }} votes
+      ({{ "%0.1f"|format((votes / resblob.FPTP_result.total_votes) * 100) }} %)
+    </li>
+    {% endfor %}
+    </ul></li>
+    <li><b>Total:</b> {{resblob.FPTP_result.total_votes}} votes</li>
+  </ul>
+</div>
