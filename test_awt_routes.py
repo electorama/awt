@@ -8,6 +8,7 @@ import requests
 import pytest
 import signal
 import yaml
+from urllib.parse import quote
 
 # Adjust these paths as needed
 # AWT_DIR = '/home/robla/src/awt'
@@ -64,13 +65,14 @@ def load_ids_from_yaml(yaml_path):
         data = yaml.safe_load(f)
     return [item['id'] for item in data if 'id' in item]
 
-@pytest.mark.parametrize("path", [
-    f"/id/{id_}" for id_ in load_ids_from_yaml(ABIF_LIST_PATH)
-])
-def test_awt_url_returns_html(awt_server, path):
+@pytest.mark.parametrize("id_", load_ids_from_yaml(ABIF_LIST_PATH))
+def test_awt_url_returns_html(awt_server, id_):
     """Test that each /id/<id> URL returns 200 and includes HTML content."""
+    # URL-encode the id to handle special characters like |
+    encoded_id = quote(id_, safe='')
+    path = f"/id/{encoded_id}"
     url = f"http://127.0.0.1:{awt_server}{path}"
-    print(f"Testing {url}")
+    print(f"Testing {url} (original id: {id_})")
     response = requests.get(url)
     assert response.status_code == 200, f"{url} returned {response.status_code}"
     assert "<html" in response.text.lower(), f"{url} did not return HTML"
