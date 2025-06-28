@@ -15,10 +15,6 @@ from abiflib import (
     scaled_scores
     )
 
-from awt import (
-    add_html_hints_to_stardict
-)
-
 from dataclasses import dataclass, field
 from typing import Dict, Any
 
@@ -61,9 +57,9 @@ class ResultConduit:
         scoremodel = STAR_result_from_abifmodel(jabmod)
         scorestar['scoremodel'] = scoremodel
         stardict = scaled_scores(jabmod, target_scale=50)
+        from awt import add_html_hints_to_stardict
         scorestar['starscale'] = \
             add_html_hints_to_stardict(scorestar['scoremodel'], stardict)
-        # scorestar['star_lede'] = 'STAR results follow....'
         if jabmod['metadata'].get('is_ranking_to_rating') == True:
             scorestar['star_foot'] = \
                 'NOTE: Since ratings or stars are not present in the provided ballots, ' + \
