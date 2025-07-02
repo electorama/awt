@@ -1,7 +1,32 @@
 [project]
 name = "awt"
-version = "0.31.0"
+version = "0.31.0rc1"
 dependencies = [
     "abiftool",
     "Flask"
 ]
+description = "awt is the abif web tool.  Web interface for abiftool."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "GPL-3.0"}
+authors = [
+    { name = "Rob Lanphier", email = "robla@robla.net" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Sociology :: History"
+]
+
+[project.scripts]
+RUNAWT.sh = "RUNAWT.sh"
+awt = "awt:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["awt"]
