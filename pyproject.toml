@@ -3,7 +3,9 @@ name = "awt"
 version = "0.31.0rc1"
 dependencies = [
     "abiftool",
-    "Flask"
+    "Flask",
+    "PyYAML",
+    "setuptools"
 ]
 description = "awt is the abif web tool.  Web interface for abiftool."
 readme = "README.md"
@@ -21,7 +23,6 @@ classifiers = [
 ]
 
 [project.scripts]
-RUNAWT.sh = "RUNAWT.sh"
 awt = "awt:main"
 
 [build-system]
@@ -29,4 +30,4 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-py-modules = ["awt"]
+py-modules = ["awt", "conduits"]
