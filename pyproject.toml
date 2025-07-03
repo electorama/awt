@@ -1,13 +1,13 @@
 [project]
 name = "awt"
-version = "0.31.0rc1"
+version = "0.31.0rc2"
 dependencies = [
     "abiftool",
     "Flask",
     "PyYAML",
     "setuptools"
 ]
-description = "awt is the abif web tool.  Web interface for abiftool."
+description = "awt == 'abif web tool'. It's a web interface for abiftool & abiflib."
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "GPL-3.0"}

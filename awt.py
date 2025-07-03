@@ -3,26 +3,30 @@ from flask import Flask, render_template, request, redirect
 from markupsafe import escape
 from pathlib import Path
 from pprint import pformat
+import argparse
 import colorsys
-import json
+import conduits
 import os
 import re
+import socket
 import sys
+import threading
 import urllib
 import yaml
+from dotenv import load_dotenv
 
-import conduits
+########.
+# Load environment variables from .env file
+load_dotenv()
+
+# Allow overriding port via env or CLI
+DEFAULT_PORT = int(os.environ.get("PORT", 0))
 
 app = Flask(__name__)
-AWT_DIR = os.getenv('AWT_DIR')
-ABIFTOOL_DIR = os.getenv('ABIFTOOL_DIR')
-HOME_DIR = os.getenv('HOME')
-sys.path.append(ABIFTOOL_DIR)
 
-if not AWT_DIR:
-    AWT_DIR = Path(HOME_DIR) / 'awt'
-if not ABIFTOOL_DIR:
-    ABIFTOOL_DIR = Path(HOME_DIR) / 'abiftool'
+AWT_DIR = os.path.expanduser('~/src/awt')
+ABIFTOOL_DIR = os.path.expanduser('~/src/abiftool')
+sys.path.append(ABIFTOOL_DIR)
 
 TESTFILEDIR = Path(ABIFTOOL_DIR) / 'testdata'
 
@@ -79,9 +83,9 @@ class WebEnv:
 
 
 def build_examplelist():
-    '''Load the list of examples from examplelist.yml'''
+    '''Load the list of examples from abif_list.yml'''
     yampathlist = [
-        Path(AWT_DIR, "examplelist.yml")
+        Path(AWT_DIR, "abif_list.yml")
     ]
 
     retval = []
@@ -165,7 +169,6 @@ def generate_golden_angle_palette(count=250, start_hex='#d0ffce',
         initial_colors (list[str], optional): A list of hex colors to start the
                                               palette with. Defaults to None.
         master_list_size (int): The reference size for consistent generation.
-
     Returns:
         list[str]: A list of color strings in hex format.
 
@@ -544,5 +547,28 @@ def awt_post():
                            )
 
 
-if __name__ == '__main__':
-    app.run(debug=True, port=0)
+def find_free_port():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def run_flask():
+    parser = argparse.ArgumentParser(description="Run the AWT server.")
+    parser.add_argument("--port", type=int, help="Port to listen on")
+    parser.add_argument("--debug", action="store_true", help="Run in debug mode")
+    args = parser.parse_args()
+
+    port = args.port or DEFAULT_PORT or find_free_port()
+    debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
+
+    print(f"AWT running at http://127.0.0.1:{port}/ (debug={debug_mode})")
+    app.run(host="127.0.0.1", port=port, debug=debug_mode, use_reloader=False)
+
+
+if __name__ == "__main__":
+    run_flask()
+
+
+
+
