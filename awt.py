@@ -444,7 +444,6 @@ def get_by_id(identifier, resulttype=None):
 
 @app.route('/awt', methods=['POST'])
 def awt_post():
-    abifinput = ""
     abifinput = request.form['abifinput']
     copewinners = None
     copewinnerstring = None
@@ -553,7 +552,7 @@ def find_free_port():
         return s.getsockname()[1]
 
 
-def run_flask():
+def main():
     parser = argparse.ArgumentParser(description="Run the AWT server.")
     parser.add_argument("--port", type=int, help="Port to listen on")
     parser.add_argument("--debug", action="store_true", help="Run in debug mode")
@@ -567,7 +566,7 @@ def run_flask():
 
 
 if __name__ == "__main__":
-    run_flask()
+    main()
 
 
 

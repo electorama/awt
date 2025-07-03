@@ -3,6 +3,7 @@ name = "awt"
 version = "0.31.0rc2"
 dependencies = [
     "abiftool",
+    "dotenv",
     "Flask",
     "PyYAML",
     "setuptools"
