@@ -32,3 +32,29 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 py-modules = ["awt", "conduits"]
+include-package-data = true
+[tool.setuptools.data-files]
+awt-templates = [
+    "templates/abifbox-snippet.html",
+    "templates/all-snippet.html",
+    "templates/also-note-snippet.html",
+    "templates/base.html",
+    "templates/default-index.html",
+    "templates/example-list-snippet.html",
+    "templates/footer.snippet.html",
+    "templates/fptp-snippet.html",
+    "templates/intro-snippet.html",
+    "templates/irv-snippet.html",
+    "templates/not-found.html",
+    "templates/results-index.html",
+    "templates/star-snippet.html",
+    "templates/tag-index.html"
+]
+awt-static = [
+    "static/css/electostyle.css",
+    "static/favicon.ico",
+    "static/img/awt-electorama.svg",
+    "static/img/awtonly.svg",
+    "static/img/electodrop.svg",
+    "static/js/abifwebtool.js"
+]

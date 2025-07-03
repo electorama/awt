@@ -17,12 +17,86 @@ from dotenv import load_dotenv
 
 ########.
 # Load environment variables from .env file
-load_dotenv()
+# Load .env from the same directory as this file (project root)
+awt_py_dir = Path(__file__).parent.resolve()
+dotenv_path = awt_py_dir / '.env'
+load_dotenv(dotenv_path=dotenv_path)
+if dotenv_path.exists():
+    print(f"[awt.py] Loaded .env from {dotenv_path}")
+else:
+    print(f"[awt.py] No .env file found at {dotenv_path} (this is fine if you set env vars another way)")
 
 # Allow overriding port via env or CLI
 DEFAULT_PORT = int(os.environ.get("PORT", 0))
 
-app = Flask(__name__)
+# Intelligent defaults for static/template directories
+AWT_STATIC = os.getenv("AWT_STATIC")
+AWT_TEMPLATES = os.getenv("AWT_TEMPLATES")
+
+# Only guess if not set by env
+if not AWT_STATIC or not AWT_TEMPLATES:
+    # 1. Try static/templates next to this file
+    static_candidate = awt_py_dir / 'static'
+    templates_candidate = awt_py_dir / 'templates'
+    if not AWT_STATIC and static_candidate.is_dir():
+        AWT_STATIC = str(static_candidate)
+    if not AWT_TEMPLATES and templates_candidate.is_dir():
+        AWT_TEMPLATES = str(templates_candidate)
+
+# 2. Try awt-static/awt-templates in package data dir (for venv installs)
+if not AWT_STATIC or not AWT_TEMPLATES:
+    try:
+        import importlib.util
+        pkg_dir = Path(importlib.util.find_spec('awt').origin).parent
+        awt_static_candidate = pkg_dir / 'awt-static'
+        awt_templates_candidate = pkg_dir / 'awt-templates'
+        if not AWT_STATIC and awt_static_candidate.is_dir():
+            AWT_STATIC = str(awt_static_candidate)
+        if not AWT_TEMPLATES and awt_templates_candidate.is_dir():
+            AWT_TEMPLATES = str(awt_templates_candidate)
+    except Exception:
+        pass
+
+# 3. Try static/templates in current working directory
+if not AWT_STATIC or not AWT_TEMPLATES:
+    cwd = Path.cwd()
+    static_candidate = cwd / 'static'
+    templates_candidate = cwd / 'templates'
+    if not AWT_STATIC and static_candidate.is_dir():
+        AWT_STATIC = str(static_candidate)
+    if not AWT_TEMPLATES and templates_candidate.is_dir():
+        AWT_TEMPLATES = str(templates_candidate)
+
+# 4. Try awt-static/awt-templates as siblings to the executable's bin directory
+if not AWT_STATIC or not AWT_TEMPLATES:
+    import sys
+    exe_path = Path(sys.argv[0]).resolve()
+    # If running as 'python -m awt', sys.argv[0] may be 'python', so also try sys.executable
+    if exe_path.name == 'python' or exe_path.name.startswith('python'):
+        exe_path = Path(sys.executable).resolve()
+    venv_root = exe_path.parent.parent  # bin/ -> venv/
+    awt_static_candidate = venv_root / 'awt-static'
+    awt_templates_candidate = venv_root / 'awt-templates'
+    if not AWT_STATIC and awt_static_candidate.is_dir():
+        AWT_STATIC = str(awt_static_candidate)
+    if not AWT_TEMPLATES and awt_templates_candidate.is_dir():
+        AWT_TEMPLATES = str(awt_templates_candidate)
+
+missing_static = not (AWT_STATIC and Path(AWT_STATIC).is_dir())
+missing_templates = not (AWT_TEMPLATES and Path(AWT_TEMPLATES).is_dir())
+
+print(f"[awt.py] Using static: {AWT_STATIC if AWT_STATIC else '[not set]'}{' (MISSING)' if missing_static else ''}")
+print(f"[awt.py] Using templates: {AWT_TEMPLATES if AWT_TEMPLATES else '[not set]'}{' (MISSING)' if missing_templates else ''}")
+if missing_static or missing_templates:
+    print("[awt.py] WARNING: Could not find static/templates directories. This is just a warning; the app will still run.")
+    print("[awt.py] To fix this, either:")
+    print("  1. Create a .env file in your project root (next to awt.py) with:")
+    print("     AWT_STATIC=static\n     AWT_TEMPLATES=templates")
+    print("  2. Or, create 'static' and 'templates' directories next to awt.py.")
+    print("[awt.py] If these are missing, some features (like static files or templates) may not work as expected.")
+
+# Use discovered static/template directories for Flask app
+app = Flask(__name__, static_folder=AWT_STATIC, template_folder=AWT_TEMPLATES)
 
 AWT_DIR = os.path.expanduser('~/src/awt')
 ABIFTOOL_DIR = os.path.expanduser('~/src/abiftool')
@@ -561,7 +635,7 @@ def main():
     port = args.port or DEFAULT_PORT or find_free_port()
     debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
 
-    print(f"AWT running at http://127.0.0.1:{port}/ (debug={debug_mode})")
+    print(f"Running on http://127.0.0.1:{port}/ (debug={debug_mode})")
     app.run(host="127.0.0.1", port=port, debug=debug_mode, use_reloader=False)
 
 
