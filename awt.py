@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, send_from_directory
 from markupsafe import escape
 from pathlib import Path
 from pprint import pformat
@@ -96,7 +96,36 @@ if missing_static or missing_templates:
     print("[awt.py] If these are missing, some features (like static files or templates) may not work as expected.")
 
 # Use discovered static/template directories for Flask app
-app = Flask(__name__, static_folder=AWT_STATIC, template_folder=AWT_TEMPLATES)
+# For venv installs, static files may be flattened, so handle this case
+if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
+    # If we found awt-static directory with flattened files, use it directly
+    # and create a custom static URL path mapping
+    static_folder = AWT_STATIC
+    static_url_path = '/static'
+else:
+    # Otherwise use the discovered static directory directly
+    static_folder = AWT_STATIC
+    static_url_path = '/static'
+
+app = Flask(__name__, static_folder=static_folder, template_folder=AWT_TEMPLATES, static_url_path=static_url_path)
+
+# Custom static file routes for flattened venv installs
+if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
+    @app.route('/static/css/<filename>')
+    def static_css(filename):
+        return send_from_directory(AWT_STATIC, filename)
+    
+    @app.route('/static/img/<filename>')
+    def static_img(filename):
+        return send_from_directory(AWT_STATIC, filename)
+    
+    @app.route('/static/js/<filename>')
+    def static_js(filename):
+        return send_from_directory(AWT_STATIC, filename)
+    
+    @app.route('/static/<filename>')
+    def static_file(filename):
+        return send_from_directory(AWT_STATIC, filename)
 
 AWT_DIR = os.path.expanduser('~/src/awt')
 ABIFTOOL_DIR = os.path.expanduser('~/src/abiftool')
