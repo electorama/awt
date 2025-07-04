@@ -2,7 +2,7 @@
 name = "awt"
 version = "0.31.0rc2"
 dependencies = [
-    "abiftool",
+    "abiftool>=0.31.0rc1",
     "dotenv",
     "Flask",
     "PyYAML",
