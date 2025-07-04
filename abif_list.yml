@@ -591,7 +591,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-2-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-2-Cast-Vote-Record
   title: 2021-Ward-2-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021, CondorcetVsIRV
   desc: 2021-Ward-2-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-9-Cast-Vote-Record.abif
@@ -922,7 +922,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-U.S._Representative_(Special_General).abif
   id: 2022-08-16_Alaska-U.S._Representative_(Special_General)
   title: U.S._Representative_(Special_General) (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08, CondorcetVsIRV
   desc: U.S._Representative_(Special_General) (Alaska; 2022-08-16). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_12.abif
@@ -1333,7 +1333,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-School_Director_Dist._4_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-School_Director_Dist._4_-_Oakland
   title: School Director Dist. 4 - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA, CondorcetVsIRV
   desc: School Director Dist. 4 - Oakland (AlamedaCounty; 2022-11-08). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Mayor_-_Oakland.abif
@@ -2249,7 +2249,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2009_Burlington_VT-vote.abif
   id: 2009_Burlington_VT-vote
   title: vote (Burlington_VT; 2009)
-  tags: from-bolson, Burlington_VT, VT, Burlington_VT-2009, 2009
+  tags: from-bolson, Burlington_VT, VT, Burlington_VT-2009, 2009, CondorcetVsIRV
   desc: vote (Burlington_VT; 2009). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2009-11-03_PierceCounty_WA-auditor.abif
   id: 2009-11-03_PierceCounty_WA-auditor
