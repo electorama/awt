@@ -1,4 +1,21 @@
 #!/usr/bin/env python3
+from abiflib import (
+    convert_abif_to_jabmod,
+    htmltable_pairwise_and_winlosstie,
+    get_Copeland_winners,
+    html_score_and_star,
+    ABIFVotelineException,
+    full_copecount_from_abifmodel,
+    copecount_diagram,
+    IRV_dict_from_jabmod,
+    get_IRV_report,
+    FPTP_result_from_abifmodel,
+    get_FPTP_report,
+    pairwise_count_dict,
+    STAR_result_from_abifmodel,
+    scaled_scores,
+    add_ratings_to_jabmod_votelines
+)
 from flask import Flask, render_template, request, redirect, send_from_directory
 from markupsafe import escape
 from pathlib import Path
@@ -15,16 +32,17 @@ import urllib
 import yaml
 from dotenv import load_dotenv
 
-########.
-# Load environment variables from .env file
-# Load .env from the same directory as this file (project root)
+# -----------------------------
+# Load environment variables from .env file in the same directory
+# as this file (project root)
 awt_py_dir = Path(__file__).parent.resolve()
 dotenv_path = awt_py_dir / '.env'
 load_dotenv(dotenv_path=dotenv_path)
 if dotenv_path.exists():
     print(f"[awt.py] Loaded .env from {dotenv_path}")
 else:
-    print(f"[awt.py] No .env file found at {dotenv_path} (this is fine if you set env vars another way)")
+    print(
+        f"[awt.py] No .env file found at {dotenv_path} (this is fine if you set env vars another way)")
 
 # Allow overriding port via env or CLI
 DEFAULT_PORT = int(os.environ.get("PORT", 0))
@@ -85,8 +103,10 @@ if not AWT_STATIC or not AWT_TEMPLATES:
 missing_static = not (AWT_STATIC and Path(AWT_STATIC).is_dir())
 missing_templates = not (AWT_TEMPLATES and Path(AWT_TEMPLATES).is_dir())
 
-print(f"[awt.py] Using static: {AWT_STATIC if AWT_STATIC else '[not set]'}{' (MISSING)' if missing_static else ''}")
-print(f"[awt.py] Using templates: {AWT_TEMPLATES if AWT_TEMPLATES else '[not set]'}{' (MISSING)' if missing_templates else ''}")
+print(
+    f"[awt.py] Using static: {AWT_STATIC if AWT_STATIC else '[not set]'}{' (MISSING)' if missing_static else ''}")
+print(
+    f"[awt.py] Using templates: {AWT_TEMPLATES if AWT_TEMPLATES else '[not set]'}{' (MISSING)' if missing_templates else ''}")
 if missing_static or missing_templates:
     print("[awt.py] WARNING: Could not find static/templates directories. This is just a warning; the app will still run.")
     print("[awt.py] To fix this, either:")
@@ -107,22 +127,23 @@ else:
     static_folder = AWT_STATIC
     static_url_path = '/static'
 
-app = Flask(__name__, static_folder=static_folder, template_folder=AWT_TEMPLATES, static_url_path=static_url_path)
+app = Flask(__name__, static_folder=static_folder,
+            template_folder=AWT_TEMPLATES, static_url_path=static_url_path)
 
 # Custom static file routes for flattened venv installs
 if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
     @app.route('/static/css/<filename>')
     def static_css(filename):
         return send_from_directory(AWT_STATIC, filename)
-    
+
     @app.route('/static/img/<filename>')
     def static_img(filename):
         return send_from_directory(AWT_STATIC, filename)
-    
+
     @app.route('/static/js/<filename>')
     def static_js(filename):
         return send_from_directory(AWT_STATIC, filename)
-    
+
     @app.route('/static/<filename>')
     def static_file(filename):
         return send_from_directory(AWT_STATIC, filename)
@@ -133,23 +154,6 @@ sys.path.append(ABIFTOOL_DIR)
 
 TESTFILEDIR = Path(ABIFTOOL_DIR) / 'testdata'
 
-from abiflib import (
-    convert_abif_to_jabmod,
-    htmltable_pairwise_and_winlosstie,
-    get_Copeland_winners,
-    html_score_and_star,
-    ABIFVotelineException,
-    full_copecount_from_abifmodel,
-    copecount_diagram,
-    IRV_dict_from_jabmod,
-    get_IRV_report,
-    FPTP_result_from_abifmodel,
-    get_FPTP_report,
-    pairwise_count_dict,
-    STAR_result_from_abifmodel,
-    scaled_scores,
-    add_ratings_to_jabmod_votelines
-    )
 
 class WebEnv:
     __env = {}
@@ -175,7 +179,7 @@ class WebEnv:
         WebEnv.__env['pathportion'] = request.path
         WebEnv.__env['queryportion'] = request.args
         WebEnv.__env['approot'] = app.config['APPLICATION_ROOT']
-        WebEnv.__env['debugFlag'] = ( os.getenv('AWT_STATUS') == "debug" )
+        WebEnv.__env['debugFlag'] = (os.getenv('AWT_STATUS') == "debug")
         WebEnv.__env['debugIntro'] = "Set AWT_STATUS=prod to turn off debug mode\n"
 
         if WebEnv.__env['debugFlag']:
@@ -207,7 +211,7 @@ def build_examplelist():
             for t in re.split('[ ,]+', retval[i]['tags']):
                 retval[i]['taglist'].append(t)
         else:
-            retval[i]['taglist'] = [ "UNTAGGED" ]
+            retval[i]['taglist'] = ["UNTAGGED"]
 
     return retval
 
@@ -336,7 +340,7 @@ def add_html_hints_to_stardict(scores, stardict):
     retval['colordict'] = {}
     retval['colorlines'] = {}
     colors = generate_golden_angle_palette(count=len(scores['ranklist']),
-                                           initial_colors = [
+                                           initial_colors=[
                                                '#d0ffce', '#cee1ff', '#ffcece', '#ffeab9']
                                            )
 
@@ -399,7 +403,7 @@ def awt_get(toppage=None, tag=None):
                                      msgs=msgs,
                                      debug_output=debug_output,
                                      debug_flag=debug_flag,
-                                     tagarray = mytagarray,
+                                     tagarray=mytagarray,
                                      )
         case "tag":
             if tag:
@@ -417,18 +421,18 @@ def awt_get(toppage=None, tag=None):
                                          msgs=msgs,
                                          debug_output=debug_output,
                                          debug_flag=debug_flag,
-                                         tag = tag,
-                                         tagarray = mytagarray
+                                         tag=tag,
+                                         tagarray=mytagarray
                                          )
             else:
                 retval = render_template('tag-index.html',
                                          example_list=file_array,
                                          webenv=webenv,
                                          msgs=msgs,
-                                         tag = tag,
-                                         tagarray = mytagarray
+                                         tag=tag,
+                                         tagarray=mytagarray
                                          )
-                                         
+
         case _:
             msgs['pagetitle'] = "NOT FOUND"
             msgs['lede'] = (
@@ -444,14 +448,16 @@ def awt_get(toppage=None, tag=None):
                                       ), 404)
     return retval
 
+
 @app.route('/id/<identifier>/dot/svg')
 def get_svg_dotdiagram(identifier):
     '''FIXME FIXME July 2024'''
     examplelist = build_examplelist()
     fileentry = get_fileentry_from_examplelist(identifier, examplelist)
-    jabmod = convert_abif_to_jabmod(fileentry['text'], cleanws = True)
+    jabmod = convert_abif_to_jabmod(fileentry['text'], cleanws=True)
     copecount = full_copecount_from_abifmodel(jabmod)
     return copecount_diagram(copecount, outformat='svg')
+
 
 @app.route('/id/<identifier>', methods=['GET'])
 @app.route('/id/<identifier>/<resulttype>', methods=['GET'])
@@ -505,7 +511,7 @@ def get_by_id(identifier, resulttype=None):
         if not resulttype or resulttype == 'all':
             rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
         else:
-            rtypelist = [ resulttype ]
+            rtypelist = [resulttype]
 
         debug_output += pformat(resblob.keys()) + "\n"
         debug_output += f"result_types: {rtypelist}\n"
@@ -564,7 +570,7 @@ def awt_post():
     rtypelist = []
     try:
         abifmodel = convert_abif_to_jabmod(abifinput,
-                                           cleanws = True)
+                                           cleanws=True)
         error_html = None
     except ABIFVotelineException as e:
         abifmodel = None
@@ -593,20 +599,20 @@ def awt_post():
             debug_output += pformat(pairwise_dict)
             debug_output += "\n"
             pairwise_html = htmltable_pairwise_and_winlosstie(abifmodel,
-                                                              snippet = True,
-                                                              validate = True,
-                                                              modlimit = 2500)
+                                                              snippet=True,
+                                                              validate=True,
+                                                              modlimit=2500)
             resconduit = resconduit.update_pairwise_result(abifmodel)
         if request.form.get('include_FPTP'):
             rtypelist.append('FPTP')
             if True:
                 FPTP_result = FPTP_result_from_abifmodel(abifmodel)
                 FPTP_text = get_FPTP_report(abifmodel)
-            #debug_output += "\nFPTP_result:\n"
-            #debug_output += pformat(FPTP_result)
-            #debug_output += "\n"
-            #debug_output += pformat(FPTP_text)
-            #debug_output += "\n"
+            # debug_output += "\nFPTP_result:\n"
+            # debug_output += pformat(FPTP_result)
+            # debug_output += "\n"
+            # debug_output += pformat(FPTP_text)
+            # debug_output += "\n"
 
         if request.form.get('include_IRV'):
             rtypelist.append('IRV')
@@ -621,7 +627,7 @@ def awt_post():
             scorestardict = resconduit.resblob['scorestardict']
         resblob = resconduit.resblob
 
-    msgs={}
+    msgs = {}
     msgs['pagetitle'] = \
         f"{webenv['statusStr']}ABIF Electorama results"
     msgs['placeholder'] = \
@@ -658,7 +664,8 @@ def find_free_port():
 def main():
     parser = argparse.ArgumentParser(description="Run the AWT server.")
     parser.add_argument("--port", type=int, help="Port to listen on")
-    parser.add_argument("--debug", action="store_true", help="Run in debug mode")
+    parser.add_argument("--debug", action="store_true",
+                        help="Run in debug mode")
     args = parser.parse_args()
 
     port = args.port or DEFAULT_PORT or find_free_port()
@@ -670,7 +677,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-

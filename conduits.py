@@ -13,10 +13,11 @@ from abiflib import (
     pairwise_count_dict,
     STAR_result_from_abifmodel,
     scaled_scores
-    )
+)
 
 from dataclasses import dataclass, field
 from typing import Dict, Any
+
 
 @dataclass
 class ResultConduit:
@@ -25,7 +26,8 @@ class ResultConduit:
 
     def __post_init__(self):
         if not self.jabmod:
-            raise TypeError("Please pass in jabmod= param on ResultsConduit init")
+            raise TypeError(
+                "Please pass in jabmod= param on ResultsConduit init")
         self.resblob = {}
 
     def update_FPTP_result(self, jabmod) -> "ResultConduit":
@@ -43,12 +45,13 @@ class ResultConduit:
         copecount = full_copecount_from_abifmodel(jabmod)
         cwstring = ", ".join(get_Copeland_winners(copecount))
         self.resblob['copewinnerstring'] = cwstring
-        self.resblob['dotsvg_html'] = copecount_diagram(copecount, outformat='svg')
+        self.resblob['dotsvg_html'] = copecount_diagram(
+            copecount, outformat='svg')
         self.resblob['pairwise_dict'] = pairwise_count_dict(jabmod)
         self.resblob['pairwise_html'] = htmltable_pairwise_and_winlosstie(jabmod,
-                                                                         snippet = True,
-                                                                         validate = True,
-                                                                         modlimit = 2500)
+                                                                          snippet=True,
+                                                                          validate=True,
+                                                                          modlimit=2500)
         return self
 
     def update_STAR_result(self, jabmod) -> "ResultConduit":
@@ -60,11 +63,11 @@ class ResultConduit:
         from awt import add_html_hints_to_stardict
         scorestar['starscale'] = \
             add_html_hints_to_stardict(scorestar['scoremodel'], stardict)
-        if jabmod['metadata'].get('is_ranking_to_rating') == True:
+        if jabmod['metadata'].get('is_ranking_to_rating'):
             scorestar['star_foot'] = \
                 'NOTE: Since ratings or stars are not present in the provided ballots, ' + \
                 'allocated stars are estimated using a Borda-like formula.'
-        self.resblob['scorestardict']=scorestar
+        self.resblob['scorestardict'] = scorestar
         return self
 
     def update_all(self, jabmod):
