@@ -72,57 +72,57 @@
 - filename: localabif/debian-elections/dpl2019.abif
   id: DPL2019
   title: Debian 2019 Project Leader
-  desc2: 2019 Debian Project Leader election, won by Sam Hartman
+  desc: 2019 Debian Project Leader election, won by Sam Hartman
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2018.abif
   id: DPL2018
   title: Debian 2018 Project Leader
-  desc2: 2018 Debian Project Leader election, won by Chris Lamb
+  desc: 2018 Debian Project Leader election, won by Chris Lamb
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2017.abif
   id: DPL2017
   title: Debian 2017 Project Leader
-  desc2: 2017 Debian Project Leader election, won by Chris Lamb
+  desc: 2017 Debian Project Leader election, won by Chris Lamb
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2016.abif
   id: DPL2016
   title: Debian 2016 Project Leader
-  desc2: 2016 Debian Project Leader election, won by Mehdi Dogguy
+  desc: 2016 Debian Project Leader election, won by Mehdi Dogguy
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2015.abif
   id: DPL2015
   title: Debian 2015 Project Leader
-  desc2: 2015 Debian Project Leader election, won by Neil McGovern
+  desc: 2015 Debian Project Leader election, won by Neil McGovern
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2014.abif
   id: DPL2014
   title: Debian 2014 Project Leader
-  desc2: 2014 Debian Project Leader election, won by Lucas Nussbaum
+  desc: 2014 Debian Project Leader election, won by Lucas Nussbaum
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2013.abif
   id: DPL2013
   title: Debian 2013 Project Leader
-  desc2: 2013 Debian Project Leader election, won by Lucas Nussbaum
+  desc: 2013 Debian Project Leader election, won by Lucas Nussbaum
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2012.abif
   id: DPL2012
   title: Debian 2012 Project Leader
-  desc2: 2012 Debian Project Leader election, won by Stefano Zacchiroli
+  desc: 2012 Debian Project Leader election, won by Stefano Zacchiroli
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2011.abif
   id: DPL2011
   title: Debian 2011 Project Leader
-  desc2: 2011 Debian Project Leader election, won by Stefano Zacchiroli
+  desc: 2011 Debian Project Leader election, won by Stefano Zacchiroli
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2010.abif
   id: DPL2010
   title: Debian 2010 Project Leader
-  desc2: 2010 Debian Project Leader election, won by Stefano Zacchiroli
+  desc: 2010 Debian Project Leader election, won by Stefano Zacchiroli
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2009.abif
   id: DPL2009
   title: Debian 2009 Project Leader
-  desc2: 2009 Debian Project Leader election, won by Steve McIntyre
+  desc: 2009 Debian Project Leader election, won by Steve McIntyre
   tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/dpl2008.abif
   id: DPL2008
@@ -165,12 +165,10 @@
   tags: theoretical, CondorcetVsIRV
 - filename: california/sf2018special-results.abif
   id: sf2018special
-  title: San Francisco June 2018 Special Election
-  tags: actual, CA, USA, government
+  title: Mayor (San Francisco, CA; 2018 Special Election)
+  tags: 2018, RCV, SF, SF_mayor, SanFrancisco_CA, actual, government, USA
   desc: >
-    This example is based on the electoral results from the San
-    Francisco special election for mayor in 2018.
-- filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Portland_ME-city_council_at_large.abif
+    Electoral results from the San Francisco special election for mayor in 2018.- - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Portland_ME-city_council_at_large.abif
   id: 2021-11-02_Portland_ME-city_council_at_large
   title: city_council_at_large (Portland_ME; 2021-11-02)
   tags: 2021, from-bolson, Portland_ME-2021, 2021-11, Portland_ME, ME
@@ -2314,4 +2312,65 @@
   title: Mayor (SF_Mayor; 2018-06-05)
   tags: 2018-06, from-bolson, 2018, SF_Mayor, mayor, SF_Mayor-2018
   desc: Mayor (SF_Mayor; 2018-06-05). Derived from results obtained at bolson.org.
+- filename: localabif/california/sf2024-mayor.abif
+  id: sf2024-mayor
+  title: MAYOR
+  tags: sf2024, actual, CA, USA, government, 2024, mayor
+  desc: MAYOR. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-member-board-of-supervisors-district-1.abif
+  id: sf2024-member-board-of-supervisors-district-1
+  title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 1
+  tags: sf2024, actual, CA, USA, government
+  desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 1. Derived from SF Elections 2024 CVR
+    data.
+- filename: localabif/california/sf2024-member-board-of-supervisors-district-3.abif
+  id: sf2024-member-board-of-supervisors-district-3
+  title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 3
+  tags: sf2024, actual, CA, USA, government
+  desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 3. Derived from SF Elections 2024 CVR
+    data.
+- filename: localabif/california/sf2024-member-board-of-supervisors-district-5.abif
+  id: sf2024-member-board-of-supervisors-district-5
+  title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 5
+  tags: sf2024, actual, CA, USA, government
+  desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 5. Derived from SF Elections 2024 CVR
+    data.
+- filename: localabif/california/sf2024-member-board-of-supervisors-district-7.abif
+  id: sf2024-member-board-of-supervisors-district-7
+  title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 7
+  tags: sf2024, actual, CA, USA, government
+  desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 7. Derived from SF Elections 2024 CVR
+    data.
+- filename: localabif/california/sf2024-member-board-of-supervisors-district-9.abif
+  id: sf2024-member-board-of-supervisors-district-9
+  title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 9
+  tags: sf2024, actual, CA, USA, government
+  desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 9. Derived from SF Elections 2024 CVR
+    data.
+- filename: localabif/california/sf2024-member-board-of-supervisors-district-11.abif
+  id: sf2024-member-board-of-supervisors-district-11
+  title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 11
+  tags: sf2024, actual, CA, USA, government
+  desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 11. Derived from SF Elections 2024
+    CVR data.
+- filename: localabif/california/sf2024-city-attorney.abif
+  id: sf2024-city-attorney
+  title: CITY ATTORNEY
+  tags: sf2024, actual, CA, USA, government
+  desc: CITY ATTORNEY. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-district-attorney.abif
+  id: sf2024-district-attorney
+  title: DISTRICT ATTORNEY
+  tags: sf2024, actual, CA, USA, government
+  desc: DISTRICT ATTORNEY. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-sheriff.abif
+  id: sf2024-sheriff
+  title: SHERIFF
+  tags: sf2024, actual, CA, USA, government
+  desc: SHERIFF. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-treasurer.abif
+  id: sf2024-treasurer
+  title: TREASURER
+  tags: sf2024, actual, CA, USA, government
+  desc: TREASURER. Derived from SF Elections 2024 CVR data.
 
