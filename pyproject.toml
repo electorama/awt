@@ -1,8 +1,8 @@
 [project]
 name = "awt"
-version = "0.31.0rc2"
+version = "0.31.0"
 dependencies = [
-    "abiftool>=0.31.0rc1",
+    "abiftool>=0.31.0",
     "dotenv",
     "Flask",
     "PyYAML",
