@@ -9,7 +9,9 @@
     {% for candidate, votes in resblob.FPTP_result.toppicks|dictsort(reverse=true, by='value') %}
     <li>
       {{ candidate }}: {{ votes }} votes
-      ({{ "%0.1f"|format((votes / resblob.FPTP_result.total_votes) * 100) }} %)
+      {% if resblob.FPTP_result.total_votes > 0 %}
+      ({{ "%0.1f"|format((votes / resblob.FPTP_result.total_votes) * 100) }} %)
+      {% endif %}
     </li>
     {% endfor %}
     </ul></li>
