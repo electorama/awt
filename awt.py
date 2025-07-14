@@ -655,9 +655,9 @@ def awt_post():
                            )
 
 
-def find_free_port():
+def find_free_port(host="127.0.0.1"):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(("127.0.0.1", 0))
+        s.bind((host, 0))
         return s.getsockname()[1]
 
 
@@ -666,13 +666,17 @@ def main():
     parser.add_argument("--port", type=int, help="Port to listen on")
     parser.add_argument("--debug", action="store_true",
                         help="Run in debug mode")
+    parser.add_argument("--host", default="127.0.0.1",
+                        help="Host to bind to (default: 127.0.0.1)")
     args = parser.parse_args()
 
-    port = args.port or DEFAULT_PORT or find_free_port()
     debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
-
-    print(f"Running on http://127.0.0.1:{port}/ (debug={debug_mode})")
-    app.run(host="127.0.0.1", port=port, debug=debug_mode, use_reloader=False)
+    host = args.host
+    port = args.port or DEFAULT_PORT or find_free_port(host)
+    print(f" * Starting: http://{host}:{port}/ (debug={debug_mode})")
+    if host == "127.0.0.1":
+        print("   Choose host '0.0.0.0' to bind to all local machine addresses")
+    app.run(host=args.host, port=port, debug=debug_mode, use_reloader=False)
 
 
 if __name__ == "__main__":
