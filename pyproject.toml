@@ -58,3 +58,6 @@ awt-static = [
     "static/img/electodrop.svg",
     "static/js/abifwebtool.js"
 ]
+abif-catalog = [
+    "abif_list.yml"
+]

@@ -154,6 +154,9 @@ sys.path.append(ABIFTOOL_DIR)
 
 TESTFILEDIR = Path(ABIFTOOL_DIR) / 'testdata'
 
+# Initialized in main()
+ABIF_CATALOG = None
+
 
 class WebEnv:
     __env = {}
@@ -189,16 +192,35 @@ class WebEnv:
             WebEnv.__env['statusStr'] = ""
 
 
+def abif_catalog_init(extra_dirs=None,
+                      catalog_filename="abif_list.yml"):
+    global ABIF_CATALOG, AWT_DIR
+    basedir = os.path.dirname(os.path.abspath(__file__))
+    search_dirs = [basedir,
+                   os.path.join(sys.prefix, "abif-catalog"),
+                   AWT_DIR]
+    if extra_dirs:
+        search_dirs = extra_dirs + search_dirs
+
+    if ABIF_CATALOG:
+        return ABIF_CATALOG
+    else:
+        for dir in search_dirs:
+            path = os.path.join(dir, "abif_list.yml")
+            if os.path.exists(path):
+                return path
+        else:
+            raise Exception(
+                f"{catalog_filename} not found in {', '.join(search_dirs)}")
+
+
 def build_examplelist():
     '''Load the list of examples from abif_list.yml'''
-    yampathlist = [
-        Path(AWT_DIR, "abif_list.yml")
-    ]
+    yampath = abif_catalog_init()
 
     retval = []
-    for yampath in yampathlist:
-        with open(yampath) as fp:
-            retval.extend(yaml.safe_load(fp))
+    with open(yampath) as fp:
+        retval.extend(yaml.safe_load(fp))
 
     for i, f in enumerate(retval):
         apath = Path(TESTFILEDIR, f['filename'])
@@ -669,6 +691,8 @@ def main():
     parser.add_argument("--host", default="127.0.0.1",
                         help="Host to bind to (default: 127.0.0.1)")
     args = parser.parse_args()
+
+    abif_catalog_init()
 
     debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
     host = args.host
