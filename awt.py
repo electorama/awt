@@ -214,8 +214,8 @@ def abif_catalog_init(extra_dirs=None,
                 f"{catalog_filename} not found in {', '.join(search_dirs)}")
 
 
-def build_examplelist():
-    '''Load the list of examples from abif_list.yml'''
+def build_election_list():
+    '''Load the list of elections from abif_list.yml'''
     yampath = abif_catalog_init()
 
     retval = []
@@ -238,41 +238,41 @@ def build_examplelist():
     return retval
 
 
-def get_fileentry_from_examplelist(filekey, examplelist):
+def get_fileentry_from_election_list(filekey, election_list):
     """Returns entry of ABIF file matching filekey
 
     Args:
-        examplelist: A list of dictionaries.
+        election_list: A list of dictionaries.
         filekey: The id value to lookup.
 
     Returns:
         The single index if exactly one match is found.
         None if no matches are found.
     """
-    matchlist = [i for i, d in enumerate(examplelist)
+    matchlist = [i for i, d in enumerate(election_list)
                  if d['id'] == filekey]
 
     if not matchlist:
         return None
     elif len(matchlist) == 1:
-        return examplelist[matchlist[0]]
+        return election_list[matchlist[0]]
     else:
         raise ValueError("Multiple file entries found with the same id.")
 
 
-def get_fileentries_by_tag(tag, examplelist):
+def get_fileentries_by_tag(tag, election_list):
     """Returns ABIF file entries having given tag
     """
     retval = []
-    for i, d in enumerate(examplelist):
+    for i, d in enumerate(election_list):
         if d.get('tags') and tag and tag in d.get('tags'):
             retval.append(d)
     return retval
 
 
-def get_all_tags_in_examplelist(examplelist):
+def get_all_tags_in_election_list(election_list):
     retval = set()
-    for i, d in enumerate(examplelist):
+    for i, d in enumerate(election_list):
         if d.get('tags'):
             for t in re.split('[ ,]+', d['tags']):
                 retval.add(t)
@@ -402,7 +402,7 @@ def awt_get(toppage=None, tag=None):
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
     msgs['lede'] = "FIXME-flaskabif.py"
-    file_array = build_examplelist()
+    election_list = build_election_list()
     debug_flag = webenv['debugFlag']
     debug_output = webenv['debugIntro']
 
@@ -411,16 +411,16 @@ def awt_get(toppage=None, tag=None):
 
     webenv['toppage'] = toppage
 
-    mytagarray = sorted(get_all_tags_in_examplelist(file_array),
+    mytagarray = sorted(get_all_tags_in_election_list(election_list),
                         key=str.casefold)
     match toppage:
         case "awt":
             retval = render_template('default-index.html',
                                      abifinput='',
                                      abiftool_output=None,
-                                     main_file_array=file_array[0:5],
-                                     other_files=file_array[5:],
-                                     example_list=file_array,
+                                     main_file_array=election_list[0:5],
+                                     other_files=election_list[5:],
+                                     example_list=election_list,
                                      webenv=webenv,
                                      msgs=msgs,
                                      debug_output=debug_output,
@@ -431,14 +431,14 @@ def awt_get(toppage=None, tag=None):
             if tag:
                 msgs['pagetitle'] = \
                     f"{webenv['statusStr']}Tag: {tag}"
-                tag_file_array = get_fileentries_by_tag(tag, file_array)
+                tag_file_array = get_fileentries_by_tag(tag, election_list)
                 debug_output += f"{tag=}"
                 retval = render_template('default-index.html',
                                          abifinput='',
                                          abiftool_output=None,
                                          main_file_array=tag_file_array[0:5],
                                          other_files=tag_file_array[5:],
-                                         example_list=file_array,
+                                         example_list=election_list,
                                          webenv=webenv,
                                          msgs=msgs,
                                          debug_output=debug_output,
@@ -448,7 +448,7 @@ def awt_get(toppage=None, tag=None):
                                          )
             else:
                 retval = render_template('tag-index.html',
-                                         example_list=file_array,
+                                         example_list=election_list,
                                          webenv=webenv,
                                          msgs=msgs,
                                          tag=tag,
@@ -470,12 +470,35 @@ def awt_get(toppage=None, tag=None):
                                       ), 404)
     return retval
 
+# Route for '/id' with no identifier
+@app.route('/id', methods=['GET'])
+def id_no_identifier():
+    msgs = {}
+    webenv = WebEnv.wenvDict()
+    WebEnv.sync_web_env()
+    msgs['pagetitle'] = \
+        f"{webenv['statusStr']}ABIF web tool (awt) on Electorama!"
+    msgs['placeholder'] = \
+        "FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    msgs['pagetitle'] = "ABIF Election List"
+    msgs['lede'] = (
+        "Please select one of the elections below:"
+    )
+    webenv = WebEnv.wenvDict()
+    WebEnv.sync_web_env()
+    election_list = build_election_list()
+    return render_template('id-index.html',
+                           msgs=msgs,
+                           webenv=webenv,
+                           election_list=election_list
+                           ), 200
+
 
 @app.route('/id/<identifier>/dot/svg')
 def get_svg_dotdiagram(identifier):
     '''FIXME FIXME July 2024'''
-    examplelist = build_examplelist()
-    fileentry = get_fileentry_from_examplelist(identifier, examplelist)
+    election_list = build_election_list()
+    fileentry = get_fileentry_from_election_list(identifier, election_list)
     jabmod = convert_abif_to_jabmod(fileentry['text'], cleanws=True)
     copecount = full_copecount_from_abifmodel(jabmod)
     return copecount_diagram(copecount, outformat='svg')
@@ -502,11 +525,11 @@ def get_by_id(identifier, resulttype=None):
     msgs = {}
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
-    examplelist = build_examplelist()
+    election_list = build_election_list()
     webenv = WebEnv.wenvDict()
     debug_output = webenv.get('debugIntro') or ""
     WebEnv.sync_web_env()
-    fileentry = get_fileentry_from_examplelist(identifier, examplelist)
+    fileentry = get_fileentry_from_election_list(identifier, election_list)
     if fileentry:
         msgs['pagetitle'] = f"{webenv['statusStr']}{fileentry['title']}"
         msgs['lede'] = (
@@ -541,7 +564,7 @@ def get_by_id(identifier, resulttype=None):
         return render_template('results-index.html',
                                abifinput=fileentry['text'],
                                abif_id=identifier,
-                               example_list=examplelist,
+                               election_list=election_list,
                                copewinnerstring=resblob['copewinnerstring'],
                                dotsvg_html=resblob['dotsvg_html'],
                                error_html=resblob.get('error_html'),

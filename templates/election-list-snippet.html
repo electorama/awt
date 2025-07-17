@@ -1,6 +1,6 @@
-<h2>Example list</h2>
+<h2>Election list</h2>
 <ul>
-    {% for item in example_list %}
+    {% for item in election_list %}
   <!--<p>{{ item.desc }}</p>-->
   <li>{{loop.index}}. <a href="/id/{{item.id}}">{{item.id}}</a>
     &mdash; {{item.title}} &mdash; {{ item.desc }}

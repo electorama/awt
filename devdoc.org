@@ -55,13 +55,13 @@ Return dictionary with entire web environment
 *** set_web_env():
 sync web environment with WebEnv singleton
 ** supporting functions
-*** build_examplelist():
-Load the list of examples from examplelist.yml
-*** get_fileentry_from_examplelist(filekey, examplelist):
+*** build_election_list():
+Load the list of examples from election_list.yml
+*** get_fileentry_from_election_list(filekey, election_list):
 Returns entry of ABIF file matching filekey
-*** get_fileentries_by_tag(tag, examplelist):
+*** get_fileentries_by_tag(tag, election_list):
 Returns ABIF file entries having given tag
-*** get_all_tags_in_examplelist(examplelist):
+*** get_all_tags_in_election_list(election_list):
 FIXME
 *** add_html_hints_to_stardict(scores, stardict):
 FIXME

@@ -2,7 +2,6 @@ This is a very incomplete list of incomplete tasks for this project
 * Test coverage
   * Create tests directory and add tests besides per-election smoketests
   * Move test_awt_routes.py to tests directory
-* Rename examplelist.yml to abif_list.yml; rm symlink; update refs to file
 * Integrate 2024 SF-mayoral IRV code
 * Finalize FPTP Integration
   * Add a pytest for an FPTP edge case (e.g. single-ballot or tie).

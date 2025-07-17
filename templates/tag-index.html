@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 id="examples">ABIF examples by tag</h2>
+<h2>Elections by tag</h2>
 <ul>
   {% for item in tagarray %}
   <li>{{loop.index}}. <a href="/tag/{{item}}">{{item}}</a></li>
   {% endfor %}
   <li><a href="/awt">/awt homepage</a></li>
 </ul>
-{% include 'example-list-snippet.html' %}
-<p>In addition to the above examples, one may return to the <a href="/awt">/awt homepage</a> and create one's own example.</p>
+{% include 'election-list-snippet.html' %}
+<p>See also: the <a href="/id">full list of elections</a> on this website. In addition to
+   the above elections, one may return to the <a href="/awt">/awt homepage</a>
+   and enter an ABIF-formatted election into the form field.</p>
 {% endblock content %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+{#  <h2 id="examples">Elections by id</h2>
+  <p>Below is a list of elections hosted at this website:</p>
+  <ol>
+    {% for entry in election_list %}
+      <li>
+        <a href="/id/{{ entry.id }}">{{ entry.title or entry.id }}</a>
+        {% if entry.taglist and entry.taglist|length > 0 %}
+          <span class="tags">
+            [ tags:
+            {% for tag in entry.taglist %}
+              <a href="/tag/{{ tag }}">{{ tag }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            ]
+          </span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>#}
+{% include 'election-list-snippet.html' %}
+<p>In addition to the above elections, one may return to the <a href="/awt">/awt homepage</a>
+   and enter an ABIF-formatted election.</p>
+{% endblock content %}
