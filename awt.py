@@ -718,6 +718,8 @@ def main():
     abif_catalog_init()
 
     debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
+    if args.debug:
+        os.environ["AWT_STATUS"] = "debug"
     host = args.host
     port = args.port or DEFAULT_PORT or find_free_port(host)
     print(f" * Starting: http://{host}:{port}/ (debug={debug_mode})")
