@@ -189,3 +189,22 @@ svg {
     font-size: smaller;
     margin-left: 2rem;
 }
+
+.election-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-right: 2em;
+}
+
+.election-id {
+  /* Optional: add left-side styling if desired */
+}
+
+.election-tags {
+  font-size: 85%;
+  color: #aaa;
+  text-align: right;
+  min-width: 80px;
+  margin-left: 1em;
+}

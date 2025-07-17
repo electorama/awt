@@ -2,12 +2,19 @@
 <ul>
     {% for item in election_list %}
   <!--<p>{{ item.desc }}</p>-->
-  <li>{{loop.index}}. <a href="/id/{{item.id}}">{{item.id}}</a>
-    &mdash; {{item.title}} &mdash; {{ item.desc }}
-    ({% for t in item.taglist %}
-    <a href="/tag/{{t}}">{{t}}</a>
-    {% endfor %})
+  <li class="election-item">
+    <span class="election-id">
+      {{loop.index}}. <a href="/id/{{item.id}}">{{item.id}}</a>
+    </span>
+    <span class="election-tags">
+      (tags: {% for t in item.taglist %}
+        <a href="/tag/{{t}}">{{t}}</a>{% if not loop.last %}, {% endif %}
+      {% endfor %})
+    </span>
   </li>
+  <ul>
+    <li>{{item.title}}</li>
+    <li>{{ item.desc }}</li>
+  </ul>
   {% endfor %}
-
 </ul>

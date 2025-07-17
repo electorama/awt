@@ -1,6 +1,6 @@
 [project]
 name = "awt"
-version = "0.31.0"
+version = "0.31.1"
 dependencies = [
     "abiftool>=0.31.0",
     "dotenv",
