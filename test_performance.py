@@ -1,0 +1,73 @@
+import os
+import abiflib
+import subprocess
+import tempfile
+import time
+import re
+import requests
+import pytest
+import signal
+from urllib.parse import quote
+
+# Adjust these paths as needed
+AWT_DIR = os.path.dirname(os.path.abspath(__file__))
+ABIFTOOL_DIR = '/home/robla/src/abiftool'
+
+@pytest.fixture(scope="session")
+def awt_server():
+    """Start awt.py in a subprocess and yield the detected port."""
+    env = os.environ.copy()
+    env['AWT_DIR'] = AWT_DIR
+    env['ABIFTOOL_DIR'] = ABIFTOOL_DIR
+    env['PYTHONUNBUFFERED'] = '1'
+
+    log_file = tempfile.NamedTemporaryFile(mode='w+', delete=False)
+    log_path = log_file.name
+    print(f"\n[pytest] Logging awt.py output to {log_path}")
+
+    proc = subprocess.Popen(
+        ['python3', os.path.join(AWT_DIR, 'awt.py')],
+        stdout=open(log_path, 'w'),
+        stderr=subprocess.STDOUT,
+        env=env,
+        preexec_fn=os.setsid
+    )
+
+    try:
+        port = None
+        for _ in range(30):  # Try for 6 seconds
+            time.sleep(0.2)
+            with open(log_path) as f:
+                output = f.read()
+            match = re.search(r'Running on http://127\.0\.0\.1:(\d+)', output)
+            if match:
+                port = int(match.group(1))
+                break
+
+        if not port:
+            raise RuntimeError("Could not detect Flask port.")
+
+        yield port
+
+    finally:
+        print("\n[pytest] Terminating awt.py server...")
+        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+        proc.wait()
+
+def test_awt_url_returns_html_performance(awt_server):
+    """Performance test for a single /id/<id> URL."""
+    id_ = 'sf2024-member-board-of-supervisors-district-11'
+    encoded_id = quote(id_, safe='')
+    path = f"/id/{encoded_id}"
+    url = f"http://127.0.0.1:{awt_server}{path}"
+    print(f"Performance testing {url} (original id: {id_})")
+    start = time.time()
+    try:
+        response = requests.get(url, timeout=5)
+    except requests.Timeout:
+        pytest.fail(f"Request to {url} did not complete within 5 seconds.")
+    elapsed = time.time() - start
+    print(f"Request completed in {elapsed:.3f} seconds")
+    assert response.status_code == 200, f"{url} returned {response.status_code}"
+    assert "<html" in response.text.lower(), f"{url} did not return HTML"
+    assert elapsed < 5, f"Performance test took too long: {elapsed:.3f} seconds"
