@@ -18,6 +18,7 @@ from abiflib import (
     get_abiftool_dir
 )
 from flask import Flask, render_template, request, redirect, send_from_directory
+from flask_caching import Cache
 from markupsafe import escape
 from pathlib import Path
 from pprint import pformat
@@ -128,8 +129,17 @@ else:
     static_folder = AWT_STATIC
     static_url_path = '/static'
 
+
 app = Flask(__name__, static_folder=static_folder,
             template_folder=AWT_TEMPLATES, static_url_path=static_url_path)
+
+# Flask-Caching config (simple in-memory cache, can be changed to 'filesystem', 'redis', etc.)
+import tempfile
+app.config['CACHE_TYPE'] = 'filesystem'
+# Store cache in a subdir of the system temp dir (can be customized)
+app.config['CACHE_DIR'] = os.path.join(tempfile.gettempdir(), 'awt_flask_cache')
+app.config['CACHE_DEFAULT_TIMEOUT'] = 7 * 24 * 3600  # 1 week
+cache = Cache(app)
 
 # Custom static file routes for flattened venv installs
 if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
@@ -475,6 +485,7 @@ def awt_get(toppage=None, tag=None):
 
 # Route for '/id' with no identifier
 @app.route('/id', methods=['GET'])
+@cache.cached(timeout=7*24*3600, query_string=True)
 def id_no_identifier():
     msgs = {}
     webenv = WebEnv.wenvDict()
@@ -498,6 +509,7 @@ def id_no_identifier():
 
 
 @app.route('/id/<identifier>/dot/svg')
+@cache.cached(timeout=7*24*3600, query_string=True)
 def get_svg_dotdiagram(identifier):
     '''FIXME FIXME July 2024'''
     election_list = build_election_list()
@@ -509,7 +521,14 @@ def get_svg_dotdiagram(identifier):
 
 @app.route('/id/<identifier>', methods=['GET'])
 @app.route('/id/<identifier>/<resulttype>', methods=['GET'])
+@cache.cached(timeout=7*24*3600, query_string=True)
 def get_by_id(identifier, resulttype=None):
+# Instructions for cache invalidation
+# To clear the cache, delete the contents of the cache directory:
+#   import shutil; shutil.rmtree(app.config['CACHE_DIR'])
+# Or manually delete files in:
+#   {app.config['CACHE_DIR']}
+# Each cached response is stored as a file in that directory.
     '''Populate template variables based on id of the election
 
     As of May 2025, most variables should be populated via a
