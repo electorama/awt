@@ -820,7 +820,33 @@ def main():
         app.config['CACHE_TYPE'] = 'filesystem'
         app.config['CACHE_DIR'] = args.cache_dir
     app.config['CACHE_DEFAULT_TIMEOUT'] = args.cache_timeout
+
     cache.init_app(app)
+
+    # If using filesystem cache, monkeypatch the cache backend to print cache hits and file paths
+    if app.config['CACHE_TYPE'] == 'filesystem':
+        fs_cache = cache.cache
+        orig_get = fs_cache.get
+
+        def debug_get(key):
+            result = orig_get(key)
+            if result is not None:
+                # Compute the cache file path
+                cache_dir = app.config['CACHE_DIR']
+                # Flask-Caching FileSystemCache uses a hash of the key as filename
+                import hashlib
+                key_hash = hashlib.md5(key.encode('utf-8')).hexdigest()
+                filename = os.path.join(cache_dir, key_hash)
+                print(f"[awt.py] Flask-Caching: CACHE HIT {filename}")
+            return result
+
+        fs_cache.get = debug_get
+
+    # Print cache configuration for debugging
+    print(f"[awt.py] Flask-Caching: CACHE_TYPE={app.config['CACHE_TYPE']}")
+    if app.config['CACHE_TYPE'] == 'filesystem':
+        print(f"[awt.py] Flask-Caching: CACHE_DIR={app.config['CACHE_DIR']}")
+    print(f"[awt.py] Flask-Caching: CACHE_DEFAULT_TIMEOUT={app.config['CACHE_DEFAULT_TIMEOUT']}")
 
     debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
     if args.debug:
