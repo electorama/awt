@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 """perf_awt.py - Performance testing script for awt.py"""
-import argparse
 
+import argparse
 import cProfile
 import datetime
 import os
@@ -12,13 +12,17 @@ import requests
 import signal
 import string
 import subprocess
-import tempfile
 import time
 from urllib.parse import quote
 
-# Adjust these paths as needed
+
+# Set AWT_DIR
 AWT_DIR = os.path.dirname(os.path.abspath(__file__))
-ABIFTOOL_DIR = '/home/robla/src/abiftool'
+
+
+# Use abiflib.util.get_abiftool_dir to determine abiftool root
+from abiflib.util import get_abiftool_dir
+
 
 
 # --- b1060time support (minimal, just timestamp generation) ---
@@ -37,14 +41,14 @@ def get_b1060_timestamp_from_datetime(dt):
 
 # Start awt.py in a subprocess and detect the port
 
-def start_awt_server():
+
+def start_awt_server(log_path):
     env = os.environ.copy()
     env['AWT_DIR'] = AWT_DIR
-    env['ABIFTOOL_DIR'] = ABIFTOOL_DIR
+    abiftool_dir = get_abiftool_dir()
+    env['ABIFTOOL_DIR'] = abiftool_dir
     env['PYTHONUNBUFFERED'] = '1'
 
-    log_file = tempfile.NamedTemporaryFile(mode='w+', delete=False)
-    log_path = log_file.name
     print(f"[perf] Logging awt.py output to {log_path}")
 
     proc = subprocess.Popen(
@@ -142,7 +146,8 @@ def list_ids():
 def main():
     parser = argparse.ArgumentParser(description='Profile or analyze AWT performance.')
     parser.add_argument('cprof_file', nargs='?', help='Analyze an existing .cprof file instead of running a new test.')
-    parser.add_argument('--path', default='/id/sf2024-mayor', help='Endpoint path to test (default: /id/sf2024-mayor)')
+    parser.add_argument('--path', help='Endpoint path to test (e.g. /id/sf2024-mayor)')
+    parser.add_argument('--id', help='ID to test (sets --path to /id/<id> unless --path is given)')
     parser.add_argument('--list-ids', action='store_true', help='List all ids and their .abif filenames')
     args = parser.parse_args()
 
@@ -155,7 +160,20 @@ def main():
         print(summary)
         return
 
-    proc, port = start_awt_server()
+    # Determine endpoint path
+    if args.path:
+        path = args.path
+    elif args.id:
+        path = f"/id/{args.id}"
+    else:
+        path = "/id/sf2024-mayor"
+
+    git_rev = get_git_rev(AWT_DIR)
+    now = datetime.datetime.now(datetime.UTC)
+    b1060time = get_b1060_timestamp_from_datetime(now)
+    log_path = os.path.join(AWT_DIR, 'timing', f"out-{b1060time}-{git_rev}.out")
+
+    proc, port = start_awt_server(log_path)
 
     def cleanup(*_):
         print("[perf] Cleaning up server subprocess...")
@@ -173,7 +191,7 @@ def main():
     signal.signal(signal.SIGTERM, cleanup)
 
     try:
-        cprof_path = run_perf_test(proc, port, args.path, AWT_DIR)
+        cprof_path = run_perf_test(proc, port, path, AWT_DIR)
         if cprof_path:
             summary = analyze_profile(cprof_path)
             print(summary)

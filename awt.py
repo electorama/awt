@@ -14,7 +14,8 @@ from abiflib import (
     pairwise_count_dict,
     STAR_result_from_abifmodel,
     scaled_scores,
-    add_ratings_to_jabmod_votelines
+    add_ratings_to_jabmod_votelines,
+    get_abiftool_dir
 )
 from flask import Flask, render_template, request, redirect, send_from_directory
 from markupsafe import escape
@@ -148,10 +149,12 @@ if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
     def static_file(filename):
         return send_from_directory(AWT_STATIC, filename)
 
-AWT_DIR = os.path.expanduser('~/src/awt')
-ABIFTOOL_DIR = os.path.expanduser('~/src/abiftool')
-sys.path.append(ABIFTOOL_DIR)
 
+
+# Use abiflib.util.get_abiftool_dir to set ABIFTOOL_DIR and TESTFILEDIR
+ABIFTOOL_DIR = get_abiftool_dir()
+AWT_DIR = str(awt_py_dir)  # Directory containing this awt.py file
+sys.path.append(ABIFTOOL_DIR)
 TESTFILEDIR = Path(ABIFTOOL_DIR) / 'testdata'
 
 # Initialized in main()
