@@ -16,6 +16,11 @@ import tempfile
 import time
 from urllib.parse import quote
 
+# Adjust these paths as needed
+AWT_DIR = os.path.dirname(os.path.abspath(__file__))
+ABIFTOOL_DIR = '/home/robla/src/abiftool'
+
+
 # --- b1060time support (minimal, just timestamp generation) ---
 _B1060_ALPHABET = string.digits + string.ascii_uppercase + string.ascii_lowercase + '-_'
 def get_base60_digit(x):
@@ -29,10 +34,6 @@ def get_b1060_timestamp_from_datetime(dt):
     timepart = get_base60_digit(dt.hour) + get_base60_digit(dt.minute) + get_base60_digit(dt.second)
     return datepart + timepart
 
-
-# Adjust these paths as needed
-AWT_DIR = os.path.dirname(os.path.abspath(__file__))
-ABIFTOOL_DIR = '/home/robla/src/abiftool'
 
 # Start awt.py in a subprocess and detect the port
 
@@ -75,6 +76,52 @@ def start_awt_server():
         proc.terminate()
         raise e
 
+def analyze_profile(cprof_file):
+    import io
+    s = io.StringIO()
+    s.write(f"Analyzing profile: {cprof_file}\n\n")
+    p = pstats.Stats(cprof_file, stream=s)
+    p.strip_dirs().sort_stats(SortKey.CUMULATIVE).print_stats(30)
+    return s.getvalue()
+
+def get_git_rev(awt_dir):
+    try:
+        return subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=awt_dir).decode().strip()
+    except Exception:
+        return 'unknown'
+
+def build_cprof_path(awt_dir, b1060time, git_rev):
+    return os.path.join(awt_dir, 'timing', f"awt-perf-{b1060time}-{git_rev}.cprof")
+
+def run_perf_test(proc, port, path, awt_dir):
+    id_ = path.split('/')[-1] if path.startswith('/id/') and len(path.split('/')) > 2 else path
+    url = f"http://127.0.0.1:{port}{path}"
+    git_rev = get_git_rev(awt_dir)
+    now = datetime.datetime.now(datetime.UTC)
+    b1060time = get_b1060_timestamp_from_datetime(now)
+    cprof_path = build_cprof_path(awt_dir, b1060time, git_rev)
+    print(f"Performance testing {url} (original id: {id_})\nProfiling to: {cprof_path}")
+    pr = cProfile.Profile()
+    pr.enable()
+    start = time.time()
+    try:
+        response = requests.get(url, timeout=60)
+    except requests.Timeout:
+        print(f"Request to {url} did not complete within 60 seconds.")
+        return None
+    elapsed = time.time() - start
+    pr.disable()
+    pr.dump_stats(cprof_path)
+    print(f"Request completed in {elapsed:.3f} seconds. Profile saved to {cprof_path}")
+    print(f"Status code: {response.status_code}")
+    if response.status_code != 200:
+        print(f"Error: {url} returned {response.status_code}")
+    elif "<html" not in response.text.lower():
+        print(f"Error: {url} did not return HTML")
+    elif elapsed >= 60:
+        print(f"Warning: Performance test took too long: {elapsed:.3f} seconds")
+    return cprof_path
+
 
 def main():
     parser = argparse.ArgumentParser(description='Profile or analyze AWT performance.')
@@ -83,13 +130,10 @@ def main():
     args = parser.parse_args()
 
     if args.cprof_file:
-        # Analyze mode (like analyze_profile.py)
-        print(f"Analyzing profile: {args.cprof_file}\n")
-        p = pstats.Stats(args.cprof_file)
-        p.strip_dirs().sort_stats(SortKey.CUMULATIVE).print_stats(30)
+        summary = analyze_profile(args.cprof_file)
+        print(summary)
         return
 
-    # Otherwise, run the perf test
     proc, port = start_awt_server()
 
     def cleanup(*_):
@@ -104,43 +148,14 @@ def main():
             pass
         exit(1)
 
-    # Register signal handlers for SIGINT and SIGTERM
     signal.signal(signal.SIGINT, cleanup)
     signal.signal(signal.SIGTERM, cleanup)
 
     try:
-        # If the user gave a path, use it; otherwise default
-        path = args.path
-        # If path starts with /id/, extract id for display
-        id_ = path.split('/')[-1] if path.startswith('/id/') and len(path.split('/')) > 2 else path
-        url = f"http://127.0.0.1:{port}{path}"
-        try:
-            git_rev = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=AWT_DIR).decode().strip()
-        except Exception:
-            git_rev = 'unknown'
-        now = datetime.datetime.now(datetime.UTC)
-        b1060time = get_b1060_timestamp_from_datetime(now)
-        cprof_path = os.path.join(AWT_DIR, 'timing', f"awt-perf-{b1060time}-{git_rev}.cprof")
-        print(f"Performance testing {url} (original id: {id_})\nProfiling to: {cprof_path}")
-        pr = cProfile.Profile()
-        pr.enable()
-        start = time.time()
-        try:
-            response = requests.get(url, timeout=60)
-        except requests.Timeout:
-            print(f"Request to {url} did not complete within 60 seconds.")
-            return
-        elapsed = time.time() - start
-        pr.disable()
-        pr.dump_stats(cprof_path)
-        print(f"Request completed in {elapsed:.3f} seconds. Profile saved to {cprof_path}")
-        print(f"Status code: {response.status_code}")
-        if response.status_code != 200:
-            print(f"Error: {url} returned {response.status_code}")
-        elif "<html" not in response.text.lower():
-            print(f"Error: {url} did not return HTML")
-        elif elapsed >= 60:
-            print(f"Warning: Performance test took too long: {elapsed:.3f} seconds")
+        cprof_path = run_perf_test(proc, port, args.path, AWT_DIR)
+        if cprof_path:
+            summary = analyze_profile(cprof_path)
+            print(summary)
     finally:
         print("[perf] Terminating awt.py server...")
         try:
@@ -151,6 +166,7 @@ def main():
             proc.wait(timeout=5)
         except Exception:
             pass
+
 
 if __name__ == "__main__":
     main()
