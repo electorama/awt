@@ -47,6 +47,9 @@ else:
     print(
         f"[awt.py] No .env file found at {dotenv_path} (this is fine if you set env vars another way)")
 
+
+# Global default cache timeout (1 week)
+AWT_DEFAULT_CACHE_TIMEOUT = 7 * 24 * 3600
 # Allow overriding port via env or CLI
 DEFAULT_PORT = int(os.environ.get("PORT", 0))
 
@@ -136,7 +139,7 @@ app = Flask(__name__, static_folder=static_folder,
 
 
 # Flask-Caching config is set in main() based on CLI args
-cache = None  # Will be initialized in main()
+cache = Cache()  # Create cache object at module level for decorators
 
 # Custom static file routes for flattened venv installs
 if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
@@ -378,18 +381,16 @@ def add_html_hints_to_stardict(scores, stardict):
     curstart = 1
     for i, candtok in enumerate(scores['ranklist']):
         retval['colordict'][candtok] = colors[i]
-        retval['starscaled'][candtok] = \
-            round(retval['canddict'][candtok]['scaled_score'])
+        retval['starscaled'][candtok] = round(retval['canddict'][candtok]['scaled_score'])
         selline = ", ".join(".s%02d" % j for j in range(
             curstart, retval['starscaled'][candtok] + curstart))
-        retval['colorlines'][candtok] = f".g{i+1}"
+        retval['colorlines'][candtok] = f".g{i + 1}"
         if selline:
             retval['colorlines'][candtok] += ", " + selline
         retval['colorlines'][candtok] += " { color: " + colors[i] + "; }"
         curstart += retval['starscaled'][candtok]
     try:
-        retval['starratio'] = \
-            round(retval['total_all_scores'] / retval['scaled_total'])
+        retval['starratio'] = round(retval['total_all_scores'] / retval['scaled_total'])
     except ZeroDivisionError:
         retval['starratio'] = 0
     return retval
@@ -483,7 +484,7 @@ def awt_get(toppage=None, tag=None):
 
 
 @app.route('/id', methods=['GET'])
-@cache.cached(timeout=7*24*3600, query_string=True)
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
 def id_no_identifier():
     msgs = {}
     webenv = WebEnv.wenvDict()
@@ -507,7 +508,7 @@ def id_no_identifier():
 
 
 @app.route('/id/<identifier>/dot/svg')
-@cache.cached(timeout=7*24*3600, query_string=True)
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
 def get_svg_dotdiagram(identifier):
     '''FIXME FIXME July 2024'''
     election_list = build_election_list()
@@ -519,7 +520,7 @@ def get_svg_dotdiagram(identifier):
 
 @app.route('/id/<identifier>', methods=['GET'])
 @app.route('/id/<identifier>/<resulttype>', methods=['GET'])
-@cache.cached(timeout=7*24*3600, query_string=True)
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
 def get_by_id(identifier, resulttype=None):
     # Instructions for cache invalidation
     # To clear the cache, delete the contents of the cache directory:
@@ -800,8 +801,8 @@ def main():
                         help="Caching backend: none (no cache), simple (in-memory), filesystem (default)")
     parser.add_argument("--cache-dir", type=str, default=os.path.join(tempfile.gettempdir(), 'awt_flask_cache'),
                         help="Directory for filesystem cache (default: system temp dir)")
-    parser.add_argument("--cache-timeout", type=int, default=7*24*3600,
-                        help="Cache timeout in seconds (default: 1 week)")
+    parser.add_argument("--cache-timeout", type=int, default=AWT_DEFAULT_CACHE_TIMEOUT,
+                        help=f"Cache timeout in seconds (default: {AWT_DEFAULT_CACHE_TIMEOUT} seconds)")
     args = parser.parse_args()
 
     abif_catalog_init()
@@ -811,7 +812,6 @@ def main():
         os.environ["AWT_PROFILE_OUTPUT"] = args.profile_output
 
     # Configure Flask-Caching
-    global cache
     if args.caching == "none":
         app.config['CACHE_TYPE'] = 'null'
     elif args.caching == "simple":
@@ -820,7 +820,7 @@ def main():
         app.config['CACHE_TYPE'] = 'filesystem'
         app.config['CACHE_DIR'] = args.cache_dir
     app.config['CACHE_DEFAULT_TIMEOUT'] = args.cache_timeout
-    cache = Cache(app)
+    cache.init_app(app)
 
     debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
     if args.debug:
