@@ -516,8 +516,9 @@ def get_by_id(identifier, resulttype=None):
     "ResultConduit" object.  Prior to May 2025, the awt templates
     needed an ad hoc collection of variables, and probably still will
     into the future.
-
     '''
+    import cProfile, pstats, io, os
+    import datetime
     rtypemap = {
         'wlt': 'win-loss-tie (pairwise) results',
         'dot': 'pairwise diagram',
@@ -529,38 +530,25 @@ def get_by_id(identifier, resulttype=None):
     debug_output = webenv.get('debugIntro') or ""
     WebEnv.sync_web_env()
 
-    import datetime
     print(f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})")
-    debug_output += \
-        f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})\n"
+    debug_output += f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})\n"
     msgs = {}
-    msgs['placeholder'] = \
-        "Enter ABIF here, possibly using one of the examples below..."
+    msgs['placeholder'] = "Enter ABIF here, possibly using one of the examples below..."
     election_list = build_election_list()
     fileentry = get_fileentry_from_election_list(identifier, election_list)
     print(f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-    debug_output += \
-        f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
-    import cProfile, pstats, io, os
+    debug_output += f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+
+    # --- Server-side profiling if AWT_PROFILE_OUTPUT is set ---
     prof = None
-    profile_this = (identifier == 'sf2024-mayor')
-    if profile_this:
+    cprof_path = os.environ.get('AWT_PROFILE_OUTPUT')
+    if cprof_path:
         prof = cProfile.Profile()
         prof.enable()
-        import datetime
-        b1060time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        git_rev = 'unknown'
-        try:
-            import subprocess
-            git_rev = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=os.path.dirname(__file__)).decode().strip()
-        except Exception:
-            pass
-        cprof_path = os.path.join(os.path.dirname(__file__), 'timing', f"awt-server-sf2024-mayor-{b1060time}-{git_rev}.cprof")
 
     if fileentry:
         print(f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += \
-            f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+        debug_output += f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
         msgs['pagetitle'] = f"{webenv['statusStr']}{fileentry['title']}"
         msgs['lede'] = (
             f"Below is the ABIF from the \"{fileentry['id']}\" election" +
@@ -610,7 +598,6 @@ def get_by_id(identifier, resulttype=None):
         star_time = time.time() - t_star
         print(f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
         debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
-        # Removed duplicate and mis-indented lines after timing instrumentation
         resblob = resconduit.resblob
         if not resulttype or resulttype == 'all':
             rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
@@ -621,9 +608,8 @@ def get_by_id(identifier, resulttype=None):
         debug_output += f"result_types: {rtypelist}\n"
 
         print(f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += \
-            f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
-        if profile_this and prof:
+        debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+        if prof:
             prof.disable()
             prof.dump_stats(cprof_path)
             print(f"[SERVER PROFILE] Profile saved to {cprof_path}")
@@ -779,9 +765,15 @@ def main():
                         help="Run in debug mode")
     parser.add_argument("--host", default="127.0.0.1",
                         help="Host to bind to (default: 127.0.0.1)")
+    parser.add_argument("--profile-output", type=str, default=None,
+                        help="If set, enables server-side profiling and writes .cprof to this path")
     args = parser.parse_args()
 
     abif_catalog_init()
+
+    # Set AWT_PROFILE_OUTPUT env var if --profile-output is given
+    if args.profile_output:
+        os.environ["AWT_PROFILE_OUTPUT"] = args.profile_output
 
     debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
     if args.debug:

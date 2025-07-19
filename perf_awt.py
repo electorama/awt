@@ -42,17 +42,22 @@ def get_b1060_timestamp_from_datetime(dt):
 # Start awt.py in a subprocess and detect the port
 
 
-def start_awt_server(log_path):
+def start_awt_server(log_path, profile_output_path=None):
     env = os.environ.copy()
     env['AWT_DIR'] = AWT_DIR
     abiftool_dir = get_abiftool_dir()
     env['ABIFTOOL_DIR'] = abiftool_dir
     env['PYTHONUNBUFFERED'] = '1'
+    # Do NOT set AWT_PROFILE; instead, use --profile-output option
 
     print(f"[perf] Logging awt.py output to {log_path}")
 
+    cmd = ['python3', os.path.join(AWT_DIR, 'awt.py')]
+    if profile_output_path:
+        cmd.append(f'--profile-output={profile_output_path}')
+
     proc = subprocess.Popen(
-        ['python3', os.path.join(AWT_DIR, 'awt.py')],
+        cmd,
         stdout=open(log_path, 'w'),
         stderr=subprocess.STDOUT,
         env=env,
@@ -94,18 +99,14 @@ def get_git_rev(awt_dir):
     except Exception:
         return 'unknown'
 
-def build_cprof_path(awt_dir, b1060time, git_rev):
-    return os.path.join(awt_dir, 'timing', f"awt-perf-{b1060time}-{git_rev}.cprof")
+def build_cprof_path(awt_dir, b1060time, git_rev, id_value=None):
+    # If id_value is provided, include it in the filename
+    id_part = f"-{id_value}" if id_value else ""
+    return os.path.join(awt_dir, 'timing', f"awt-perf-{b1060time}{id_part}-{git_rev}.cprof")
 
-def run_perf_test(proc, port, path, awt_dir):
+def run_perf_test(proc, port, path, cprof_path):
     url = f"http://127.0.0.1:{port}{path}"
-    git_rev = get_git_rev(awt_dir)
-    now = datetime.datetime.now(datetime.UTC)
-    b1060time = get_b1060_timestamp_from_datetime(now)
-    cprof_path = build_cprof_path(awt_dir, b1060time, git_rev)
     print(f"Performance testing {url}\nProfiling to: {cprof_path}")
-    pr = cProfile.Profile()
-    pr.enable()
     start = time.time()
     try:
         response = requests.get(url, timeout=60)
@@ -113,8 +114,6 @@ def run_perf_test(proc, port, path, awt_dir):
         print(f"Request to {url} did not complete within 60 seconds.")
         return None
     elapsed = time.time() - start
-    pr.disable()
-    pr.dump_stats(cprof_path)
     print(f"Request completed in {elapsed:.3f} seconds. Profile saved to {cprof_path}")
     print(f"Status code: {response.status_code}")
     if response.status_code != 200:
@@ -128,7 +127,11 @@ def run_perf_test(proc, port, path, awt_dir):
 
 def list_ids():
     """Print all ids and their .abif filenames from abif_list.yml, one per line."""
-    import yaml
+    try:
+        import yaml
+    except ImportError:
+        print("PyYAML is required to list ids.")
+        return
     abif_list_path = os.path.join(AWT_DIR, 'abif_list.yml')
     try:
         with open(abif_list_path, 'r') as f:
@@ -173,7 +176,18 @@ def main():
     b1060time = get_b1060_timestamp_from_datetime(now)
     log_path = os.path.join(AWT_DIR, 'timing', f"out-{b1060time}-{git_rev}.out")
 
-    proc, port = start_awt_server(log_path)
+    # Build .cprof path for server-side profile
+    git_rev = get_git_rev(AWT_DIR)
+    now = datetime.datetime.now(datetime.UTC)
+    b1060time = get_b1060_timestamp_from_datetime(now)
+    # Use id in filename if available and simple
+    id_for_filename = None
+    if args.id:
+        # Only use safe characters for filenames
+        id_for_filename = re.sub(r'[^A-Za-z0-9_.-]', '_', args.id)
+    cprof_path = build_cprof_path(AWT_DIR, b1060time, git_rev, id_for_filename)
+
+    proc, port = start_awt_server(log_path, profile_output_path=cprof_path)
 
     def cleanup(*_):
         print("[perf] Cleaning up server subprocess...")
@@ -191,10 +205,12 @@ def main():
     signal.signal(signal.SIGTERM, cleanup)
 
     try:
-        cprof_path = run_perf_test(proc, port, path, AWT_DIR)
-        if cprof_path:
-            summary = analyze_profile(cprof_path)
+        cprof_path_result = run_perf_test(proc, port, path, cprof_path)
+        if cprof_path_result and os.path.exists(cprof_path_result):
+            summary = analyze_profile(cprof_path_result)
             print(summary)
+        else:
+            print(f"[perf] WARNING: Expected profile file {cprof_path} not found.")
     finally:
         print("[perf] Terminating awt.py server...")
         try:
