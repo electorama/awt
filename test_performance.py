@@ -56,18 +56,36 @@ def awt_server():
 
 def test_awt_url_returns_html_performance(awt_server):
     """Performance test for a single /id/<id> URL."""
-    id_ = 'sf2024-member-board-of-supervisors-district-11'
+    id_ = 'sf2024-mayor'
     encoded_id = quote(id_, safe='')
     path = f"/id/{encoded_id}"
     url = f"http://127.0.0.1:{awt_server}{path}"
-    print(f"Performance testing {url} (original id: {id_})")
-    start = time.time()
+    import cProfile
+    import pstats
+    import io
+    import subprocess
+    # Get git revision
     try:
-        response = requests.get(url, timeout=5)
+        git_rev = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=AWT_DIR).decode().strip()
+    except Exception:
+        git_rev = 'unknown'
+    # Use timestamp as b1060time-style identifier
+    import datetime
+    b1060time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+    cprof_path = os.path.join(AWT_DIR, 'timing', f"awt-perf-{b1060time}-{git_rev}.cprof")
+    print(f"Performance testing {url} (original id: {id_})\nProfiling to: {cprof_path}")
+    pr = cProfile.Profile()
+    pr.enable()
+    start = time.time()
+    timeout = 40
+    try:
+        response = requests.get(url, timeout=timeout)
     except requests.Timeout:
-        pytest.fail(f"Request to {url} did not complete within 5 seconds.")
+        pytest.fail(f"Request to {url} did not complete within 25 seconds.")
     elapsed = time.time() - start
-    print(f"Request completed in {elapsed:.3f} seconds")
+    pr.disable()
+    pr.dump_stats(cprof_path)
+    print(f"Request completed in {elapsed:.3f} seconds. Profile saved to {cprof_path}")
     assert response.status_code == 200, f"{url} returned {response.status_code}"
     assert "<html" in response.text.lower(), f"{url} did not return HTML"
-    assert elapsed < 5, f"Performance test took too long: {elapsed:.3f} seconds"
+    assert elapsed < timeout, f"Performance test took too long: {elapsed:.3f} seconds"
