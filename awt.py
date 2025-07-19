@@ -133,13 +133,10 @@ else:
 app = Flask(__name__, static_folder=static_folder,
             template_folder=AWT_TEMPLATES, static_url_path=static_url_path)
 
-# Flask-Caching config (simple in-memory cache, can be changed to 'filesystem', 'redis', etc.)
+
+# Flask-Caching config is set in main() based on CLI args
 import tempfile
-app.config['CACHE_TYPE'] = 'filesystem'
-# Store cache in a subdir of the system temp dir (can be customized)
-app.config['CACHE_DIR'] = os.path.join(tempfile.gettempdir(), 'awt_flask_cache')
-app.config['CACHE_DEFAULT_TIMEOUT'] = 7 * 24 * 3600  # 1 week
-cache = Cache(app)
+cache = None  # Will be initialized in main()
 
 # Custom static file routes for flattened venv installs
 if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
@@ -777,6 +774,7 @@ def find_free_port(host="127.0.0.1"):
         return s.getsockname()[1]
 
 
+
 def main():
     parser = argparse.ArgumentParser(description="Run the AWT server.")
     parser.add_argument("--port", type=int, help="Port to listen on")
@@ -786,6 +784,12 @@ def main():
                         help="Host to bind to (default: 127.0.0.1)")
     parser.add_argument("--profile-output", type=str, default=None,
                         help="If set, enables server-side profiling and writes .cprof to this path")
+    parser.add_argument("--caching", choices=["none", "simple", "filesystem"], default="filesystem",
+                        help="Caching backend: none (no cache), simple (in-memory), filesystem (default)")
+    parser.add_argument("--cache-dir", type=str, default=os.path.join(tempfile.gettempdir(), 'awt_flask_cache'),
+                        help="Directory for filesystem cache (default: system temp dir)")
+    parser.add_argument("--cache-timeout", type=int, default=7*24*3600,
+                        help="Cache timeout in seconds (default: 1 week)")
     args = parser.parse_args()
 
     abif_catalog_init()
@@ -793,6 +797,18 @@ def main():
     # Set AWT_PROFILE_OUTPUT env var if --profile-output is given
     if args.profile_output:
         os.environ["AWT_PROFILE_OUTPUT"] = args.profile_output
+
+    # Configure Flask-Caching
+    global cache
+    if args.caching == "none":
+        app.config['CACHE_TYPE'] = 'null'
+    elif args.caching == "simple":
+        app.config['CACHE_TYPE'] = 'simple'
+    elif args.caching == "filesystem":
+        app.config['CACHE_TYPE'] = 'filesystem'
+        app.config['CACHE_DIR'] = args.cache_dir
+    app.config['CACHE_DEFAULT_TIMEOUT'] = args.cache_timeout
+    cache = Cache(app)
 
     debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
     if args.debug:
