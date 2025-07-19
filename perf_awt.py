@@ -1,3 +1,4 @@
+
 import os
 import subprocess
 import tempfile
@@ -7,6 +8,25 @@ import requests
 from urllib.parse import quote
 import cProfile
 import datetime
+import time as pytime
+import string
+# --- b1060time support (minimal, just timestamp generation) ---
+_B1060_ALPHABET = string.digits + string.ascii_uppercase + string.ascii_lowercase + '-_'
+def get_base60_digit(x):
+    if x < 0 or x >= 60:
+        raise ValueError(f"{x} is out of range to represent as single base60 digit")
+    return _B1060_ALPHABET[x % 60]
+
+def get_b1060_timestamp_from_datetime(dt):
+    ttup = dt.timetuple()
+    datepart = f"{dt.year:04d}{dt.month:02d}{dt.day:02d}-"
+    timepart = get_base60_digit(dt.hour) + get_base60_digit(dt.minute) + get_base60_digit(dt.second)
+    return datepart + timepart
+
+import argparse
+import pstats
+from pstats import SortKey
+import signal
 
 # Adjust these paths as needed
 AWT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -55,18 +75,50 @@ def start_awt_server():
 
 
 def main():
+
+    parser = argparse.ArgumentParser(description='Profile or analyze AWT performance.')
+    parser.add_argument('cprof_file', nargs='?', help='Analyze an existing .cprof file instead of running a new test.')
+    parser.add_argument('--path', default='/id/sf2024-mayor', help='Endpoint path to test (default: /id/sf2024-mayor)')
+    args = parser.parse_args()
+
+    if args.cprof_file:
+        # Analyze mode (like analyze_profile.py)
+        print(f"Analyzing profile: {args.cprof_file}\n")
+        p = pstats.Stats(args.cprof_file)
+        p.strip_dirs().sort_stats(SortKey.CUMULATIVE).print_stats(30)
+        return
+
+    # Otherwise, run the perf test
     proc, port = start_awt_server()
+
+    def cleanup(*_):
+        print("[perf] Cleaning up server subprocess...")
+        try:
+            os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+        except Exception:
+            pass
+        try:
+            proc.wait(timeout=5)
+        except Exception:
+            pass
+        exit(1)
+
+    # Register signal handlers for SIGINT and SIGTERM
+    signal.signal(signal.SIGINT, cleanup)
+    signal.signal(signal.SIGTERM, cleanup)
+
     try:
-        id_ = 'sf2024-mayor'
-        encoded_id = quote(id_, safe='')
-        path = f"/id/{encoded_id}"
+        # If the user gave a path, use it; otherwise default
+        path = args.path
+        # If path starts with /id/, extract id for display
+        id_ = path.split('/')[-1] if path.startswith('/id/') and len(path.split('/')) > 2 else path
         url = f"http://127.0.0.1:{port}{path}"
-        # Get git revision
         try:
             git_rev = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=AWT_DIR).decode().strip()
         except Exception:
             git_rev = 'unknown'
-        b1060time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        now = datetime.datetime.now()
+        b1060time = get_b1060_timestamp_from_datetime(now)
         cprof_path = os.path.join(AWT_DIR, 'timing', f"awt-perf-{b1060time}-{git_rev}.cprof")
         print(f"Performance testing {url} (original id: {id_})\nProfiling to: {cprof_path}")
         pr = cProfile.Profile()
@@ -90,9 +142,14 @@ def main():
             print(f"Warning: Performance test took too long: {elapsed:.3f} seconds")
     finally:
         print("[perf] Terminating awt.py server...")
-        import signal
-        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
-        proc.wait()
+        try:
+            os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+        except Exception:
+            pass
+        try:
+            proc.wait(timeout=5)
+        except Exception:
+            pass
 
 if __name__ == "__main__":
     main()
