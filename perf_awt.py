@@ -94,13 +94,12 @@ def build_cprof_path(awt_dir, b1060time, git_rev):
     return os.path.join(awt_dir, 'timing', f"awt-perf-{b1060time}-{git_rev}.cprof")
 
 def run_perf_test(proc, port, path, awt_dir):
-    id_ = path.split('/')[-1] if path.startswith('/id/') and len(path.split('/')) > 2 else path
     url = f"http://127.0.0.1:{port}{path}"
     git_rev = get_git_rev(awt_dir)
     now = datetime.datetime.now(datetime.UTC)
     b1060time = get_b1060_timestamp_from_datetime(now)
     cprof_path = build_cprof_path(awt_dir, b1060time, git_rev)
-    print(f"Performance testing {url} (original id: {id_})\nProfiling to: {cprof_path}")
+    print(f"Performance testing {url}\nProfiling to: {cprof_path}")
     pr = cProfile.Profile()
     pr.enable()
     start = time.time()
@@ -123,11 +122,33 @@ def run_perf_test(proc, port, path, awt_dir):
     return cprof_path
 
 
+def list_ids():
+    """Print all ids and their .abif filenames from abif_list.yml, one per line."""
+    import yaml
+    abif_list_path = os.path.join(AWT_DIR, 'abif_list.yml')
+    try:
+        with open(abif_list_path, 'r') as f:
+            abif_list = yaml.safe_load(f)
+    except Exception as e:
+        print(f"Could not read abif_list.yml: {e}")
+        return
+    # abif_list is expected to be a list of dicts with 'id' and 'filename' keys
+    for entry in abif_list:
+        id_ = entry.get('id')
+        filename = entry.get('filename')
+        if id_ and filename:
+            print(f"{id_}: {filename}")
+
 def main():
     parser = argparse.ArgumentParser(description='Profile or analyze AWT performance.')
     parser.add_argument('cprof_file', nargs='?', help='Analyze an existing .cprof file instead of running a new test.')
     parser.add_argument('--path', default='/id/sf2024-mayor', help='Endpoint path to test (default: /id/sf2024-mayor)')
+    parser.add_argument('--list-ids', action='store_true', help='List all ids and their .abif filenames')
     args = parser.parse_args()
+
+    if args.list_ids:
+        list_ids()
+        return
 
     if args.cprof_file:
         summary = analyze_profile(args.cprof_file)
