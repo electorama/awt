@@ -21,7 +21,7 @@ ABIF_LIST_PATH = os.path.join(AWT_DIR, 'abif_list.yml')
 
 @pytest.fixture(scope="session")
 def awt_server():
-    """Start awt.py in a subprocess and yield the detected port."""
+    """Start awt.py in a subprocess with --caching=none (or $AWT_PYTEST_CACHING) and yield the detected port."""
     env = os.environ.copy()
     env['AWT_DIR'] = AWT_DIR
     env['ABIFTOOL_DIR'] = ABIFTOOL_DIR
@@ -31,8 +31,9 @@ def awt_server():
     log_path = log_file.name
     print(f"\n[pytest] Logging awt.py output to {log_path}")
 
+    caching_backend = os.environ.get('AWT_PYTEST_CACHING', 'none')
     proc = subprocess.Popen(
-        ['python3', os.path.join(AWT_DIR, 'awt.py')],
+        ['python3', os.path.join(AWT_DIR, 'awt.py'), f'--caching={caching_backend}'],
         stdout=open(log_path, 'w'),
         stderr=subprocess.STDOUT,
         env=env,
