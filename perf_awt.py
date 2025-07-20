@@ -52,7 +52,7 @@ def start_awt_server(log_path, profile_output_path=None):
 
     print(f"[perf] Logging awt.py output to {log_path}")
 
-    cmd = ['python3', os.path.join(AWT_DIR, 'awt.py')]
+    cmd = ['python3', os.path.join(AWT_DIR, 'awt.py'), '--caching=none']
     if profile_output_path:
         cmd.append(f'--profile-output={profile_output_path}')
 
