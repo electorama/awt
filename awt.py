@@ -138,8 +138,25 @@ app = Flask(__name__, static_folder=static_folder,
             template_folder=AWT_TEMPLATES, static_url_path=static_url_path)
 
 
-# Flask-Caching config is set in main() based on CLI args
+# --- Flask-Caching Initialization for WSGI ---
+# This block configures and initializes the cache when the app is imported by a
+# WSGI server (e.g., on PythonAnywhere). The `main()` function below handles
+# configuration when running as a standalone script with command-line arguments.
 cache = Cache()  # Create cache object at module level for decorators
+wsgi_cache_type = os.environ.get("AWT_CACHE_TYPE", "filesystem")
+if wsgi_cache_type == "none":
+    app.config['CACHE_TYPE'] = 'null'
+elif wsgi_cache_type == "simple":
+    app.config['CACHE_TYPE'] = 'simple'
+else:  # filesystem
+    app.config['CACHE_TYPE'] = 'filesystem'
+    app.config['CACHE_DIR'] = os.environ.get(
+        "AWT_CACHE_DIR", os.path.join(tempfile.gettempdir(), 'awt_flask_cache'))
+
+app.config['CACHE_DEFAULT_TIMEOUT'] = int(
+    os.environ.get("AWT_CACHE_TIMEOUT", AWT_DEFAULT_CACHE_TIMEOUT))
+
+cache.init_app(app)
 
 # Custom static file routes for flattened venv installs
 if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
