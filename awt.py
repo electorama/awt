@@ -381,7 +381,8 @@ def add_html_hints_to_stardict(scores, stardict):
     curstart = 1
     for i, candtok in enumerate(scores['ranklist']):
         retval['colordict'][candtok] = colors[i]
-        retval['starscaled'][candtok] = round(retval['canddict'][candtok]['scaled_score'])
+        retval['starscaled'][candtok] = round(
+            retval['canddict'][candtok]['scaled_score'])
         selline = ", ".join(".s%02d" % j for j in range(
             curstart, retval['starscaled'][candtok] + curstart))
         retval['colorlines'][candtok] = f".g{i + 1}"
@@ -390,7 +391,8 @@ def add_html_hints_to_stardict(scores, stardict):
         retval['colorlines'][candtok] += " { color: " + colors[i] + "; }"
         curstart += retval['starscaled'][candtok]
     try:
-        retval['starratio'] = round(retval['total_all_scores'] / retval['scaled_total'])
+        retval['starratio'] = round(
+            retval['total_all_scores'] / retval['scaled_total'])
     except ZeroDivisionError:
         retval['starratio'] = 0
     return retval
@@ -551,13 +553,15 @@ def get_by_id(identifier, resulttype=None):
     debug_output = webenv.get('debugIntro') or ""
     WebEnv.sync_web_env()
 
-    print(f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})")
+    print(
+        f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})")
     debug_output += f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})\n"
     msgs = {}
     msgs['placeholder'] = "Enter ABIF here, possibly using one of the examples below..."
     election_list = build_election_list()
     fileentry = get_fileentry_from_election_list(identifier, election_list)
-    print(f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
+    print(
+        f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
     debug_output += f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
 
     # --- Server-side profiling if AWT_PROFILE_OUTPUT is set ---
@@ -568,7 +572,8 @@ def get_by_id(identifier, resulttype=None):
         prof.enable()
 
     if fileentry:
-        print(f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
+        print(
+            f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
         debug_output += f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
         msgs['pagetitle'] = f"{webenv['statusStr']}{fileentry['title']}"
         msgs['lede'] = (
@@ -586,38 +591,44 @@ def get_by_id(identifier, resulttype=None):
             error_html = e.message
 
         import time
-        print(f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
+        print(
+            f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
         debug_output += f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
         resconduit = conduits.ResultConduit(jabmod=jabmod)
 
         t_fptp = time.time()
         resconduit = resconduit.update_FPTP_result(jabmod)
         fptp_time = time.time() - t_fptp
-        print(f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]")
+        print(
+            f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]")
         debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
 
         t_irv = time.time()
         resconduit = resconduit.update_IRV_result(jabmod)
         irv_time = time.time() - t_irv
-        print(f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
+        print(
+            f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
         debug_output += f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
 
         t_pairwise = time.time()
         resconduit = resconduit.update_pairwise_result(jabmod)
         pairwise_time = time.time() - t_pairwise
-        print(f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]")
+        print(
+            f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]")
         debug_output += f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
 
         t_starprep = time.time()
         ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
         starprep_time = time.time() - t_starprep
-        print(f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
+        print(
+            f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
         debug_output += f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
 
         t_star = time.time()
         resconduit = resconduit.update_STAR_result(ratedjabmod)
         star_time = time.time() - t_star
-        print(f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
+        print(
+            f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
         debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
         resblob = resconduit.resblob
         if not resulttype or resulttype == 'all':
@@ -628,7 +639,8 @@ def get_by_id(identifier, resulttype=None):
         debug_output += pformat(resblob.keys()) + "\n"
         debug_output += f"result_types: {rtypelist}\n"
 
-        print(f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
+        print(
+            f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
         debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
         if prof:
             prof.disable()
@@ -837,7 +849,8 @@ def main():
     print(f"[awt.py] Flask-Caching: CACHE_TYPE={app.config['CACHE_TYPE']}")
     if app.config['CACHE_TYPE'] == 'filesystem':
         print(f"[awt.py] Flask-Caching: CACHE_DIR={app.config['CACHE_DIR']}")
-    print(f"[awt.py] Flask-Caching: CACHE_DEFAULT_TIMEOUT={app.config['CACHE_DEFAULT_TIMEOUT']}")
+    print(
+        f"[awt.py] Flask-Caching: CACHE_DEFAULT_TIMEOUT={app.config['CACHE_DEFAULT_TIMEOUT']}")
 
     debug_mode = args.debug or os.environ.get("FLASK_ENV") == "development"
     if args.debug:
