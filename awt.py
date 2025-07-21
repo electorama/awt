@@ -552,8 +552,7 @@ def get_by_id(identifier, resulttype=None):
     WebEnv.sync_web_env()
 
     print(f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})")
-    debug_output += f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({
-        identifier=} {resulttype=})\n"
+    debug_output += f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})\n"
     msgs = {}
     msgs['placeholder'] = "Enter ABIF here, possibly using one of the examples below..."
     election_list = build_election_list()
@@ -570,8 +569,7 @@ def get_by_id(identifier, resulttype=None):
 
     if fileentry:
         print(f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += f" 00003 ---->  [{
-            datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+        debug_output += f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
         msgs['pagetitle'] = f"{webenv['statusStr']}{fileentry['title']}"
         msgs['lede'] = (
             f"Below is the ABIF from the \"{fileentry['id']}\" election" +
@@ -589,44 +587,38 @@ def get_by_id(identifier, resulttype=None):
 
         import time
         print(f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += f" 00004 ---->  [{
-            datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+        debug_output += f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
         resconduit = conduits.ResultConduit(jabmod=jabmod)
 
         t_fptp = time.time()
         resconduit = resconduit.update_FPTP_result(jabmod)
         fptp_time = time.time() - t_fptp
         print(f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]")
-        debug_output += f" 00006 ---->  [{datetime.datetime.now(
-        ):%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
+        debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
 
         t_irv = time.time()
         resconduit = resconduit.update_IRV_result(jabmod)
         irv_time = time.time() - t_irv
         print(f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
-        debug_output += f" 00007 ---->  [{datetime.datetime.now(
-        ):%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
+        debug_output += f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
 
         t_pairwise = time.time()
         resconduit = resconduit.update_pairwise_result(jabmod)
         pairwise_time = time.time() - t_pairwise
         print(f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]")
-        debug_output += f" 00008 ---->  [{datetime.datetime.now(
-        ):%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
+        debug_output += f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
 
         t_starprep = time.time()
         ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
         starprep_time = time.time() - t_starprep
         print(f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
-        debug_output += f" 00009 ---->  [{datetime.datetime.now(
-        ):%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
+        debug_output += f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
 
         t_star = time.time()
         resconduit = resconduit.update_STAR_result(ratedjabmod)
         star_time = time.time() - t_star
         print(f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
-        debug_output += f" 00010 ---->  [{datetime.datetime.now(
-        ):%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
+        debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
         resblob = resconduit.resblob
         if not resulttype or resulttype == 'all':
             rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
@@ -637,8 +629,7 @@ def get_by_id(identifier, resulttype=None):
         debug_output += f"result_types: {rtypelist}\n"
 
         print(f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += f" 00011 ---->  [{
-            datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+        debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
         if prof:
             prof.disable()
             prof.dump_stats(cprof_path)
