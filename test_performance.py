@@ -6,6 +6,7 @@ import tempfile
 import time
 import re
 import requests
+from pathlib import Path
 import pytest
 import signal
 from urllib.parse import quote
@@ -93,7 +94,9 @@ def _run_performance_test(port, cache_mode):
     # Use timestamp as b1060time-style identifier
     import datetime
     b1060time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-    cprof_path = os.path.join(AWT_DIR, 'timing', f"awt-perf-{b1060time}-{git_rev}-{cache_mode}.cprof")
+    timing_dir = Path(AWT_DIR) / 'timing'
+    timing_dir.mkdir(exist_ok=True)
+    cprof_path = timing_dir / f"awt-perf-{b1060time}-{git_rev}-{cache_mode}.cprof"
     print(f"Performance testing {url} (original id: {id_}, cache: {cache_mode})\nProfiling to: {cprof_path}")
     pr = cProfile.Profile()
     pr.enable()
