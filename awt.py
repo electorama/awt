@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import tempfile
+import logging
 from abiflib import (
     convert_abif_to_jabmod,
     htmltable_pairwise_and_winlosstie,
@@ -18,7 +19,7 @@ from abiflib import (
     add_ratings_to_jabmod_votelines,
     get_abiftool_dir
 )
-from flask import Flask, render_template, request, redirect, send_from_directory
+from flask import Flask, render_template, request, redirect, send_from_directory, url_for
 from flask_caching import Cache
 from markupsafe import escape
 from pathlib import Path
@@ -34,6 +35,16 @@ import threading
 import urllib
 import yaml
 from dotenv import load_dotenv
+
+
+# --- Cache utility functions ---
+from cache_awt import (
+    cache_key_from_request,
+    cache_file_from_key,
+    log_cache_hit,
+    purge_cache_entry,
+    monkeypatch_cache_get
+)
 
 # -----------------------------
 # Load environment variables from .env file in the same directory
@@ -123,6 +134,7 @@ if missing_static or missing_templates:
 
 # Use discovered static/template directories for Flask app
 # For venv installs, static files may be flattened, so handle this case
+
 if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
     # If we found awt-static directory with flattened files, use it directly
     # and create a custom static URL path mapping
@@ -133,9 +145,17 @@ else:
     static_folder = AWT_STATIC
     static_url_path = '/static'
 
-
 app = Flask(__name__, static_folder=static_folder,
             template_folder=AWT_TEMPLATES, static_url_path=static_url_path)
+
+
+# --- Configure logging to show cache events ---
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] %(levelname)s %(name)s: %(message)s',
+    datefmt='%d/%b/%Y %H:%M:%S'
+)
+logging.getLogger('awt.cache').setLevel(logging.INFO)
 
 
 # --- Flask-Caching Initialization for WSGI ---
@@ -539,163 +559,167 @@ def get_svg_dotdiagram(identifier):
 
 @app.route('/id/<identifier>', methods=['GET'])
 @app.route('/id/<identifier>/<resulttype>', methods=['GET'])
-@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
 def get_by_id(identifier, resulttype=None):
-    # Instructions for cache invalidation
-    # To clear the cache, delete the contents of the cache directory:
-    #   import shutil; shutil.rmtree(app.config['CACHE_DIR'])
-    # Or manually delete files in:
-    #   {app.config['CACHE_DIR']}
-    # Each cached response is stored as a file in that directory.
-    '''Populate template variables based on id of the election
-
-    As of May 2025, most variables should be populated via a
-    "ResultConduit" object.  Prior to May 2025, the awt templates
-    needed an ad hoc collection of variables, and probably still will
-    into the future.
-    '''
     import cProfile
     import pstats
     import io
     import os
     import datetime
-    rtypemap = {
-        'wlt': 'win-loss-tie (pairwise) results',
-        'dot': 'pairwise diagram',
-        'IRV': 'RCV/IRV results',
-        'STAR': 'STAR results',
-        'FPTP': 'choose-one (FPTP) results'
-    }
-    webenv = WebEnv.wenvDict()
-    debug_output = webenv.get('debugIntro') or ""
-    WebEnv.sync_web_env()
+    # --- Cache purge support via ?action=purge ---
+    if request.args.get('action') == 'purge':
+        # Purge all cache entries for this path
+        args = request.args.to_dict()
+        args.pop('action', None)
+        canonical_path = request.path
+        cache_dir = app.config.get('CACHE_DIR')
+        import logging
+        logging.getLogger('awt.cache').info(
+            f"[DEBUG] Entering purge logic for path: {canonical_path}")
+        from cache_awt import purge_cache_entries_by_path
+        purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Redirect to same URL without ?action=purge
+        return redirect(url_for(request.endpoint, identifier=identifier, resulttype=resulttype, **args))
+    # Only cache normal GET requests
 
-    print(
-        f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})")
-    debug_output += f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})\n"
-    msgs = {}
-    msgs['placeholder'] = "Enter ABIF here, possibly using one of the examples below..."
-    election_list = build_election_list()
-    fileentry = get_fileentry_from_election_list(identifier, election_list)
-    print(
-        f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-    debug_output += f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
-
-    # --- Server-side profiling if AWT_PROFILE_OUTPUT is set ---
-    prof = None
-    cprof_path = os.environ.get('AWT_PROFILE_OUTPUT')
-    if cprof_path:
-        prof = cProfile.Profile()
-        prof.enable()
-
-    if fileentry:
+    @cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
+    def cached_get_by_id(identifier, resulttype=None):
+        webenv = WebEnv.wenvDict()
+        debug_output = webenv.get('debugIntro') or ""
+        WebEnv.sync_web_env()
+        rtypemap = {
+            'wlt': 'win-loss-tie (pairwise) results',
+            'dot': 'pairwise diagram',
+            'IRV': 'RCV/IRV results',
+            'STAR': 'STAR results',
+            'FPTP': 'choose-one (FPTP) results'
+        }
         print(
-            f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
-        msgs['pagetitle'] = f"{webenv['statusStr']}{fileentry['title']}"
-        msgs['lede'] = (
-            f"Below is the ABIF from the \"{fileentry['id']}\" election" +
-            f" ({fileentry['title']})"
-        )
-        msgs['results_name'] = rtypemap.get(resulttype)
-        msgs['taglist'] = fileentry['taglist']
-
-        try:
-            jabmod = convert_abif_to_jabmod(fileentry['text'])
-            error_html = None
-        except ABIFVotelineException as e:
-            jabmod = None
-            error_html = e.message
-
-        import time
+            f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})")
+        debug_output += f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})\n"
+        msgs = {}
+        msgs['placeholder'] = "Enter ABIF here, possibly using one of the examples below..."
+        election_list = build_election_list()
+        fileentry = get_fileentry_from_election_list(identifier, election_list)
         print(
-            f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
-        resconduit = conduits.ResultConduit(jabmod=jabmod)
+            f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
+        debug_output += f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
 
-        t_fptp = time.time()
-        resconduit = resconduit.update_FPTP_result(jabmod)
-        fptp_time = time.time() - t_fptp
-        print(
-            f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]")
-        debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
+        # --- Server-side profiling if AWT_PROFILE_OUTPUT is set ---
+        prof = None
+        cprof_path = os.environ.get('AWT_PROFILE_OUTPUT')
+        if cprof_path:
+            prof = cProfile.Profile()
+            prof.enable()
 
-        t_irv = time.time()
-        resconduit = resconduit.update_IRV_result(jabmod)
-        irv_time = time.time() - t_irv
-        print(
-            f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
-        debug_output += f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
+        if fileentry:
+            print(
+                f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
+            debug_output += f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+            msgs['pagetitle'] = f"{webenv['statusStr']}{fileentry['title']}"
+            msgs['lede'] = (
+                f"Below is the ABIF from the \"{fileentry['id']}\" election" +
+                f" ({fileentry['title']})"
+            )
+            msgs['results_name'] = rtypemap.get(resulttype)
+            msgs['taglist'] = fileentry['taglist']
 
-        t_pairwise = time.time()
-        resconduit = resconduit.update_pairwise_result(jabmod)
-        pairwise_time = time.time() - t_pairwise
-        print(
-            f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]")
-        debug_output += f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
+            try:
+                jabmod = convert_abif_to_jabmod(fileentry['text'])
+                error_html = None
+            except ABIFVotelineException as e:
+                jabmod = None
+                error_html = e.message
 
-        t_starprep = time.time()
-        ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
-        starprep_time = time.time() - t_starprep
-        print(
-            f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
-        debug_output += f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
+            import time
+            print(
+                f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
+            debug_output += f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+            resconduit = conduits.ResultConduit(jabmod=jabmod)
 
-        t_star = time.time()
-        resconduit = resconduit.update_STAR_result(ratedjabmod)
-        star_time = time.time() - t_star
-        print(
-            f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
-        debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
-        resblob = resconduit.resblob
-        if not resulttype or resulttype == 'all':
-            rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
+            t_fptp = time.time()
+            resconduit = resconduit.update_FPTP_result(jabmod)
+            fptp_time = time.time() - t_fptp
+            print(
+                f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]")
+            debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
+
+            t_irv = time.time()
+            resconduit = resconduit.update_IRV_result(jabmod)
+            irv_time = time.time() - t_irv
+            print(
+                f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
+            debug_output += f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
+
+            t_pairwise = time.time()
+            resconduit = resconduit.update_pairwise_result(jabmod)
+            pairwise_time = time.time() - t_pairwise
+            print(
+                f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]")
+            debug_output += f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
+
+            t_starprep = time.time()
+            ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
+            starprep_time = time.time() - t_starprep
+            print(
+                f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
+            debug_output += f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
+
+            t_star = time.time()
+            resconduit = resconduit.update_STAR_result(ratedjabmod)
+            star_time = time.time() - t_star
+            print(
+                f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
+            debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
+            resblob = resconduit.resblob
+            if not resulttype or resulttype == 'all':
+                rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
+            else:
+                rtypelist = [resulttype]
+
+            debug_output += pformat(resblob.keys()) + "\n"
+            debug_output += f"result_types: {rtypelist}\n"
+
+            print(
+                f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
+            debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+            if prof:
+                prof.disable()
+                prof.dump_stats(cprof_path)
+                print(f"[SERVER PROFILE] Profile saved to {cprof_path}")
+            return render_template('results-index.html',
+                                   abifinput=fileentry['text'],
+                                   abif_id=identifier,
+                                   election_list=election_list,
+                                   copewinnerstring=resblob['copewinnerstring'],
+                                   dotsvg_html=resblob['dotsvg_html'],
+                                   error_html=resblob.get('error_html'),
+                                   IRV_dict=resblob['IRV_dict'],
+                                   IRV_text=resblob['IRV_text'],
+                                   lower_abif_caption="Input",
+                                   lower_abif_text=fileentry['text'],
+                                   msgs=msgs,
+                                   pairwise_dict=resblob['pairwise_dict'],
+                                   pairwise_html=resblob['pairwise_html'],
+                                   resblob=resblob,
+                                   result_types=rtypelist,
+                                   STAR_html=resblob['STAR_html'],
+                                   scorestardict=resblob['scorestardict'],
+                                   webenv=webenv,
+                                   debug_output=debug_output,
+                                   debug_flag=webenv['debugFlag'],
+                                   )
         else:
-            rtypelist = [resulttype]
-
-        debug_output += pformat(resblob.keys()) + "\n"
-        debug_output += f"result_types: {rtypelist}\n"
-
-        print(
-            f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
-        if prof:
-            prof.disable()
-            prof.dump_stats(cprof_path)
-            print(f"[SERVER PROFILE] Profile saved to {cprof_path}")
-        return render_template('results-index.html',
-                               abifinput=fileentry['text'],
-                               abif_id=identifier,
-                               election_list=election_list,
-                               copewinnerstring=resblob['copewinnerstring'],
-                               dotsvg_html=resblob['dotsvg_html'],
-                               error_html=resblob.get('error_html'),
-                               IRV_dict=resblob['IRV_dict'],
-                               IRV_text=resblob['IRV_text'],
-                               lower_abif_caption="Input",
-                               lower_abif_text=fileentry['text'],
-                               msgs=msgs,
-                               pairwise_dict=resblob['pairwise_dict'],
-                               pairwise_html=resblob['pairwise_html'],
-                               resblob=resblob,
-                               result_types=rtypelist,
-                               STAR_html=resblob['STAR_html'],
-                               scorestardict=resblob['scorestardict'],
-                               webenv=webenv,
-                               debug_output=debug_output,
-                               debug_flag=webenv['debugFlag'],
-                               )
-    else:
-        msgs['pagetitle'] = "NOT FOUND"
-        msgs['lede'] = (
-            "I'm not sure what you're looking for, " +
-            "but you shouldn't look here."
-        )
-        return render_template('not-found.html',
-                               identifier=identifier,
-                               msgs=msgs,
-                               webenv=webenv
-                               ), 404
+            msgs['pagetitle'] = "NOT FOUND"
+            msgs['lede'] = (
+                "I'm not sure what you're looking for, " +
+                "but you shouldn't look here."
+            )
+            return render_template('not-found.html',
+                                   identifier=identifier,
+                                   msgs=msgs,
+                                   webenv=webenv
+                                   ), 404
+    return cached_get_by_id(identifier, resulttype)
 
 
 @app.route('/awt', methods=['POST'])
@@ -845,22 +869,7 @@ def main():
 
     # If using filesystem cache, monkeypatch the cache backend to print cache hits and file paths
     if app.config['CACHE_TYPE'] == 'filesystem':
-        fs_cache = cache.cache
-        orig_get = fs_cache.get
-
-        def debug_get(key):
-            result = orig_get(key)
-            if result is not None:
-                # Compute the cache file path
-                cache_dir = app.config['CACHE_DIR']
-                # Flask-Caching FileSystemCache uses a hash of the key as filename
-                import hashlib
-                key_hash = hashlib.md5(key.encode('utf-8')).hexdigest()
-                filename = os.path.join(cache_dir, key_hash)
-                print(f"[awt.py] Flask-Caching: CACHE HIT {filename}")
-            return result
-
-        fs_cache.get = debug_get
+        monkeypatch_cache_get(app, cache)
 
     # Print cache configuration for debugging
     print(f"[awt.py] Flask-Caching: CACHE_TYPE={app.config['CACHE_TYPE']}")

@@ -16,8 +16,8 @@ class TestPEP8Compliance(unittest.TestCase):
     """Test that all awt Python files follow PEP8 style guidelines."""
     
     IGNORED_ERRORS = ['E501', 'W504']
-    PYTHON_FILES = ['awt.py', 'conduits.py']
-    
+    PYTHON_FILES = ['awt.py', 'cache_awt.py', 'conduits.py']
+
     def setUp(self):
         """Set up test environment."""
         self.project_dir = Path(__file__).parent
