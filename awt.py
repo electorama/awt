@@ -587,8 +587,8 @@ def get_by_id(identifier, resulttype=None):
         debug_output = webenv.get('debugIntro') or ""
         WebEnv.sync_web_env()
         rtypemap = {
-            'wlt': 'win-loss-tie (pairwise) results',
-            'dot': 'pairwise diagram',
+            'wlt': 'win-loss-tie (Condorcet) results',
+            'dot': 'pairwise (Condorcet) diagram',
             'IRV': 'RCV/IRV results',
             'STAR': 'STAR results',
             'FPTP': 'choose-one (FPTP) results'

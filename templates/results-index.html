@@ -33,11 +33,11 @@ and can be edited in the field above.</p>
   {% endif %}
   <ul>
     {% if 'dot' in result_types %}
-    <li><a href="#dot">Pairwise diagram</a> &mdash; Winner: {{copewinnerstring}}</li>
+    <li><a href="#dot">Pairwise (Condorcet/Copeland) diagram</a> &mdash; Winner: {{copewinnerstring}}</li>
     {% endif %}
     {% if 'wlt' in result_types %}
     <li>
-      <a href="#wlt">Win-loss-tie table</a> &mdash; Winner: {{copewinnerstring}}
+      <a href="#wlt">Win-loss-tie (Condorcet/Copeland) table</a> &mdash; Winner: {{copewinnerstring}}
     </li>
     {% endif %}
     {% if 'FPTP' in result_types %}
@@ -64,12 +64,12 @@ and can be edited in the field above.</p>
     <ul>
       {% if not 'dot' in result_types %}
       <li>
-        <a href="/id/{{abif_id}}/dot#dot">Pairwise diagram for {{abif_id}}</a>
+        <a href="/id/{{abif_id}}/dot#dot">Pairwise (Condorcet/Copeland) diagram for {{abif_id}}</a>
       </li>
       {% endif %}
       {% if not 'wlt' in result_types %}
       <li>
-        <a href="/id/{{abif_id}}/wlt#wlt">Win-loss-tie table for {{abif_id}}</a>
+        <a href="/id/{{abif_id}}/wlt#wlt">Win-loss-tie (Condorcet/Copeland) table for {{abif_id}}</a>
       </li>
       {% endif %}
       {% if not 'FPTP' in result_types %}
@@ -96,7 +96,7 @@ and can be edited in the field above.</p>
 {% set restype="dot" %}
 {% set rellink=restype + "#" + restype %}
 {% if 'dot' in result_types and dotsvg_html %}
-<h3><a name="{{restype}}"></a>Pairwise diagram</h3>
+<h3><a name="{{restype}}"></a>Pairwise (Condorcet/Copeland) diagram</h3>
 {% if abif_id %}
 {% set pathpart="/id/" + abif_id + "/" + rellink %}
 {% set abslink=webenv.base_url + pathpart %}
@@ -113,7 +113,7 @@ and can be edited in the field above.</p>
 {% set restype="wlt" %}
 {% set rellink=restype + "#" + restype %}
 {% if 'wlt' in result_types and pairwise_html %}
-<h3><a name="{{restype}}"></a>Win-loss-tie table</h3>
+<h3><a name="{{restype}}"></a>Win-loss-tie (Condorcet/Copeland) table</h3>
 {% if abif_id %}
 {% set pathpart="/id/" + abif_id + "/" + rellink %}
 {% set abslink=webenv.base_url + pathpart %}
