@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import hashlib
 import datetime
 import os
@@ -173,3 +174,73 @@ def monkeypatch_cache_get(app, cache):
             logger.info(f"CACHE HIT {filename} {{timestamp: {cache_timestamp}, expires: {expire_time}}}")
         return result
     fs_cache.get = debug_get
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="AWT cache utility")
+    parser.add_argument("--cache-dir", type=str, default="/tmp/awt_flask_cache", help="Cache directory (default: /tmp/awt_flask_cache)")
+    parser.add_argument("--purge", action="store_true", help="Purge all cache files")
+    parser.add_argument("--list", action="store_true", help="List all cache entries")
+    args = parser.parse_args()
+
+    cache_dir = args.cache_dir
+    if not os.path.exists(cache_dir):
+        print(f"AWT cache directory: {cache_dir}")
+        print("Cache directory does not exist.")
+        exit(0)
+
+    cache_files = [f for f in os.listdir(cache_dir) if os.path.isfile(os.path.join(cache_dir, f))]
+
+    if args.list:
+        print(f"AWT cache directory: {cache_dir}")
+        print(f"Cache file count: {len(cache_files)}")
+        if cache_files:
+            print("Cache files:")
+            for f in cache_files:
+                path = os.path.join(cache_dir, f)
+                size = os.path.getsize(path)
+                mtime = datetime.datetime.fromtimestamp(os.path.getmtime(path)).strftime('%d/%b/%Y %H:%M:%S')
+                print(f"  {f}  size={size}  mtime={mtime}")
+        else:
+            print("No cache files found.")
+        return
+
+    if args.purge:
+        print(f"AWT cache directory: {cache_dir}")
+        print("Purging all cache files...")
+        deleted = 0
+        for f in cache_files:
+            path = os.path.join(cache_dir, f)
+            try:
+                os.unlink(path)
+                deleted += 1
+            except Exception as e:
+                print(f"Failed to delete {f}: {e}")
+        print(f"Deleted {deleted} cache files.")
+        return
+
+    # No parameters: print summary and usage
+    print(f"AWT cache directory: {cache_dir}")
+    print(f"Cache file count: {len(cache_files)}")
+    if cache_files:
+        mtimes = [(f, os.path.getmtime(os.path.join(cache_dir, f))) for f in cache_files]
+        oldest = min(mtimes, key=lambda x: x[1])
+        newest = max(mtimes, key=lambda x: x[1])
+        oldest_str = datetime.datetime.fromtimestamp(oldest[1]).strftime('%d/%b/%Y %H:%M:%S')
+        newest_str = datetime.datetime.fromtimestamp(newest[1]).strftime('%d/%b/%Y %H:%M:%S')
+        print(f"Oldest entry: {oldest[0]}  mtime={oldest_str}")
+        print(f"Newest entry: {newest[0]}  mtime={newest_str}")
+    else:
+        print("No cache files found.")
+
+    print("\nUsage:")
+    print("  python cache_awt.py [--cache-dir DIR] [--list] [--purge]")
+    print("Options:")
+    print("  --cache-dir DIR   Specify cache directory (default: /tmp/awt_flask_cache)")
+    print("  --list            List all cache entries")
+    print("  --purge           Purge all cache files")
+
+
+if __name__ == "__main__":
+    main()
