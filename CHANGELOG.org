@@ -1,12 +1,13 @@
 Changelog for ABIF web tool (awt):
-* [0.31.0] (FIXMEdate) (FIXMErev) FPTP; test suite; substantial bugfix release
+* [0.32.0] 2025-07-22 (FIXMErev) Caching support
+* [0.31.0] 2025-07-11 (765afe9d) FPTP; test suite; substantial bugfix release
   * Added FPTP support
   * Added test suite, performing smoketest on all elections in abif_list.yml
   * SF-mayoral IRV tabulation
   * Started important modularization work (conduits.py)
   * Cleaned up output (e.g. star colors in STAR output, important footnotes)
   * Many tweaks and bugfixes
-* [0.2.0] 2025-02-04 f9825cc IRV/RCV tabulation; bolson archive
+* [0.2.0] 2025-02-04 (f9825cc) IRV/RCV tabulation; bolson archive
   * Added IRV/RCV tabulation
     * Handles IRV ties with random selection in rounds with ties (per SF and Maine rules)
   * Greatly expanded list of elections
@@ -19,7 +20,7 @@ Changelog for ABIF web tool (awt):
     * https://github.com/electorama/awt/releases/tag/v0.2.0
     * https://hio.mailmanlists.us/archives/list/election-software@hio.mailmanlists.us/thread/CHUNC5UB6KNBWSX3GBBYCM7BRE7O3QMF/
     * https://www.reddit.com/r/EndFPTP/comments/1euuac4/debian_project_leader_election_of_2003_realworld/
-* [0.1.0] 2024-05-13 8f25893 Initial release
+* [0.1.0] 2024-05-13 (8f25893) Initial release
   * Condorcet/Copeland and STAR support
   * Graphviz-based illustrations of Condorcet/Copeland beatpaths
   * Some elections included:

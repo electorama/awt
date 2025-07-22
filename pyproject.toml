@@ -1,6 +1,6 @@
 [project]
 name = "awt"
-version = "0.31.1"
+version = "0.32.0"
 dependencies = [
     "abiftool>=0.31.0",
     "dotenv",
@@ -32,7 +32,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-py-modules = ["awt", "conduits"]
+py-modules = ["awt", "cache_awt.py", "conduits"]
 include-package-data = true
 [tool.setuptools.data-files]
 awt-templates = [

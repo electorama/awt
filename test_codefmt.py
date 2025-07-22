@@ -287,7 +287,7 @@ class TestPEP8IndividualChecks(unittest.TestCase):
     """Individual PEP8 checks that can be run selectively."""
     
     # Use the same list as the main class
-    PYTHON_FILES = ['awt.py', 'conduits.py']
+    PYTHON_FILES = ['awt.py', 'cache_awt.py', 'conduits.py']
     
     def setUp(self):
         self.project_dir = Path(__file__).parent
@@ -337,4 +337,4 @@ if __name__ == '__main__':
     result = runner.run(suite)
     
     # Exit with appropriate code
-    sys.exit(not result.wasSuccessful()) 
+    sys.exit(not result.wasSuccessful())

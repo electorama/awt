@@ -14,7 +14,6 @@ This is a very incomplete list of incomplete tasks for this project
   * Test "`python -m build`"
 * Update CondorcetVsIRV tag
 * Generate/update CHANGELOG.md
-* Post 0.31.0
+* Post 0.32.0
   * Better observability: debug-mode flamegraph to spot performance bottlenecks
   * Create src directory and move most code to this directory
-  * Remove the need for the RUNAWT.sh file and environment variables
