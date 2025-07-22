@@ -60,7 +60,7 @@
       </td>
       {% endfor %}
     </tr>
-    {% for cand in IRV_dict['rounds'][0] | sort(attribute=IRV_dict['rounds'][0].get, reverse=True) %}
+    {% for cand in IRV_dict['rounds'][0].keys() %}
     {% if cand in winner %}
     {% set rowclass = "highlight" %}
     {% else %}
