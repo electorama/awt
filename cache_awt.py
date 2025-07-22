@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-import hashlib
+import argparse
 import datetime
+import glob
+import hashlib
+import logging
 import os
 import urllib
-import logging
 
 logger = logging.getLogger('awt.cache')
 
@@ -25,16 +27,13 @@ def log_cache_hit(cache_key, cache_dir, timeout):
     now_str = datetime.datetime.now().strftime('%d/%b/%Y %H:%M:%S')
     cache_timestamp = None
     expire_time = None
-    import logging
-    logging.getLogger('awt.cache').info(
-        f"[DEBUG] log_cache_hit called with cache_key: {cache_key}")
+    logger.debug(f"log_cache_hit called with cache_key: {cache_key}")
     if os.path.exists(filename):
         cache_timestamp = datetime.datetime.fromtimestamp(
             os.path.getmtime(filename)).strftime('%d/%b/%Y %H:%M:%S')
         expire_time = datetime.datetime.fromtimestamp(
             os.path.getmtime(filename) + timeout).strftime('%d/%b/%Y %H:%M:%S')
-    logger.info(f"CACHE HIT {filename} {{timestamp: {
-                cache_timestamp}, expires: {expire_time}}}")
+    logger.info(f"CACHE HIT {filename} {{timestamp: {cache_timestamp}, expires: {expire_time}}}")
 
 
 def purge_cache_entry(cache, cache_key, cache_dir):
@@ -51,7 +50,6 @@ def purge_cache_entry(cache, cache_key, cache_dir):
 
 def purge_cache_entries_by_path(cache, path_prefix, cache_dir):
     """Delete all cache entries whose keys start with the given path prefix."""
-    import glob
     deleted_count = 0
 
     if not os.path.exists(cache_dir):
@@ -155,9 +153,7 @@ def monkeypatch_cache_get(app, cache):
     orig_get = fs_cache.get
 
     def debug_get(key):
-        import logging
-        logging.getLogger('awt.cache').info(
-            f"[DEBUG] monkeypatch_cache_get.debug_get called with cache_key: {key}")
+        logger.debug(f"monkeypatch_cache_get.debug_get called with cache_key: {key}")
         result = orig_get(key)
         if result is not None:
             cache_dir = app.config['CACHE_DIR']
@@ -177,7 +173,6 @@ def monkeypatch_cache_get(app, cache):
 
 
 def main():
-    import argparse
     parser = argparse.ArgumentParser(description="AWT cache utility")
     parser.add_argument("--cache-dir", type=str, default="/tmp/awt_flask_cache", help="Cache directory (default: /tmp/awt_flask_cache)")
     parser.add_argument("--purge", action="store_true", help="Purge all cache files")
