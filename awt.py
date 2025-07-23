@@ -525,6 +525,18 @@ def awt_get(toppage=None, tag=None):
 @app.route('/id', methods=['GET'])
 @cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
 def id_no_identifier():
+    # --- Cache purge support via ?action=purge ---
+    if request.args.get('action') == 'purge':
+        args = request.args.to_dict()
+        args.pop('action', None)
+        canonical_path = request.path
+        cache_dir = app.config.get('CACHE_DIR')
+        logging.getLogger('awt.cache').info(
+            f"[DEBUG] Entering purge logic for path: {canonical_path}")
+        from cache_awt import purge_cache_entries_by_path
+        purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Redirect to same URL without ?action=purge
+        return redirect(url_for(request.endpoint, **args))
     msgs = {}
     webenv = WebEnv.wenvDict()
     WebEnv.sync_web_env()
@@ -572,7 +584,6 @@ def get_by_id(identifier, resulttype=None):
         args.pop('action', None)
         canonical_path = request.path
         cache_dir = app.config.get('CACHE_DIR')
-        import logging
         logging.getLogger('awt.cache').info(
             f"[DEBUG] Entering purge logic for path: {canonical_path}")
         from cache_awt import purge_cache_entries_by_path
