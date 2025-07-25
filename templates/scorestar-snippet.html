@@ -1,0 +1,20 @@
+{# Jinja2 template for STAR/Score output (migrated to awt) #}
+<!-- JINJA2-SCORESTAR-TEMPLATE-USED -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>STAR/Score Results</title>
+</head>
+<body>
+    <h1>STAR/Score Results</h1>
+    <pre>{{ content|e }}</pre>
+    {% if basicstar %}
+    <h2>Basic STAR Result</h2>
+    <pre>{{ basicstar|tojson(indent=4) }}</pre>
+    {% endif %}
+    {% if scaled %}
+    <h2>Scaled Scores</h2>
+    <pre>{{ scaled|tojson(indent=4) }}</pre>
+    {% endif %}
+</body>
+</html>

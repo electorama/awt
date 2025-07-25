@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-import tempfile
-import logging
 from abiflib import (
     convert_abif_to_jabmod,
-    htmltable_pairwise_and_winlosstie,
+    htmltable_pairwise_and_winlosstie as abiflib_htmltable_pairwise_and_winlosstie,
     get_Copeland_winners,
-    html_score_and_star,
+    html_score_and_star as abiflib_html_score_and_star,
     ABIFVotelineException,
     full_copecount_from_abifmodel,
     copecount_diagram,
@@ -19,25 +17,9 @@ from abiflib import (
     add_ratings_to_jabmod_votelines,
     get_abiftool_dir
 )
-from flask import Flask, render_template, request, redirect, send_from_directory, url_for
-from flask_caching import Cache
-from markupsafe import escape
-from pathlib import Path
-from pprint import pformat
+from abiflib.score_star_tally import STAR_report
+from abiflib.pairwise_tally import winlosstie_dict_from_pairdict
 import argparse
-import colorsys
-import conduits
-import os
-import re
-import socket
-import sys
-import threading
-import urllib
-import yaml
-from dotenv import load_dotenv
-
-
-# --- Cache utility functions ---
 from cache_awt import (
     cache_key_from_request,
     cache_file_from_key,
@@ -45,7 +27,89 @@ from cache_awt import (
     purge_cache_entry,
     monkeypatch_cache_get
 )
+import colorsys
+import conduits
+from dotenv import load_dotenv
+from flask import Flask, render_template, request, redirect, send_from_directory, url_for
+from flask_caching import Cache
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+import logging
+from markupsafe import escape
+from pathlib import Path
+from pprint import pformat
+import os
+import re
+import socket
+import sys
+import tempfile
+import threading
+import urllib
+import yaml
 
+
+def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, add_desc=True, svg_text=None):
+    def wltstr(cand):
+        retval = f"{wltdict[cand]['wins']}" + "-"
+        retval += f"{wltdict[cand]['losses']}" + "-"
+        retval += f"{wltdict[cand]['ties']}"
+        return retval
+    candtoks = sorted(
+        pairdict.keys(), key=lambda x: wltdict[x]['wins'], reverse=True)
+    candnames = abifmodel.get('candidates', None)
+    has_ties_or_cycles = False
+    for ck in candtoks:
+        for rk in candtoks:
+            if ck != rk and candtoks.index(ck) > candtoks.index(rk):
+                rkscore = pairdict[rk][ck]
+                ckscore = pairdict[ck][rk]
+                if not (rkscore > ckscore):
+                    has_ties_or_cycles = True
+
+    # Generate description if not provided
+    desc = abifmodel.get('desc', None) if add_desc else None
+    if add_desc and not desc:
+        cand_list_str = ", ".join([candnames[c] for c in candtoks])
+        desc = f"Candidate matchups for {cand_list_str}"
+
+    env = Environment(
+        loader=FileSystemLoader(os.path.join(
+            os.path.dirname(__file__), 'templates')),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('pairwise-snippet.html')
+    html = template.render(
+        title=abifmodel.get('title', 'Pairwise Table'),
+        desc=desc,
+        candtoks=candtoks,
+        candnames=candnames,
+        pairdict=pairdict,
+        wltdict=wltdict,
+        wltstr=wltstr,
+        has_ties_or_cycles=has_ties_or_cycles,
+        svg_text=svg_text
+    )
+    return html
+
+# Utility: Jinja2 rendering for STAR/score output
+
+
+def jinja_scorestar_snippet(jabmod, basicstar=None, scaled=None):
+    content = STAR_report(jabmod)
+    env = Environment(
+        loader=FileSystemLoader(os.path.join(
+            os.path.dirname(__file__), 'templates')),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('scorestar-snippet.html')
+    html = template.render(
+        content='\n'.join(content),
+        basicstar=basicstar,
+        scaled=scaled
+    )
+    return html
+
+
+# --- Cache utility functions ---
 # -----------------------------
 # Load environment variables from .env file in the same directory
 # as this file (project root)
@@ -606,14 +670,16 @@ def get_by_id(identifier, resulttype=None):
         }
         print(
             f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})")
-        debug_output += f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})\n"
+        debug_output += f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({
+            identifier=} {resulttype=})\n"
         msgs = {}
         msgs['placeholder'] = "Enter ABIF here, possibly using one of the examples below..."
         election_list = build_election_list()
         fileentry = get_fileentry_from_election_list(identifier, election_list)
         print(
             f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+        debug_output += f" 00002 ---->  [{
+            datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
 
         # --- Server-side profiling if AWT_PROFILE_OUTPUT is set ---
         prof = None
@@ -625,7 +691,8 @@ def get_by_id(identifier, resulttype=None):
         if fileentry:
             print(
                 f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-            debug_output += f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+            debug_output += f" 00003 ---->  [{
+                datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
             msgs['pagetitle'] = f"{webenv['statusStr']}{fileentry['title']}"
             msgs['lede'] = (
                 f"Below is the ABIF from the \"{fileentry['id']}\" election" +
@@ -644,7 +711,8 @@ def get_by_id(identifier, resulttype=None):
             import time
             print(
                 f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-            debug_output += f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+            debug_output += f" 00004 ---->  [{
+                datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
             resconduit = conduits.ResultConduit(jabmod=jabmod)
 
             t_fptp = time.time()
@@ -652,36 +720,53 @@ def get_by_id(identifier, resulttype=None):
             fptp_time = time.time() - t_fptp
             print(
                 f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]")
-            debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
+            debug_output += f" 00006 ---->  [{datetime.datetime.now(
+            ):%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
 
             t_irv = time.time()
             resconduit = resconduit.update_IRV_result(jabmod)
             irv_time = time.time() - t_irv
             print(
                 f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
-            debug_output += f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
+            debug_output += f" 00007 ---->  [{datetime.datetime.now(
+            ):%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
 
             t_pairwise = time.time()
             resconduit = resconduit.update_pairwise_result(jabmod)
             pairwise_time = time.time() - t_pairwise
             print(
                 f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]")
-            debug_output += f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
+            debug_output += f" 00008 ---->  [{datetime.datetime.now(
+            ):%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
 
             t_starprep = time.time()
             ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
             starprep_time = time.time() - t_starprep
             print(
                 f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
-            debug_output += f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
+            debug_output += f" 00009 ---->  [{datetime.datetime.now(
+            ):%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
 
             t_star = time.time()
             resconduit = resconduit.update_STAR_result(ratedjabmod)
             star_time = time.time() - t_star
             print(
                 f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
-            debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
+            debug_output += f" 00010 ---->  [{datetime.datetime.now(
+            ):%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
             resblob = resconduit.resblob
+
+            pairwise_dict = pairwise_count_dict(jabmod)
+            wltdict = winlosstie_dict_from_pairdict(
+                jabmod['candidates'], pairwise_dict)
+            resblob['pairwise_html'] = jinja_pairwise_snippet(
+                jabmod,
+                pairwise_dict,
+                wltdict,
+                add_desc=True,
+                svg_text=None
+            )
+            resblob['STAR_html'] = jinja_scorestar_snippet(ratedjabmod)
             if not resulttype or resulttype == 'all':
                 rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
             else:
@@ -692,7 +777,8 @@ def get_by_id(identifier, resulttype=None):
 
             print(
                 f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-            debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+            debug_output += f" 00011 ---->  [{
+                datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
             if prof:
                 prof.disable()
                 prof.dump_stats(cprof_path)
@@ -780,10 +866,15 @@ def awt_post():
             debug_output += "\npairwise_dict:\n"
             debug_output += pformat(pairwise_dict)
             debug_output += "\n"
-            pairwise_html = htmltable_pairwise_and_winlosstie(abifmodel,
-                                                              snippet=True,
-                                                              validate=True,
-                                                              modlimit=2500)
+            wltdict = winlosstie_dict_from_pairdict(
+                abifmodel['candidates'], pairwise_dict)
+            pairwise_html = jinja_pairwise_snippet(
+                abifmodel,
+                pairwise_dict,
+                wltdict,
+                add_desc=True,
+                svg_text=None
+            )
             resconduit = resconduit.update_pairwise_result(abifmodel)
         if request.form.get('include_FPTP'):
             rtypelist.append('FPTP')
@@ -805,7 +896,7 @@ def awt_post():
             rtypelist.append('STAR')
             ratedjabmod = add_ratings_to_jabmod_votelines(abifmodel)
             resconduit = resconduit.update_STAR_result(ratedjabmod)
-            STAR_html = resconduit.resblob['STAR_html']
+            STAR_html = jinja_scorestar_snippet(ratedjabmod)
             scorestardict = resconduit.resblob['scorestardict']
         resblob = resconduit.resblob
 
