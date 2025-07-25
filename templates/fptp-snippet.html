@@ -3,12 +3,21 @@
     {% set winners = resblob['FPTP_result']['winners'] %}
     {% set winnerstr = ", ".join(winners) %}
     {% set winnerintro = "FPTP Winners (tie)" if winners | length > 1 else "FPTP Winner" %}
-    <li><b>{{winnerintro}}</b>: {{winnerstr}}</li>
+    <li><b>{{winnerintro}}</b>:
+      {% if FPTP_candnames %}
+        {%- set winner_tokens = winnerstr.split(',') -%}
+        {%- for tok in winner_tokens -%}
+          {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+        {%- endfor -%}
+      {% else %}
+        {{ winnerstr }}
+      {% endif %}
+    </li>
     <li><b>First-place votes</b>
     <ul>
     {% for candidate, votes in resblob.FPTP_result.toppicks|dictsort(reverse=true, by='value') %}
     <li>
-      {{ candidate }}: {{ votes }} votes
+      {{ FPTP_candnames[candidate] if FPTP_candnames and candidate in FPTP_candnames else candidate }}: {{ votes }} votes
       {% if resblob.FPTP_result.total_votes > 0 %}
       ({{ "%0.1f"|format((votes / resblob.FPTP_result.total_votes) * 100) }} %)
       {% endif %}

@@ -33,30 +33,63 @@ and can be edited in the field above.</p>
   {% endif %}
   <ul>
     {% if 'dot' in result_types %}
-    <li><a href="#dot">Pairwise (Condorcet/Copeland) diagram</a> &mdash; Winner: {{copewinnerstring}}</li>
+    <li><a href="#dot">Pairwise (Condorcet/Copeland) diagram</a> &mdash; Winner:
+      {% if copewinnerstring and FPTP_candnames %}
+        {%- set winner_tokens = copewinnerstring.split(',') -%}
+        {%- for tok in winner_tokens -%}
+          {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+        {%- endfor -%}
+      {% else %}
+        {{ copewinnerstring }}
+      {% endif %}
+    </li>
     {% endif %}
     {% if 'wlt' in result_types %}
     <li>
-      <a href="#wlt">Win-loss-tie (Condorcet/Copeland) table</a> &mdash; Winner: {{copewinnerstring}}
+      <a href="#wlt">Win-loss-tie (Condorcet/Copeland) table</a> &mdash; Winner:
+      {% if copewinnerstring and FPTP_candnames %}
+        {%- set winner_tokens = copewinnerstring.split(',') -%}
+        {%- for tok in winner_tokens -%}
+          {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+        {%- endfor -%}
+      {% else %}
+        {{ copewinnerstring }}
+      {% endif %}
     </li>
     {% endif %}
     {% if 'FPTP' in result_types %}
     <li>
       <a href="#FPTP">FPTP output</a> &mdash;
       {{ "Winners (tie):" if resblob['FPTP_result']['winners'] | length > 1 else "Winner:" }}
-      {{resblob['FPTP_result']['winners'][0]}}
+      {% if FPTP_candnames and resblob['FPTP_result']['winners'] %}
+        {{ FPTP_candnames[resblob['FPTP_result']['winners'][0]] if resblob['FPTP_result']['winners'][0] in FPTP_candnames else resblob['FPTP_result']['winners'][0] }}
+      {% else %}
+        {{ resblob['FPTP_result']['winners'][0] }}
+      {% endif %}
     </li>
     {% endif %}
     {% if 'IRV' in result_types %}
     <li>
       <a href="#IRV">IRV output</a> &mdash;
       {{ "Winners (tie):" if IRV_dict['winner'] | length > 1 else "Winner:" }}
-      {{IRV_dict['winnerstr']}}
+      {% if IRV_dict['winnerstr'] and IRV_candnames %}
+        {%- set winner_tokens = IRV_dict['winnerstr'].split(',') -%}
+        {%- for tok in winner_tokens -%}
+          {{ IRV_candnames[tok.strip()] if tok.strip() in IRV_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+        {%- endfor -%}
+      {% else %}
+        {{ IRV_dict['winnerstr'] }}
+      {% endif %}
     </li>
     {% endif %}
     {% if 'STAR' in result_types %}
     <li>
-      <a href="#STAR">STAR output</a> &mdash; Winner: {{ scorestardict['scoremodel']['winner'] }}
+      <a href="#STAR">STAR output</a> &mdash; Winner:
+      {% if scorestardict['scoremodel']['winner'] and FPTP_candnames %}
+        {{ FPTP_candnames[scorestardict['scoremodel']['winner']] if scorestardict['scoremodel']['winner'] in FPTP_candnames else scorestardict['scoremodel']['winner'] }}
+      {% else %}
+        {{ scorestardict['scoremodel']['winner'] }}
+      {% endif %}
     </li>
     {% endif %}
     {% if abif_id and not all_results_generated %}
@@ -122,7 +155,16 @@ and can be edited in the field above.</p>
   🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
-<p><b>Pairwise winner(s)</b>: {{copewinnerstring}}</p>
+<p><b>Pairwise winner(s)</b>:
+  {% if copewinnerstring and FPTP_candnames %}
+    {%- set winner_tokens = copewinnerstring.split(',') -%}
+    {%- for tok in winner_tokens -%}
+      {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+    {%- endfor -%}
+  {% else %}
+    {{ copewinnerstring }}
+  {% endif %}
+</p>
 <div class="scaletable">
   {{ pairwise_html | safe }}
 </div>

@@ -785,6 +785,8 @@ def get_by_id(identifier, resulttype=None):
                                    error_html=resblob.get('error_html'),
                                    IRV_dict=resblob['IRV_dict'],
                                    IRV_text=resblob['IRV_text'],
+                                   IRV_candnames=jabmod.get('candidates', {}) if jabmod else {},
+                                   FPTP_candnames=jabmod.get('candidates', {}) if jabmod else {},
                                    lower_abif_caption="Input",
                                    lower_abif_text=fileentry['text'],
                                    msgs=msgs,
@@ -885,6 +887,8 @@ def awt_post():
             resconduit = resconduit.update_IRV_result(abifmodel)
             IRV_dict = resconduit.resblob['IRV_dict']
             IRV_text = resconduit.resblob['IRV_text']
+            # Add candidate full names for template use
+            IRV_candnames = abifmodel.get('candidates', {})
         if request.form.get('include_STAR'):
             rtypelist.append('STAR')
             ratedjabmod = add_ratings_to_jabmod_votelines(abifmodel)
@@ -910,6 +914,8 @@ def awt_post():
                            STAR_html=STAR_html,
                            IRV_dict=IRV_dict,
                            IRV_text=IRV_text,
+                           IRV_candnames=abifmodel.get('candidates', {}) if abifmodel else {},
+                           FPTP_candnames=abifmodel.get('candidates', {}) if abifmodel else {},
                            scorestardict=scorestardict,
                            webenv=webenv,
                            error_html=error_html,
