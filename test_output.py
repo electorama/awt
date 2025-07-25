@@ -1,4 +1,3 @@
-
 import pytest
 try:
     from bs4 import BeautifulSoup
@@ -53,10 +52,10 @@ def test_pairwise_table_structure(use_jinja):
     last_row = rows[-1]
     cells = last_row.find_all(["th", "td"])
     # For TNexample, last row should have 6 columns
-    assert len(cells) == 6, f"Last row has {
-        len(cells)} columns, expected 6: {last_row}"
+    assert(len(cells) == 6,
+           f"Last row has {len(cells)} columns, expected 6: {last_row}")
     # Check that the last cell is always 'losses' or 'is undefeated'
     last_text = cells[-1].get_text()
-    assert "losses" in last_text or "undefeated" in last_text, f"Last cell is not losses/undefeated: {
-        last_text}"
+    assert("losses" in last_text or "undefeated" in last_text,
+           f"Last cell is not losses/undefeated: {last_text}")
     # Optionally: check matchup order/content if you want to be even stricter

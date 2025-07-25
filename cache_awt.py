@@ -33,7 +33,8 @@ def log_cache_hit(cache_key, cache_dir, timeout):
             os.path.getmtime(filename)).strftime('%d/%b/%Y %H:%M:%S')
         expire_time = datetime.datetime.fromtimestamp(
             os.path.getmtime(filename) + timeout).strftime('%d/%b/%Y %H:%M:%S')
-    logger.info(f"CACHE HIT {filename} {{timestamp: {cache_timestamp}, expires: {expire_time}}}")
+    logger.info(
+        f"CACHE HIT {filename} {{timestamp: {cache_timestamp}, expires: {expire_time}}}")
 
 
 def purge_cache_entry(cache, cache_key, cache_dir):
@@ -53,8 +54,8 @@ def purge_cache_entries_by_path(cache, path_prefix, cache_dir):
     deleted_count = 0
 
     if not os.path.exists(cache_dir):
-        logger.info(f"CACHE PURGE PATTERN {
-                    path_prefix}: cache directory does not exist")
+        logger.info(f"CACHE PURGE PATTERN {path_prefix}:" +
+                    "cache directory does not exist")
         return 0
 
     # Get all cache files
@@ -84,8 +85,9 @@ def purge_cache_entries_by_path(cache, path_prefix, cache_dir):
                         os.path.getmtime(cache_file)).strftime('%d/%b/%Y %H:%M:%S')
                     os.unlink(cache_file)
                     deleted_count += 1
-                    logger.info(f"CACHE PURGE PATTERN {
-                                cache_file} {{key: {test_key}, old timestamp: {old_timestamp}}}")
+                    logger.info(
+                        f"CACHE PURGE PATTERN {cache_file} " +
+                        f"{{key: {test_key}, old timestamp: {old_timestamp}}}")
                     found_match = True
                 break
 
@@ -109,8 +111,8 @@ def purge_cache_entries_by_path(cache, path_prefix, cache_dir):
                         os.path.getmtime(cache_file)).strftime('%d/%b/%Y %H:%M:%S')
                     os.unlink(cache_file)
                     deleted_count += 1
-                    logger.info(f"CACHE PURGE PATTERN {
-                                cache_file} {{key: {test_key}, old timestamp: {old_timestamp}}}")
+                    logger.info(f"CACHE PURGE PATTERN {cache_file} " +
+                                f"{{key: {test_key}, old timestamp: {old_timestamp}}}")
                     found_match = True
                 break
 
@@ -126,8 +128,9 @@ def purge_cache_entries_by_path(cache, path_prefix, cache_dir):
                     os.path.getmtime(cache_file)).strftime('%d/%b/%Y %H:%M:%S')
                 os.unlink(cache_file)
                 deleted_count += 1
-                logger.info(f"CACHE PURGE PATTERN {
-                            cache_file} {{hardcoded hash for TNexampleTie, old timestamp: {old_timestamp}}}")
+                logger.info(
+                    f"CACHE PURGE PATTERN {cache_file} " +
+                    f"{{hardcoded hash for TNexampleTie, old timestamp: {old_timestamp}}}")
 
     # Also try to delete via Flask-Caching's delete method
     test_keys = [path_prefix, path_prefix + '?', path_prefix.rstrip('?')]
@@ -143,7 +146,8 @@ def purge_cache_entries_by_path(cache, path_prefix, cache_dir):
     except Exception:
         pass
 
-    logger.info(f"CACHE PURGE PATTERN {path_prefix}: deleted {deleted_count} files")
+    logger.info(
+        f"CACHE PURGE PATTERN {path_prefix}: deleted {deleted_count} files")
     return deleted_count
 
 
@@ -153,7 +157,8 @@ def monkeypatch_cache_get(app, cache):
     orig_get = fs_cache.get
 
     def debug_get(key):
-        logger.debug(f"monkeypatch_cache_get.debug_get called with cache_key: {key}")
+        logger.debug(
+            f"monkeypatch_cache_get.debug_get called with cache_key: {key}")
         result = orig_get(key)
         if result is not None:
             cache_dir = app.config['CACHE_DIR']
@@ -167,16 +172,20 @@ def monkeypatch_cache_get(app, cache):
                     os.path.getmtime(filename)).strftime('%d/%b/%Y %H:%M:%S')
             else:
                 cache_timestamp = None
-            logger.info(f"CACHE HIT {filename} {{timestamp: {cache_timestamp}, expires: {expire_time}}}")
+            logger.info(
+                f"CACHE HIT {filename} {{timestamp: {cache_timestamp}, expires: {expire_time}}}")
         return result
     fs_cache.get = debug_get
 
 
 def main():
     parser = argparse.ArgumentParser(description="AWT cache utility")
-    parser.add_argument("--cache-dir", type=str, default="/tmp/awt_flask_cache", help="Cache directory (default: /tmp/awt_flask_cache)")
-    parser.add_argument("--purge", action="store_true", help="Purge all cache files")
-    parser.add_argument("--list", action="store_true", help="List all cache entries")
+    parser.add_argument("--cache-dir", type=str, default="/tmp/awt_flask_cache",
+                        help="Cache directory (default: /tmp/awt_flask_cache)")
+    parser.add_argument("--purge", action="store_true",
+                        help="Purge all cache files")
+    parser.add_argument("--list", action="store_true",
+                        help="List all cache entries")
     args = parser.parse_args()
 
     cache_dir = args.cache_dir
@@ -185,7 +194,8 @@ def main():
         print("Cache directory does not exist.")
         exit(0)
 
-    cache_files = [f for f in os.listdir(cache_dir) if os.path.isfile(os.path.join(cache_dir, f))]
+    cache_files = [f for f in os.listdir(
+        cache_dir) if os.path.isfile(os.path.join(cache_dir, f))]
 
     if args.list:
         print(f"AWT cache directory: {cache_dir}")
@@ -195,7 +205,8 @@ def main():
             for f in cache_files:
                 path = os.path.join(cache_dir, f)
                 size = os.path.getsize(path)
-                mtime = datetime.datetime.fromtimestamp(os.path.getmtime(path)).strftime('%d/%b/%Y %H:%M:%S')
+                mtime = datetime.datetime.fromtimestamp(
+                    os.path.getmtime(path)).strftime('%d/%b/%Y %H:%M:%S')
                 print(f"  {f}  size={size}  mtime={mtime}")
         else:
             print("No cache files found.")
@@ -219,11 +230,14 @@ def main():
     print(f"AWT cache directory: {cache_dir}")
     print(f"Cache file count: {len(cache_files)}")
     if cache_files:
-        mtimes = [(f, os.path.getmtime(os.path.join(cache_dir, f))) for f in cache_files]
+        mtimes = [(f, os.path.getmtime(os.path.join(cache_dir, f)))
+                  for f in cache_files]
         oldest = min(mtimes, key=lambda x: x[1])
         newest = max(mtimes, key=lambda x: x[1])
-        oldest_str = datetime.datetime.fromtimestamp(oldest[1]).strftime('%d/%b/%Y %H:%M:%S')
-        newest_str = datetime.datetime.fromtimestamp(newest[1]).strftime('%d/%b/%Y %H:%M:%S')
+        oldest_str = datetime.datetime.fromtimestamp(
+            oldest[1]).strftime('%d/%b/%Y %H:%M:%S')
+        newest_str = datetime.datetime.fromtimestamp(
+            newest[1]).strftime('%d/%b/%Y %H:%M:%S')
         print(f"Oldest entry: {oldest[0]}  mtime={oldest_str}")
         print(f"Newest entry: {newest[0]}  mtime={newest_str}")
     else:
