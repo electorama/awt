@@ -78,28 +78,27 @@
     {% set rowclass = "" %}
     {% endif %}
     <tr class="{{rowclass}}">
-      <td>{{ IRV_candnames[cand] if IRV_candnames and cand in IRV_candnames else cand }}: {{ IRV_dict['rounds'][0].get(cand, ' ') }}</td>
-      {% for round_data in IRV_dict['rounds'][1:] %}
-      {% if cand in winner and (loop.index) == IRV_dict['rounds']|length %}
-      <td><b>IRV/RCV winner</b>:<br> {{ IRV_candnames[cand] if IRV_candnames and cand in IRV_candnames else cand }}: {{ round_data.get(cand) }}</td>
-      {% elif
-      round_data.get(cand) and IRV_dict['roundmeta'][loop.index]
-      and cand in IRV_dict['roundmeta'][loop.index]['eliminated'] %}
-      <td class="highred">
-        {{ IRV_candnames[cand] if IRV_candnames and cand in IRV_candnames else cand }}: {{ round_data.get(cand) }}
-        {% if IRV_dict['roundmeta'][loop.index]['batch_elim'] %}
-        (batch eliminated †)
-        {% elif cand in IRV_dict['roundmeta'][loop.index]['bottomtie'] %}
-        (randomly eliminated ††)
+      {% for i in range(IRV_dict['rounds'] | length) %}
+        {% set round_data = IRV_dict['rounds'][i] %}
+        {% set round_meta = IRV_dict['roundmeta'][i] %}
+        {% if cand in winner and (i + 1) == numrounds %}
+          <td><b>IRV/RCV winner</b>:<br> {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}</td>
+        {% elif round_data.get(cand) and cand in round_meta.get('eliminated', []) %}
+          <td class="highred">
+            {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
+            {% if round_meta.get('batch_elim') %}
+              (batch eliminated †)
+            {% elif cand in round_meta.get('bottomtie', []) %}
+              (randomly eliminated ††)
+            {% else %}
+              (eliminated)
+            {% endif %}
+          </td>
+        {% elif round_data.get(cand) %}
+          <td>{{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}</td>
         {% else %}
-        (eliminated)
+          <td class="greyedOut"><s>{{ IRV_candnames.get(cand, cand) }}</s></td>
         {% endif %}
-      </td>
-      {% elif round_data.get(cand) %}
-      <td>{{ IRV_candnames[cand] if IRV_candnames and cand in IRV_candnames else cand }}: {{ round_data.get(cand) }}</td>
-      {% else %}
-      <td class="greyedOut"><s>{{ IRV_candnames[cand] if IRV_candnames and cand in IRV_candnames else cand }}</s></td>
-      {% endif %}
       {% endfor %}
     </tr>
     {% endfor %}

@@ -1,0 +1,32 @@
+{% if round.elimcand_supporter_pairwise_results %}
+<div class="elim-analysis">
+  <h4>Analysis of Eliminated Candidate Ballots</h4>
+  <p>
+    This table shows a head-to-head comparison of the remaining candidates, using only the ballots from supporters of the eliminated candidate(s): <strong>{{ round.eliminated | join(", ") }}</strong>.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>&nbsp;</th>
+        {% for cand_col in round.elimcand_supporter_pairwise_results.keys() %}
+        <th>{{ IRV_candnames.get(cand_col, cand_col) }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for cand_row, matchups in round.elimcand_supporter_pairwise_results.items() %}
+      <tr>
+        <th>{{ IRV_candnames.get(cand_row, cand_row) }}</th>
+        {% for cand_col, score in matchups.items() %}
+          {% if cand_row == cand_col %}
+            <td class="greyedOut">&nbsp;</td>
+          {% else %}
+            <td>{{ score }}</td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
