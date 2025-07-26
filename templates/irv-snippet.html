@@ -48,24 +48,26 @@
     <tr>
       {% set flags = namespace(overvote=false) %}
       {% for i in range(IRV_dict['roundmeta'] | length) %}
+      {% set round = IRV_dict['roundmeta'][i] %}
       <td><b>Overview</b>:<br>
-        {% set threshold=IRV_dict['roundmeta'][i]['countedqty'] // 2 + 1 %}
-        <small>Starting ballots: {{IRV_dict['roundmeta'][i]['startingqty'] }}<br/>
+        {% set threshold=round['countedqty'] // 2 + 1 %}
+        <small>Starting ballots: {{round['startingqty'] }}<br/>
           Exhausted ballots:
-                {{IRV_dict['roundmeta'][i]['exhaustedqty'] }}<br>
-          {% if IRV_dict['roundmeta'][i]['overvoteqty'] > 0 %}
+                {{round['exhaustedqty'] }}<br>
+          {% if round['overvoteqty'] > 0 %}
           Overvotes:
-            {{IRV_dict['roundmeta'][i]['overvoteqty'] }}<br>
+            {{round['overvoteqty'] }}<br>
           {% set flags.overvote=true %}
             {% endif %}
-            Counted ballots: {{IRV_dict['roundmeta'][i]['countedqty'] }}<br>
+            Counted ballots: {{round['countedqty'] }}<br>
           {% if threshold < majority %}
           Minimum plurality: {{threshold}}<br/>
           {% endif %}
-          {% if IRV_dict['roundmeta'][i]['bottomtie'] %}
-          TIE(†): {{ IRV_dict['roundmeta'][i]['bottomtie'] | join(", ") }} <br/>
+          {% if round['bottomtie'] %}
+          TIE(†): {{ round['bottomtie'] | join(", ") }} <br/>
           {% endif %}
         </small>
+        {% include 'elim-pairwise-snippet.html' %}
       </td>
       {% endfor %}
     </tr>

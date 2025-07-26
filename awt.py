@@ -722,7 +722,9 @@ def get_by_id(identifier, resulttype=None):
             debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
 
             t_irv = time.time()
-            resconduit = resconduit.update_IRV_result(jabmod)
+            include_irv_extra = bool(request.args.get('include_irv_extra'))
+            resconduit = resconduit.update_IRV_result(
+                jabmod, include_irv_extra=include_irv_extra)
             irv_time = time.time() - t_irv
             print(
                 f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
@@ -884,7 +886,9 @@ def awt_post():
 
         if request.form.get('include_IRV'):
             rtypelist.append('IRV')
-            resconduit = resconduit.update_IRV_result(abifmodel)
+            include_irv_extra = bool(request.form.get('include_irv_extra'))
+            resconduit = resconduit.update_IRV_result(
+                abifmodel, include_irv_extra=include_irv_extra)
             IRV_dict = resconduit.resblob['IRV_dict']
             IRV_text = resconduit.resblob['IRV_text']
             # Add candidate full names for template use

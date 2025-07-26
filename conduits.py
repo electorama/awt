@@ -36,8 +36,9 @@ class ResultConduit:
         self.resblob['FPTP_text'] = get_FPTP_report(jabmod)
         return self
 
-    def update_IRV_result(self, jabmod) -> "ResultConduit":
-        self.resblob['IRV_dict'] = IRV_dict_from_jabmod(jabmod)
+    def update_IRV_result(self, jabmod, include_irv_extra=False) -> "ResultConduit":
+        self.resblob['IRV_dict'] = IRV_dict_from_jabmod(
+            jabmod, include_irv_extra=include_irv_extra)
         self.resblob['IRV_text'] = get_IRV_report(self.resblob['IRV_dict'])
         return self
 
