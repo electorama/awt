@@ -1,3 +1,6 @@
+{% if round.transfers or round.hypothetical_transfers %}
+
+{# Show actual transfers from eliminated candidates #}
 {% if round.transfers %}
 {% set eliminated_names = [] %}
 {% for elim_cand in round.eliminated %}
@@ -19,4 +22,27 @@
     {% endfor %}
   {% endif %}
 {% endfor %}
+{% endif %}
+
+{# Show hypothetical transfers for remaining candidates #}
+{% if round.hypothetical_transfers %}
+<br><br><small><strong>Hypothetical transfers if eliminated this round:</strong></small>
+{% for remaining_cand, transfer_data in round.hypothetical_transfers.items() %}
+  {% if transfer_data and transfer_data.values() | sum > 0 %}
+    {% set total_transfers = transfer_data.values() | sum %}
+    <br><small><strong>{{ IRV_candnames.get(remaining_cand, remaining_cand) }}</strong> ({{ total_transfers }} votes) →</small>
+    {% for cand, count in transfer_data.items() %}
+      {% if count > 0 %}
+        {% set pct = (count / total_transfers * 100) | round(1) %}
+        {% if cand == 'exhausted' %}
+          <br><small>&nbsp;&nbsp;{{ count }} ({{ pct }}%) exhausted</small>
+        {% else %}
+          <br><small>&nbsp;&nbsp;{{ count }} ({{ pct }}%) → {{ IRV_candnames.get(cand, cand) }}</small>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% endif %}
+
 {% endif %}
