@@ -722,7 +722,7 @@ def get_by_id(identifier, resulttype=None):
             debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
 
             t_irv = time.time()
-            include_irv_extra = bool(request.args.get('include_irv_extra'))
+            include_irv_extra = bool(request.args.get('include_irv_extra', True))
             resconduit = resconduit.update_IRV_result(
                 jabmod, include_irv_extra=include_irv_extra)
             irv_time = time.time() - t_irv
