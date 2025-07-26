@@ -1,31 +1,35 @@
-{% if round.elimcand_supporter_pairwise_results %}
+{% if round.elimcand_supporter_pairwise_results or round.transfers %}
 <div class="elim-analysis">
-  <h4>Analysis of Eliminated Candidate Ballots</h4>
-  
   {% set eliminated_names = [] %}
   {% for elim_cand in round.eliminated %}
     {% set _ = eliminated_names.append(IRV_candnames.get(elim_cand, elim_cand)) %}
   {% endfor %}
   
+  <h4>Analysis of ballots for {{ eliminated_names | join(" and ") }}</h4>
+
   <p>
-    When <strong>{{ eliminated_names | join(" and ") }}</strong> {% if eliminated_names|length > 1 %}were{% else %}was{% endif %} eliminated, their supporters' ballots revealed the following transfer patterns and preferences:
+    When <strong>{{ eliminated_names | join(" and ") }}</strong> {% if eliminated_names|length > 1 %}were{% else %}was{% endif %} eliminated, their ballots were examined for next preferences.
   </p>
 
-  {% if round.transfers %}
+  {# Ballot Transfers Section #}
+  {% if round.transfers and round.transfer_total and round.transfer_total > 0 %}
   <p>
-    <strong>Ballot Transfers:</strong> Of the ballots that listed {{ eliminated_names | join(" or ") }} as their top choice, 
+    <strong>Vote Transfers:</strong> Of the {{ round.transfer_total }} ballots, 
     {% set transfer_parts = [] %}
-    {% for cand, count in round.transfers.items() %}
-      {% if cand != 'exhausted' %}
-        {% set _ = transfer_parts.append(count ~ " transferred to " ~ IRV_candnames.get(cand, cand)) %}
-      {% endif %}
+    {% for cand, count in round.transfers.items() if cand != 'exhausted' %}
+      {% set _ = transfer_parts.append(count ~ " went to " ~ IRV_candnames.get(cand, cand)) %}
     {% endfor %}
-    {{ transfer_parts | join(", ") }}{% if round.transfers.exhausted %}, and {{ round.transfers.exhausted }} were exhausted (had no further preferences){% endif %}.
+    {{ transfer_parts | join(", ") }}.
+    {% if round.transfers.exhausted %}
+      The remaining {{ round.transfers.exhausted }} ballots were exhausted, having no further preferences listed.
+    {% endif %}
   </p>
   {% endif %}
 
+  {# Pairwise Preferences Section #}
+  {% if round.elimcand_supporter_pairwise_results %}
   <p>
-    <strong>Pairwise Preferences:</strong> Among the supporters of {{ eliminated_names | join(" and ") }}, head-to-head matchups between the remaining candidates showed these preferences:
+    <strong>Pairwise Preferences:</strong> Among the same group of voters, head-to-head comparisons between the remaining candidates revealed the following:
   </p>
   
   <ul>
@@ -38,23 +42,16 @@
         {% set score2_vs_1 = round.elimcand_supporter_pairwise_results[cand2][cand1] %}
         {% set total_compared = score1_vs_2 + score2_vs_1 %}
         {% if total_compared > 0 %}
-          {% set winner = cand1 if score1_vs_2 > score2_vs_1 else cand2 %}
+          {% set winner, loser = (cand1, cand2) if score1_vs_2 > score2_vs_1 else (cand2, cand1) %}
           {% set winner_score = score1_vs_2 if score1_vs_2 > score2_vs_1 else score2_vs_1 %}
           {% set loser_score = score2_vs_1 if score1_vs_2 > score2_vs_1 else score1_vs_2 %}
-          {% set margin_pct = ((winner_score - loser_score) / total_compared * 100) %}
-        <li>
-          <strong>{{ IRV_candnames.get(winner, winner) }}</strong> vs {{ IRV_candnames.get(cand1 if winner == cand2 else cand2, cand1 if winner == cand2 else cand2) }}: 
-          {{ winner_score }} to {{ loser_score }} 
-          ({{ "%.1f"|format(winner_score / total_compared * 100) }}% to {{ "%.1f"|format(loser_score / total_compared * 100) }}%, 
-          margin of {{ "%.1f"|format(margin_pct) }} percentage points)
-        </li>
+          <li>
+            Voters preferred <strong>{{ IRV_candnames.get(winner, winner) }}</strong> over {{ IRV_candnames.get(loser, loser) }} by a margin of {{ winner_score }} to {{ loser_score }}.
+          </li>
         {% endif %}
       {% endfor %}
     {% endfor %}
   </ul>
-
-  <p>
-    <em>This analysis shows how the eliminated candidate's supporters would have voted in direct comparisons between the remaining candidates, providing insight into the political preferences and coalition dynamics within this voter cohort.</em>
-  </p>
+  {% endif %}
 </div>
 {% endif %}
