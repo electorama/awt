@@ -12,8 +12,24 @@
 .highlight {
     background-color: #ffffdd;
 }
+.irv-colorblock {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+    vertical-align: middle;
+    border: 1px solid #000;
+    font-size: 0;
+}
 
 </style>
+{% if scorestardict and scorestardict.starscale and scorestardict.starscale.colordict %}
+<style>
+  {% for cand, color in scorestardict.starscale.colordict.items() %}
+  .irv-color-{{ loop.index }} { background-color: {{ color }}; }
+  {% endfor %}
+</style>
+{% endif %}
 <div>
   <ul>
     {% set has_tie = false %}
@@ -24,6 +40,15 @@
     {% set numrounds =  IRV_dict['rounds']|length %}
     {% set startingqty = IRV_dict['roundmeta'][0]['startingqty'] %}
     {% set majority = IRV_dict['roundmeta'][0]['startingqty'] // 2 + 1 %}
+
+    {# Create color mapping for candidates #}
+    {% set color_map = {} %}
+    {% if scorestardict and scorestardict.starscale and scorestardict.starscale.colordict %}
+      {% for cand, color in scorestardict.starscale.colordict.items() %}
+        {% set _ = color_map.update({cand: loop.index}) %}
+      {% endfor %}
+    {% endif %}
+
     <li><b>{{winnerintro}}</b>:
       {% if winnerstr and IRV_candnames %}
         {%- set winner_tokens = winnerstr.split(',') -%}
@@ -81,9 +106,13 @@
         {% set round_data = IRV_dict['rounds'][i] %}
         {% set round_meta = IRV_dict['roundmeta'][i] %}
         {% if cand in winner and (i + 1) == numrounds %}
-          <td><b>IRV/RCV winner</b>:<br> {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}</td>
+          <td><b>IRV/RCV winner</b>:<br>
+            {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
+            {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
+          </td>
         {% elif round_data.get(cand) and cand in round_meta.get('eliminated', []) %}
           <td class="highred">
+            {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% if round_meta.get('batch_elim') %}
               (batch eliminated †)
@@ -94,9 +123,15 @@
             {% endif %}
           </td>
         {% elif round_data.get(cand) %}
-          <td>{{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}</td>
+          <td>
+            {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
+            {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
+          </td>
         {% else %}
-          <td class="greyedOut"><s>{{ IRV_candnames.get(cand, cand) }}</s></td>
+          <td class="greyedOut">
+            {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}" style="opacity: 0.5;"></span>{% endif %}
+            <s>{{ IRV_candnames.get(cand, cand) }}</s>
+          </td>
         {% endif %}
       {% endfor %}
     </tr>
