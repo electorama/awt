@@ -1,32 +1,60 @@
 {% if round.elimcand_supporter_pairwise_results %}
 <div class="elim-analysis">
   <h4>Analysis of Eliminated Candidate Ballots</h4>
+  
+  {% set eliminated_names = [] %}
+  {% for elim_cand in round.eliminated %}
+    {% set _ = eliminated_names.append(IRV_candnames.get(elim_cand, elim_cand)) %}
+  {% endfor %}
+  
   <p>
-    This table shows a head-to-head comparison of the remaining candidates, using only the ballots from supporters of the eliminated candidate(s): <strong>{{ round.eliminated | join(", ") }}</strong>.
+    When <strong>{{ eliminated_names | join(" and ") }}</strong> {% if eliminated_names|length > 1 %}were{% else %}was{% endif %} eliminated, their supporters' ballots revealed the following transfer patterns and preferences:
   </p>
-  <table>
-    <thead>
-      <tr>
-        <th>&nbsp;</th>
-        {% for cand_col in round.elimcand_supporter_pairwise_results.keys() %}
-        <th>{{ IRV_candnames.get(cand_col, cand_col) }}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for cand_row, matchups in round.elimcand_supporter_pairwise_results.items() %}
-      <tr>
-        <th>{{ IRV_candnames.get(cand_row, cand_row) }}</th>
-        {% for cand_col, score in matchups.items() %}
-          {% if cand_row == cand_col %}
-            <td class="greyedOut">&nbsp;</td>
-          {% else %}
-            <td>{{ score }}</td>
-          {% endif %}
-        {% endfor %}
-      </tr>
+
+  {% if round.transfers %}
+  <p>
+    <strong>Ballot Transfers:</strong> Of the ballots that listed {{ eliminated_names | join(" or ") }} as their top choice, 
+    {% set transfer_parts = [] %}
+    {% for cand, count in round.transfers.items() %}
+      {% if cand != 'exhausted' %}
+        {% set _ = transfer_parts.append(count ~ " transferred to " ~ IRV_candnames.get(cand, cand)) %}
+      {% endif %}
+    {% endfor %}
+    {{ transfer_parts | join(", ") }}{% if round.transfers.exhausted %}, and {{ round.transfers.exhausted }} were exhausted (had no further preferences){% endif %}.
+  </p>
+  {% endif %}
+
+  <p>
+    <strong>Pairwise Preferences:</strong> Among the supporters of {{ eliminated_names | join(" and ") }}, head-to-head matchups between the remaining candidates showed these preferences:
+  </p>
+  
+  <ul>
+    {% set candidates = round.elimcand_supporter_pairwise_results.keys() | list %}
+    {% for i in range(candidates | length) %}
+      {% for j in range(i + 1, candidates | length) %}
+        {% set cand1 = candidates[i] %}
+        {% set cand2 = candidates[j] %}
+        {% set score1_vs_2 = round.elimcand_supporter_pairwise_results[cand1][cand2] %}
+        {% set score2_vs_1 = round.elimcand_supporter_pairwise_results[cand2][cand1] %}
+        {% set total_compared = score1_vs_2 + score2_vs_1 %}
+        {% if total_compared > 0 %}
+          {% set winner = cand1 if score1_vs_2 > score2_vs_1 else cand2 %}
+          {% set winner_score = score1_vs_2 if score1_vs_2 > score2_vs_1 else score2_vs_1 %}
+          {% set loser_score = score2_vs_1 if score1_vs_2 > score2_vs_1 else score1_vs_2 %}
+          {% set margin_pct = ((winner_score - loser_score) / total_compared * 100) %}
+        <li>
+          <strong>{{ IRV_candnames.get(winner, winner) }}</strong> vs {{ IRV_candnames.get(cand1 if winner == cand2 else cand2, cand1 if winner == cand2 else cand2) }}: 
+          {{ winner_score }} to {{ loser_score }} 
+          ({{ "%.1f"|format(winner_score / total_compared * 100) }}% to {{ "%.1f"|format(loser_score / total_compared * 100) }}%, 
+          margin of {{ "%.1f"|format(margin_pct) }} percentage points)
+        </li>
+        {% endif %}
       {% endfor %}
-    </tbody>
-  </table>
+    {% endfor %}
+  </ul>
+
+  <p>
+    <em>This analysis shows how the eliminated candidate's supporters would have voted in direct comparisons between the remaining candidates, providing insight into the political preferences and coalition dynamics within this voter cohort.</em>
+  </p>
 </div>
 {% endif %}
