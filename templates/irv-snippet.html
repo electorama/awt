@@ -262,20 +262,29 @@ function toggleIrvPopover(indicator, roundIndex, candidateKey) {
             let content = '';
             let hasContent = false;
 
+            // Check if this is the final round
+            const isFinalRound = (roundIndex + 1) === roundsData.length;
+
             // Check actual transfers for this candidate
             if (roundData.transfers && roundData.transfers[candidateKey]) {
-                content += `<div style="margin-bottom: 8px;"><strong>Transfer of ${candidateName}'s votes:</strong></div>`;
-                content += formatCandidateTransferData(roundData.transfers[candidateKey]);
+                const transferLabel = isFinalRound ?
+                    `Second choices in final round on ballots listing ${candidateName} first:` :
+                    `Transfer of ${candidateName}'s votes:`;
+                content += `<div style="margin-bottom: 8px;"><strong>${transferLabel}</strong></div>`;
+                content += formatCandidateSecondChoices(roundData.transfers[candidateKey]);
                 hasContent = true;
             }
 
-            // Check hypothetical transfers for this candidate
+            // Check hypothetical second choices for this candidate
             if (roundData.hypothetical_transfers && roundData.hypothetical_transfers[candidateKey]) {
                 if (hasContent) {
                     content += '<hr style="margin: 8px 0;">';
                 }
-                content += `<div style="margin-bottom: 8px;"><strong>Remaining second choices in round ${roundIndex + 1} for ${candidateName}'s voters:</strong></div>`;
-                content += formatCandidateTransferData(roundData.hypothetical_transfers[candidateKey]);
+                const hypotheticalLabel = isFinalRound ?
+                    `Second choices in final round on ballots listing ${candidateName} first:` :
+                    `Remaining second choices in round ${roundIndex + 1} on ballots listing ${candidateName} first:`;
+                content += `<div style="margin-bottom: 8px;"><strong>${hypotheticalLabel}</strong></div>`;
+                content += formatCandidateSecondChoices(roundData.hypothetical_transfers[candidateKey]);
                 hasContent = true;
             }
 
@@ -303,21 +312,49 @@ function toggleIrvPopover(indicator, roundIndex, candidateKey) {
     }
 }
 
-function formatCandidateTransferData(transfers) {
+function formatCandidateSecondChoices(transfers) {
     let html = '';
+    let totalVotes = 0;
 
     if (typeof transfers === 'object' && transfers !== null) {
-        Object.entries(transfers).forEach(([dest, amount]) => {
+        // Convert to array for sorting and calculate total
+        const transferArray = Object.entries(transfers).map(([dest, amount]) => {
+            let votes = 0;
+            let percentage = '';
+
             if (typeof amount === 'object' && amount.votes !== undefined) {
-                const percentage = amount.percentage ? ` (${amount.percentage}%)` : '';
-                // Map destination candidate key to name if available
-                const destName = candidateNames[dest] || dest;
-                html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${amount.votes} (${amount.percentage}%) → ${destName}</div>`;
+                votes = amount.votes;
+                percentage = amount.percentage ? `${amount.percentage}%` : '';
             } else {
-                const destName = candidateNames[dest] || dest;
-                html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${amount} → ${destName}</div>`;
+                votes = parseInt(amount) || 0;
+            }
+
+            totalVotes += votes;
+            const destName = candidateNames[dest] || dest;
+
+            return {
+                destination: destName,
+                votes: votes,
+                percentage: percentage,
+                raw: amount
+            };
+        });
+
+        // Sort by vote count in descending order
+        transferArray.sort((a, b) => b.votes - a.votes);
+
+        // Generate HTML for each transfer
+        transferArray.forEach(transfer => {
+            if (transfer.percentage) {
+                html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${transfer.votes} (${transfer.percentage}) → ${transfer.destination}</div>`;
+            } else {
+                html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${transfer.votes} → ${transfer.destination}</div>`;
             }
         });
+
+        // Add total votes
+        html += `<div style="margin-top: 8px; font-weight: bold; font-size: 11px;">Total: ${totalVotes} ballots</div>`;
+
     } else {
         html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${transfers}</div>`;
     }
