@@ -28,15 +28,29 @@
     position: absolute;
     bottom: 2px;
     right: 2px;
-    width: 16px;
-    height: 8px;
+    width: 32px;
+    height: 16px;
     background-color: #333;
     border: 1px solid #666;
     cursor: pointer;
     border-radius: 2px;
+    display: flex;
+    overflow: hidden;
 }
 .irv-transfer-indicator:hover {
-    background-color: #555;
+    border-color: #999;
+}
+.irv-transfer-indicator::before {
+    content: "→";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: #333;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 1;
 }
 .irv-popover {
     position: absolute;
@@ -147,7 +161,9 @@
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')"></div>
+              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')">
+                <!-- Data bar segments will be populated by JavaScript -->
+              </div>
               <div class="irv-popover">
                 <!-- Content will be populated by JavaScript -->
               </div>
@@ -166,7 +182,9 @@
             {% endif %}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')"></div>
+              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')">
+                <!-- Data bar segments will be populated by JavaScript -->
+              </div>
               <div class="irv-popover">
                 <!-- Content will be populated by JavaScript -->
               </div>
@@ -178,7 +196,9 @@
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')"></div>
+              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')">
+                <!-- Data bar segments will be populated by JavaScript -->
+              </div>
               <div class="irv-popover">
                 <!-- Content will be populated by JavaScript -->
               </div>
@@ -231,6 +251,15 @@ const roundsData = [
 
 // Candidate names mapping
 const candidateNames = {{ IRV_candnames | tojson }};
+
+// Candidate color mapping
+const candidateColors = {
+  {% if scorestardict and scorestardict.starscale and scorestardict.starscale.colordict %}
+    {% for cand, color in scorestardict.starscale.colordict.items() %}
+      "{{ cand }}": "{{ color }}",
+    {% endfor %}
+  {% endif %}
+};
 
 function toggleIrvPopover(indicator, roundIndex, candidateKey) {
     // Find the popover element - it should be the next sibling
@@ -384,4 +413,81 @@ function formatTransferData(transfers) {
 
     return html;
 }
+
+function createDataBar(transfers) {
+    let html = '';
+    let totalVotes = 0;
+    const segments = [];
+
+    if (typeof transfers === 'object' && transfers !== null) {
+        // Calculate total votes first
+        Object.entries(transfers).forEach(([dest, amount]) => {
+            let votes = 0;
+            if (typeof amount === 'object' && amount.votes !== undefined) {
+                votes = amount.votes;
+            } else {
+                votes = parseInt(amount) || 0;
+            }
+            totalVotes += votes;
+        });
+
+        // Create segments with percentages
+        Object.entries(transfers).forEach(([dest, amount]) => {
+            let votes = 0;
+            if (typeof amount === 'object' && amount.votes !== undefined) {
+                votes = amount.votes;
+            } else {
+                votes = parseInt(amount) || 0;
+            }
+            
+            if (votes > 0) {
+                const percentage = (votes / totalVotes) * 100;
+                const color = candidateColors[dest] || '#999';
+                segments.push({
+                    dest,
+                    votes,
+                    percentage,
+                    color
+                });
+            }
+        });
+
+        // Sort by vote count descending for consistent display
+        segments.sort((a, b) => b.votes - a.votes);
+
+        // Create colored segments
+        segments.forEach(segment => {
+            html += `<div style="background-color: ${segment.color}; width: ${segment.percentage}%; height: 100%; display: inline-block;" title="${candidateNames[segment.dest] || segment.dest}: ${segment.votes} votes"></div>`;
+        });
+    }
+
+    return html;
+}
+
+// Initialize data bars when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    roundsData.forEach((roundData, roundIndex) => {
+        // Find all transfer indicators for this round
+        document.querySelectorAll(`.irv-transfer-indicator[onclick*="${roundIndex}"]`).forEach(indicator => {
+            // Extract candidate key from onclick attribute
+            const onclickAttr = indicator.getAttribute('onclick');
+            const candidateMatch = onclickAttr.match(/'([^']+)'/);
+            if (candidateMatch) {
+                const candidateKey = candidateMatch[1];
+                
+                // Get transfer data for this candidate
+                let transferData = null;
+                if (roundData.transfers && roundData.transfers[candidateKey]) {
+                    transferData = roundData.transfers[candidateKey];
+                } else if (roundData.hypothetical_transfers && roundData.hypothetical_transfers[candidateKey]) {
+                    transferData = roundData.hypothetical_transfers[candidateKey];
+                }
+                
+                if (transferData) {
+                    indicator.innerHTML = createDataBar(transferData);
+                }
+            }
+        });
+    });
+});
 </script>
