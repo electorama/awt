@@ -21,6 +21,42 @@
     border: 1px solid #000;
     font-size: 0;
 }
+.irv-cell {
+    position: relative;
+}
+.irv-transfer-indicator {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 16px;
+    height: 8px;
+    background-color: #333;
+    border: 1px solid #666;
+    cursor: pointer;
+    border-radius: 2px;
+}
+.irv-transfer-indicator:hover {
+    background-color: #555;
+}
+.irv-popover {
+    position: absolute;
+    background: white;
+    border: 2px solid #333;
+    border-radius: 4px;
+    padding: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 1000;
+    min-width: 200px;
+    max-width: 400px;
+    font-size: 12px;
+    line-height: 1.3;
+    display: none;
+    bottom: 20px;
+    right: 0;
+}
+.irv-popover.show {
+    display: block;
+}
 
 </style>
 {% if scorestardict and scorestardict.starscale and scorestardict.starscale.colordict %}
@@ -106,12 +142,19 @@
         {% set round_data = IRV_dict['rounds'][i] %}
         {% set round_meta = IRV_dict['roundmeta'][i] %}
         {% if cand in winner and (i + 1) == numrounds %}
-          <td><b>IRV/RCV winner</b>:<br>
+          <td class="irv-cell"><b>IRV/RCV winner</b>:<br>
             {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
+            {% set round = IRV_dict['roundmeta'][i] %}
+            {% if round.transfers or round.hypothetical_transfers %}
+              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this)"></div>
+              <div class="irv-popover">
+                {% include 'elim-pairwise-snippet.html' %}
+              </div>
+            {% endif %}
           </td>
         {% elif round_data.get(cand) and cand in round_meta.get('eliminated', []) %}
-          <td class="highred">
+          <td class="highred irv-cell">
             {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% if round_meta.get('batch_elim') %}
@@ -121,14 +164,28 @@
             {% else %}
               (eliminated)
             {% endif %}
+            {% set round = IRV_dict['roundmeta'][i] %}
+            {% if round.transfers or round.hypothetical_transfers %}
+              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this)"></div>
+              <div class="irv-popover">
+                {% include 'elim-pairwise-snippet.html' %}
+              </div>
+            {% endif %}
           </td>
         {% elif round_data.get(cand) %}
-          <td>
+          <td class="irv-cell">
             {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
+            {% set round = IRV_dict['roundmeta'][i] %}
+            {% if round.transfers or round.hypothetical_transfers %}
+              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this)"></div>
+              <div class="irv-popover">
+                {% include 'elim-pairwise-snippet.html' %}
+              </div>
+            {% endif %}
           </td>
         {% else %}
-          <td class="greyedOut">
+          <td class="greyedOut irv-cell">
             {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}" style="opacity: 0.5;"></span>{% endif %}
             <s>{{ IRV_candnames.get(cand, cand) }}</s>
           </td>
@@ -154,3 +211,42 @@
   {% endif %}
  </div>
 </div>
+
+<script>
+function toggleIrvPopover(indicator) {
+    // Find the popover element - it should be the next sibling
+    const popover = indicator.nextElementSibling;
+
+    // Safety check - make sure we found the popover
+    if (!popover || !popover.classList.contains('irv-popover')) {
+        console.error('Could not find popover element');
+        return;
+    }
+
+    // Close all other popovers first
+    document.querySelectorAll('.irv-popover.show').forEach(otherPopover => {
+        if (otherPopover !== popover) {
+            otherPopover.classList.remove('show');
+        }
+    });
+
+    // Toggle the clicked popover
+    const isShowing = popover.classList.contains('show');
+    if (isShowing) {
+        popover.classList.remove('show');
+    } else {
+        popover.classList.add('show');
+
+        // Add the outside click listener after a small delay to prevent immediate closing
+        setTimeout(() => {
+            const closeOnOutsideClick = (event) => {
+                if (!indicator.contains(event.target) && !popover.contains(event.target)) {
+                    popover.classList.remove('show');
+                    document.removeEventListener('click', closeOnOutsideClick);
+                }
+            };
+            document.addEventListener('click', closeOnOutsideClick);
+        }, 100);
+    }
+}
+</script>
