@@ -9,6 +9,9 @@
 .highred {
     background-color: #ffeeee;
 }
+.new-elim {
+    background-color: #f0f0f0;
+}
 .highlight {
     background-color: #ffffdd;
 }
@@ -46,17 +49,24 @@
     border-color: #007acc;
     box-shadow: 0 0 4px rgba(0, 122, 204, 0.5);
 }
-.irv-transfer-indicator::after {
-    content: "→";
+.transfer-arrow {
     position: absolute;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 8px;
-    color: #333;
+    width: 32px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: rgba(65, 65, 65, 0.8);
     font-weight: bold;
     pointer-events: none;
-    z-index: 1;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0);
+}
+.data-bar {
+    display: flex;
+    width: 100%;
+    height: 100%;
 }
 .irv-popover {
     position: absolute;
@@ -167,8 +177,9 @@
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')">
+              <div class="irv-transfer-indicator" onmouseover="showIrvPopover(this, {{ i }}, '{{ cand }}')" onmouseout="hideIrvPopover(this)">
                 <!-- Data bar segments will be populated by JavaScript -->
+                <div class="transfer-arrow">→</div>
               </div>
               <div class="irv-popover">
                 <!-- Content will be populated by JavaScript -->
@@ -176,7 +187,7 @@
             {% endif %}
           </td>
         {% elif round_data.get(cand) and cand in round_meta.get('eliminated', []) %}
-          <td class="highred irv-cell">
+          <td class="new-elim irv-cell">
             {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% if round_meta.get('batch_elim') %}
@@ -188,8 +199,9 @@
             {% endif %}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')">
+              <div class="irv-transfer-indicator" onmouseover="showIrvPopover(this, {{ i }}, '{{ cand }}')" onmouseout="hideIrvPopover(this)">
                 <!-- Data bar segments will be populated by JavaScript -->
+                <div class="transfer-arrow">→</div>
               </div>
               <div class="irv-popover">
                 <!-- Content will be populated by JavaScript -->
@@ -202,8 +214,9 @@
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')">
+              <div class="irv-transfer-indicator" onmouseover="showIrvPopover(this, {{ i }}, '{{ cand }}')" onmouseout="hideIrvPopover(this)">
                 <!-- Data bar segments will be populated by JavaScript -->
+                <div class="transfer-arrow">→</div>
               </div>
               <div class="irv-popover">
                 <!-- Content will be populated by JavaScript -->
@@ -267,9 +280,18 @@ const candidateColors = {
   {% endif %}
 };
 
-function toggleIrvPopover(indicator, roundIndex, candidateKey) {
-    // Find the popover element - it should be the next sibling
-    const popover = indicator.nextElementSibling;
+let popoverTimeouts = new Map();
+
+function showIrvPopover(indicator, roundIndex, candidateKey) {
+    // Clear any existing hide timeout for this indicator
+    const hideTimeoutId = popoverTimeouts.get(indicator);
+    if (hideTimeoutId) {
+        clearTimeout(hideTimeoutId);
+        popoverTimeouts.delete(indicator);
+    }
+
+    // Find the popover element - it should be the next sibling after the arrow
+    const popover = indicator.parentElement.querySelector('.irv-popover');
 
     // Safety check - make sure we found the popover
     if (!popover || !popover.classList.contains('irv-popover')) {
@@ -277,24 +299,8 @@ function toggleIrvPopover(indicator, roundIndex, candidateKey) {
         return;
     }
 
-    // Close all other popovers first and remove active state from other indicators
-    document.querySelectorAll('.irv-popover.show').forEach(otherPopover => {
-        if (otherPopover !== popover) {
-            otherPopover.classList.remove('show');
-        }
-    });
-    document.querySelectorAll('.irv-transfer-indicator.active').forEach(otherIndicator => {
-        if (otherIndicator !== indicator) {
-            otherIndicator.classList.remove('active');
-        }
-    });
-
-    // Toggle the clicked popover
-    const isShowing = popover.classList.contains('show');
-    if (isShowing) {
-        popover.classList.remove('show');
-        indicator.classList.remove('active');
-    } else {
+    // Set a delay before showing the popover
+    const showTimeoutId = setTimeout(() => {
         // Populate the popover with transfer data for this specific candidate and round
         const roundData = roundsData[roundIndex];
         const candidateName = candidateNames[candidateKey] || candidateKey;
@@ -341,18 +347,66 @@ function toggleIrvPopover(indicator, roundIndex, candidateKey) {
         popover.classList.add('show');
         indicator.classList.add('active');
 
-        // Add the outside click listener after a small delay to prevent immediate closing
-        setTimeout(() => {
-            const closeOnOutsideClick = (event) => {
-                if (!indicator.contains(event.target) && !popover.contains(event.target)) {
-                    popover.classList.remove('show');
-                    indicator.classList.remove('active');
-                    document.removeEventListener('click', closeOnOutsideClick);
-                }
-            };
-            document.addEventListener('click', closeOnOutsideClick);
-        }, 100);
+        // Add mouseenter/mouseleave events to keep popover open when hovering over it
+        popover.onmouseenter = () => {
+            // Clear any pending hide timeout when entering popover
+            const hideTimeoutId = popoverTimeouts.get(indicator);
+            if (hideTimeoutId) {
+                clearTimeout(hideTimeoutId);
+                popoverTimeouts.delete(indicator);
+            }
+        };
+
+        popover.onmouseleave = () => {
+            // Start hide timeout when leaving popover
+            scheduleHidePopover(indicator, popover);
+        };
+    }, 200); // 200ms delay before showing
+
+    popoverTimeouts.set(indicator, showTimeoutId);
+}
+
+function hideIrvPopover(indicator) {
+    // Clear any existing show timeout
+    const showTimeoutId = popoverTimeouts.get(indicator);
+    if (showTimeoutId) {
+        clearTimeout(showTimeoutId);
+        popoverTimeouts.delete(indicator);
     }
+
+    // Find the popover element
+    const popover = indicator.parentElement.querySelector('.irv-popover');
+
+    if (popover && popover.classList.contains('show')) {
+        // Schedule hiding with delay
+        scheduleHidePopover(indicator, popover);
+    }
+}
+
+function scheduleHidePopover(indicator, popover) {
+    // Clear any existing hide timeout
+    const existingHideTimeout = popoverTimeouts.get(indicator);
+    if (existingHideTimeout) {
+        clearTimeout(existingHideTimeout);
+    }
+
+    // Set a delay before hiding the popover
+    const hideTimeoutId = setTimeout(() => {
+        if (popover) {
+            popover.classList.remove('show');
+            popover.onmouseenter = null;
+            popover.onmouseleave = null;
+        }
+        indicator.classList.remove('active');
+        popoverTimeouts.delete(indicator);
+    }, 500); // 500ms delay before hiding
+
+    popoverTimeouts.set(indicator, hideTimeoutId);
+}
+
+function toggleIrvPopover(indicator, roundIndex, candidateKey) {
+    // Keep this function for backward compatibility, but it's no longer used
+    showIrvPopover(indicator, roundIndex, candidateKey);
 }
 
 function formatCandidateSecondChoices(transfers, isActualTransfer = false) {
@@ -398,7 +452,7 @@ function formatCandidateSecondChoices(transfers, isActualTransfer = false) {
         // Generate HTML for each transfer with color box
         transferArray.forEach(transfer => {
             const colorBox = `<span style="display: inline-block; width: 12px; height: 12px; background-color: ${transfer.color}; border: 1px solid #333; margin-right: 6px; vertical-align: middle;"></span>`;
-            
+
             if (transfer.isExhausted) {
                 // Special handling for exhausted ballots
                 if (transfer.percentage) {
@@ -474,27 +528,18 @@ function createDataBar(transfers, isActualTransfer = false) {
             } else {
                 votes = parseInt(amount) || 0;
             }
-            
+
             if (votes > 0) {
                 const percentage = (votes / totalVotes) * 100;
                 const color = candidateColors[dest] || '#999';
                 const destName = candidateNames[dest] || dest;
                 const isExhausted = dest === 'exhausted' || destName.toLowerCase().includes('exhausted');
-                
-                let tooltipText;
-                if (isExhausted) {
-                    tooltipText = `Exhausted: ${votes} votes`;
-                } else {
-                    const tooltipPrefix = isActualTransfer ? 'Transfer:' : '2nd Choice:';
-                    tooltipText = `${tooltipPrefix} ${destName}: ${votes} votes`;
-                }
-                
+
                 segments.push({
                     dest,
                     votes,
                     percentage,
                     color,
-                    tooltipText,
                     isExhausted
                 });
             }
@@ -508,10 +553,13 @@ function createDataBar(transfers, isActualTransfer = false) {
             return b.votes - a.votes; // then by vote count descending
         });
 
-        // Create colored segments
+        // Wrap colored segments in a data-bar div for easier positioning
+        let segmentsHTML = '';
         segments.forEach(segment => {
-            html += `<div style="background-color: ${segment.color}; width: ${segment.percentage}%; height: 100%; display: inline-block;" title="${segment.tooltipText}"></div>`;
+            segmentsHTML += `<div style="background-color: ${segment.color}; width: ${segment.percentage}%; height: 100%; display: inline-block;"></div>`;
         });
+
+        html = `<div class="data-bar">${segmentsHTML}</div>`;
     }
 
     return html;
@@ -521,17 +569,17 @@ function createDataBar(transfers, isActualTransfer = false) {
 document.addEventListener('DOMContentLoaded', function() {
     roundsData.forEach((roundData, roundIndex) => {
         // Find all transfer indicators for this round
-        document.querySelectorAll(`.irv-transfer-indicator[onclick*="${roundIndex}"]`).forEach(indicator => {
-            // Extract candidate key from onclick attribute
-            const onclickAttr = indicator.getAttribute('onclick');
-            const candidateMatch = onclickAttr.match(/'([^']+)'/);
+        document.querySelectorAll(`.irv-transfer-indicator[onmouseover*="${roundIndex}"]`).forEach(indicator => {
+            // Extract candidate key from onmouseover attribute
+            const onmouseoverAttr = indicator.getAttribute('onmouseover');
+            const candidateMatch = onmouseoverAttr.match(/'([^']+)'/);
             if (candidateMatch) {
                 const candidateKey = candidateMatch[1];
-                
+
                 // Get transfer data for this candidate
                 let transferData = null;
                 let isActualTransfer = false;
-                
+
                 if (roundData.transfers && roundData.transfers[candidateKey]) {
                     transferData = roundData.transfers[candidateKey];
                     isActualTransfer = true;
@@ -539,9 +587,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     transferData = roundData.hypothetical_transfers[candidateKey];
                     isActualTransfer = false;
                 }
-                
+
                 if (transferData) {
-                    indicator.innerHTML = createDataBar(transferData, isActualTransfer);
+                    // STRATEGY CHANGE: Create data bar but preserve arrow by creating it fresh
+                    const dataBarHTML = createDataBar(transferData, isActualTransfer);
+                    const arrowHTML = '<div class="transfer-arrow">→</div>';
+
+                    // Set both together so arrow isn't destroyed
+                    indicator.innerHTML = dataBarHTML + arrowHTML;
+
+                    console.log(`Added arrow to indicator for candidate ${candidateKey} in round ${roundIndex}`);
                 }
             }
         });
