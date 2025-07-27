@@ -37,8 +37,17 @@ class ResultConduit:
         return self
 
     def update_IRV_result(self, jabmod, include_irv_extra=False) -> "ResultConduit":
-        self.resblob['IRV_dict'] = IRV_dict_from_jabmod(
-            jabmod, include_irv_extra=include_irv_extra)
+        """Add IRV result to resblob"""
+
+        # Backwards compatibility with abiflib v0.32.0
+        try:
+            self.resblob['IRV_dict'] = IRV_dict_from_jabmod(
+                jabmod, include_irv_extra=include_irv_extra)
+        except TypeError as e:
+            import datetime
+            print(f" ------------ [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] "
+                  f"Upgrade abiflib to v0.32.1 or later for IRVextra support.")
+            self.resblob['IRV_dict'] = IRV_dict_from_jabmod(jabmod)
         self.resblob['IRV_text'] = get_IRV_report(self.resblob['IRV_dict'])
         return self
 
