@@ -234,13 +234,6 @@
     {% endfor %}
   </table>
   </div>
-  {% for i in range(IRV_dict['roundmeta'] | length) %}
-    {% set round = IRV_dict['roundmeta'][i] %}
-    {% if round.elimcand_supporter_pairwise_results %}
-      <h4>Pairwise preferences of voters for eliminated candidate(s) in Round {{ i + 1 }}</h4>
-      {% include 'elim-pairwise-snippet.html' %}
-    {% endif %}
-  {% endfor %}
   {% if flags.overvote %}
   <p><small>Overvotes are ballots where multiple candidates are ranked at the same, highest-ranking position.</small></p>
   {% endif %}
