@@ -264,7 +264,7 @@ function toggleIrvPopover(indicator, roundIndex, candidateKey) {
 
             // Check actual transfers for this candidate
             if (roundData.transfers && roundData.transfers[candidateKey]) {
-                content += `<div style="margin-bottom: 8px;"><strong>Actual transfer of ${candidateName}'s votes:</strong></div>`;
+                content += `<div style="margin-bottom: 8px;"><strong>Transfer of ${candidateName}'s votes:</strong></div>`;
                 content += formatCandidateTransferData(roundData.transfers[candidateKey]);
                 hasContent = true;
             }
@@ -274,7 +274,7 @@ function toggleIrvPopover(indicator, roundIndex, candidateKey) {
                 if (hasContent) {
                     content += '<hr style="margin: 8px 0;">';
                 }
-                content += `<div style="margin-bottom: 8px;"><strong>Hypothetical transfer of ${candidateName}'s votes:</strong></div>`;
+                content += `<div style="margin-bottom: 8px;"><strong>Remaining second choices in round ${roundIndex + 1} for ${candidateName}'s voters:</strong></div>`;
                 content += formatCandidateTransferData(roundData.hypothetical_transfers[candidateKey]);
                 hasContent = true;
             }
