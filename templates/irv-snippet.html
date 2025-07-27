@@ -147,9 +147,9 @@
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this)"></div>
+              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')"></div>
               <div class="irv-popover">
-                {% include 'elim-pairwise-snippet.html' %}
+                <!-- Content will be populated by JavaScript -->
               </div>
             {% endif %}
           </td>
@@ -166,9 +166,9 @@
             {% endif %}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this)"></div>
+              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')"></div>
               <div class="irv-popover">
-                {% include 'elim-pairwise-snippet.html' %}
+                <!-- Content will be populated by JavaScript -->
               </div>
             {% endif %}
           </td>
@@ -178,9 +178,9 @@
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this)"></div>
+              <div class="irv-transfer-indicator" onclick="toggleIrvPopover(this, {{ i }}, '{{ cand }}')"></div>
               <div class="irv-popover">
-                {% include 'elim-pairwise-snippet.html' %}
+                <!-- Content will be populated by JavaScript -->
               </div>
             {% endif %}
           </td>
@@ -213,7 +213,26 @@
 </div>
 
 <script>
-function toggleIrvPopover(indicator) {
+// Convert round metadata to JSON-serializable format
+const roundsData = [
+  {% for round_meta in IRV_dict['roundmeta'] %}
+    {
+      transfers: {{ round_meta.get('transfers', {}) | tojson }},
+      hypothetical_transfers: {{ round_meta.get('hypothetical_transfers', {}) | tojson }},
+      eliminated: {{ round_meta.get('eliminated', []) | list | tojson }},
+      all_eliminated: {{ round_meta.get('all_eliminated', []) | list | tojson }},
+      startingqty: {{ round_meta.get('startingqty', 0) }},
+      countedqty: {{ round_meta.get('countedqty', 0) }},
+      exhaustedqty: {{ round_meta.get('exhaustedqty', 0) }},
+      overvoteqty: {{ round_meta.get('overvoteqty', 0) }}
+    },
+  {% endfor %}
+];
+
+// Candidate names mapping
+const candidateNames = {{ IRV_candnames | tojson }};
+
+function toggleIrvPopover(indicator, roundIndex, candidateKey) {
     // Find the popover element - it should be the next sibling
     const popover = indicator.nextElementSibling;
 
@@ -235,6 +254,40 @@ function toggleIrvPopover(indicator) {
     if (isShowing) {
         popover.classList.remove('show');
     } else {
+        // Populate the popover with transfer data for this specific candidate and round
+        const roundData = roundsData[roundIndex];
+        const candidateName = candidateNames[candidateKey] || candidateKey;
+
+        if (roundData) {
+            let content = '';
+            let hasContent = false;
+
+            // Check actual transfers for this candidate
+            if (roundData.transfers && roundData.transfers[candidateKey]) {
+                content += `<div style="margin-bottom: 8px;"><strong>Actual transfer of ${candidateName}'s votes:</strong></div>`;
+                content += formatCandidateTransferData(roundData.transfers[candidateKey]);
+                hasContent = true;
+            }
+
+            // Check hypothetical transfers for this candidate
+            if (roundData.hypothetical_transfers && roundData.hypothetical_transfers[candidateKey]) {
+                if (hasContent) {
+                    content += '<hr style="margin: 8px 0;">';
+                }
+                content += `<div style="margin-bottom: 8px;"><strong>Hypothetical transfer of ${candidateName}'s votes:</strong></div>`;
+                content += formatCandidateTransferData(roundData.hypothetical_transfers[candidateKey]);
+                hasContent = true;
+            }
+
+            if (!hasContent) {
+                content = `<div>No transfer data available for ${candidateName} in Round ${roundIndex + 1}.</div>`;
+            }
+
+            popover.innerHTML = content;
+        } else {
+            popover.innerHTML = '<div>No data available for this round.</div>';
+        }
+
         popover.classList.add('show');
 
         // Add the outside click listener after a small delay to prevent immediate closing
@@ -248,5 +301,50 @@ function toggleIrvPopover(indicator) {
             document.addEventListener('click', closeOnOutsideClick);
         }, 100);
     }
+}
+
+function formatCandidateTransferData(transfers) {
+    let html = '';
+
+    if (typeof transfers === 'object' && transfers !== null) {
+        Object.entries(transfers).forEach(([dest, amount]) => {
+            if (typeof amount === 'object' && amount.votes !== undefined) {
+                const percentage = amount.percentage ? ` (${amount.percentage}%)` : '';
+                // Map destination candidate key to name if available
+                const destName = candidateNames[dest] || dest;
+                html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${amount.votes} (${amount.percentage}%) → ${destName}</div>`;
+            } else {
+                const destName = candidateNames[dest] || dest;
+                html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${amount} → ${destName}</div>`;
+            }
+        });
+    } else {
+        html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${transfers}</div>`;
+    }
+
+    return html;
+}
+
+function formatTransferData(transfers) {
+    let html = '';
+
+    Object.entries(transfers).forEach(([source, destinations]) => {
+        html += `<div style="margin-bottom: 4px;"><strong>${source}:</strong></div>`;
+
+        if (typeof destinations === 'object' && destinations !== null) {
+            Object.entries(destinations).forEach(([dest, amount]) => {
+                if (typeof amount === 'object' && amount.votes !== undefined) {
+                    const percentage = amount.percentage ? ` (${amount.percentage}%)` : '';
+                    html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">→ ${dest}: ${amount.votes} votes${percentage}</div>`;
+                } else {
+                    html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">→ ${dest}: ${amount}</div>`;
+                }
+            });
+        } else {
+            html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${destinations}</div>`;
+        }
+    });
+
+    return html;
 }
 </script>
