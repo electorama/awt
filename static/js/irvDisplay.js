@@ -1,8 +1,17 @@
 import { showPopover, hidePopover } from './popover.js';
-import { getColor } from './colorService.js';
 
 let roundsData = [];
 let candidateNames = {};
+let candidateColors = {};
+
+/**
+ * Gets the color for a specific candidate.
+ * @param {string} candidateKey - The key for the candidate.
+ * @returns {string} The hex color code or a default fallback color.
+ */
+function getColor(candidateKey) {
+    return candidateColors[candidateKey] || '#dddddd'; // Default grey
+}
 
 /**
  * Initializes the IRV display module with data from the page.
@@ -13,6 +22,23 @@ export function initializeIrvDisplay() {
         console.log('IRV display container not found. Skipping initialization.');
         return;
     }
+    const colorContainer = document.getElementById('results-container');
+    if (colorContainer && colorContainer.dataset.candidateColors) {
+        try {
+            candidateColors = JSON.parse(colorContainer.dataset.candidateColors);
+        } catch (e) {
+            console.error("Failed to parse candidate colors data:", e);
+            candidateColors = {};
+        }
+    }
+
+    // After parsing colors, apply them to the color blocks
+    container.querySelectorAll('.irv-colorblock').forEach(block => {
+        const key = block.dataset.candidateKey;
+        if (key) {
+            block.style.backgroundColor = getColor(key);
+        }
+    });
 
     try {
         roundsData = JSON.parse(container.dataset.roundsData);
