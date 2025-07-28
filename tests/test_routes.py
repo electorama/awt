@@ -10,9 +10,10 @@ import signal
 import yaml
 from urllib.parse import quote
 
+
 # Adjust these paths as needed
 # AWT_DIR = '/home/robla/src/awt'
-AWT_DIR = os.path.dirname(os.path.abspath(__file__))
+AWT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 ABIFTOOL_DIR = '/home/robla/src/abiftool'
 # ABIFTOOL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(abiflib.__file__)))
 print(f"{ABIFTOOL_DIR=}")

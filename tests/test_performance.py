@@ -1,5 +1,16 @@
-
 import os
+import sys
+
+# Add awt project root to sys.path
+AWT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if AWT_DIR not in sys.path:
+    sys.path.insert(0, AWT_DIR)
+
+# Add abiftool (sibling) to sys.path if needed
+ABIFTOOL_DIR = os.path.abspath(os.path.join(AWT_DIR, '..', 'abiftool'))
+if os.path.isdir(ABIFTOOL_DIR) and ABIFTOOL_DIR not in sys.path:
+    sys.path.insert(0, ABIFTOOL_DIR)
+
 import abiflib
 import subprocess
 import tempfile
@@ -12,8 +23,9 @@ import signal
 from urllib.parse import quote
 
 
+
 # Adjust these paths as needed
-AWT_DIR = os.path.dirname(os.path.abspath(__file__))
+AWT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 ABIFTOOL_DIR = abiflib.get_abiftool_dir()
 
 @pytest.fixture(scope="session")
