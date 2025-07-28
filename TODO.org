@@ -12,8 +12,11 @@ This is a very incomplete list of incomplete tasks for this project
    - [ ] Move presentation logic from templates to Python
    - [ ] Replace print() statements with the standard `logging` module
    - [ ] Clean up Python imports
+   - [ ] Generate IRV transfer indicators server-side, not JavaScript.
 * For 0.33.0
+  - [ ] Sanitize candidate tokens before using them in CSS class names
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list]]
   - [ ] See [[./CHANGELOG.org]]
 * Post 0.33.0
+  - [ ] Create bifhub and figure out awt interface to it [[./docs/bifhub.md]]
   - Moar [[Code hygiene]] (see above)

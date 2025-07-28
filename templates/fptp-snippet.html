@@ -17,6 +17,7 @@
     <ul>
     {% for candidate, votes in resblob.FPTP_result.toppicks|dictsort(reverse=true, by='value') %}
     <li>
+      <span class="color-box" style="background-color: {{ colordict[candidate] | default('#ccc') }};"></span>
       {{ FPTP_candnames[candidate] if FPTP_candnames and candidate in FPTP_candnames else candidate }}: {{ votes }} votes
       {% if resblob.FPTP_result.total_votes > 0 %}
       ({{ "%0.1f"|format((votes / resblob.FPTP_result.total_votes) * 100) }} %)

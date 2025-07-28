@@ -32,14 +32,6 @@ export function initializeIrvDisplay() {
         }
     }
 
-    // After parsing colors, apply them to the color blocks
-    container.querySelectorAll('.irv-colorblock').forEach(block => {
-        const key = block.dataset.candidateKey;
-        if (key) {
-            block.style.backgroundColor = getColor(key);
-        }
-    });
-
     try {
         roundsData = JSON.parse(container.dataset.roundsData);
         candidateNames = JSON.parse(container.dataset.candidateNames);

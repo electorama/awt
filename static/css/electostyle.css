@@ -208,3 +208,12 @@ svg {
   min-width: 80px;
   margin-left: 1em;
 }
+
+.color-box {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 1px solid #999;
+    vertical-align: middle;
+    margin-right: 0.5em;
+}
