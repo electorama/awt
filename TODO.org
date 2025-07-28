@@ -1,19 +1,19 @@
 This is a very incomplete list of incomplete tasks for this project 
-* Test coverage
-  * Create tests directory and add tests besides per-election smoketests
-  * Move test_awt_routes.py to tests directory
-* Integrate 2024 SF-mayoral IRV code
-* Finalize FPTP Integration
-  * Add a pytest for an FPTP edge case (e.g. single-ballot or tie).
-  * Add the “Include FPTP” checkbox.
-  * Wire the flag through your route logic.
-  * Insert the `<h3>/<pre>` FPTP block in results-index.html
-* Flesh out pyproject.toml
-  * Potentially add [tool.setuptools] include-package-data = true
-  * whitelist conduits.py, abif_list.yml, examples.yml, static/* and templates/*
-  * Test "`python -m build`"
-* Update CondorcetVsIRV tag
-* Generate/update CHANGELOG.md
-* Post 0.32.0
-  * Better observability: debug-mode flamegraph to spot performance bottlenecks
-  * Create src directory and move most code to this directory
+* Code hygiene
+** Testing (test)
+   - [ ] Create tests directory and add tests besides per-election smoketests
+   - [ ] Move test_*.py to tests directory
+   - [ ] Quicker/easier smoketests
+** Build & Packaging (build)
+   - [ ] Create src directory and move most code to this directory
+   - [ ] Potentially add [tool.setuptools] include-package-data = true
+   - [ ] whitelist conduits.py, abif_list.yml, examples.yml, static/* and templates/*
+** Refactoring (refactor)
+   - [ ] Move presentation logic from templates to Python
+   - [ ] Replace print() statements with the standard `logging` module
+   - [ ] Clean up Python imports
+* For 0.33.0
+  - [ ] Review [[https://github.com/electorama/awt/issues][bug list]]
+  - [ ] See [[./CHANGELOG.org]]
+* Post 0.33.0
+  - Moar [[Code hygiene]] (see above)
