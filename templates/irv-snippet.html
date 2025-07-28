@@ -89,14 +89,9 @@
 }
 
 </style>
-{% if scorestardict and scorestardict.starscale and scorestardict.starscale.colordict %}
-<style>
-  {% for cand, color in scorestardict.starscale.colordict.items() %}
-  .irv-color-{{ loop.index }} { background-color: {{ color }}; }
-  {% endfor %}
-</style>
-{% endif %}
-<div>
+<div id="irv-display-container"
+     data-rounds-data='{{ IRV_dict['roundmeta'] | tojson | safe }}'
+     data-candidate-names='{{ IRV_candnames | tojson | safe }}'>
   <ul>
     {% set has_tie = false %}
     {% set canddict = IRV_dict['canddict'] %}
@@ -106,14 +101,6 @@
     {% set numrounds =  IRV_dict['rounds']|length %}
     {% set startingqty = IRV_dict['roundmeta'][0]['startingqty'] %}
     {% set majority = IRV_dict['roundmeta'][0]['startingqty'] // 2 + 1 %}
-
-    {# Create color mapping for candidates #}
-    {% set color_map = {} %}
-    {% if scorestardict and scorestardict.starscale and scorestardict.starscale.colordict %}
-      {% for cand, color in scorestardict.starscale.colordict.items() %}
-        {% set _ = color_map.update({cand: loop.index}) %}
-      {% endfor %}
-    {% endif %}
 
     <li><b>{{winnerintro}}</b>:
       {% if winnerstr and IRV_candnames %}
@@ -173,11 +160,11 @@
         {% set round_meta = IRV_dict['roundmeta'][i] %}
         {% if cand in winner and (i + 1) == numrounds %}
           <td class="irv-cell"><b>IRV/RCV winner</b>:<br>
-            {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
+            {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock" data-candidate-key="{{ cand }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onmouseover="showIrvPopover(this, {{ i }}, '{{ cand }}')" onmouseout="hideIrvPopover(this)">
+              <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
                 <!-- Data bar segments will be populated by JavaScript -->
                 <div class="transfer-arrow">→</div>
               </div>
@@ -188,7 +175,7 @@
           </td>
         {% elif round_data.get(cand) and cand in round_meta.get('eliminated', []) %}
           <td class="new-elim irv-cell">
-            {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
+            {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock" data-candidate-key="{{ cand }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% if round_meta.get('batch_elim') %}
               (batch eliminated †)
@@ -199,7 +186,7 @@
             {% endif %}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onmouseover="showIrvPopover(this, {{ i }}, '{{ cand }}')" onmouseout="hideIrvPopover(this)">
+              <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
                 <!-- Data bar segments will be populated by JavaScript -->
                 <div class="transfer-arrow">→</div>
               </div>
@@ -210,11 +197,11 @@
           </td>
         {% elif round_data.get(cand) %}
           <td class="irv-cell">
-            {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}"></span>{% endif %}
+            {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock" data-candidate-key="{{ cand }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" onmouseover="showIrvPopover(this, {{ i }}, '{{ cand }}')" onmouseout="hideIrvPopover(this)">
+              <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
                 <!-- Data bar segments will be populated by JavaScript -->
                 <div class="transfer-arrow">→</div>
               </div>
@@ -225,7 +212,7 @@
           </td>
         {% else %}
           <td class="greyedOut irv-cell">
-            {% if color_map.get(cand) %}<span class="irv-colorblock irv-color-{{ color_map[cand] }}" style="opacity: 0.5;"></span>{% endif %}
+            {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock" data-candidate-key="{{ cand }}" style="opacity: 0.5;"></span>{% endif %}
             <s>{{ IRV_candnames.get(cand, cand) }}</s>
           </td>
         {% endif %}
@@ -243,356 +230,3 @@
   {% endif %}
  </div>
 </div>
-
-<script>
-// Convert round metadata to JSON-serializable format
-const roundsData = [
-  {% for round_meta in IRV_dict['roundmeta'] %}
-    {
-      transfers: {{ round_meta.get('transfers', {}) | tojson }},
-      hypothetical_transfers: {{ round_meta.get('hypothetical_transfers', {}) | tojson }},
-      eliminated: {{ round_meta.get('eliminated', []) | list | tojson }},
-      all_eliminated: {{ round_meta.get('all_eliminated', []) | list | tojson }},
-      startingqty: {{ round_meta.get('startingqty', 0) }},
-      countedqty: {{ round_meta.get('countedqty', 0) }},
-      exhaustedqty: {{ round_meta.get('exhaustedqty', 0) }},
-      overvoteqty: {{ round_meta.get('overvoteqty', 0) }}
-    },
-  {% endfor %}
-];
-
-// Candidate names mapping
-const candidateNames = {{ IRV_candnames | tojson }};
-
-// Candidate color mapping
-const candidateColors = {
-  {% if scorestardict and scorestardict.starscale and scorestardict.starscale.colordict %}
-    {% for cand, color in scorestardict.starscale.colordict.items() %}
-      "{{ cand }}": "{{ color }}",
-    {% endfor %}
-  {% endif %}
-};
-
-let popoverTimeouts = new Map();
-
-function showIrvPopover(indicator, roundIndex, candidateKey) {
-    // Clear any existing hide timeout for this indicator
-    const hideTimeoutId = popoverTimeouts.get(indicator);
-    if (hideTimeoutId) {
-        clearTimeout(hideTimeoutId);
-        popoverTimeouts.delete(indicator);
-    }
-
-    // Find the popover element - it should be the next sibling after the arrow
-    const popover = indicator.parentElement.querySelector('.irv-popover');
-
-    // Safety check - make sure we found the popover
-    if (!popover || !popover.classList.contains('irv-popover')) {
-        console.error('Could not find popover element');
-        return;
-    }
-
-    // Set a delay before showing the popover
-    const showTimeoutId = setTimeout(() => {
-        // Populate the popover with transfer data for this specific candidate and round
-        const roundData = roundsData[roundIndex];
-        const candidateName = candidateNames[candidateKey] || candidateKey;
-
-        if (roundData) {
-            let content = '';
-            let hasContent = false;
-
-            // Check if this is the final round
-            const isFinalRound = (roundIndex + 1) === roundsData.length;
-
-            // Check actual transfers for this candidate
-            if (roundData.transfers && roundData.transfers[candidateKey]) {
-                const transferLabel = isFinalRound ?
-                    `Second choices in final round on ballots listing ${candidateName} first:` :
-                    `Transfer of ${candidateName}'s votes:`;
-                content += `<div style="margin-bottom: 8px;"><strong>${transferLabel}</strong></div>`;
-                content += formatCandidateSecondChoices(roundData.transfers[candidateKey], true);
-                hasContent = true;
-            }
-
-            // Check hypothetical second choices for this candidate
-            if (roundData.hypothetical_transfers && roundData.hypothetical_transfers[candidateKey]) {
-                if (hasContent) {
-                    content += '<hr style="margin: 8px 0;">';
-                }
-                const hypotheticalLabel = isFinalRound ?
-                    `Second choices in final round on ballots listing ${candidateName} first:` :
-                    `Remaining second choices in round ${roundIndex + 1} on ballots listing ${candidateName} first:`;
-                content += `<div style="margin-bottom: 8px;"><strong>${hypotheticalLabel}</strong></div>`;
-                content += formatCandidateSecondChoices(roundData.hypothetical_transfers[candidateKey], false);
-                hasContent = true;
-            }
-
-            if (!hasContent) {
-                content = `<div>No transfer data available for ${candidateName} in Round ${roundIndex + 1}.</div>`;
-            }
-
-            popover.innerHTML = content;
-        } else {
-            popover.innerHTML = '<div>No data available for this round.</div>';
-        }
-
-        popover.classList.add('show');
-        indicator.classList.add('active');
-
-        // Add mouseenter/mouseleave events to keep popover open when hovering over it
-        popover.onmouseenter = () => {
-            // Clear any pending hide timeout when entering popover
-            const hideTimeoutId = popoverTimeouts.get(indicator);
-            if (hideTimeoutId) {
-                clearTimeout(hideTimeoutId);
-                popoverTimeouts.delete(indicator);
-            }
-        };
-
-        popover.onmouseleave = () => {
-            // Start hide timeout when leaving popover
-            scheduleHidePopover(indicator, popover);
-        };
-    }, 200); // 200ms delay before showing
-
-    popoverTimeouts.set(indicator, showTimeoutId);
-}
-
-function hideIrvPopover(indicator) {
-    // Clear any existing show timeout
-    const showTimeoutId = popoverTimeouts.get(indicator);
-    if (showTimeoutId) {
-        clearTimeout(showTimeoutId);
-        popoverTimeouts.delete(indicator);
-    }
-
-    // Find the popover element
-    const popover = indicator.parentElement.querySelector('.irv-popover');
-
-    if (popover && popover.classList.contains('show')) {
-        // Schedule hiding with delay
-        scheduleHidePopover(indicator, popover);
-    }
-}
-
-function scheduleHidePopover(indicator, popover) {
-    // Clear any existing hide timeout
-    const existingHideTimeout = popoverTimeouts.get(indicator);
-    if (existingHideTimeout) {
-        clearTimeout(existingHideTimeout);
-    }
-
-    // Set a delay before hiding the popover
-    const hideTimeoutId = setTimeout(() => {
-        if (popover) {
-            popover.classList.remove('show');
-            popover.onmouseenter = null;
-            popover.onmouseleave = null;
-        }
-        indicator.classList.remove('active');
-        popoverTimeouts.delete(indicator);
-    }, 500); // 500ms delay before hiding
-
-    popoverTimeouts.set(indicator, hideTimeoutId);
-}
-
-function toggleIrvPopover(indicator, roundIndex, candidateKey) {
-    // Keep this function for backward compatibility, but it's no longer used
-    showIrvPopover(indicator, roundIndex, candidateKey);
-}
-
-function formatCandidateSecondChoices(transfers, isActualTransfer = false) {
-    let html = '';
-    let totalVotes = 0;
-
-    if (typeof transfers === 'object' && transfers !== null) {
-        // Convert to array for sorting and calculate total
-        const transferArray = Object.entries(transfers).map(([dest, amount]) => {
-            let votes = 0;
-            let percentage = '';
-
-            if (typeof amount === 'object' && amount.votes !== undefined) {
-                votes = amount.votes;
-                percentage = amount.percentage ? `${amount.percentage}%` : '';
-            } else {
-                votes = parseInt(amount) || 0;
-            }
-
-            totalVotes += votes;
-            const destName = candidateNames[dest] || dest;
-            const color = candidateColors[dest] || '#999';
-            const isExhausted = dest === 'exhausted' || destName.toLowerCase().includes('exhausted');
-
-            return {
-                destination: destName,
-                votes: votes,
-                percentage: percentage,
-                color: color,
-                isExhausted: isExhausted,
-                raw: amount
-            };
-        });
-
-        // Sort by: 1) non-exhausted first, 2) then by vote count descending
-        transferArray.sort((a, b) => {
-            if (a.isExhausted !== b.isExhausted) {
-                return a.isExhausted ? 1 : -1; // exhausted goes to end
-            }
-            return b.votes - a.votes; // then by vote count descending
-        });
-
-        // Generate HTML for each transfer with color box
-        transferArray.forEach(transfer => {
-            const colorBox = `<span style="display: inline-block; width: 12px; height: 12px; background-color: ${transfer.color}; border: 1px solid #333; margin-right: 6px; vertical-align: middle;"></span>`;
-
-            if (transfer.isExhausted) {
-                // Special handling for exhausted ballots
-                if (transfer.percentage) {
-                    html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${colorBox}Exhausted: ${transfer.votes} (${transfer.percentage})</div>`;
-                } else {
-                    html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${colorBox}Exhausted: ${transfer.votes}</div>`;
-                }
-            } else {
-                // Normal candidate transfers
-                if (transfer.percentage) {
-                    html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${colorBox}${transfer.votes} (${transfer.percentage}) → ${transfer.destination}</div>`;
-                } else {
-                    html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${colorBox}${transfer.votes} → ${transfer.destination}</div>`;
-                }
-            }
-        });
-
-        // Add total votes
-        html += `<div style="margin-top: 8px; font-weight: bold; font-size: 11px;">Total: ${totalVotes} ballots</div>`;
-
-    } else {
-        html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${transfers}</div>`;
-    }
-
-    return html;
-}
-
-function formatTransferData(transfers) {
-    let html = '';
-
-    Object.entries(transfers).forEach(([source, destinations]) => {
-        html += `<div style="margin-bottom: 4px;"><strong>${source}:</strong></div>`;
-
-        if (typeof destinations === 'object' && destinations !== null) {
-            Object.entries(destinations).forEach(([dest, amount]) => {
-                if (typeof amount === 'object' && amount.votes !== undefined) {
-                    const percentage = amount.percentage ? ` (${amount.percentage}%)` : '';
-                    html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">→ ${dest}: ${amount.votes} votes${percentage}</div>`;
-                } else {
-                    html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">→ ${dest}: ${amount}</div>`;
-                }
-            });
-        } else {
-            html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${destinations}</div>`;
-        }
-    });
-
-    return html;
-}
-
-function createDataBar(transfers, isActualTransfer = false) {
-    let html = '';
-    let totalVotes = 0;
-    const segments = [];
-
-    if (typeof transfers === 'object' && transfers !== null) {
-        // Calculate total votes first
-        Object.entries(transfers).forEach(([dest, amount]) => {
-            let votes = 0;
-            if (typeof amount === 'object' && amount.votes !== undefined) {
-                votes = amount.votes;
-            } else {
-                votes = parseInt(amount) || 0;
-            }
-            totalVotes += votes;
-        });
-
-        // Create segments with percentages
-        Object.entries(transfers).forEach(([dest, amount]) => {
-            let votes = 0;
-            if (typeof amount === 'object' && amount.votes !== undefined) {
-                votes = amount.votes;
-            } else {
-                votes = parseInt(amount) || 0;
-            }
-
-            if (votes > 0) {
-                const percentage = (votes / totalVotes) * 100;
-                const color = candidateColors[dest] || '#999';
-                const destName = candidateNames[dest] || dest;
-                const isExhausted = dest === 'exhausted' || destName.toLowerCase().includes('exhausted');
-
-                segments.push({
-                    dest,
-                    votes,
-                    percentage,
-                    color,
-                    isExhausted
-                });
-            }
-        });
-
-        // Sort by: 1) non-exhausted first, 2) then by vote count descending
-        segments.sort((a, b) => {
-            if (a.isExhausted !== b.isExhausted) {
-                return a.isExhausted ? 1 : -1; // exhausted goes to end (right side)
-            }
-            return b.votes - a.votes; // then by vote count descending
-        });
-
-        // Wrap colored segments in a data-bar div for easier positioning
-        let segmentsHTML = '';
-        segments.forEach(segment => {
-            segmentsHTML += `<div style="background-color: ${segment.color}; width: ${segment.percentage}%; height: 100%; display: inline-block;"></div>`;
-        });
-
-        html = `<div class="data-bar">${segmentsHTML}</div>`;
-    }
-
-    return html;
-}
-
-// Initialize data bars when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    roundsData.forEach((roundData, roundIndex) => {
-        // Find all transfer indicators for this round
-        document.querySelectorAll(`.irv-transfer-indicator[onmouseover*="${roundIndex}"]`).forEach(indicator => {
-            // Extract candidate key from onmouseover attribute
-            const onmouseoverAttr = indicator.getAttribute('onmouseover');
-            const candidateMatch = onmouseoverAttr.match(/'([^']+)'/);
-            if (candidateMatch) {
-                const candidateKey = candidateMatch[1];
-
-                // Get transfer data for this candidate
-                let transferData = null;
-                let isActualTransfer = false;
-
-                if (roundData.transfers && roundData.transfers[candidateKey]) {
-                    transferData = roundData.transfers[candidateKey];
-                    isActualTransfer = true;
-                } else if (roundData.hypothetical_transfers && roundData.hypothetical_transfers[candidateKey]) {
-                    transferData = roundData.hypothetical_transfers[candidateKey];
-                    isActualTransfer = false;
-                }
-
-                if (transferData) {
-                    // STRATEGY CHANGE: Create data bar but preserve arrow by creating it fresh
-                    const dataBarHTML = createDataBar(transferData, isActualTransfer);
-                    const arrowHTML = '<div class="transfer-arrow">→</div>';
-
-                    // Set both together so arrow isn't destroyed
-                    indicator.innerHTML = dataBarHTML + arrowHTML;
-
-                    console.log(`Added arrow to indicator for candidate ${candidateKey} in round ${roundIndex}`);
-                }
-            }
-        });
-    });
-});
-</script>

@@ -201,7 +201,12 @@ and can be edited in the field above.</p>
   🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
-<p>{% include 'irv-snippet.html' %}</p>
+<div id="results-container" data-candidate-colors='{{ scorestardict.starscale.colordict | tojson | safe }}'>
+    <p>{% include 'irv-snippet.html' %}</p>
+    {# {% include 'star-snippet.html' %} #}
+</div>
+
+<script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endif %}
 {############ STAR ############}
 {% set restype="STAR" %}

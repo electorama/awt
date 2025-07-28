@@ -48,6 +48,15 @@ class ResultConduit:
             print(f" ------------ [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] "
                   f"Upgrade abiflib to v0.32.1 or later for IRVextra support.")
             self.resblob['IRV_dict'] = IRV_dict_from_jabmod(jabmod)
+
+        # Convert sets to lists for JSON serialization in templates
+        irv_dict = self.resblob['IRV_dict']
+        if 'roundmeta' in irv_dict:
+            for round_meta in irv_dict['roundmeta']:
+                for key in ['eliminated', 'all_eliminated', 'bottomtie']:
+                    if key in round_meta and isinstance(round_meta[key], set):
+                        round_meta[key] = list(round_meta[key])
+
         self.resblob['IRV_text'] = get_IRV_report(self.resblob['IRV_dict'])
         return self
 
