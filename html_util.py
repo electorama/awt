@@ -3,6 +3,7 @@
 Utilities for generating HTML or preparing data for HTML templates.
 """
 import colorsys
+import re
 
 
 def generate_golden_angle_palette(count=250, start_hex='#d0ffce',
@@ -97,3 +98,11 @@ def generate_candidate_colors(candidates):
     for i, cand in enumerate(candidates):
         colordict[cand] = colors[i]
     return colordict
+
+
+def escape_css_selector(s):
+    """
+    Escapes a string to be used as a CSS selector, replacing invalid characters with an underscore.
+    """
+    # This regex finds any character that is not a letter, number, underscore, or hyphen.
+    return re.sub(r'[^a-zA-Z0-9_-]', '_', s)

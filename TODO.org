@@ -13,8 +13,9 @@ This is a very incomplete list of incomplete tasks for this project
    - [ ] Replace print() statements with the standard `logging` module
    - [ ] Clean up Python imports
    - [ ] Generate IRV transfer indicators server-side, not JavaScript.
+   - [ ] Unify color styling: Generate CSS classes in one place for use by all voting methods (FPTP, IRV, STAR, etc.)
 * For 0.33.0
-  - [ ] Sanitize candidate tokens before using them in CSS class names
+  - [X] Sanitize candidate tokens before using them in CSS class names
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list]]
   - [ ] See [[./CHANGELOG.org]]
 * Post 0.33.0
