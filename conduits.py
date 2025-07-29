@@ -14,6 +14,7 @@ from abiflib import (
     STAR_result_from_abifmodel,
     scaled_scores
 )
+from html_util import generate_candidate_colors
 
 from dataclasses import dataclass, field
 from typing import Dict, Any
@@ -71,6 +72,11 @@ class ResultConduit:
                                                                           snippet=True,
                                                                           validate=True,
                                                                           modlimit=2500)
+        if jabmod and 'candidates' in jabmod:
+            self.resblob['colordict'] = generate_candidate_colors(
+                jabmod['candidates'].keys())
+        else:
+            self.resblob['colordict'] = {}
         return self
 
     def update_STAR_result(self, jabmod) -> "ResultConduit":

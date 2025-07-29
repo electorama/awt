@@ -1,4 +1,18 @@
 {# Jinja2 template for pairwise/win-loss-tie table (migrated to awt) #}
+{% if colordict %}
+<style type="text/css">
+  .colorblock {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 1px solid #666;
+    vertical-align: middle;
+  }
+  {% for cand, color in colordict.items() %}
+  .color-{{ cand | escape_css }} { background-color: {{ color }}; }
+  {% endfor %}
+</style>
+{% endif %}
 <!-- JINJA2-PAIRWISE-TEMPLATE-USED -->
 {% if desc %}<p>{{ desc }}</p>{% endif %}
 <div>
@@ -7,7 +21,7 @@
             <tbody>
                 {% for ck in candtoks %}
                 <tr>
-                    <th>{{ candnames[ck] }}{% if ck != candnames[ck] %} ["{{ ck }}"]{% endif %}</th>
+                    <th><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}{% if ck != candnames[ck] %} ["{{ ck }}"]{% endif %}</th>
                     <td colspan="{{ candtoks|length - loop.index0 - 1 }}" style="padding-right: 3em;">({{ wltstr(ck) }})</td>
                     {# Only show victories cell if there are matchups (i.e., not the first row) AND there are wins #}
                     {% if wltdict[ck]['wins'] > 0 %}

@@ -47,7 +47,7 @@ import urllib
 import yaml
 
 
-def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, add_desc=True, svg_text=None):
+def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_desc=True, svg_text=None):
     def wltstr(cand):
         retval = f"{wltdict[cand]['wins']}" + "-"
         retval += f"{wltdict[cand]['losses']}" + "-"
@@ -76,6 +76,7 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, add_desc=True, svg_text
             os.path.dirname(__file__), 'templates')),
         autoescape=select_autoescape(['html', 'xml'])
     )
+    env.filters['escape_css'] = escape_css_selector
     template = env.get_template('pairwise-snippet.html')
     html = template.render(
         title=abifmodel.get('title', 'Pairwise Table'),
@@ -86,7 +87,8 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, add_desc=True, svg_text
         wltdict=wltdict,
         wltstr=wltstr,
         has_ties_or_cycles=has_ties_or_cycles,
-        svg_text=svg_text
+        svg_text=svg_text,
+        colordict=colordict
     )
     return html
 
@@ -682,6 +684,7 @@ def get_by_id(identifier, resulttype=None):
                 jabmod,
                 pairwise_dict,
                 wltdict,
+                colordict=resblob.get('colordict', {}),
                 add_desc=True,
                 svg_text=None
             )
@@ -783,20 +786,18 @@ def awt_post():
 
         if request.form.get('include_pairtable'):
             rtypelist.append('wlt')
-            pairwise_dict = pairwise_count_dict(abifmodel)
-            debug_output += "\npairwise_dict:\n"
-            debug_output += pformat(pairwise_dict)
-            debug_output += "\n"
+            resconduit = resconduit.update_pairwise_result(abifmodel)
+            pairwise_dict = resconduit.resblob['pairwise_dict']
             wltdict = winlosstie_dict_from_pairdict(
                 abifmodel['candidates'], pairwise_dict)
             pairwise_html = jinja_pairwise_snippet(
                 abifmodel,
                 pairwise_dict,
                 wltdict,
+                colordict=resconduit.resblob.get('colordict', {}),
                 add_desc=True,
                 svg_text=None
             )
-            resconduit = resconduit.update_pairwise_result(abifmodel)
         if request.form.get('include_FPTP'):
             rtypelist.append('FPTP')
             if True:
