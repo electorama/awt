@@ -78,10 +78,11 @@
             <tr>
                 <th></th>
                 {% for ck in candtoks %}
+                    {% if not loop.last %}
                     <th class="pseudo-header">
-                        <div><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} victories</div>
                         <div>↓</div>
                     </th>
+                    {% endif %}
                 {% endfor %}
             </tr>
         </thead>
@@ -95,26 +96,31 @@
                     <small class="wlt-score">({{ wltstr(rk) }})</small>
                 </th>
                 {% for ck in candtoks %}
-                    {% if candtoks.index(rk) > candtoks.index(ck) %}
-                        <td>
-                            <div class="matchup-cell-inner">
-                                <div class="matchup-row">
-                                    <span class="cand-name"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}:</span>
-                                    <span class="cand-score">{{ pairdict[ck][rk] }}</span>
+                    {% if not loop.last %}
+                        {% if candtoks.index(rk) > candtoks.index(ck) %}
+                            <td>
+                                <div class="matchup-cell-inner">
+                                    <div class="matchup-row">
+                                        <span class="cand-name"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}:</span>
+                                        <span class="cand-score">{{ pairdict[ck][rk] }}</span>
+                                    </div>
+                                    <div class="matchup-row">
+                                        <span class="cand-name"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}:</span>
+                                        <span class="cand-score">{{ pairdict[rk][ck] }}{% if not (pairdict[ck][rk] > pairdict[rk][ck]) %}<sup>†</sup>{% endif %}</span>
+                                    </div>
                                 </div>
-                                <div class="matchup-row">
-                                    <span class="cand-name"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}:</span>
-                                    <span class="cand-score">{{ pairdict[rk][ck] }}{% if not (pairdict[ck][rk] > pairdict[rk][ck]) %}<sup>†</sup>{% endif %}</span>
-                                </div>
-                            </div>
-                        </td>
-                    {% elif rk == ck %}
-                        <td class="pseudo-header" style="background-color: #d0d0d0; text-align: center; vertical-align: middle; font-weight: bold;">
-                            <div><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }} victories</div>
-                            <div>↓</div>
-                        </td>
-                    {% else %}
-                        <td></td>
+                            </td>
+                        {% elif rk == ck %}
+                            <td class="pseudo-header" style="background-color: #d0d0d0; text-align: center; vertical-align: middle; font-weight: bold; border-left: 3px solid #999;">
+                                <div><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }} victories ▼</div>
+                            </td>
+                        {% else %}
+                            {% if candtoks.index(rk) < candtoks.index(ck) %}
+                                <td style="background-color: #f5f5f5;"></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </tr>
