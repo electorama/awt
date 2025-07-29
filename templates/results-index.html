@@ -20,7 +20,9 @@
 {% if abif_id %}
 {% set pathpart="/id/" + abif_id  %}
 {% set abslink=webenv.base_url + pathpart %}
+<!-- BEGIN .hatnote -->
 <div class="hatnote">🔗<a href="{{abslink}}">{{abslink}}</a></div>
+<!-- END .hatnote -->
 {% endif %}
 {% if msgs.results_name %}
 <p>The {{msgs.results_name}} of {{abif_id}} are below,
@@ -125,7 +127,9 @@ and can be edited in the field above.</p>
     {% endif %}
   </ul>
 </p>
+<!-- BEGIN .resultbox -->
 <div class="resultbox">
+<!-- BEGIN resultbox -->
 {############ dot ############}
 {% set restype="dot" %}
 {% set rellink=restype + "#" + restype %}
@@ -134,15 +138,18 @@ and can be edited in the field above.</p>
 {% if abif_id %}
 {% set pathpart="/id/" + abif_id + "/" + rellink %}
 {% set abslink=webenv.base_url + pathpart %}
+<!-- BEGIN .hatnote -->
 <div class="hatnote">
   {{abif_id}} pairwise diagram permalink:<br>
   🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
+<!-- END .hatnote -->
 <p><a href="/id/{{abif_id}}/dot/svg">{{ dotsvg_html | safe }}</a></p>
 {% else %}
 <p>{{ dotsvg_html | safe }}</p>
 {% endif %}
 {% endif %}
+<!-- END dot section -->
 {############ wlt ############}
 {% set restype="wlt" %}
 {% set rellink=restype + "#" + restype %}
@@ -151,10 +158,12 @@ and can be edited in the field above.</p>
 {% if abif_id %}
 {% set pathpart="/id/" + abif_id + "/" + rellink %}
 {% set abslink=webenv.base_url + pathpart %}
+<!-- BEGIN .hatnote -->
 <div class="hatnote">
   {{abif_id}} w-l-t table permalink:<br>
   🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
+<!-- END .hatnote -->
 {% endif %}
 <p><b>Pairwise winner(s)</b>:
   {% if copewinnerstring and FPTP_candnames %}
@@ -166,10 +175,13 @@ and can be edited in the field above.</p>
     {{ copewinnerstring }}
   {% endif %}
 </p>
+<!-- BEGIN .scaletable -->
 <div class="scaletable">
   {{ pairwise_html | safe }}
 </div>
+<!-- END .scaletable -->
 {% endif %}
+<!-- END wlt section -->
 {############ FPTP ############}
 {% set restype="FPTP" %}
 {% set rellink=restype + "#" + restype %}
@@ -180,14 +192,17 @@ and can be edited in the field above.</p>
 {% if abif_id %}
 {% set pathpart="/id/" + abif_id + "/" + rellink %}
 {% set abslink=webenv.base_url + pathpart %}
+<!-- BEGIN .hatnote -->
 <div class="hatnote">
   "FPTP" is "First-past-the-post", also known as "plurality" or "choose-one"<br>
   {{abif_id}} FPTP results permalink:<br>
   🔗<a href="{{abslink}}">{{abslink}}</a><br>
 </div>
+<!-- END .hatnote -->
 {% endif %}
 <p>{% include 'fptp-snippet.html' %}</p>
 {% endif %}
+<!-- END FPTP section -->
 {############ IRV ############}
 {% set restype="IRV" %}
 {% set rellink=restype + "#" + restype %}
@@ -201,13 +216,15 @@ and can be edited in the field above.</p>
   🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
 {% endif %}
+<!-- BEGIN results-container -->
 <div id="results-container" data-candidate-colors='{{ scorestardict.starscale.colordict | tojson | safe }}'>
     <p>{% include 'irv-snippet.html' %}</p>
-    {# {% include 'star-snippet.html' %} #}
 </div>
+<!-- END results-container -->
 
 <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endif %}
+<!-- END IRV section -->
 {############ STAR ############}
 {% set restype="STAR" %}
 {% set rellink=restype + "#" + restype %}
@@ -216,10 +233,12 @@ and can be edited in the field above.</p>
 {% if abif_id %}
 {% set pathpart="/id/" + abif_id + "/" + rellink %}
 {% set abslink=webenv.base_url + pathpart %}
+<!-- BEGIN .hatnote -->
 <div class="hatnote">
   {{abif_id}} STAR results permalink:<br>
   🔗<a href="{{abslink}}">{{abslink}}</a>
 </div>
+<!-- END .hatnote -->
 {% endif %}
 {% if scorestardict['star_lede'] %}
 <p class="description">
@@ -233,6 +252,9 @@ and can be edited in the field above.</p>
 </p>
 {% endif %}
 {% endif %}
+<!-- END STAR section -->
+<!-- END resultbox -->
 </div>
+<!-- END .resultbox -->
 <p>(<a href="/">homepage</a>)</p>
 {% endblock content %}
