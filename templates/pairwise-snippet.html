@@ -11,21 +11,66 @@
   {% for cand, color in colordict.items() %}
   .color-{{ cand | escape_css }} { background-color: {{ color }}; }
   {% endfor %}
+  .pairwise-table {
+    border-collapse: collapse;
+    margin: 1em 0;
+  }
+  .pairwise-table th, .pairwise-table td {
+    border: 1px solid #ccc;
+    padding: 0.5em;
+  }
+  .pairwise-table th {
+    text-align: left;
+    vertical-align: top;
+  }
+  .pairwise-table caption {
+    caption-side: top;
+    text-align: left;
+    font-weight: bold;
+    padding: 0.5em;
+    background-color: #a04040;
+    color: white;
+    border: 1px solid #a04040;
+  }
+  .matchup-cell-inner {
+    display: flex;
+    flex-direction: column;
+  }
+  .matchup-row {
+    display: flex;
+    justify-content: space-between;
+    white-space: nowrap;
+  }
+  .cand-name {
+    text-align: left;
+    margin-right: 1em;
+  }
+  .cand-score {
+    text-align: right;
+    font-weight: bold;
+  }
+  .pseudo-header {
+    background-color: #f2f2f2;
+  }
 </style>
 {% endif %}
 <!-- JINJA2-PAIRWISE-TEMPLATE-USED -->
 {% if desc %}<p>{{ desc }}</p>{% endif %}
 <div>
     <div class="hscroll">
-        <table border="1">
+        <table class="pairwise-table">
+            <caption>{{ title }} pairwise matchups</caption>
             <tbody>
                 {% for ck in candtoks %}
                 <tr>
-                    <th><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}</th>
-                    <td colspan="{{ candtoks|length - loop.index0 - 1 }}" style="padding-right: 3em; background-color: #f2f2f2;">({{ wltstr(ck) }})</td>
+                    <th>
+                        <span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}
+                        <br><small>({{ wltstr(ck) }})</small>
+                    </th>
+                    <td class="pseudo-header" colspan="{{ candtoks|length - loop.index0 - 1 }}"></td>
                     {# Only show victories cell if there are matchups (i.e., not the first row) AND there are wins #}
                     {% if wltdict[ck]['wins'] > 0 %}
-                    <td style="text-align: center; background-color: #f2f2f2;">
+                    <td class="pseudo-header" style="text-align: center;">
                         <div><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} victories</div>
                         <div style="float: center;">↓</div>
                     </td>
@@ -34,14 +79,20 @@
                     {% for rk in candtoks[:loop.index0]|reverse %}
                         {% set rkscore = pairdict[rk][ck] %}
                         {% set ckscore = pairdict[ck][rk] %}
-                        <td style="justify-content: center;">
-                            <div style="text-align: right;">
-                                <div style="white-space: nowrap;"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}: {{ rkscore }}</div>
-                                <div style="white-space: nowrap;"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}: {{ ckscore }}{% if not (rkscore > ckscore) %}<sup>†</sup>{% endif %}</div>
+                        <td>
+                            <div class="matchup-cell-inner">
+                                <div class="matchup-row">
+                                    <span class="cand-name"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}:</span>
+                                    <span class="cand-score">{{ rkscore }}</span>
+                                </div>
+                                <div class="matchup-row">
+                                    <span class="cand-name"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}:</span>
+                                    <span class="cand-score">{{ ckscore }}{% if not (rkscore > ckscore) %}<sup>†</sup>{% endif %}</span>
+                                </div>
                             </div>
                         </td>
                     {% endfor %}
-                    <td style="background-color: #f2f2f2;">{% if wltdict[ck]['losses'] > 0 %}← <span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} losses{% else %}<span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} is undefeated{% endif %}</td>
+                    <td class="pseudo-header">{% if wltdict[ck]['losses'] > 0 %}← <span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} losses{% else %}<span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} is undefeated{% endif %}</td>
                 </tr>
                 {% endfor %}
             </tbody>
