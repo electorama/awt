@@ -89,7 +89,6 @@
         </thead>
         <tbody>
             {% for rk in candtoks %}
-            {% if not loop.first %}
             <tr>
                 <th>
                     <div>
@@ -99,26 +98,23 @@
                 </th>
                 {% for ck in candtoks %}
                     {% if candtoks.index(rk) > candtoks.index(ck) %}
-                    <td>
-                        <div class="matchup-cell-inner">
-                            <div class="matchup-row">
-                                <span class="cand-name"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}:</span>
-                                <span class="cand-score">{{ pairdict[ck][rk] }}</span>
+                        <td>
+                            <div class="matchup-cell-inner">
+                                <div class="matchup-row">
+                                    <span class="cand-name"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}:</span>
+                                    <span class="cand-score">{{ pairdict[ck][rk] }}</span>
+                                </div>
+                                <div class="matchup-row">
+                                    <span class="cand-name"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}:</span>
+                                    <span class="cand-score">{{ pairdict[rk][ck] }}{% if not (pairdict[ck][rk] > pairdict[rk][ck]) %}<sup>†</sup>{% endif %}</span>
+                                </div>
                             </div>
-                            <div class="matchup-row">
-                                <span class="cand-name"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}:</span>
-                                <span class="cand-score">{{ pairdict[rk][ck] }}{% if not (pairdict[ck][rk] > pairdict[rk][ck]) %}<sup>†</sup>{% endif %}</span>
-                            </div>
-                        </div>
-                    </td>
+                        </td>
+                    {% else %}
+                        <td></td>
                     {% endif %}
                 {% endfor %}
-                 {# Pad the end of the row with empty cells to maintain table structure #}
-                {% for _ in range(candtoks|length - loop.index) %}
-                    <td></td>
-                {% endfor %}
             </tr>
-            {% endif %}
             {% endfor %}
         </tbody>
     </table>
