@@ -26,7 +26,7 @@
                     {# Only show victories cell if there are matchups (i.e., not the first row) AND there are wins #}
                     {% if wltdict[ck]['wins'] > 0 %}
                     <td style="text-align: center;">
-                        <div>{{ candnames[ck] }} victories</div>
+                        <div><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} victories</div>
                         <div style="float: center;">↓</div>
                     </td>
                     {% endif %}
@@ -36,12 +36,12 @@
                         {% set ckscore = pairdict[ck][rk] %}
                         <td style="justify-content: center;">
                             <div style="text-align: right;">
-                                <div style="white-space: nowrap;">{{ candnames[rk] }}: {{ rkscore }}</div>
-                                <div style="white-space: nowrap;">{{ candnames[ck] }}: {{ ckscore }}{% if not (rkscore > ckscore) %}<sup>†</sup>{% endif %}</div>
+                                <div style="white-space: nowrap;"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}: {{ rkscore }}</div>
+                                <div style="white-space: nowrap;"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}: {{ ckscore }}{% if not (rkscore > ckscore) %}<sup>†</sup>{% endif %}</div>
                             </div>
                         </td>
                     {% endfor %}
-                    <td>{% if wltdict[ck]['losses'] > 0 %}← {{ candnames[ck] }} losses{% else %}{{ candnames[ck] }} is undefeated{% endif %}</td>
+                    <td>{% if wltdict[ck]['losses'] > 0 %}← <span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} losses{% else %}<span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} is undefeated{% endif %}</td>
                 </tr>
                 {% endfor %}
             </tbody>
