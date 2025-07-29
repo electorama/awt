@@ -5,13 +5,10 @@ Test whether awt.py conforms to PEP8 standards.
 This test uses pycodestyle (formerly pep8) to check code formatting.
 """
 
-import os
-import sys
-# Add awt project root to sys.path
-AWT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if AWT_DIR not in sys.path:
-    sys.path.insert(0, AWT_DIR)
 
+import os
+import pytest
+import sys
 import subprocess
 import unittest
 from pathlib import Path
@@ -25,8 +22,8 @@ class TestPEP8Compliance(unittest.TestCase):
 
     def setUp(self):
         """Set up test environment."""
-        # Find project root (awt directory)
-        self.project_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+        awt_dir = os.environ.get('AWT_DIR') or os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        self.project_dir = Path(awt_dir)
         self.python_files = [self.project_dir / f for f in self.PYTHON_FILES]
         self.maxDiff = None  # Show full diffs for better debugging
     
