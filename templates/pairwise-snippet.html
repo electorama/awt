@@ -78,12 +78,10 @@
             <tr>
                 <th></th>
                 {% for ck in candtoks %}
-                    {% if not loop.last %}
                     <th class="pseudo-header">
                         <div><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }} victories</div>
                         <div>↓</div>
                     </th>
-                    {% endif %}
                 {% endfor %}
             </tr>
         </thead>
@@ -109,6 +107,11 @@
                                     <span class="cand-score">{{ pairdict[rk][ck] }}{% if not (pairdict[ck][rk] > pairdict[rk][ck]) %}<sup>†</sup>{% endif %}</span>
                                 </div>
                             </div>
+                        </td>
+                    {% elif rk == ck %}
+                        <td class="pseudo-header" style="background-color: #d0d0d0; text-align: center; vertical-align: middle; font-weight: bold;">
+                            <div><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }} victories</div>
+                            <div>↓</div>
                         </td>
                     {% else %}
                         <td></td>
