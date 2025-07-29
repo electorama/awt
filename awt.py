@@ -180,7 +180,7 @@ if not AWT_STATIC or not AWT_TEMPLATES:
     if not AWT_STATIC and awt_static_candidate.is_dir():
         AWT_STATIC = str(awt_static_candidate)
     if not AWT_TEMPLATES and awt_templates_candidate.is_dir():
-        AWT_TEMPLATES = str(awt_templates_candidate)
+        AWT_TEMPLATES = str(templates_candidate)
 
 missing_static = not (AWT_STATIC and Path(AWT_STATIC).is_dir())
 missing_templates = not (AWT_TEMPLATES and Path(AWT_TEMPLATES).is_dir())
@@ -627,6 +627,8 @@ def get_by_id(identifier, resulttype=None):
 
             try:
                 jabmod = convert_abif_to_jabmod(fileentry['text'])
+                if fileentry.get('desc'):
+                    jabmod['desc'] = fileentry['desc']
                 error_html = None
             except ABIFVotelineException as e:
                 jabmod = None
