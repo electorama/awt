@@ -74,18 +74,6 @@
 <div style="overflow-x:auto;">
     <table class="pairwise-table">
         <caption>{{ abifmodel.title }} pairwise matchups</caption>
-        <thead>
-            <tr>
-                <th></th>
-                {% for ck in candtoks %}
-                    {% if not loop.last %}
-                    <th class="pseudo-header">
-                        <div>↓</div>
-                    </th>
-                    {% endif %}
-                {% endfor %}
-            </tr>
-        </thead>
         <tbody>
             {% for rk in candtoks %}
             <tr>
@@ -112,7 +100,7 @@
                             </td>
                         {% elif rk == ck %}
                             <td class="pseudo-header" style="background-color: #d0d0d0; text-align: center; vertical-align: middle; font-weight: bold; border-left: 3px solid #999;">
-                                <div><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }} victories ▼</div>
+                                <div><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }} <br/><= losses / victories ▼</div>
                             </td>
                         {% else %}
                             {% if candtoks.index(rk) < candtoks.index(ck) %}
