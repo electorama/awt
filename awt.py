@@ -80,6 +80,7 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_des
     template = env.get_template('pairwise-snippet.html')
     html = template.render(
         title=abifmodel.get('title', 'Pairwise Table'),
+        abifmodel=abifmodel,
         desc=desc,
         candtoks=candtoks,
         candnames=candnames,
