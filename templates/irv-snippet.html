@@ -168,7 +168,7 @@
             {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
-            {% if round.transfers or round.hypothetical_transfers %}
+            {% if round.transfers or round.next_choices %}
               <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
                 <!-- Data bar segments will be populated by JavaScript -->
                 <div class="transfer-arrow">→</div>
@@ -190,7 +190,7 @@
               (eliminated)
             {% endif %}
             {% set round = IRV_dict['roundmeta'][i] %}
-            {% if round.transfers or round.hypothetical_transfers %}
+            {% if round.transfers or round.next_choices %}
               <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
                 <!-- Data bar segments will be populated by JavaScript -->
                 <div class="transfer-arrow">→</div>
@@ -205,7 +205,7 @@
             {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
-            {% if round.transfers or round.hypothetical_transfers %}
+            {% if round.transfers or round.next_choices %}
               <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
                 <!-- Data bar segments will be populated by JavaScript -->
                 <div class="transfer-arrow">→</div>

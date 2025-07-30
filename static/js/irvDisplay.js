@@ -78,21 +78,21 @@ function getIrvPopoverContent(roundIndex, candidateKey) {
     // Check actual transfers
     if (roundData.transfers && roundData.transfers[candidateKey]) {
         const transferLabel = isFinalRound ?
-            `Second choices in final round on ballots listing ${candidateName} first:` :
+            `Next choices in final round on ballots listing ${candidateName} first:` :
             `Transfer of ${candidateName}'s votes:`;
         content += `<div style="margin-bottom: 8px;"><strong>${transferLabel}</strong></div>`;
-        content += formatCandidateSecondChoices(roundData.transfers[candidateKey]);
+        content += formatCandidateNextChoices(roundData.transfers[candidateKey]);
         hasContent = true;
     }
 
     // Check hypothetical transfers
-    if (roundData.hypothetical_transfers && roundData.hypothetical_transfers[candidateKey]) {
+    if (roundData.next_choices && roundData.next_choices[candidateKey]) {
         if (hasContent) {
             content += '<hr style="margin: 8px 0;">';
         }
-        const hypotheticalLabel = `Remaining second choices in round ${roundIndex + 1} on ballots listing ${candidateName} first:`;
+        const hypotheticalLabel = `Remaining next choices in round ${roundIndex + 1} on ballots listing ${candidateName} first:`;
         content += `<div style="margin-bottom: 8px;"><strong>${hypotheticalLabel}</strong></div>`;
-        content += formatCandidateSecondChoices(roundData.hypothetical_transfers[candidateKey]);
+        content += formatCandidateNextChoices(roundData.next_choices[candidateKey]);
         hasContent = true;
     }
 
@@ -104,11 +104,11 @@ function getIrvPopoverContent(roundIndex, candidateKey) {
 }
 
 /**
- * Formats the second-choice transfer data into HTML.
+ * Formats the next-choice transfer data into HTML.
  * @param {object} transfers The transfer data object.
  * @returns {string} HTML representation of the transfers.
  */
-function formatCandidateSecondChoices(transfers) {
+function formatCandidateNextChoices(transfers) {
     let html = '';
     let totalVotes = 0;
 
@@ -150,7 +150,7 @@ function initializeDataBars() {
         document.querySelectorAll(`.irv-transfer-indicator[data-round-index="${roundIndex}"]`).forEach(indicator => {
             const candidateKey = indicator.dataset.candidateKey;
             const transferData = (roundData.transfers && roundData.transfers[candidateKey]) ||
-                                 (roundData.hypothetical_transfers && roundData.hypothetical_transfers[candidateKey]);
+                                 (roundData.next_choices && roundData.next_choices[candidateKey]);
 
             if (transferData) {
                 const dataBarHTML = createDataBar(transferData);
