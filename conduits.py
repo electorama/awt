@@ -54,6 +54,8 @@ class ResultConduit:
         irv_dict = self.resblob['IRV_dict']
         if 'roundmeta' in irv_dict:
             for round_meta in irv_dict['roundmeta']:
+                if 'hypothetical_transfers' in round_meta:
+                    round_meta['next_choices'] = round_meta.pop('hypothetical_transfers')
                 for key in ['eliminated', 'all_eliminated', 'bottomtie']:
                     if key in round_meta and isinstance(round_meta[key], set):
                         round_meta[key] = list(round_meta[key])
