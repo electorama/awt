@@ -169,7 +169,7 @@
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand | escape_css }}">
+              <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
                 <!-- Data bar segments will be populated by JavaScript -->
                 <div class="transfer-arrow">→</div>
               </div>
@@ -191,7 +191,7 @@
             {% endif %}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand | escape_css }}">
+              <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
                 <!-- Data bar segments will be populated by JavaScript -->
                 <div class="transfer-arrow">→</div>
               </div>
@@ -206,7 +206,7 @@
             {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.hypothetical_transfers %}
-              <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand | escape_css }}">
+              <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
                 <!-- Data bar segments will be populated by JavaScript -->
                 <div class="transfer-arrow">→</div>
               </div>
