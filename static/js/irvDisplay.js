@@ -148,7 +148,7 @@ function formatCandidateNextChoices(transfers, candidateName) {
 
     const formattedTotal = totalVotes.toLocaleString();
     const overallPercentage = startingQty > 0 ? ((totalVotes / startingQty) * 100).toFixed(1) : '0.0';
-    html += `<div style="margin-top: 8px; font-weight: bold; font-size: 11px;">${candidateName} Total: ${formattedTotal} ballots (${overallPercentage}% of total)</div>`;
+    html += `<div style="margin-top: 8px; font-weight: bold; font-size: 11px;">${candidateName} Total: ${formattedTotal} ballots (${overallPercentage}% of overall total)</div>`;
     return html;
 }
 
