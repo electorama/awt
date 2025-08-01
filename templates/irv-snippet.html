@@ -123,12 +123,12 @@
     </li>
     <li>Number of rounds: {{numrounds}}</li>
     <li>Total ballots: {{ "{:,}".format(startingqty) }}
-      ({{ "%.1f"|format(startingqty / startingqty * 100) }}%)
+      ({{ "%.1f"|format(100.0 if startingqty else 0) }}%)
     </li>
     <li>Majority of ballots: {{ "{:,}".format(majority) }}
-        ({{ "%.3f"|format(majority / startingqty * 100) }}%)</li>
+        ({{ "%.3f"|format((majority / startingqty * 100) if startingqty else 0) }}%)</li>
     <li>Ballots counted in final round: {{ "{:,}".format(IRV_dict['roundmeta'][-1]['countedqty']) }}
-        ({{ "%.3f"|format(IRV_dict['roundmeta'][-1]['countedqty'] / startingqty * 100) }}%)</li>
+        ({{ "%.1f"|format((IRV_dict['roundmeta'][-1]['countedqty'] / startingqty * 100) if startingqty else 0) }}%)</li>
   </ul>
   <div class="hscroll">
   <table>
@@ -144,24 +144,24 @@
       <td><b>Overview</b>:<br>
         {% set threshold=round['countedqty'] // 2 + 1 %}
         <small>Active ballots: {{ "{:,}".format(round['startingqty']) }}
-          ({{ "%.1f"|format(round['startingqty'] / startingqty * 100) }}%)<br/>
+          ({{ "%.1f"|format((round['startingqty'] / startingqty * 100) if startingqty else 0) }}%)<br/>
           <br/>
           Exhausted ballots:
                 {{ "{:,}".format(round['exhaustedqty']) }}
-                ({{ "%.1f"|format(round['exhaustedqty'] / startingqty * 100) }}%)<br/>
+                ({{ "%.1f"|format((round['exhaustedqty'] / startingqty * 100) if startingqty else 0) }}%)<br/>
           {% if round['overvoteqty'] > 0 %}
           Overvotes:
             {{ "{:,}".format(round['overvoteqty']) }}
-            ({{ "%.1f"|format(round['overvoteqty'] / startingqty * 100) }}%)<br/>
+            ({{ "%.1f"|format((round['overvoteqty'] / startingqty * 100) if startingqty else 0) }}%)<br/>
             <br>
           {% set flags.overvote=true %}
             {% endif %}
             Counted ballots: {{ "{:,}".format(round['countedqty']) }}
-            ({{ "%.1f"|format(round['countedqty'] / startingqty * 100) }}%)
+            ({{ "%.1f"|format((round['countedqty'] / startingqty * 100) if startingqty else 0) }}%)
             <br>
           {% if threshold < majority %}
           Winning threshold: {{ "{:,}".format(threshold) }} 
-          ({{ "%.2f"|format(threshold / startingqty * 100) }}%)<br/>
+          ({{ "%.2f"|format((threshold / startingqty * 100) if startingqty else 0) }}%)<br/>
           {% endif %}
           {% if round['bottomtie'] %}
           TIE(†): {{ round['bottomtie'] | join(", ") }} <br/>
