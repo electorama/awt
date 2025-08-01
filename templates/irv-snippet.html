@@ -122,8 +122,8 @@
       {% endif %}
     </li>
     <li>Number of rounds: {{numrounds}}</li>
-    <li>Total ballots: {{startingqty}}
-    <li>Majority of ballots: {{majority}}
+    <li>Total ballots: {{ "{:,}".format(startingqty) }}
+    <li>Majority of ballots: {{ "{:,}".format(majority) }}
   </ul>
   <div class="hscroll">
   <table>
@@ -138,17 +138,17 @@
       {% set round = IRV_dict['roundmeta'][i] %}
       <td><b>Overview</b>:<br>
         {% set threshold=round['countedqty'] // 2 + 1 %}
-        <small>Starting ballots: {{round['startingqty'] }}<br/>
+        <small>Starting ballots: {{ "{:,}".format(round['startingqty']) }}<br/>
           Exhausted ballots:
-                {{round['exhaustedqty'] }}<br>
+                {{ "{:,}".format(round['exhaustedqty']) }}<br>
           {% if round['overvoteqty'] > 0 %}
           Overvotes:
-            {{round['overvoteqty'] }}<br>
+            {{ "{:,}".format(round['overvoteqty']) }}<br>
           {% set flags.overvote=true %}
             {% endif %}
-            Counted ballots: {{round['countedqty'] }}<br>
+            Counted ballots: {{ "{:,}".format(round['countedqty']) }}<br>
           {% if threshold < majority %}
-          Minimum plurality: {{threshold}}<br/>
+          Minimum plurality: {{ "{:,}".format(threshold) }}<br/>
           {% endif %}
           {% if round['bottomtie'] %}
           TIE(†): {{ round['bottomtie'] | join(", ") }} <br/>
@@ -171,7 +171,7 @@
         {% if cand in winner and (i + 1) == numrounds %}
           <td class="irv-cell {{ colclass }}"><b>IRV/RCV winner</b>:<br>
             {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
-            {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
+            {{ IRV_candnames.get(cand, cand) }}: {{ "{:,}".format(round_data.get(cand, 0)) }} ({{ "%.1f"|format((round_data.get(cand, 0) / startingqty * 100) if startingqty else 0) }}%)
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.next_choices %}
               <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">
@@ -186,7 +186,7 @@
         {% elif round_data.get(cand) and cand in round_meta.get('eliminated', []) %}
           <td class="new-elim irv-cell {{ colclass }}">
             {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
-            {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
+            {{ IRV_candnames.get(cand, cand) }}: {{ "{:,}".format(round_data.get(cand, 0)) }} ({{ "%.1f"|format((round_data.get(cand, 0) / startingqty * 100) if startingqty else 0) }}%)
             {% if round_meta.get('batch_elim') %}
               (batch eliminated †)
             {% elif cand in round_meta.get('bottomtie', []) %}
@@ -208,7 +208,7 @@
         {% elif round_data.get(cand) %}
           <td class="irv-cell {{ colclass }}">
             {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
-            {{ IRV_candnames.get(cand, cand) }}: {{ round_data.get(cand) }}
+            {{ IRV_candnames.get(cand, cand) }}: {{ "{:,}".format(round_data.get(cand, 0)) }} ({{ "%.1f"|format((round_data.get(cand, 0) / startingqty * 100) if startingqty else 0) }}%)
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.next_choices %}
               <div class="irv-transfer-indicator" data-round-index="{{ i }}" data-candidate-key="{{ cand }}">

@@ -3,6 +3,7 @@ import { showPopover, hidePopover } from './popover.js';
 let roundsData = [];
 let candidateNames = {};
 let candidateColors = {};
+let startingQty = 0;
 
 /**
  * Gets the color for a specific candidate.
@@ -35,6 +36,10 @@ export function initializeIrvDisplay() {
     try {
         roundsData = JSON.parse(container.dataset.roundsData);
         candidateNames = JSON.parse(container.dataset.candidateNames);
+        // Extract starting quantity from the first round's metadata
+        if (roundsData.length > 0 && roundsData[0].startingqty) {
+            startingQty = roundsData[0].startingqty;
+        }
     } catch (e) {
         console.error('Failed to parse IRV data from container:', e);
         return;
@@ -81,7 +86,7 @@ function getIrvPopoverContent(roundIndex, candidateKey) {
             `Next choices in final round on ballots listing ${candidateName} first:` :
             `Transfer of ${candidateName}'s votes:`;
         content += `<div style="margin-bottom: 8px;"><strong>${transferLabel}</strong></div>`;
-        content += formatCandidateNextChoices(roundData.transfers[candidateKey]);
+        content += formatCandidateNextChoices(roundData.transfers[candidateKey], candidateName);
         hasContent = true;
     }
 
@@ -92,7 +97,7 @@ function getIrvPopoverContent(roundIndex, candidateKey) {
         }
         const hypotheticalLabel = `Remaining next choices in round ${roundIndex + 1} on ballots listing ${candidateName} first:`;
         content += `<div style="margin-bottom: 8px;"><strong>${hypotheticalLabel}</strong></div>`;
-        content += formatCandidateNextChoices(roundData.next_choices[candidateKey]);
+        content += formatCandidateNextChoices(roundData.next_choices[candidateKey], candidateName);
         hasContent = true;
     }
 
@@ -106,9 +111,10 @@ function getIrvPopoverContent(roundIndex, candidateKey) {
 /**
  * Formats the next-choice transfer data into HTML.
  * @param {object} transfers The transfer data object.
+ * @param {string} candidateName The name of the candidate whose transfers are being shown.
  * @returns {string} HTML representation of the transfers.
  */
-function formatCandidateNextChoices(transfers) {
+function formatCandidateNextChoices(transfers, candidateName) {
     let html = '';
     let totalVotes = 0;
 
@@ -133,12 +139,16 @@ function formatCandidateNextChoices(transfers) {
 
     transferArray.forEach(transfer => {
         const colorBox = `<span style="display: inline-block; width: 12px; height: 12px; background-color: ${transfer.color}; border: 1px solid #333; margin-right: 6px; vertical-align: middle;"></span>`;
-        const percentageStr = transfer.percentage ? ` (${transfer.percentage})` : '';
-        const label = transfer.isExhausted ? `Exhausted: ${transfer.votes}` : `${transfer.votes} → ${transfer.destination}`;
+        const formattedVotes = transfer.votes.toLocaleString();
+        const transferPercentage = totalVotes > 0 ? ((transfer.votes / totalVotes) * 100).toFixed(1) : '0.0';
+        const percentageStr = transfer.percentage ? ` (${transfer.percentage})` : ` (${transferPercentage}%)`;
+        const label = transfer.isExhausted ? `Exhausted: ${formattedVotes}` : `${formattedVotes} → ${transfer.destination}`;
         html += `<div style="margin-left: 15px; margin-bottom: 2px; font-size: 11px;">${colorBox}${label}${percentageStr}</div>`;
     });
 
-    html += `<div style="margin-top: 8px; font-weight: bold; font-size: 11px;">Total: ${totalVotes} ballots</div>`;
+    const formattedTotal = totalVotes.toLocaleString();
+    const overallPercentage = startingQty > 0 ? ((totalVotes / startingQty) * 100).toFixed(1) : '0.0';
+    html += `<div style="margin-top: 8px; font-weight: bold; font-size: 11px;">${candidateName} Total: ${formattedTotal} ballots (${overallPercentage}% of total)</div>`;
     return html;
 }
 
