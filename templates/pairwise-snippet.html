@@ -1,81 +1,9 @@
 {# Jinja2 template for pairwise/win-loss-tie table (migrated to awt) #}
 {% if colordict %}
 <style type="text/css">
-  .colorblock {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    border: 1px solid #666;
-    vertical-align: middle;
-  }
   {% for cand, color in colordict.items() %}
   .color-{{ cand | escape_css }} { background-color: {{ color }}; }
   {% endfor %}
-  .pairwise-table {
-    border-collapse: collapse;
-    margin: 1em 0;
-    width: 100%;
-  }
-  .pairwise-table th, .pairwise-table td {
-    border: 1px solid #ccc;
-    padding: 0.4em;
-  }
-  .pairwise-table th {
-    background-color: #f2f2f2;
-    color: black;
-    min-width: 10em;
-    text-align: left;
-    vertical-align: top;
-    word-wrap: break-word;
-  }
-  .wlt-score {
-    display: block;
-    text-align: right;
-    font-size: 0.9em;
-    margin-top: 0.2em;
-  }
-  .pairwise-table caption {
-    caption-side: top;
-    text-align: center;
-    font-weight: bold;
-    padding: 0.5em;
-    background-color: rgb(208, 41, 41);
-    color: white;
-    border: 1px solid rgb(208, 41, 41);
-  }
-  .matchup-cell-inner {
-    display: flex;
-    flex-direction: column;
-    min-height: 2.5em;
-  }
-  .matchup-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0.1em 0;
-    font-size: 1em;
-  }
-  .cand-name {
-    text-align: left;
-    margin-right: 0.5em;
-    flex: 1;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-  .cand-score {
-    text-align: right;
-    font-weight: bold;
-    white-space: nowrap;
-  }
-  .pseudo-header {
-    background-color: #e8e8e8;
-    font-style: italic;
-    text-align: center;
-    vertical-align: top;
-  }
-  .pairwise-table thead th {
-    vertical-align: bottom;
-  }
 </style>
 {% endif %}
 <!-- JINJA2-PAIRWISE-TEMPLATE-USED -->
@@ -90,7 +18,7 @@
                     <div>
                         <span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}
                     </div>
-                    <small class="wlt-score">({{ wltstr(rk) }})</small>
+                    <small class="wlt-score">({{ "{:,}".format(wltdict[rk]['wins']) }}-{{ "{:,}".format(wltdict[rk]['losses']) }}-{{ "{:,}".format(wltdict[rk]['ties']) }})</small>
                 </th>
                 {% for ck in candtoks %}
                     {% if not loop.last %}
@@ -99,29 +27,34 @@
                                 <div class="matchup-cell-inner">
                                     <div class="matchup-row">
                                         <span class="cand-name"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}:</span>
-                                        <span class="cand-score">{{ pairdict[ck][rk] }}</span>
+                                        {% set total_votes = pairdict[ck][rk] + pairdict[rk][ck] %}
+                                        {% set ck_score = pairdict[ck][rk] %}
+                                        {% set ck_percentage = (ck_score / total_votes * 100) if total_votes > 0 else 0 %}
+                                        <span class="cand-score">{{ "{:,}".format(ck_score) }}<span class="score-percentage">({{ "%.1f"|format(ck_percentage) }}%)</span></span>
                                     </div>
                                     <div class="matchup-row">
                                         <span class="cand-name"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}:</span>
-                                        <span class="cand-score">{{ pairdict[rk][ck] }}{% if not (pairdict[ck][rk] > pairdict[rk][ck]) %}<sup>†</sup>{% endif %}</span>
+                                        {% set rk_score = pairdict[rk][ck] %}
+                                        {% set rk_percentage = (rk_score / total_votes * 100) if total_votes > 0 else 0 %}
+                                        <span class="cand-score">{{ "{:,}".format(rk_score) }}<span class="score-percentage">({{ "%.1f"|format(rk_percentage) }}%)</span>{% if not (pairdict[ck][rk] > pairdict[rk][ck]) %}<sup>†</sup>{% endif %}</span>
                                     </div>
                                 </div>
                             </td>
                         {% elif rk == ck %}
-                            <td class="pseudo-header" style="background-color: #d0d0d0; text-align: center; vertical-align: middle; font-weight: bold; border-left: 3px solid #999; font-size: 0.95em;">
+                            <td class="pseudo-header">
                                 <div><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }} <br/>
                                 {% if loop.index0 == 0 %}
-                                    {{ wltdict[rk]['wins'] }} victor{{ 'y' if wltdict[rk]['wins'] == 1 else 'ies' }} ⇣
+                                    {{ "{:,}".format(wltdict[rk]['wins']) }} victor{{ 'y' if wltdict[rk]['wins'] == 1 else 'ies' }} ⇣
                                 {% else %}
-                                    ⇽ {{ wltdict[rk]['losses'] }} loss{{ 'es' if wltdict[rk]['losses'] != 1 else '' }} / {{ wltdict[rk]['wins'] }} victor{{ 'y' if wltdict[rk]['wins'] == 1 else 'ies' }} ⇣
+                                    ⇽ {{ "{:,}".format(wltdict[rk]['losses']) }} loss{{ 'es' if wltdict[rk]['losses'] != 1 else '' }} / {{ "{:,}".format(wltdict[rk]['wins']) }} victor{{ 'y' if wltdict[rk]['wins'] == 1 else 'ies' }} ⇣
                                 {% endif %}
                                 </div>
                             </td>
                         {% else %}
                             {% if candtoks.index(rk) < candtoks.index(ck) %}
-                                <td style="background-color: #f5f5f5;"></td>
+                                <td class="greyedOut"></td>
                             {% else %}
-                                <td></td>
+                                <td class="greyedOut"></td>
                             {% endif %}
                         {% endif %}
                     {% endif %}

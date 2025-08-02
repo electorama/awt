@@ -1,8 +1,4 @@
 <style>
-.greyedOut {
-    color: darkgrey;
-    background-color: lightgrey;
-}
 .highblue {
     background-color: #cceff6;
 }
@@ -91,8 +87,8 @@
 .irv-popover.show {
     display: block;
 }
-{% if scorestardict and scorestardict.starscale and scorestardict.starscale.colordict %}
-{% for cand, color in scorestardict.starscale.colordict.items() %}
+{% if colordict %}
+{% for cand, color in colordict.items() %}
 .irv-color-{{ cand | escape_css }} { background-color: {{ color }}; }
 {% endfor %}
 {% endif %}
@@ -183,7 +179,7 @@
         {% set colclass = "first-col" if i == 0 else "" %}
         {% if cand in winner and (i + 1) == numrounds %}
           <td class="irv-cell {{ colclass }}"><b>IRV/RCV winner</b>:<br>
-            {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
+            {% if colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ "{:,}".format(round_data.get(cand, 0)) }}
             ({{ "%.1f"|format((round_data.get(cand, 0) / startingqty * 100) if startingqty else 0) }}%)✅
             {% set round = IRV_dict['roundmeta'][i] %}
@@ -199,7 +195,7 @@
           </td>
         {% elif round_data.get(cand) and cand in round_meta.get('eliminated', []) %}
           <td class="new-elim irv-cell {{ colclass }}">
-            {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
+            {% if colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ "{:,}".format(round_data.get(cand, 0)) }} ({{ "%.1f"|format((round_data.get(cand, 0) / startingqty * 100) if startingqty else 0) }}%)
             {% if round_meta.get('batch_elim') %}
               (🛑batch eliminated †)
@@ -221,7 +217,7 @@
           </td>
         {% elif round_data.get(cand) %}
           <td class="irv-cell {{ colclass }}">
-            {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
+            {% if colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}"></span>{% endif %}
             {{ IRV_candnames.get(cand, cand) }}: {{ "{:,}".format(round_data.get(cand, 0)) }} ({{ "%.1f"|format((round_data.get(cand, 0) / startingqty * 100) if startingqty else 0) }}%)
             {% set round = IRV_dict['roundmeta'][i] %}
             {% if round.transfers or round.next_choices %}
@@ -236,7 +232,7 @@
           </td>
         {% else %}
           <td class="greyedOut irv-cell {{ colclass }}">
-            {% if scorestardict.starscale.colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}" style="opacity: 0.5;"></span>{% endif %}
+            {% if colordict.get(cand) %}<span class="irv-colorblock irv-color-{{ cand | escape_css }}" style="opacity: 0.5;"></span>{% endif %}
             <s>{{ IRV_candnames.get(cand, cand) }}</s>
           </td>
         {% endif %}
