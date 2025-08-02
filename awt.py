@@ -395,13 +395,18 @@ def get_all_tags_in_election_list(election_list):
     return retval
 
 
-def add_html_hints_to_stardict(scores, stardict):
+def add_html_hints_to_stardict(scores, stardict, colordict=None):
     retval = stardict
     retval['starscaled'] = {}
     retval['colordict'] = {}
     retval['colorlines'] = {}
 
-    colors = generate_candidate_colors(scores['ranklist'])
+    # Use provided colordict or generate from scores ranklist
+    if colordict:
+        # Reorder the provided colordict to match scores ranklist order
+        colors = {cand: colordict.get(cand, '#cccccc') for cand in scores['ranklist']}
+    else:
+        colors = generate_candidate_colors(scores['ranklist'])
     retval['colordict'] = colors
 
     curstart = 1
@@ -671,14 +676,51 @@ def get_by_id(identifier, resulttype=None):
                 f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
             debug_output += f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
 
+            # Create consistent candidate ordering based on FPTP results for colors (do this early)
+            resblob = resconduit.resblob
+            if jabmod and 'FPTP_result' in resblob:
+                # Sort candidates by FPTP vote count (descending)
+                # The actual vote counts are in resblob['FPTP_result']['toppicks']
+                fptp_toppicks = resblob['FPTP_result'].get('toppicks', {})
+                if fptp_toppicks:
+                    # Handle cases where vote counts might be lists or other types
+                    def get_vote_count(item):
+                        cand, votes = item
+                        if isinstance(votes, (int, float)):
+                            return votes
+                        elif isinstance(votes, list) and len(votes) > 0:
+                            return votes[0] if isinstance(votes[0], (int, float)) else 0
+                        else:
+                            return 0
+
+                    fptp_ordered_candidates = sorted(fptp_toppicks.items(),
+                                                     key=get_vote_count, reverse=True)
+                    candidate_order = [cand for cand, votes in fptp_ordered_candidates if cand is not None]
+                else:
+                    # Fallback to alphabetical if no toppicks
+                    candidate_order = sorted(jabmod['candidates'].keys())
+            elif jabmod:
+                # Fallback to alphabetical if no FPTP results
+                candidate_order = sorted(jabmod['candidates'].keys())
+            else:
+                candidate_order = []
+
+            # Generate single color dictionary for all voting systems
+            consistent_colordict = generate_candidate_colors(
+                [c for c in candidate_order if c is not None])
+
             t_star = time.time()
-            resconduit = resconduit.update_STAR_result(ratedjabmod)
+            resconduit = resconduit.update_STAR_result(
+                ratedjabmod, consistent_colordict)
             star_time = time.time() - t_star
             print(
                 f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
             debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
             resblob = resconduit.resblob
-            resblob['colordict'] = generate_candidate_colors(jabmod['candidates'].keys()) if jabmod else {}
+
+            # Store the consistent colordict and candidate order
+            resblob['colordict'] = consistent_colordict
+            resblob['candidate_order'] = candidate_order
 
             pairwise_dict = pairwise_count_dict(jabmod)
             wltdict = winlosstie_dict_from_pairdict(
@@ -703,6 +745,7 @@ def get_by_id(identifier, resulttype=None):
             print(
                 f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
             debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+
             if prof:
                 prof.disable()
                 prof.dump_stats(cprof_path)
@@ -716,8 +759,10 @@ def get_by_id(identifier, resulttype=None):
                                    error_html=resblob.get('error_html'),
                                    IRV_dict=resblob['IRV_dict'],
                                    IRV_text=resblob['IRV_text'],
-                                   IRV_candnames=jabmod.get('candidates', {}) if jabmod else {},
-                                   FPTP_candnames=jabmod.get('candidates', {}) if jabmod else {},
+                                   IRV_candnames=jabmod.get(
+                                       'candidates', {}) if jabmod else {},
+                                   FPTP_candnames=jabmod.get(
+                                       'candidates', {}) if jabmod else {},
                                    lower_abif_caption="Input",
                                    lower_abif_text=fileentry['text'],
                                    msgs=msgs,
@@ -726,8 +771,11 @@ def get_by_id(identifier, resulttype=None):
                                    resblob=resblob,
                                    result_types=rtypelist,
                                    STAR_html=resblob['STAR_html'],
-                                   scorestardict=resblob.get('scorestardict', {'starscale': {'colordict': ratedjabmod.get('colordict', {})}}),
+                                   scorestardict=resblob.get('scorestardict', {'starscale': {
+                                                             'colordict': ratedjabmod.get('colordict', {})}}),
                                    colordict=resblob.get('colordict', {}),
+                                   candidate_order=resblob.get(
+                                       'candidate_order', []),
                                    webenv=webenv,
                                    debug_output=debug_output,
                                    debug_flag=webenv['debugFlag'],
@@ -763,6 +811,9 @@ def awt_post():
     debug_dict = {}
     debug_output = ""
     rtypelist = []
+    resblob = {}  # Initialize resblob early
+    consistent_colordict = {}  # Initialize colordict early
+    candidate_order = []  # Initialize candidate_order early
     try:
         abifmodel = convert_abif_to_jabmod(abifinput,
                                            cleanws=True)
@@ -821,14 +872,51 @@ def awt_post():
             IRV_text = resconduit.resblob['IRV_text']
             # Add candidate full names for template use
             IRV_candnames = abifmodel.get('candidates', {})
+        # Create consistent candidate ordering based on FPTP results for colors (do this early)
+        resblob = resconduit.resblob
+        if abifmodel and 'FPTP_result' in resblob:
+            # Sort candidates by FPTP vote count (descending)
+            # The actual vote counts are in resblob['FPTP_result']['toppicks']
+            fptp_toppicks = resblob['FPTP_result'].get('toppicks', {})
+            if fptp_toppicks:
+                # Handle cases where vote counts might be lists or other types
+                def get_vote_count(item):
+                    cand, votes = item
+                    if isinstance(votes, (int, float)):
+                        return votes
+                    elif isinstance(votes, list) and len(votes) > 0:
+                        return votes[0] if isinstance(votes[0], (int, float)) else 0
+                    else:
+                        return 0
+
+                fptp_ordered_candidates = sorted(fptp_toppicks.items(),
+                                                 key=get_vote_count, reverse=True)
+                candidate_order = [
+                    cand for cand, votes in fptp_ordered_candidates if cand is not None]
+            else:
+                # Fallback to alphabetical if no toppicks
+                candidate_order = sorted(abifmodel['candidates'].keys())
+        elif abifmodel:
+            # Fallback to alphabetical if no FPTP results
+            candidate_order = sorted(abifmodel['candidates'].keys())
+        else:
+            candidate_order = []
+
+        # Generate single color dictionary for all voting systems
+        consistent_colordict = generate_candidate_colors(
+            [c for c in candidate_order if c is not None])
+
         if request.form.get('include_STAR'):
             rtypelist.append('STAR')
             ratedjabmod = add_ratings_to_jabmod_votelines(abifmodel)
-            resconduit = resconduit.update_STAR_result(ratedjabmod)
+            resconduit = resconduit.update_STAR_result(ratedjabmod, consistent_colordict)
             STAR_html = jinja_scorestar_snippet(ratedjabmod)
             scorestardict = resconduit.resblob['scorestardict']
         resblob = resconduit.resblob
-        resblob['colordict'] = generate_candidate_colors(abifmodel['candidates'].keys()) if abifmodel else {}
+
+        # Store the consistent colordict and candidate order
+        resblob['colordict'] = consistent_colordict
+        resblob['candidate_order'] = candidate_order
 
     msgs = {}
     msgs['pagetitle'] = \
@@ -847,10 +935,13 @@ def awt_post():
                            STAR_html=STAR_html,
                            IRV_dict=IRV_dict,
                            IRV_text=IRV_text,
-                           IRV_candnames=abifmodel.get('candidates', {}) if abifmodel else {},
-                           FPTP_candnames=abifmodel.get('candidates', {}) if abifmodel else {},
+                           IRV_candnames=abifmodel.get(
+                               'candidates', {}) if abifmodel else {},
+                           FPTP_candnames=abifmodel.get(
+                               'candidates', {}) if abifmodel else {},
                            scorestardict=scorestardict,
                            colordict=resblob.get('colordict', {}),
+                           candidate_order=resblob.get('candidate_order', []),
                            webenv=webenv,
                            error_html=error_html,
                            lower_abif_caption="Input",

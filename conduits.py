@@ -55,7 +55,8 @@ class ResultConduit:
         if 'roundmeta' in irv_dict:
             for round_meta in irv_dict['roundmeta']:
                 if 'hypothetical_transfers' in round_meta:
-                    round_meta['next_choices'] = round_meta.pop('hypothetical_transfers')
+                    round_meta['next_choices'] = round_meta.pop(
+                        'hypothetical_transfers')
                 for key in ['eliminated', 'all_eliminated', 'bottomtie']:
                     if key in round_meta and isinstance(round_meta[key], set):
                         round_meta[key] = list(round_meta[key])
@@ -81,7 +82,7 @@ class ResultConduit:
             self.resblob['colordict'] = {}
         return self
 
-    def update_STAR_result(self, jabmod) -> "ResultConduit":
+    def update_STAR_result(self, jabmod, colordict=None) -> "ResultConduit":
         scorestar = {}
         self.resblob['STAR_html'] = html_score_and_star(jabmod)
         scoremodel = STAR_result_from_abifmodel(jabmod)
@@ -89,7 +90,8 @@ class ResultConduit:
         stardict = scaled_scores(jabmod, target_scale=50)
         from awt import add_html_hints_to_stardict
         scorestar['starscale'] = \
-            add_html_hints_to_stardict(scorestar['scoremodel'], stardict)
+            add_html_hints_to_stardict(
+                scorestar['scoremodel'], stardict, colordict)
         if jabmod['metadata'].get('is_ranking_to_rating'):
             scorestar['star_foot'] = \
                 'NOTE: Since ratings or stars are not present in the provided ballots, ' + \
