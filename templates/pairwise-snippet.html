@@ -10,7 +10,7 @@
 {% if desc %}<p>{{ desc }}</p>{% endif %}
 <div style="overflow-x:auto;">
     <table class="pairwise-table">
-        <caption>{{ abifmodel.title }} pairwise matchups</caption>
+        <caption>{{ title | e }} pairwise matchups</caption>
         <tbody>
             {% for rk in candtoks %}
             <tr>

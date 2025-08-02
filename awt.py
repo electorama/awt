@@ -635,6 +635,8 @@ def get_by_id(identifier, resulttype=None):
                 jabmod = convert_abif_to_jabmod(fileentry['text'])
                 if fileentry.get('desc'):
                     jabmod['desc'] = fileentry['desc']
+                if fileentry.get('title'):
+                    jabmod['title'] = fileentry['title']
                 error_html = None
             except ABIFVotelineException as e:
                 jabmod = None
