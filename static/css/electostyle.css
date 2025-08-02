@@ -244,7 +244,7 @@ svg {
     text-align: left;
     vertical-align: top;
     word-wrap: break-word;
-    font-weight: 600;
+    font-weight: normal;
 }
 
 .pairwise-table caption {
@@ -252,7 +252,7 @@ svg {
     text-align: center;
     font-weight: bold;
     padding: 0.5em;
-    background-color: rgb(208, 41, 41); /* Restore red header */
+    background-color: rgb(208, 41, 41);
     color: white;
     border: 1px solid rgb(208, 41, 41);
 }
@@ -263,7 +263,6 @@ svg {
     font-size: 0.85em;
     margin-top: 0.2em;
     font-weight: normal;
-    color: #666;
 }
 
 .matchup-cell-inner {
@@ -301,12 +300,10 @@ svg {
 }
 
 .pseudo-header {
-    background-color: #f0f0f0;
+    background-color: #f5f5f5;
     font-style: italic;
     text-align: center;
-    vertical-align: top;
-    font-weight: 500;
-    /* Remove the dark grey border */
+    vertical-align: bottom;
 }
 
 .colorblock {
