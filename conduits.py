@@ -14,6 +14,10 @@ from abiflib import (
     STAR_result_from_abifmodel,
     scaled_scores
 )
+from abiflib.approval_tally import (
+    approval_result_from_abifmodel,
+    get_approval_report
+)
 from html_util import generate_candidate_colors
 
 from dataclasses import dataclass, field
@@ -97,6 +101,12 @@ class ResultConduit:
                 'NOTE: Since ratings or stars are not present in the provided ballots, ' + \
                 'allocated stars are estimated using a Borda-like formula.'
         self.resblob['scorestardict'] = scorestar
+        return self
+
+    def update_approval_result(self, jabmod) -> "ResultConduit":
+        """Add approval voting result to resblob"""
+        self.resblob['approval_result'] = approval_result_from_abifmodel(jabmod)
+        self.resblob['approval_text'] = get_approval_report(jabmod)
         return self
 
     def update_all(self, jabmod):

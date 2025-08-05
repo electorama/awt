@@ -17,6 +17,11 @@ from abiflib import (
     add_ratings_to_jabmod_votelines,
     get_abiftool_dir
 )
+from abiflib.approval_tally import (
+    approval_result_from_abifmodel,
+    get_approval_report,
+    detect_ballot_type
+)
 from abiflib.score_star_tally import STAR_report
 from abiflib.pairwise_tally import winlosstie_dict_from_pairdict
 import argparse
@@ -596,7 +601,8 @@ def get_by_id(identifier, resulttype=None):
             'dot': 'pairwise (Condorcet) diagram',
             'IRV': 'RCV/IRV results',
             'STAR': 'STAR results',
-            'FPTP': 'choose-one (FPTP) results'
+            'FPTP': 'choose-one (FPTP) results',
+            'approval': 'approval voting results'
         }
         print(
             f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})")
@@ -718,6 +724,14 @@ def get_by_id(identifier, resulttype=None):
             print(
                 f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
             debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
+
+            t_approval = time.time()
+            resconduit = resconduit.update_approval_result(jabmod)
+            approval_time = time.time() - t_approval
+            print(
+                f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Approval: {approval_time:.2f}s]")
+            debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Approval: {approval_time:.2f}s]\n"
+
             resblob = resconduit.resblob
 
             # Store the consistent colordict and candidate order
@@ -737,7 +751,7 @@ def get_by_id(identifier, resulttype=None):
             )
             resblob['STAR_html'] = jinja_scorestar_snippet(ratedjabmod)
             if not resulttype or resulttype == 'all':
-                rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'wlt']
+                rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'approval', 'wlt']
             else:
                 rtypelist = [resulttype]
 
@@ -745,8 +759,8 @@ def get_by_id(identifier, resulttype=None):
             debug_output += f"result_types: {rtypelist}\n"
 
             print(
-                f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-            debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+                f" 00012 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
+            debug_output += f" 00012 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
 
             if prof:
                 prof.disable()
@@ -773,6 +787,8 @@ def get_by_id(identifier, resulttype=None):
                                    resblob=resblob,
                                    result_types=rtypelist,
                                    STAR_html=resblob['STAR_html'],
+                                   approval_result=resblob.get('approval_result', {}),
+                                   approval_text=resblob.get('approval_text', ''),
                                    scorestardict=resblob.get('scorestardict', {'starscale': {
                                                              'colordict': ratedjabmod.get('colordict', {})}}),
                                    colordict=resblob.get('colordict', {}),
@@ -914,6 +930,11 @@ def awt_post():
             resconduit = resconduit.update_STAR_result(ratedjabmod, consistent_colordict)
             STAR_html = jinja_scorestar_snippet(ratedjabmod)
             scorestardict = resconduit.resblob['scorestardict']
+
+        if request.form.get('include_approval'):
+            rtypelist.append('approval')
+            resconduit = resconduit.update_approval_result(abifmodel)
+
         resblob = resconduit.resblob
 
         # Store the consistent colordict and candidate order
@@ -935,6 +956,8 @@ def awt_post():
                            dotsvg_html=dotsvg_html,
                            result_types=rtypelist,
                            STAR_html=STAR_html,
+                           approval_result=resblob.get('approval_result', {}),
+                           approval_text=resblob.get('approval_text', ''),
                            IRV_dict=IRV_dict,
                            IRV_text=IRV_text,
                            IRV_candnames=abifmodel.get(

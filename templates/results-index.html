@@ -94,6 +94,19 @@ and can be edited in the field above.</p>
       {% endif %}
     </li>
     {% endif %}
+    {% if 'approval' in result_types %}
+    <li>
+      <a href="#approval">Approval voting output</a> &mdash;
+      {{ "Winners (tie):" if approval_result['winners'] | length > 1 else "Winner:" }}
+      {% if approval_result['winners'] and FPTP_candnames %}
+        {%- for winner in approval_result['winners'] -%}
+          {{ FPTP_candnames[winner] if winner in FPTP_candnames else winner }}{% if not loop.last %}, {% endif %}
+        {%- endfor -%}
+      {% else %}
+        {% for winner in approval_result['winners'] %}{{ winner }}{% if not loop.last %}, {% endif %}{% endfor %}
+      {% endif %}
+    </li>
+    {% endif %}
     {% if abif_id and not all_results_generated %}
     <li>Generate other results for {{abif_id}}:</li>
     <ul>
@@ -120,6 +133,11 @@ and can be edited in the field above.</p>
       {% if not 'STAR' in result_types %}
       <li>
         <a href="/id/{{abif_id}}/STAR#STAR">STAR results for {{abif_id}}</a>
+      </li>
+      {% endif %}
+      {% if not 'approval' in result_types %}
+      <li>
+        <a href="/id/{{abif_id}}/approval#approval">Approval voting results for {{abif_id}}</a>
       </li>
       {% endif %}
     </ul>
@@ -249,6 +267,24 @@ and can be edited in the field above.</p>
 {% endif %}
 {% endif %}
 <!-- END STAR section -->
+{############ Approval Voting ############}
+{% set restype="approval" %}
+{% set rellink=restype + "#" + restype %}
+{% if 'approval' in result_types and approval_text %}
+<h3><a name="{{restype}}"></a>Approval voting results</h3>
+{% if abif_id %}
+{% set pathpart="/id/" + abif_id + "/" + rellink %}
+{% set abslink=webenv.base_url + pathpart %}
+<!-- BEGIN .hatnote -->
+<div class="hatnote">
+  {{abif_id}} approval voting results permalink:<br>
+  🔗<a href="{{abslink}}">{{abslink}}</a>
+</div>
+<!-- END .hatnote -->
+{% endif %}
+<pre>{{ approval_text }}</pre>
+{% endif %}
+<!-- END Approval Voting section -->
 <!-- END resultbox -->
 </div>
 <!-- END .resultbox -->
