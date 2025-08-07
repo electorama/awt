@@ -190,6 +190,63 @@ svg {
     margin-left: 2rem;
 }
 
+/* Notice banners for voting method disclaimers */
+.notice-banner {
+    display: flex;
+    align-items: flex-start;
+    margin: 1em 0;
+    padding: 0.75em 1em;
+    border-left: 4px solid;
+    border-radius: 4px;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.notice-banner .notice-icon {
+    margin-right: 0.75em;
+    font-size: 1.2em;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.notice-banner .notice-content {
+    flex: 1;
+}
+
+.notice-banner .notice-title {
+    font-weight: bold;
+    margin-bottom: 0.25em;
+}
+
+.notice-banner .notice-text {
+    margin: 0;
+}
+
+/* Notice type styling */
+.notice-disclaimer {
+    background-color: #fef7e0;
+    border-left-color: #f4a835;
+    color: #8b5a00;
+}
+
+.notice-warning {
+    background-color: #fef2f2;
+    border-left-color: #ef4444;
+    color: #b91c1c;
+}
+
+.notice-info {
+    background-color: #eff6ff;
+    border-left-color: #3b82f6;
+    color: #1e40af;
+}
+
+.notice-debug {
+    background-color: #f3f4f6;
+    border-left-color: #6b7280;
+    color: #374151;
+}
+
 .election-item {
   display: flex;
   align-items: baseline;

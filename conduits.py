@@ -105,8 +105,15 @@ class ResultConduit:
 
     def update_approval_result(self, jabmod) -> "ResultConduit":
         """Add approval voting result to resblob"""
-        self.resblob['approval_result'] = approval_result_from_abifmodel(jabmod)
+        approval_result = approval_result_from_abifmodel(jabmod)
+        self.resblob['approval_result'] = approval_result
         self.resblob['approval_text'] = get_approval_report(jabmod)
+        # Generalize notices for all voting methods
+        if 'notices' not in self.resblob:
+            self.resblob['notices'] = {}
+        self.resblob['notices']['approval'] = approval_result.get('notices', [])
+        # Keep backward compatibility
+        self.resblob['approval_notices'] = approval_result.get('notices', [])
         return self
 
     def update_all(self, jabmod):

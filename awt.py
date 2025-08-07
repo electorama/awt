@@ -789,6 +789,9 @@ def get_by_id(identifier, resulttype=None):
                                    STAR_html=resblob['STAR_html'],
                                    approval_result=resblob.get('approval_result', {}),
                                    approval_text=resblob.get('approval_text', ''),
+                                   approval_notices=resblob.get('approval_notices', []),
+                                   approval_candnames=jabmod.get(
+                                       'candidates', {}) if jabmod else {},
                                    scorestardict=resblob.get('scorestardict', {'starscale': {
                                                              'colordict': ratedjabmod.get('colordict', {})}}),
                                    colordict=resblob.get('colordict', {}),

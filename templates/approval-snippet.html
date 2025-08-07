@@ -1,0 +1,31 @@
+{% if approval_result and approval_result.approval_counts %}
+<!-- HTML Approval Results -->
+{% set sorted_candidates = approval_result.approval_counts.items() | list %}
+{% set sorted_candidates = sorted_candidates | sort(attribute='1', reverse=true) %}
+{% set sorted_candidates = sorted_candidates | selectattr('0', 'ne', None) | list %}
+
+<ul>
+    <li><b>Approval Results</b>:
+        <ul>
+  {% for cand_token, count in sorted_candidates %}
+  {% if count > 0 %}
+  {% set candidate_name = approval_candnames.get(cand_token, cand_token) %}
+  {% set percentage = (count / approval_result.total_votes * 100) | round(2) if approval_result.total_votes > 0 else 0 %}
+  {% set is_winner = cand_token in approval_result.winners %}
+  <li>{% if is_winner %}✅ {% endif %}{{ candidate_name }}{% if candidate_name != cand_token %} ({{ cand_token }}){% endif %}
+    &mdash; {{ "{:,}".format(count) }} approvals ({{ percentage }}% of ballots)</li>
+  {% endif %}
+  {% endfor %}
+  </ul>
+
+  {% if approval_result.approval_counts.get(None, 0) > 0 %}
+  <li><b>Invalid ballots</b>: {{ "{:,}".format(approval_result.approval_counts[None]) }}</li>
+  {% endif %}
+
+  <li><b>Total</b>: {{ "{:,}".format(approval_result.total_votes) }} ballots</li>
+</ul>
+
+{% else %}
+<!-- Fallback to text display if no JSON data available -->
+<pre>{{ approval_text }}</pre>
+{% endif %}
