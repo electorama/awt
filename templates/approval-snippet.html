@@ -12,8 +12,12 @@
   {% set candidate_name = approval_candnames.get(cand_token, cand_token) %}
   {% set percentage = (count / approval_result.total_votes * 100) | round(2) if approval_result.total_votes > 0 else 0 %}
   {% set is_winner = cand_token in approval_result.winners %}
-  <li>{% if is_winner %}✅ {% endif %}{{ candidate_name }}{% if candidate_name != cand_token %} ({{ cand_token }}){% endif %}
-    &mdash; {{ "{:,}".format(count) }} approvals ({{ percentage }}% of ballots)</li>
+  <li>
+    <span class="color-box" style="background-color: {{ colordict[cand_token] | default('#ccc') }};"></span>
+    {{ candidate_name }}{% if candidate_name != cand_token %} ({{ cand_token }}){% endif %}
+    &mdash; {{ "{:,}".format(count) }} approvals ({{ percentage }}% of ballots)
+    {% if is_winner %}(✅ winner){% endif %}
+  </li>
   {% endif %}
   {% endfor %}
   </ul>
@@ -22,7 +26,7 @@
   <li><b>Invalid ballots</b>: {{ "{:,}".format(approval_result.approval_counts[None]) }}</li>
   {% endif %}
 
-  <li><b>Total</b>: {{ "{:,}".format(approval_result.total_votes) }} ballots</li>
+  <li><b>Total</b>: {{ "{:,}".format(approval_result.total_votes) }} ballots ({{ "{:,}".format(approval_result.total_approvals) }} total approvals)</li>
 </ul>
 
 {% else %}
