@@ -9,7 +9,7 @@
         <ul>
   {% for cand_token, count in sorted_candidates %}
   {% if count > 0 %}
-  {% set candidate_name = approval_candnames.get(cand_token, cand_token) %}
+  {% set candidate_name = FPTP_candnames.get(cand_token, cand_token) if FPTP_candnames else cand_token %}
   {% set percentage = (count / approval_result.total_votes * 100) | round(2) if approval_result.total_votes > 0 else 0 %}
   {% set is_winner = cand_token in approval_result.winners %}
   <li>

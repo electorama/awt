@@ -34,81 +34,130 @@ and can be edited in the field above.</p>
 {% else %}
 <p>Below are various abiftool output blocks for the ABIF above.
   {% endif %}
-  <ul>
+  <table style="max-width: 60em; border-collapse: collapse;">
     {% if 'dot' in result_types %}
-    <li><a href="#dot">Pairwise (Condorcet/Copeland) diagram</a> &mdash; Winner:
-      {% if copewinnerstring and FPTP_candnames %}
-        {%- set winner_tokens = copewinnerstring.split(',') -%}
-        {%- for tok in winner_tokens -%}
-          {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
-        {%- endfor -%}
-      {% else %}
-        {{ copewinnerstring }}
-      {% endif %}
-    </li>
+    <tr>
+      <td style="padding: 0.25em 1em 0.25em 0; vertical-align: top;">
+        <a href="#dot">Pairwise (Condorcet/Copeland) diagram</a>
+      </td>
+      <td style="padding: 0.25em 0; vertical-align: top;">
+        Winner: {% if copewinnerstring and FPTP_candnames %}
+          {%- set winner_tokens = copewinnerstring.split(',') -%}
+          {%- for tok in winner_tokens -%}
+            <span class="color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+          {%- endfor -%}
+        {% elif copewinnerstring %}
+          {{ copewinnerstring }}
+        {% else %}
+          N/A
+        {% endif %}
+      </td>
+    </tr>
     {% endif %}
     {% if 'wlt' in result_types %}
-    <li>
-      <a href="#wlt">Win-loss-tie (Condorcet/Copeland) table</a> &mdash; Winner:
-      {% if copewinnerstring and FPTP_candnames %}
-        {%- set winner_tokens = copewinnerstring.split(',') -%}
-        {%- for tok in winner_tokens -%}
-          {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
-        {%- endfor -%}
-      {% else %}
-        {{ copewinnerstring }}
-      {% endif %}
-    </li>
+    <tr>
+      <td style="padding: 0.25em 1em 0.25em 0; vertical-align: top;">
+        <a href="#wlt">Win-loss-tie (Condorcet/Copeland) table</a>
+      </td>
+      <td style="padding: 0.25em 0; vertical-align: top;">
+        Winner: {% if copewinnerstring and FPTP_candnames %}
+          {%- set winner_tokens = copewinnerstring.split(',') -%}
+          {%- for tok in winner_tokens -%}
+            <span class="color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+          {%- endfor -%}
+        {% elif copewinnerstring %}
+          {{ copewinnerstring }}
+        {% else %}
+          N/A
+        {% endif %}
+      </td>
+    </tr>
     {% endif %}
     {% if 'FPTP' in result_types %}
-    <li>
-      <a href="#FPTP">FPTP output</a> &mdash;
-      {{ "Winners (tie):" if resblob['FPTP_result']['winners'] | length > 1 else "Winner:" }}
-      {% if FPTP_candnames and resblob['FPTP_result']['winners'] %}
-        {{ FPTP_candnames[resblob['FPTP_result']['winners'][0]] if resblob['FPTP_result']['winners'][0] in FPTP_candnames else resblob['FPTP_result']['winners'][0] }}
-      {% else %}
-        {{ resblob['FPTP_result']['winners'][0] }}
-      {% endif %}
-    </li>
+    <tr>
+      <td style="padding: 0.25em 1em 0.25em 0; vertical-align: top;">
+        <a href="#FPTP">FPTP output</a>
+      </td>
+      <td style="padding: 0.25em 0; vertical-align: top;">
+        {{ "Winners (tie):" if resblob and resblob['FPTP_result'] and resblob['FPTP_result']['winners'] and resblob['FPTP_result']['winners'] | length > 1 else "Winner:" }} {% if FPTP_candnames and resblob and resblob['FPTP_result'] and resblob['FPTP_result']['winners'] %}
+          {% set winner_token = resblob['FPTP_result']['winners'][0] %}
+          <span class="color-box" style="background-color: {{ colordict[winner_token] | default('#ccc') }};"></span>{{ FPTP_candnames[winner_token] if winner_token in FPTP_candnames else winner_token }}
+        {% elif resblob and resblob['FPTP_result'] and resblob['FPTP_result']['winners'] %}
+          {{ resblob['FPTP_result']['winners'][0] }}
+        {% else %}
+          N/A
+        {% endif %}
+      </td>
+    </tr>
     {% endif %}
     {% if 'IRV' in result_types %}
-    <li>
-      <a href="#IRV">IRV output</a> &mdash;
-      {{ "Winners (tie):" if IRV_dict['winner'] | length > 1 else "Winner:" }}
-      {% if IRV_dict['winnerstr'] and IRV_candnames %}
-        {%- set winner_tokens = IRV_dict['winnerstr'].split(',') -%}
-        {%- for tok in winner_tokens -%}
-          {{ IRV_candnames[tok.strip()] if tok.strip() in IRV_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
-        {%- endfor -%}
-      {% else %}
-        {{ IRV_dict['winnerstr'] }}
-      {% endif %}
-    </li>
+    <tr>
+      <td style="padding: 0.25em 1em 0.25em 0; vertical-align: top;">
+        <a href="#IRV">IRV output</a>
+      </td>
+      <td style="padding: 0.25em 0; vertical-align: top;">
+        {{ "Winners (tie):" if IRV_dict and IRV_dict['winner'] and IRV_dict['winner'] | length > 1 else "Winner:" }}
+        {% if IRV_dict and IRV_dict['winner'] and IRV_candnames %}
+          {%- for winner_token in IRV_dict['winner'] -%}
+            <span class="color-box" style="background-color: {{ colordict[winner_token] | default('#ccc') }};"></span>{{ IRV_candnames[winner_token] if winner_token in IRV_candnames else winner_token }}{% if not loop.last %}, {% endif %}
+          {%- endfor -%}
+        {% elif IRV_dict and IRV_dict['winnerstr'] %}
+          {{ IRV_dict['winnerstr'] }}
+        {% else %}
+          N/A
+        {% endif %}
+      </td>
+    </tr>
     {% endif %}
     {% if 'STAR' in result_types %}
-    <li>
-      <a href="#STAR">STAR output</a> &mdash; Winner:
-      {% if scorestardict['scoremodel']['winner'] and FPTP_candnames %}
-        {{ FPTP_candnames[scorestardict['scoremodel']['winner']] if scorestardict['scoremodel']['winner'] in FPTP_candnames else scorestardict['scoremodel']['winner'] }}
-      {% else %}
-        {{ scorestardict['scoremodel']['winner'] }}
-      {% endif %}
-    </li>
+    <tr>
+      <td style="padding: 0.25em 1em 0.25em 0; vertical-align: top;">
+        <a href="#STAR">STAR output</a>
+      </td>
+      <td style="padding: 0.25em 0; vertical-align: top;">
+        Winner: 
+        {% if scorestardict and scorestardict['scoremodel']['winner'] and FPTP_candnames %}
+          {% set winner_name = scorestardict['scoremodel']['winner'] %}
+          {% set winner_token = namespace(value=None) %}
+          {% for cand_token in scorestardict['scoremodel']['ranklist'] %}
+            {% if scorestardict['scoremodel']['scores'][cand_token]['candname'] == winner_name and winner_token.value is none %}
+              {% set winner_token.value = cand_token %}
+            {% endif %}
+          {% endfor %}
+          {% if winner_token.value %}
+            <span class="color-box" style="background-color: {{ colordict[winner_token.value] | default('#ccc') }};"></span>{{ winner_name }}
+          {% else %}
+            {{ winner_name }}
+          {% endif %}
+        {% elif scorestardict and scorestardict['scoremodel']['winner'] %}
+          {{ scorestardict['scoremodel']['winner'] }}
+        {% else %}
+          N/A
+        {% endif %}
+      </td>
+    </tr>
     {% endif %}
     {% if 'approval' in result_types %}
-    <li>
-      <a href="#approval">Approval voting output</a> &mdash;
-      {{ "Winners (tie):" if approval_result['winners'] | length > 1 else "Winner:" }}
-      {% if approval_result['winners'] and FPTP_candnames %}
-        {%- for winner in approval_result['winners'] -%}
-          {{ FPTP_candnames[winner] if winner in FPTP_candnames else winner }}{% if not loop.last %}, {% endif %}
-        {%- endfor -%}
-      {% else %}
-        {% for winner in approval_result['winners'] %}{{ winner }}{% if not loop.last %}, {% endif %}{% endfor %}
-      {% endif %}
-    </li>
+    <tr>
+      <td style="padding: 0.25em 1em 0.25em 0; vertical-align: top;">
+        <a href="#approval">Approval voting output</a>
+      </td>
+      <td style="padding: 0.25em 0; vertical-align: top;">
+        {{ "Winners (tie):" if approval_result and approval_result['winners'] and approval_result['winners'] | length > 1 else "Winner:" }} {% if approval_result and approval_result['winners'] and FPTP_candnames %}
+          {%- for winner in approval_result['winners'] -%}
+            <span class="color-box" style="background-color: {{ colordict[winner] | default('#ccc') }};"></span>{{ FPTP_candnames[winner] if winner in FPTP_candnames else winner }}{% if not loop.last %}, {% endif %}
+          {%- endfor -%}
+        {% elif approval_result and approval_result['winners'] %}
+          {% for winner in approval_result['winners'] %}<span class="color-box" style="background-color: {{ colordict[winner] | default('#ccc') }};"></span>{{ winner }}{% if not loop.last %}, {% endif %}{% endfor %}
+        {% else %}
+          N/A
+        {% endif %}
+      </td>
+    </tr>
     {% endif %}
-    {% if abif_id and not all_results_generated %}
+  </table>
+  {% if abif_id and not all_results_generated %}
+  <ul>
     <li>Generate other results for {{abif_id}}:</li>
     <ul>
       {% if not 'dot' in result_types %}
@@ -190,8 +239,10 @@ and can be edited in the field above.</p>
     {%- for tok in winner_tokens -%}
       {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
     {%- endfor -%}
-  {% else %}
+  {% elif copewinnerstring %}
     {{ copewinnerstring }}
+  {% else %}
+    N/A
   {% endif %}
 </p>
   {{ pairwise_html | safe }}
@@ -232,7 +283,7 @@ and can be edited in the field above.</p>
 </div>
 {% endif %}
 <!-- BEGIN results-container -->
-<div id="results-container" data-candidate-colors='{{ scorestardict.starscale.colordict | tojson | safe }}'>
+<div id="results-container" data-candidate-colors='{{ colordict | tojson | safe }}'>
     <p>{% include 'irv-snippet.html' %}</p>
 </div>
 <!-- END results-container -->
@@ -255,13 +306,13 @@ and can be edited in the field above.</p>
 </div>
 <!-- END .hatnote -->
 {% endif %}
-{% if scorestardict['star_lede'] %}
+{% if scorestardict and scorestardict['star_lede'] %}
 <p class="description">
    {{ scorestardict['star_lede'] }}
 </p>
 {% endif %}
 <p>{% include 'star-snippet.html' %}</p>
-{% if scorestardict['star_foot'] %}
+{% if scorestardict and scorestardict['star_foot'] %}
 <p class="description">
   {{ scorestardict['star_foot'] }}
 </p>

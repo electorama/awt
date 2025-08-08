@@ -45,6 +45,7 @@
     color: grey;
 }
 </style>
+{% if scorestardict and scorestardict['scoremodel'] and scorestardict['starscale'] %}
 {% set scoredata = scorestardict['scoremodel'] %}
 {% set stardata = scorestardict['starscale'] %}
 {% set ranklist = scoredata['ranklist'] %}
@@ -116,3 +117,6 @@
     </ul>
   </div>
 </div>
+{% else %}
+<p>STAR voting data not available.</p>
+{% endif %}
