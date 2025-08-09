@@ -96,10 +96,26 @@ class ResultConduit:
         scorestar['starscale'] = \
             add_html_hints_to_stardict(
                 scorestar['scoremodel'], stardict, colordict)
+        # Handle notices for STAR voting
+        star_notices = []
         if jabmod['metadata'].get('is_ranking_to_rating'):
+            star_notices.append({
+                'notice_type': 'disclaimer',
+                'short': 'Since ratings or stars are not present in the provided ballots, allocated stars are estimated using a Borda-like formula.',
+                'long': None
+            })
+
+        # Add to generalized notice system
+        if 'notices' not in self.resblob:
+            self.resblob['notices'] = {}
+        self.resblob['notices']['star'] = star_notices
+
+        # Keep backward compatibility for now
+        if star_notices:
             scorestar['star_foot'] = \
                 'NOTE: Since ratings or stars are not present in the provided ballots, ' + \
                 'allocated stars are estimated using a Borda-like formula.'
+
         self.resblob['scorestardict'] = scorestar
         return self
 
