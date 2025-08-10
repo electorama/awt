@@ -1,0 +1,26 @@
+<!-- Notice snippet template for consistent notice rendering across all voting methods -->
+{% if notices %}
+{% for notice in notices %}
+<div class="notice-banner notice-{{ notice.notice_type }}">
+  <div class="notice-icon">
+    {% if notice.notice_type == 'note' or notice.notice_type == 'disclaimer' %}📝
+    {% elif notice.notice_type == 'warning' %}⚠️
+    {% elif notice.notice_type == 'info' %}ℹ️
+    {% elif notice.notice_type == 'debug' %}🐛
+    {% else %}📌
+    {% endif %}
+  </div>
+  <div class="notice-content">
+    <div class="notice-text"><b>Note</b> — {{ notice.short }}</div>
+    {% if notice.long %}
+    <details style="margin-top: 0.5em;">
+      <summary style="cursor: pointer; color: inherit; opacity: 0.8;">Details</summary>
+      <div style="margin-top: 0.5em; padding-left: 1em; font-size: 0.9em; line-height: 1.5;">
+        {{ notice.long }}
+      </div>
+    </details>
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
+{% endif %}
