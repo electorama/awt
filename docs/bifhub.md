@@ -11,7 +11,7 @@ The primary goal of bifhub is to decouple the logic of *finding* and *managing* 
 bifhub will consolidate and replace the functionality currently spread across two different components:
 
 1.  **`fetchmgr.py` (from `abiftool`)**: bifhub will inherit the responsibility for fetching, downloading, and caching remote `.abif` files.
-2.  **`abif_list.yml` handling (from `awt`)**: bifhub will manage the metadata, tags, and local file paths currently defined in `abif_list.yml`.
+2.  **Catalog functions (from `awt`)**: bifhub will manage the metadata, tags, and local file paths currently handled by functions like `abif_catalog_init`, `build_election_list`, and `get_fileentries_by_tag` in `awt.py`.
 
 Its core features will include:
 
@@ -38,3 +38,7 @@ bifhub will sit between the raw data sources (web servers, local files) and the 
 ```
 
 By creating this clear separation, `awt` can focus entirely on being a web frontend, and `abiflib` can focus on pure tallying logic, while bifhub handles the data logistics.
+
+## Implementation Path
+
+The bifhub functionality will initially be implemented as `src/bifhub.py` within the `awt` project during the refactoring process described in `refactor.md`. This allows the catalog management logic to be properly separated and tested before eventual extraction into a standalone service.
