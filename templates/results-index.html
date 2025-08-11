@@ -313,7 +313,7 @@ and can be edited in the field above.</p>
 {% endif %}
 
 <!-- BEGIN star notices -->
-{% set notices = star_notices %}
+{% set notices = resblob.notices.star %}
 {% include 'notice-snippet.html' %}
 <!-- END star notices -->
 
@@ -342,7 +342,7 @@ and can be edited in the field above.</p>
 {% endif %}
 
 <!-- BEGIN approval notices -->
-{% set notices = approval_notices %}
+{% set notices = resblob.notices.approval %}
 {% include 'notice-snippet.html' %}
 <!-- END approval notices -->
 

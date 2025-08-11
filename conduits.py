@@ -35,10 +35,18 @@ class ResultConduit:
                 "Please pass in jabmod= param on ResultsConduit init")
         self.resblob = {}
 
+    def _extract_notices(self, method_tag: str, result_dict: dict) -> None:
+        """Extract notices from voting method result using consistent tag-based naming"""
+        if 'notices' not in self.resblob:
+            self.resblob['notices'] = {}
+        self.resblob['notices'][method_tag] = result_dict.get('notices', [])
+
     def update_FPTP_result(self, jabmod) -> "ResultConduit":
         """Add FPTP result to resblob"""
-        self.resblob['FPTP_result'] = FPTP_result_from_abifmodel(jabmod)
-        self.resblob['FPTP_text'] = get_FPTP_report(jabmod)
+        fptp_result = FPTP_result_from_abifmodel(jabmod)
+        self.resblob['FPTP_result'] = fptp_result
+        self._extract_notices('fptp', fptp_result)
+        # self.resblob['FPTP_text'] = get_FPTP_report(jabmod)
         return self
 
     def update_IRV_result(self, jabmod, include_irv_extra=False) -> "ResultConduit":
@@ -46,6 +54,7 @@ class ResultConduit:
 
         # Backwards compatibility with abiflib v0.32.0
         try:
+            # TODO: rename to "IRV_result"
             self.resblob['IRV_dict'] = IRV_dict_from_jabmod(
                 jabmod, include_irv_extra=include_irv_extra)
         except TypeError as e:
@@ -66,6 +75,7 @@ class ResultConduit:
                         round_meta[key] = list(round_meta[key])
 
         self.resblob['IRV_text'] = get_IRV_report(self.resblob['IRV_dict'])
+        self._extract_notices('irv', self.resblob['IRV_dict'])
         return self
 
     def update_pairwise_result(self, jabmod) -> "ResultConduit":
@@ -84,6 +94,7 @@ class ResultConduit:
                 jabmod['candidates'].keys())
         else:
             self.resblob['colordict'] = {}
+        self._extract_notices('pairwise', self.resblob['pairwise_dict'])
         return self
 
     def update_STAR_result(self, jabmod, colordict=None) -> "ResultConduit":
@@ -96,21 +107,11 @@ class ResultConduit:
         scorestar['starscale'] = \
             add_html_hints_to_stardict(
                 scorestar['scoremodel'], stardict, colordict)
-        # Handle notices for STAR voting
-        star_notices = []
-        if jabmod['metadata'].get('is_ranking_to_rating'):
-            star_notices.append({
-                'notice_type': 'disclaimer',
-                'short': 'Since ratings or stars are not present in the provided ballots, allocated stars are estimated using a Borda-like formula.',
-                'long': None
-            })
-
-        # Add to generalized notice system
-        if 'notices' not in self.resblob:
-            self.resblob['notices'] = {}
-        self.resblob['notices']['star'] = star_notices
+        # Extract notices using consistent method
+        self._extract_notices('star', scoremodel)
 
         # Keep backward compatibility for now
+        star_notices = scoremodel.get('notices', [])
         if star_notices:
             scorestar['star_foot'] = \
                 'NOTE: Since ratings or stars are not present in the provided ballots, ' + \
@@ -124,10 +125,8 @@ class ResultConduit:
         approval_result = approval_result_from_abifmodel(jabmod)
         self.resblob['approval_result'] = approval_result
         self.resblob['approval_text'] = get_approval_report(jabmod)
-        # Generalize notices for all voting methods
-        if 'notices' not in self.resblob:
-            self.resblob['notices'] = {}
-        self.resblob['notices']['approval'] = approval_result.get('notices', [])
+        # Extract notices using consistent method
+        self._extract_notices('approval', approval_result)
         # Keep backward compatibility
         self.resblob['approval_notices'] = approval_result.get('notices', [])
         return self
@@ -140,4 +139,5 @@ class ResultConduit:
         resconduit = resconduit.update_IRV_result(jabmod)
         resconduit = resconduit.update_pairwise_result(jabmod)
         resconduit = resconduit.update_STAR_result(jabmod)
+        resconduit = resconduit.update_approval_result(jabmod)
         return self
