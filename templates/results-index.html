@@ -35,29 +35,12 @@ and can be edited in the field above.</p>
 <p>Below are various abiftool output blocks for the ABIF above.
   {% endif %}
   <table style="max-width: 60em; border-collapse: collapse;">
-    {% if 'dot' in result_types %}
+    {% if 'dot' in result_types or 'wlt' in result_types %}
     <tr>
       <td style="padding: 0.25em 1em 0.25em 0; vertical-align: top;">
-        <a href="#dot">Pairwise (Condorcet/Copeland) diagram</a>
-      </td>
-      <td style="padding: 0.25em 0; vertical-align: top;">
-        Winner: {% if copewinnerstring and FPTP_candnames %}
-          {%- set winner_tokens = copewinnerstring.split(',') -%}
-          {%- for tok in winner_tokens -%}
-            <span class="color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
-          {%- endfor -%}
-        {% elif copewinnerstring %}
-          {{ copewinnerstring }}
-        {% else %}
-          N/A
-        {% endif %}
-      </td>
-    </tr>
-    {% endif %}
-    {% if 'wlt' in result_types %}
-    <tr>
-      <td style="padding: 0.25em 1em 0.25em 0; vertical-align: top;">
-        <a href="#wlt">Win-loss-tie (Condorcet/Copeland) table</a>
+        <a href="#condorcet">Condorcet/Copeland/pairwise results</a>
+        {% if 'dot' in result_types %}<br>&nbsp;&nbsp;→ <a href="#dot">Pairwise diagram</a>{% endif %}
+        {% if 'wlt' in result_types %}<br>&nbsp;&nbsp;→ <a href="#wlt">Win-loss-tie table</a>{% endif %}
       </td>
       <td style="padding: 0.25em 0; vertical-align: top;">
         Winner: {% if copewinnerstring and FPTP_candnames %}
@@ -198,6 +181,10 @@ and can be edited in the field above.</p>
 <!-- BEGIN .resultbox -->
 <div class="resultbox">
 <!-- BEGIN resultbox -->
+{############ condorcet ############}
+{% if 'dot' in result_types or 'wlt' in result_types %}
+<h2><a name="condorcet"></a>Condorcet/Copeland/pairwise results</h2>
+{% endif %}
 {############ dot ############}
 {% set restype="dot" %}
 {% set rellink=restype + "#" + restype %}
