@@ -134,10 +134,10 @@ and can be edited in the field above.</p>
         {% endfor %}
       </tbody>
     </table>
-    
+
     <!-- Hidden checkbox for CSS selectors -->
     <input type="checkbox" id="tabbed-mode" class="view-mode-input" checked>
-    
+
     <!-- Compact view mode toggle positioned next to winner table -->
     <div class="view-mode-toggle">
       <span class="toggle-label">Tabbed view</span>
@@ -252,6 +252,26 @@ and can be edited in the field above.</p>
     {############ condorcet ############}
     {% if 'dot' in result_types or 'wlt' in result_types %}
     <h2><a name="condorcet"></a>Condorcet/Copeland/pairwise results</h2>
+
+    <!-- Condorcet summary bullets -->
+    <ul>
+      {% if copewinnerstring and FPTP_candnames %}
+        {% set winner_tokens = copewinnerstring.split(',') %}
+        {% set winnerintro = "Condorcet Winners (tie)" if winner_tokens | length > 1 else "Condorcet Winner" %}
+        <li><b>{{winnerintro}}</b>:
+          {%- for tok in winner_tokens -%}
+            {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+          {%- endfor -%}
+        </li>
+      {% elif copewinnerstring %}
+        <li><b>Condorcet Winner</b>: {{ copewinnerstring }}</li>
+      {% else %}
+        <li><b>Condorcet Winner</b>: N/A</li>
+      {% endif %}
+      {% if abif_id %}
+      <li><b>Pairwise permalink</b>: 🔗<a href="http://awt.electorama.com/id/{{abif_id}}/pairwise">http://awt.electorama.com/id/{{abif_id}}/pairwise</a></li>
+      {% endif %}
+    </ul>
     {% endif %}
     {############ dot ############}
     {% set rellink=restype + "#" + restype %}
