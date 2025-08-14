@@ -275,6 +275,16 @@ svg {
     margin-right: 0.5em;
 }
 
+.tab-color-box {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    border: 1px solid #999;
+    vertical-align: middle;
+    margin-right: 0.4em;
+    border-radius: 2px;
+}
+
 /* Centralized styling for all voting methods */
 .greyedOut {
     color: darkgrey;

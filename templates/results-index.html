@@ -193,22 +193,50 @@ and can be edited in the field above.</p>
     {% for restype in result_types %}
       {% if restype == 'dot' and ('dot' in result_types or 'wlt' in result_types) %}
         <a href="#condorcet" class="method-tab" role="tab" aria-controls="condorcet-section">
+          {% if copewinnerstring and FPTP_candnames %}
+            {%- set winner_tokens = copewinnerstring.split(',') -%}
+            {%- for tok in winner_tokens -%}
+              <span class="tab-color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{% if not loop.last %}{% endif %}
+            {%- endfor -%}
+          {% endif %}
           Condorcet/Copeland/pairwise
         </a>
       {% elif restype == 'FPTP' %}
         <a href="#FPTP" class="method-tab" role="tab" aria-controls="fptp-section">
+          {% if FPTP_candnames and resblob and resblob['FPTP_result'] and resblob['FPTP_result']['winners'] %}
+            {% set winner_token = resblob['FPTP_result']['winners'][0] %}
+            <span class="tab-color-box" style="background-color: {{ colordict[winner_token] | default('#ccc') }};"></span>
+          {% endif %}
           FPTP
         </a>
       {% elif restype == 'IRV' %}
         <a href="#IRV" class="method-tab" role="tab" aria-controls="irv-section">
+          {% if IRV_dict and IRV_dict['winner'] and IRV_candnames %}
+            {%- for winner_token in IRV_dict['winner'] -%}
+              <span class="tab-color-box" style="background-color: {{ colordict[winner_token] | default('#ccc') }};"></span>{% if not loop.last %}{% endif %}
+            {%- endfor -%}
+          {% endif %}
           IRV/RCV
         </a>
       {% elif restype == 'STAR' %}
         <a href="#STAR" class="method-tab" role="tab" aria-controls="star-section">
+          {% if scorestardict and scorestardict['scoremodel']['winner'] and FPTP_candnames %}
+            {% set winner_name = scorestardict['scoremodel']['winner'] %}
+            {% for token, name in FPTP_candnames.items() %}
+              {% if name == winner_name %}
+                <span class="tab-color-box" style="background-color: {{ colordict[token] | default('#ccc') }};"></span>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
           STAR
         </a>
       {% elif restype == 'approval' %}
         <a href="#approval" class="method-tab" role="tab" aria-controls="approval-section">
+          {% if approval_result and approval_result['winners'] and FPTP_candnames %}
+            {%- for winner_token in approval_result['winners'] -%}
+              <span class="tab-color-box" style="background-color: {{ colordict[winner_token] | default('#ccc') }};"></span>{% if not loop.last %}{% endif %}
+            {%- endfor -%}
+          {% endif %}
           Approval
         </a>
       {% endif %}
