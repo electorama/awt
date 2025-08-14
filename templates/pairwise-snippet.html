@@ -1,4 +1,4 @@
-{# Jinja2 template for pairwise/win-loss-tie table (migrated to awt) #}
+{# Jinja2 template for pairwise/win-loss-tie table (simple version) #}
 {% if colordict %}
 <style type="text/css">
   {% for cand, color in colordict.items() %}
@@ -7,7 +7,6 @@
 </style>
 {% endif %}
 <!-- JINJA2-PAIRWISE-TEMPLATE-USED -->
-{% if desc %}<p>{{ desc }}</p>{% endif %}
 <div style="overflow-x:auto;">
     <table class="pairwise-table">
         <caption>{{ title | e }} pairwise matchups</caption>

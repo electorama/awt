@@ -153,14 +153,9 @@ and can be edited in the field above.</p>
   <ul>
     <li>Generate other results for {{abif_id}}:</li>
     <ul>
-      {% if not 'dot' in result_types %}
+      {% if not 'dot' in result_types and not 'wlt' in result_types %}
       <li>
-        <a href="/id/{{abif_id}}/dot#dot">Pairwise (Condorcet/Copeland) diagram for {{abif_id}}</a>
-      </li>
-      {% endif %}
-      {% if not 'wlt' in result_types %}
-      <li>
-        <a href="/id/{{abif_id}}/wlt#wlt">Win-loss-tie (Condorcet/Copeland) table for {{abif_id}}</a>
+        <a href="/id/{{abif_id}}/pairwise#condorcet">Pairwise (Condorcet/Copeland) results for {{abif_id}}</a>
       </li>
       {% endif %}
       {% if not 'FPTP' in result_types %}
@@ -199,7 +194,7 @@ and can be edited in the field above.</p>
               <span class="tab-color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{% if not loop.last %}{% endif %}
             {%- endfor -%}
           {% endif %}
-          Condorcet/Copeland/pairwise
+          Condorcet/Copeland
         </a>
       {% elif restype == 'FPTP' %}
         <a href="#FPTP" class="method-tab" role="tab" aria-controls="fptp-section">
@@ -249,9 +244,17 @@ and can be edited in the field above.</p>
 {% for restype in result_types %}
   {% if restype == 'dot' %}
     <div class="method-section" id="condorcet-section" data-method="condorcet">
-    {############ condorcet ############}
+    {############ condorcet/pairwise ############}
     {% if 'dot' in result_types or 'wlt' in result_types %}
-    <h2><a name="condorcet"></a>Condorcet/Copeland/pairwise results</h2>
+    <h2><a name="condorcet"></a>Condorcet/Copeland results</h2>
+    {% if abif_id %}
+    {% set pairwise_pathpart="/id/" + abif_id + "/pairwise#condorcet" %}
+    {% set pairwise_abslink=webenv.base_url + pairwise_pathpart %}
+    <div class="hatnote">
+      {{abif_id}} Condorcet/Copeland results permalink:<br>
+      🔗<a href="{{pairwise_abslink}}">{{pairwise_abslink}}</a>
+    </div>
+    {% endif %}
 
     <!-- Condorcet summary bullets -->
     <ul>
@@ -268,61 +271,42 @@ and can be edited in the field above.</p>
       {% else %}
         <li><b>Condorcet Winner</b>: N/A</li>
       {% endif %}
-      {% if abif_id %}
-      <li><b>Pairwise permalink</b>: 🔗<a href="http://awt.electorama.com/id/{{abif_id}}/pairwise">http://awt.electorama.com/id/{{abif_id}}/pairwise</a></li>
-      {% endif %}
     </ul>
-    {% endif %}
-    {############ dot ############}
-    {% set rellink=restype + "#" + restype %}
-    {% if 'dot' in result_types and dotsvg_html %}
-    <h3><a name="{{restype}}"></a>Pairwise (Condorcet/Copeland) diagram</h3>
-    {% if abif_id %}
-    {% set pathpart="/id/" + abif_id + "/" + rellink %}
-    {% set abslink=webenv.base_url + pathpart %}
-    <!-- BEGIN .hatnote -->
-    <div class="hatnote">
-      {{abif_id}} pairwise diagram permalink:<br>
-      🔗<a href="{{abslink}}">{{abslink}}</a>
-    </div>
-    <!-- END .hatnote -->
-    <p><a href="/id/{{abif_id}}/dot/svg">{{ dotsvg_html | safe }}</a></p>
-    {% else %}
-    <p>{{ dotsvg_html | safe }}</p>
-    {% endif %}
-    {% endif %}
-    <!-- END dot section -->
-  {% elif restype == 'wlt' %}
-    {############ wlt ############}
-    {% set rellink=restype + "#" + restype %}
+
+    <!-- Include pairwise results -->
     {% if 'wlt' in result_types and pairwise_html %}
-    <h3><a name="{{restype}}"></a>Win-loss-tie (Condorcet/Copeland) table</h3>
-    {% if abif_id %}
-    {% set pathpart="/id/" + abif_id + "/" + rellink %}
-    {% set abslink=webenv.base_url + pathpart %}
-    <!-- BEGIN .hatnote -->
-    <div class="hatnote">
-      {{abif_id}} w-l-t table permalink:<br>
-      🔗<a href="{{abslink}}">{{abslink}}</a>
-    </div>
-    <!-- END .hatnote -->
-    {% endif %}
-    <p><b>Pairwise winner(s)</b>:
-      {% if copewinnerstring and FPTP_candnames %}
-        {%- set winner_tokens = copewinnerstring.split(',') -%}
-        {%- for tok in winner_tokens -%}
-          {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
-        {%- endfor -%}
-      {% elif copewinnerstring %}
-        {{ copewinnerstring }}
-      {% else %}
-        N/A
+      <h4><a name="wlt"></a>Win-loss-tie (Condorcet/Copeland) table</h4>
+      {% if abif_id %}
+      {% set wlt_pathpart="/id/" + abif_id + "/wlt#wlt" %}
+      {% set wlt_abslink=webenv.base_url + wlt_pathpart %}
+      <div class="hatnote">
+        {{abif_id}} w-l-t table permalink:<br>
+        🔗<a href="{{wlt_abslink}}">{{wlt_abslink}}</a>
+      </div>
       {% endif %}
-    </p>
       {{ pairwise_html | safe }}
     {% endif %}
-    <!-- END wlt section -->
+
+    {% if 'dot' in result_types and dotsvg_html %}
+      <h4><a name="dot"></a>Pairwise (Condorcet/Copeland) diagram</h4>
+      {% if abif_id %}
+      {% set dot_pathpart="/id/" + abif_id + "/dot#dot" %}
+      {% set dot_abslink=webenv.base_url + dot_pathpart %}
+      <div class="hatnote">
+        {{abif_id}} pairwise diagram permalink:<br>
+        🔗<a href="{{dot_abslink}}">{{dot_abslink}}</a>
+      </div>
+      {% endif %}
+      {% if abif_id %}
+      <p><a href="/id/{{abif_id}}/dot/svg">{{ dotsvg_html | safe }}</a></p>
+      {% else %}
+      <p>{{ dotsvg_html | safe }}</p>
+      {% endif %}
+    {% endif %}
+    {% endif %}
     </div> <!-- End condorcet section -->
+  {% elif restype == 'wlt' %}
+    {# wlt section now handled by dot section above - this maintains backward compatibility #}
   {% elif restype == 'FPTP' %}
     <div class="method-section" id="FPTP-section" data-method="FPTP">
     {############ FPTP ############}
