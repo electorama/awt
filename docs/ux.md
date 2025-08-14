@@ -41,7 +41,7 @@ abiftool/docs/metadata.md for more information.
 
 **Ordering rules**:
 
-**If `voting_system` declared in metadata**: Put declared system first
+**If `tally_method` declared in metadata**: Put declared system first
 
 **If no declaration**:
 - **Ranked ballots detected**: IRV → FPTP → Approval → STAR → Condorcet

@@ -36,7 +36,7 @@ import conduits
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, send_from_directory, url_for
 from flask_caching import Cache
-from html_util import generate_candidate_colors, escape_css_selector
+from html_util import generate_candidate_colors, escape_css_selector, add_html_hints_to_stardict, get_method_ordering
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import logging
 from markupsafe import escape
@@ -397,40 +397,6 @@ def get_all_tags_in_election_list(election_list):
         if d.get('tags'):
             for t in re.split('[ ,]+', d['tags']):
                 retval.add(t)
-    return retval
-
-
-def add_html_hints_to_stardict(scores, stardict, colordict=None):
-    retval = stardict
-    retval['starscaled'] = {}
-    retval['colordict'] = {}
-    retval['colorlines'] = {}
-
-    # Use provided colordict or generate from scores ranklist
-    if colordict:
-        # Reorder the provided colordict to match scores ranklist order
-        colors = {cand: colordict.get(cand, '#cccccc') for cand in scores['ranklist']}
-    else:
-        colors = generate_candidate_colors(scores['ranklist'])
-    retval['colordict'] = colors
-
-    curstart = 1
-    for i, candtok in enumerate(scores['ranklist']):
-        retval['starscaled'][candtok] = round(
-            retval['canddict'][candtok]['scaled_score'])
-        selline = ", ".join(".s%02d" % j for j in range(
-            curstart, retval['starscaled'][candtok] + curstart))
-        safe_candtok = escape_css_selector(candtok)
-        retval['colorlines'][candtok] = f".g{i + 1}"
-        if selline:
-            retval['colorlines'][candtok] += ", " + selline
-        retval['colorlines'][candtok] += " { color: " + colors[candtok] + "; }"
-        curstart += retval['starscaled'][candtok]
-    try:
-        retval['starratio'] = round(
-            retval['total_all_scores'] / retval['scaled_total'])
-    except ZeroDivisionError:
-        retval['starratio'] = 0
     return retval
 
 

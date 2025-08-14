@@ -106,3 +106,113 @@ def escape_css_selector(s):
     """
     # This regex finds any character that is not a letter, number, underscore, or hyphen.
     return re.sub(r'[^a-zA-Z0-9_-]', '_', s)
+
+
+def add_html_hints_to_stardict(scores, stardict, colordict=None):
+    """
+    Add HTML presentation hints to a STAR voting results dictionary.
+
+    Adds color information, scaled scores, and CSS selector strings
+    for template rendering.
+
+    Args:
+        scores: Score results with ranklist
+        stardict: STAR voting results dictionary to enhance
+        colordict: Optional pre-generated color mapping
+
+    Returns:
+        dict: Enhanced stardict with HTML presentation data
+    """
+    retval = stardict
+    retval['starscaled'] = {}
+    retval['colordict'] = {}
+    retval['colorlines'] = {}
+
+    # Use provided colordict or generate from scores ranklist
+    if colordict:
+        # Reorder the provided colordict to match scores ranklist order
+        colors = {cand: colordict.get(cand, '#cccccc') for cand in scores['ranklist']}
+    else:
+        colors = generate_candidate_colors(scores['ranklist'])
+    retval['colordict'] = colors
+
+    curstart = 1
+    for i, candtok in enumerate(scores['ranklist']):
+        retval['starscaled'][candtok] = round(
+            retval['canddict'][candtok]['scaled_score'])
+        selline = ", ".join(".s%02d" % j for j in range(
+            curstart, retval['starscaled'][candtok] + curstart))
+        safe_candtok = escape_css_selector(candtok)
+        retval['colorlines'][candtok] = f".g{i + 1}"
+        if selline:
+            retval['colorlines'][candtok] += ", " + selline
+        retval['colorlines'][candtok] += " { color: " + colors[candtok] + "; }"
+        curstart += retval['starscaled'][candtok]
+    try:
+        retval['starratio'] = round(
+            retval['total_all_scores'] / retval['scaled_total'])
+    except ZeroDivisionError:
+        retval['starratio'] = 0
+    return retval
+
+
+
+def get_method_ordering(abifmodel, default_methods=None):
+    """
+    Determine the optimal ordering of voting methods for display.
+
+    Based on UX Step 3: puts declared tally_method first, otherwise orders
+    based on detected ballot type for best user experience.
+
+    Args:
+        abifmodel: The ABIF model with metadata and ballot data
+        default_methods: Optional list of available methods to order
+
+    Returns:
+        list: Ordered method names (e.g., ['IRV', 'FPTP', 'approval', 'STAR', 'wlt'])
+    """
+    if default_methods is None:
+        default_methods = ['FPTP', 'IRV', 'approval', 'STAR', 'wlt']
+
+    # Check if tally_method is declared in metadata
+    declared_method = None
+    if 'metadata' in abifmodel and 'tally_method' in abifmodel['metadata']:
+        declared_method = abifmodel['metadata']['tally_method']
+
+        # Map declared methods to internal method names
+        method_mapping = {
+            'IRV': 'IRV',
+            'FPTP': 'FPTP',
+            'approval': 'approval',
+            'STAR': 'STAR',
+            'pairwise': 'wlt',
+            'Condorcet': 'wlt',
+            'Copeland': 'wlt'
+        }
+
+        mapped_method = method_mapping.get(declared_method)
+        if mapped_method and mapped_method in default_methods:
+            # Put declared method first, others in original order
+            ordered_methods = [mapped_method]
+            ordered_methods.extend([m for m in default_methods if m != mapped_method])
+            return ordered_methods
+
+    # No valid declared method - order based on detected ballot type
+    from abiflib.util import find_ballot_type
+    ballot_type = find_ballot_type(abifmodel)
+
+    if ballot_type == 'ranked':
+        # Ranked ballots: IRV → FPTP → Approval → STAR → Condorcet
+        preferred_order = ['IRV', 'FPTP', 'approval', 'STAR', 'wlt']
+    else:
+        # Non-ranked ballots: FPTP → Approval → IRV → STAR → Condorcet
+        preferred_order = ['FPTP', 'approval', 'IRV', 'STAR', 'wlt']
+
+    # Filter to only include methods that are actually available
+    ordered_methods = [method for method in preferred_order if method in default_methods]
+
+    # Add any remaining methods not in our preferred order
+    remaining = [method for method in default_methods if method not in ordered_methods]
+    ordered_methods.extend(remaining)
+
+    return ordered_methods
