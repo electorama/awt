@@ -10,7 +10,9 @@ The goal is to provide users with two complementary viewing modes:
 
 ## Implementation Steps
 
-### Step 1: Consolidate Condorcet Sections
+**Current Status**: Steps 1-5 are completed. See `CLAUDE.md` for detailed implementation notes.
+
+### Step 1: Consolidate Condorcet Sections ✅ COMPLETED
 
 **Objective**: Merge the separate "Pairwise diagram" and "Win-loss-tie table" sections into a unified Condorcet section.
 
@@ -81,41 +83,62 @@ abiftool/docs/metadata.md for more information.
 .method-tab:hover
 ```
 
-### Step 5: Interactive Tabbed View
+### Step 5: Interactive Tabbed View ✅ COMPLETED
 
-**Objective**: Provide CSS-based toggle between long-form and tabbed viewing modes.
+**Objective**: Provide toggle between long-form and tabbed viewing modes.
 
-**Requirements**:
-- **Primary goal**: Pure CSS solution if possible
-- Toggle control to switch between "Long-form view" and "Tabbed view"
-- In tabbed mode, show only one method's content at a time
-- Preserve printability of long-form view
-- Maintain URL fragment navigation (`#irv`, etc.)
+**Implementation completed**:
+- Toggle control positioned next to winner table
+- JavaScript-based view mode switching (CSS-only proved insufficient)
+- Tabbed mode shows one method at a time with active tab highlighting
+- Long-form mode hides tabs and shows all content (print-friendly)
+- Winner table links behave differently in each mode
+- URL fragment navigation maintained
 
-**CSS-only approach**:
-- Use CSS `:target` pseudo-class for tab switching
-- Radio button technique with hidden inputs for mode switching
-- CSS-only show/hide logic for content sections
+**Key files modified**:
+- `templates/results-index.html` - Added toggle control and tabbed structure
+- `static/css/electostyle.css` - Added tabbed interface styling
+- `static/js/abifwebtool.js` - Added view mode switching logic
 
-**Minimal JavaScript fallback**:
-- Only if CSS-only proves insufficient for smooth UX
-- Simple toggle function for view mode
-- Tab switching event handlers
+### Step 6: Enhanced Result Visibility
 
-**Implementation**:
-- Extend CSS with tabbed view styles
-- Add view mode toggle control to template
-- Test thoroughly across browsers
-- Ensure degradation for non-JavaScript environments
+**Objective**: Make it very easy to see the essence of the results quickly toggling in the tabbed interface.
 
-**CSS classes to add**:
-```css
-.view-mode-toggle
-.results-container.long-form
-.results-container.tabbed
-.method-content.visible
-.method-content.hidden
-```
+- Consider placing winning candidate color boxes in the tab label for
+  each election method
+- Place a bulleted list with the essense of the results at the top of
+  the results for each method, with "* <method> Winner: <winner>"
+  bolded at the top of the list.  The list should be modeled after the
+  current IRV/RCV results, and MAYBE have a few other stats besides
+  the winner, but no more than six or so bullets.
+- Deep in the results for all methods, the "✅" symbol should be next
+  to the winner so that it's easy to visually scan for the winner
+- Swap the "Win-loss-tie (Condorcet/Copeland) table" and "Pairwise
+  (Condorcet/Copeland) diagram" subsections so that the latter is
+  above the former in the "Condorcet/Copeland" section.
+- Put a bulleted list in the "Condorcet/Copeland" section above the subsections
+- There should be a "🔗http://awt.electorama.com/id/Burl2009/pairwise"
+  link at the top of the Condorcet/Copeland/pairwise section
+- Shorten "Condorcet/Copeland/pairwise" to "Condorcet/Copeland" in
+  links to sections that have the word "pairwise" in the body/headers
+  of the sections.
+- Deprecate the "wlt" abbreviation
+- Come up with a slick accordian view for elections with stupidly wide
+  tables (e.g. /id/sf2024-mayor )
+
+### Step 7: URL hackability/stability/maintainability
+
+**Objective**: have forgiving URLs (e.g. case-insensitivity where
+  appropriate) while having a maintainable list
+
+- Make it possible to deprecate URLs without breaking them
+- Have a clean, performant layer of redirects that is easy to add to
+- Have a URL strategy to make it so that some /id/* URLs can be
+  deprecated with a clean redirect to the correct URL
+- Possibly replicate MediaWiki's post-redirect user interface, where
+  there's a discreet note at the top of the page about the current
+  page being redirected from the original URL.
+- URL state preservation for tabbed mode
 
 ## Technical Considerations
 
@@ -139,18 +162,4 @@ abiftool/docs/metadata.md for more information.
 - Cross-browser compatibility testing
 - Mobile responsiveness validation
 
-## Success Metrics
 
-1. **Usability**: Users can easily switch between viewing modes
-2. **Performance**: No significant slowdown in page load or interaction
-3. **Compatibility**: All existing functionality preserved
-4. **Accessibility**: Meets WCAG guidelines for interactive elements
-5. **Print-friendly**: Long-form view prints cleanly without layout issues
-
-## Future Enhancements (Post-Implementation)
-
-- Keyboard shortcuts for tab navigation (J/K keys, arrow keys)
-- URL state preservation for tabbed mode
-- Customizable method ordering via user preferences
-- Method comparison mode (side-by-side view)
-- Export functionality for individual method results
