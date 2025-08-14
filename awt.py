@@ -19,9 +19,9 @@ from abiflib import (
 )
 from abiflib.approval_tally import (
     approval_result_from_abifmodel,
-    get_approval_report,
-    detect_ballot_type
+    get_approval_report
 )
+from abiflib.util import find_ballot_type
 from abiflib.score_star_tally import STAR_report
 from abiflib.pairwise_tally import winlosstie_dict_from_pairdict
 import argparse
