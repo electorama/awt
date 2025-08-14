@@ -30,25 +30,10 @@ The goal is to provide users with two complementary viewing modes:
 
 **Objective**: Establish a standard way to declare the primary voting system used in an election within ABIF metadata.
 
-**Proposed metadata field**:
-```
-{voting_system: "IRV"}
-{voting_system: "FPTP"}
-{voting_system: "approval"}
-{voting_system: "STAR"}
-{voting_system: "condorcet"}
-```
-
-**Implementation**:
-- Define metadata parsing in `awt.py` or relevant processing files
-- Add detection logic to complement existing ballot format detection
-- Document the new metadata field in ABIF specification
-- Provide backward compatibility for files without this declaration
-
-**Files to modify**:
-- Core processing logic (likely `awt.py` or `conduits.py`)
-- ABIF parsing utilities
-- Documentation
+**Proposed metadata fields**:
+This will actually be two fields: `ballot_type` and `tally_method`.
+Most of the work for this should be done in abiftool/abiflib.  See
+abiftool/docs/metadata.md for more information.
 
 ### Step 3: Dynamic Method Ordering
 
