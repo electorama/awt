@@ -48,7 +48,7 @@ and can be edited in the field above.</p>
         {% for restype in result_types %}
           {% if restype == 'dot' and ('dot' in result_types or 'wlt' in result_types) %}
             <tr>
-              <td style="padding: 8px; border: 1px solid #ddd;">Condorcet/Copeland</td>
+              <td style="padding: 8px; border: 1px solid #ddd;"><a href="#condorcet" class="method-link">Condorcet/Copeland</a></td>
               <td style="padding: 8px; border: 1px solid #ddd;">
                 {% if copewinnerstring and FPTP_candnames %}
                   {%- set winner_tokens = copewinnerstring.split(',') -%}
@@ -64,7 +64,7 @@ and can be edited in the field above.</p>
             </tr>
           {% elif restype == 'FPTP' %}
             <tr>
-              <td style="padding: 8px; border: 1px solid #ddd;">FPTP</td>
+              <td style="padding: 8px; border: 1px solid #ddd;"><a href="#FPTP" class="method-link">FPTP</a></td>
               <td style="padding: 8px; border: 1px solid #ddd;">
                 {% if FPTP_candnames and resblob and resblob['FPTP_result'] and resblob['FPTP_result']['winners'] %}
                   {% set winner_token = resblob['FPTP_result']['winners'][0] %}
@@ -78,7 +78,7 @@ and can be edited in the field above.</p>
             </tr>
           {% elif restype == 'IRV' %}
             <tr>
-              <td style="padding: 8px; border: 1px solid #ddd;">IRV/RCV</td>
+              <td style="padding: 8px; border: 1px solid #ddd;"><a href="#IRV" class="method-link">IRV/RCV</a></td>
               <td style="padding: 8px; border: 1px solid #ddd;">
                 {% if IRV_dict and IRV_dict['winner'] and IRV_candnames %}
                   {%- for winner_token in IRV_dict['winner'] -%}
@@ -93,7 +93,7 @@ and can be edited in the field above.</p>
             </tr>
           {% elif restype == 'STAR' %}
             <tr>
-              <td style="padding: 8px; border: 1px solid #ddd;">STAR</td>
+              <td style="padding: 8px; border: 1px solid #ddd;"><a href="#STAR" class="method-link">STAR</a></td>
               <td style="padding: 8px; border: 1px solid #ddd;">
                 {% if scorestardict and scorestardict['scoremodel']['winner'] and FPTP_candnames %}
                   {% set winner_name = scorestardict['scoremodel']['winner'] %}
@@ -117,7 +117,7 @@ and can be edited in the field above.</p>
             </tr>
           {% elif restype == 'approval' %}
             <tr>
-              <td style="padding: 8px; border: 1px solid #ddd;">Approval</td>
+              <td style="padding: 8px; border: 1px solid #ddd;"><a href="#approval" class="method-link">Approval</a></td>
               <td style="padding: 8px; border: 1px solid #ddd;">
                 {% if approval_result and approval_result['winners'] and FPTP_candnames %}
                   {%- for winner in approval_result['winners'] -%}
@@ -134,6 +134,20 @@ and can be edited in the field above.</p>
         {% endfor %}
       </tbody>
     </table>
+    
+    <!-- Hidden checkbox for CSS selectors -->
+    <input type="checkbox" id="tabbed-mode" class="view-mode-input" checked>
+    
+    <!-- Compact view mode toggle positioned next to winner table -->
+    <div class="view-mode-toggle">
+      <span class="toggle-label">Tabbed view</span>
+      <label class="toggle-switch" for="tabbed-mode">
+        <span class="toggle-slider">
+          <span class="toggle-text off">OFF</span>
+          <span class="toggle-text on">ON</span>
+        </span>
+      </label>
+    </div>
   </div>
   {% if abif_id and not all_results_generated %}
   <ul>
@@ -173,15 +187,6 @@ and can be edited in the field above.</p>
     <li><a href="/id/{{abif_id}}/all">Generate all results for {{abif_id}}</a></li>
     {% endif %}
   </ul>
-
-  <!-- View mode toggle control (UX Step 5) -->
-  <div class="view-mode-toggle">
-    <input type="radio" id="long-form-mode" name="view-mode" class="view-mode-input" checked>
-    <label for="long-form-mode" class="view-mode-label">Long-form view</label>
-    
-    <input type="radio" id="tabbed-mode" name="view-mode" class="view-mode-input">
-    <label for="tabbed-mode" class="view-mode-label">Tabbed view</label>
-  </div>
 
   <!-- Tabs for various methods -->
   <nav class="method-tabs" role="tablist" aria-label="Voting method results navigation">

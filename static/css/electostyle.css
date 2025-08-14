@@ -342,41 +342,113 @@ svg {
     }
 }
 
-/* UX Step 5: Interactive Tabbed View */
+/* UX Step 5: Interactive Tabbed View - Compact Toggle */
 .view-mode-toggle {
+    float: right;
+    margin: 0;
+    padding: 0.3em 0.6em;
+    font-size: 0.85em;
     display: flex;
-    gap: 1em;
-    margin: 1em 0;
-    padding: 0.5em;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    align-items: center;
+    gap: 0.5em;
+    position: relative;
+    top: -2em; /* Move up to align with table */
+}
+
+.toggle-label {
+    font-weight: 500;
+    color: #666;
+    white-space: nowrap;
+}
+
+/* Toggle switch styling */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 24px;
+    cursor: pointer;
 }
 
 .view-mode-input {
-    margin-right: 0.5em;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
 }
 
-.view-mode-label {
-    font-weight: 500;
-    cursor: pointer;
-    padding: 0.25em 0.5em;
-    border-radius: 3px;
-    transition: background-color 0.2s ease;
+.toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+    border: 1px solid #999;
 }
 
-.view-mode-label:hover {
-    background-color: #e0e0e0;
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    border: 1px solid #ddd;
 }
 
-.view-mode-input:checked + .view-mode-label {
-    background-color: #d0d0d0;
-    font-weight: 600;
+.toggle-text {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 9px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    pointer-events: none;
+}
+
+.toggle-text.off {
+    left: 6px;
+    opacity: 1;
+}
+
+.toggle-text.on {
+    right: 6px;
+    opacity: 0;
+}
+
+/* Checked state - now using general sibling selector since checkbox is separate */
+#tabbed-mode:checked ~ .view-mode-toggle .toggle-slider {
+    background-color: #666;
+}
+
+#tabbed-mode:checked ~ .view-mode-toggle .toggle-slider:before {
+    transform: translateX(36px);
+}
+
+#tabbed-mode:checked ~ .view-mode-toggle .toggle-text.off {
+    opacity: 0;
+}
+
+#tabbed-mode:checked ~ .view-mode-toggle .toggle-text.on {
+    opacity: 1;
 }
 
 /* Default: Long-form view (all sections visible) */
 .results-container {
     /* Default state: show all content */
+}
+
+/* Hide tabs in long-form view - handled by JavaScript since DOM structure makes CSS selectors complex */
+.method-tabs.hidden-tabs {
+    display: none !important;
 }
 
 /* Tabbed mode: hide all sections except the one corresponding to active tab */
