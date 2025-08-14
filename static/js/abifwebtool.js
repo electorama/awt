@@ -11,6 +11,27 @@ function toggleShowHide(param) {
   }
 }
 
+// Method tab activation for UX Step 4
+function activateMethodTab() {
+  // Remove active class from all tabs
+  document.querySelectorAll('.method-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+
+  // Add active class to current tab based on URL hash
+  const hash = window.location.hash;
+  if (hash) {
+    const activeTab = document.querySelector(`a[href="${hash}"].method-tab`);
+    if (activeTab) {
+      activeTab.classList.add('active');
+    }
+  }
+}
+
+// Initialize tab activation on page load and hash change
+document.addEventListener('DOMContentLoaded', activateMethodTab);
+window.addEventListener('hashchange', activateMethodTab);
+
 function pushTextFromID(exampleID) {
   var exampleText = document.getElementById(exampleID).value;
   document.getElementById("abifbox").classList.add('active');
