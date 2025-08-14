@@ -2,6 +2,7 @@
 """
 Utilities for generating HTML or preparing data for HTML templates.
 """
+from abiflib.util import find_ballot_type
 import colorsys
 import re
 
@@ -162,7 +163,7 @@ def get_method_ordering(abifmodel, default_methods=None):
     Determine the optimal ordering of voting methods for display.
 
     Based on UX Step 3: puts declared tally_method first, otherwise orders
-    based on detected ballot type for best user experience.
+    based on detected ballot type.
 
     Args:
         abifmodel: The ABIF model with metadata and ballot data
@@ -192,13 +193,13 @@ def get_method_ordering(abifmodel, default_methods=None):
 
         mapped_method = method_mapping.get(declared_method)
         if mapped_method and mapped_method in default_methods:
-            # Put declared method first, others in original order
+            # Put declared method first, then standard order (removing duplicates)
+            standard_order = ['FPTP', 'approval', 'IRV', 'STAR', 'wlt']
             ordered_methods = [mapped_method]
-            ordered_methods.extend([m for m in default_methods if m != mapped_method])
+            ordered_methods.extend([m for m in standard_order if m != mapped_method and m in default_methods])
             return ordered_methods
 
     # No valid declared method - order based on detected ballot type
-    from abiflib.util import find_ballot_type
     ballot_type = find_ballot_type(abifmodel)
 
     if ballot_type == 'ranked':

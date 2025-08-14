@@ -717,12 +717,22 @@ def get_by_id(identifier, resulttype=None):
             )
             resblob['STAR_html'] = jinja_scorestar_snippet(ratedjabmod)
             if not resulttype or resulttype == 'all':
-                rtypelist = ['dot', 'FPTP', 'IRV', 'STAR', 'approval', 'wlt']
+                # Use dynamic method ordering based on metadata and ballot type
+                base_methods = ['FPTP', 'IRV', 'STAR', 'approval', 'wlt']
+                ordered_methods = get_method_ordering(jabmod, base_methods)
+                # Insert 'dot' before 'wlt' to keep Condorcet methods together
+                rtypelist = []
+                for method in ordered_methods:
+                    if method == 'wlt':
+                        rtypelist.append('dot')
+                        rtypelist.append('wlt')
+                    elif method != 'dot':  # Skip 'dot' since we handle it with 'wlt'
+                        rtypelist.append(method)
             else:
                 rtypelist = [resulttype]
 
             debug_output += pformat(resblob.keys()) + "\n"
-            debug_output += f"result_types: {rtypelist}\n"
+            debug_output += f"result_types (dynamic order): {rtypelist}\n"
 
             print(
                 f" 00012 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
@@ -909,6 +919,12 @@ def awt_post():
         # Store the consistent colordict and candidate order
         resblob['colordict'] = consistent_colordict
         resblob['candidate_order'] = candidate_order
+
+        # Apply dynamic method ordering to rtypelist
+        if abifmodel and rtypelist:
+            # Get optimal ordering for the selected methods
+            ordered_methods = get_method_ordering(abifmodel, rtypelist)
+            rtypelist = ordered_methods
 
     msgs = {}
     msgs['pagetitle'] = \
