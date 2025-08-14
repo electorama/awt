@@ -32,6 +32,93 @@ function activateMethodTab() {
 document.addEventListener('DOMContentLoaded', activateMethodTab);
 window.addEventListener('hashchange', activateMethodTab);
 
+// UX Step 5: Tabbed view mode functionality
+function initializeTabbedMode() {
+  const longFormRadio = document.getElementById('long-form-mode');
+  const tabbedRadio = document.getElementById('tabbed-mode');
+  const resultsContainer = document.querySelector('.results-container');
+  const methodTabs = document.querySelectorAll('.method-tab');
+  
+  if (!longFormRadio || !tabbedRadio || !resultsContainer) return;
+  
+  // Function to switch between long-form and tabbed view
+  function updateViewMode() {
+    if (tabbedRadio.checked) {
+      resultsContainer.classList.add('tabbed-mode');
+      // If no tab is active, activate the first one
+      if (!document.querySelector('.method-tab.active')) {
+        const firstTab = document.querySelector('.method-tab');
+        if (firstTab) {
+          firstTab.classList.add('active');
+        }
+      }
+      showActiveMethodSection();
+    } else {
+      resultsContainer.classList.remove('tabbed-mode');
+      // Remove any method-section classes we added
+      document.querySelectorAll('.method-section').forEach(section => {
+        section.classList.remove('visible');
+      });
+    }
+  }
+  
+  // Function to show the section corresponding to the active tab
+  function showActiveMethodSection() {
+    if (!resultsContainer.classList.contains('tabbed-mode')) return;
+    
+    // Hide all sections first
+    document.querySelectorAll('.method-section').forEach(section => {
+      section.classList.remove('visible');
+    });
+    
+    // Find active tab and show corresponding section
+    const activeTab = document.querySelector('.method-tab.active');
+    if (activeTab) {
+      const href = activeTab.getAttribute('href').substring(1); // Remove #
+      const targetSection = document.getElementById(href + '-section') || 
+                           document.querySelector(`[data-method="${href}"]`) ||
+                           document.querySelector(`a[name="${href}"]`)?.closest('.method-section');
+      
+      if (targetSection) {
+        targetSection.classList.add('visible');
+      }
+    }
+  }
+  
+  // Add event listeners
+  longFormRadio.addEventListener('change', updateViewMode);
+  tabbedRadio.addEventListener('change', updateViewMode);
+  
+  // Update tab click behavior for tabbed mode
+  methodTabs.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      if (tabbedRadio.checked) {
+        e.preventDefault();
+        
+        // Remove active from all tabs
+        methodTabs.forEach(t => t.classList.remove('active'));
+        // Add active to clicked tab
+        tab.classList.add('active');
+        
+        // Show corresponding section
+        setTimeout(showActiveMethodSection, 10);
+        
+        // Update URL hash
+        const href = tab.getAttribute('href');
+        if (href) {
+          window.location.hash = href;
+        }
+      }
+    });
+  });
+  
+  // Initialize view mode
+  updateViewMode();
+}
+
+// Initialize tabbed mode functionality
+document.addEventListener('DOMContentLoaded', initializeTabbedMode);
+
 function pushTextFromID(exampleID) {
   var exampleText = document.getElementById(exampleID).value;
   document.getElementById("abifbox").classList.add('active');

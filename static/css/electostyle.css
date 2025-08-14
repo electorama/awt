@@ -342,6 +342,72 @@ svg {
     }
 }
 
+/* UX Step 5: Interactive Tabbed View */
+.view-mode-toggle {
+    display: flex;
+    gap: 1em;
+    margin: 1em 0;
+    padding: 0.5em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.view-mode-input {
+    margin-right: 0.5em;
+}
+
+.view-mode-label {
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.25em 0.5em;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+}
+
+.view-mode-label:hover {
+    background-color: #e0e0e0;
+}
+
+.view-mode-input:checked + .view-mode-label {
+    background-color: #d0d0d0;
+    font-weight: 600;
+}
+
+/* Default: Long-form view (all sections visible) */
+.results-container {
+    /* Default state: show all content */
+}
+
+/* Tabbed mode: hide all sections except the one corresponding to active tab */
+.results-container.tabbed-mode > * {
+    display: none;
+}
+
+.results-container.tabbed-mode .method-section.visible {
+    display: block;
+}
+
+/* Ensure proper spacing in tabbed mode */
+.results-container.tabbed-mode {
+    min-height: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1em;
+    margin-top: 0;
+}
+
+/* Print styles: always show long-form for printing */
+@media print {
+    .view-mode-toggle {
+        display: none;
+    }
+    
+    .results-container .method-content {
+        display: block !important;
+    }
+}
+
 /* Pairwise table styling */
 .pairwise-table {
     border-collapse: collapse;

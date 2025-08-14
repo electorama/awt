@@ -174,6 +174,15 @@ and can be edited in the field above.</p>
     {% endif %}
   </ul>
 
+  <!-- View mode toggle control (UX Step 5) -->
+  <div class="view-mode-toggle">
+    <input type="radio" id="long-form-mode" name="view-mode" class="view-mode-input" checked>
+    <label for="long-form-mode" class="view-mode-label">Long-form view</label>
+    
+    <input type="radio" id="tabbed-mode" name="view-mode" class="view-mode-input">
+    <label for="tabbed-mode" class="view-mode-label">Tabbed view</label>
+  </div>
+
   <!-- Tabs for various methods -->
   <nav class="method-tabs" role="tablist" aria-label="Voting method results navigation">
     {% for restype in result_types %}
@@ -202,10 +211,11 @@ and can be edited in the field above.</p>
   </nav>
 </p>
 <!-- BEGIN .resultbox -->
-<div class="resultbox">
+<div class="resultbox results-container">
 <!-- BEGIN resultbox -->
 {% for restype in result_types %}
   {% if restype == 'dot' %}
+    <div class="method-section" id="condorcet-section" data-method="condorcet">
     {############ condorcet ############}
     {% if 'dot' in result_types or 'wlt' in result_types %}
     <h2><a name="condorcet"></a>Condorcet/Copeland/pairwise results</h2>
@@ -259,7 +269,9 @@ and can be edited in the field above.</p>
       {{ pairwise_html | safe }}
     {% endif %}
     <!-- END wlt section -->
+    </div> <!-- End condorcet section -->
   {% elif restype == 'FPTP' %}
+    <div class="method-section" id="FPTP-section" data-method="FPTP">
     {############ FPTP ############}
     {% set rellink=restype + "#" + restype %}
     {% if 'FPTP' in result_types %}
@@ -279,7 +291,9 @@ and can be edited in the field above.</p>
     <p>{% include 'fptp-snippet.html' %}</p>
     {% endif %}
     <!-- END FPTP section -->
+    </div> <!-- End FPTP section -->
   {% elif restype == 'IRV' %}
+    <div class="method-section" id="IRV-section" data-method="IRV">
     {############ IRV ############}
     {% set rellink=restype + "#" + restype %}
     {% if 'IRV' in result_types and IRV_dict %}
@@ -301,7 +315,9 @@ and can be edited in the field above.</p>
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% endif %}
     <!-- END IRV section -->
+    </div> <!-- End IRV section -->
   {% elif restype == 'STAR' %}
+    <div class="method-section" id="STAR-section" data-method="STAR">
     {############ STAR ############}
     {% set rellink=restype + "#" + restype %}
     {% if 'STAR' in result_types and STAR_html %}
@@ -335,7 +351,9 @@ and can be edited in the field above.</p>
     {% endif %}
     {% endif %}
     <!-- END STAR section -->
+    </div> <!-- End STAR section -->
   {% elif restype == 'approval' %}
+    <div class="method-section" id="approval-section" data-method="approval">
     {############ Approval Voting ############}
     {% set rellink=restype + "#" + restype %}
     {% if 'approval' in result_types and approval_text %}
@@ -359,6 +377,7 @@ and can be edited in the field above.</p>
     {% include 'approval-snippet.html' %}
     {% endif %}
     <!-- END Approval Voting section -->
+    </div> <!-- End approval section -->
   {% endif %}
 {% endfor %}
 <!-- END resultbox -->
