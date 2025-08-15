@@ -112,6 +112,7 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_des
     )
     return html
 
+
 def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None):
     """Generate only the pairwise summary bullets (without the table)"""
     def wltstr(cand):
@@ -290,11 +291,11 @@ logging.getLogger('awt.cache').setLevel(logging.INFO)
 cache = Cache()  # Create cache object at module level for decorators
 wsgi_cache_type = os.environ.get("AWT_CACHE_TYPE", "filesystem")
 if wsgi_cache_type == "none":
-    app.config['CACHE_TYPE'] = 'null'
+    app.config['CACHE_TYPE'] = 'flask_caching.backends.NullCache'
 elif wsgi_cache_type == "simple":
-    app.config['CACHE_TYPE'] = 'simple'
+    app.config['CACHE_TYPE'] = 'flask_caching.backends.SimpleCache'
 else:  # filesystem
-    app.config['CACHE_TYPE'] = 'filesystem'
+    app.config['CACHE_TYPE'] = 'flask_caching.backends.FileSystemCache'
     app.config['CACHE_DIR'] = os.environ.get(
         "AWT_CACHE_DIR", os.path.join(tempfile.gettempdir(), 'awt_flask_cache'))
 
@@ -1062,23 +1063,23 @@ def main():
 
     # Configure Flask-Caching
     if args.caching == "none":
-        app.config['CACHE_TYPE'] = 'null'
+        app.config['CACHE_TYPE'] = 'flask_caching.backends.NullCache'
     elif args.caching == "simple":
-        app.config['CACHE_TYPE'] = 'simple'
+        app.config['CACHE_TYPE'] = 'flask_caching.backends.SimpleCache'
     elif args.caching == "filesystem":
-        app.config['CACHE_TYPE'] = 'filesystem'
+        app.config['CACHE_TYPE'] = 'flask_caching.backends.FileSystemCache'
         app.config['CACHE_DIR'] = args.cache_dir
     app.config['CACHE_DEFAULT_TIMEOUT'] = args.cache_timeout
 
     cache.init_app(app)
 
     # If using filesystem cache, monkeypatch the cache backend to print cache hits and file paths
-    if app.config['CACHE_TYPE'] == 'filesystem':
+    if app.config['CACHE_TYPE'] == 'flask_caching.backends.FileSystemCache':
         monkeypatch_cache_get(app, cache)
 
     # Print cache configuration for debugging
     print(f"[awt.py] Flask-Caching: CACHE_TYPE={app.config['CACHE_TYPE']}")
-    if app.config['CACHE_TYPE'] == 'filesystem':
+    if app.config['CACHE_TYPE'] == 'flask_caching.backends.FileSystemCache':
         print(f"[awt.py] Flask-Caching: CACHE_DIR={app.config['CACHE_DIR']}")
     print(
         f"[awt.py] Flask-Caching: CACHE_DEFAULT_TIMEOUT={app.config['CACHE_DEFAULT_TIMEOUT']}")

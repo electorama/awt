@@ -11,7 +11,7 @@ def test_next_choices():
     """Test the next choices feature with a simple IRV example."""
 
     # Disable caching for clean test
-    app.config['CACHE_TYPE'] = 'null'
+    app.config['CACHE_TYPE'] = 'flask_caching.backends.NullCache'
     cache.init_app(app)
 
     client = app.test_client()

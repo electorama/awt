@@ -9,7 +9,7 @@ def fetch_url_content(url, use_cache=False):
     if not use_cache:
         # By setting the CACHE_TYPE to 'null', we effectively disable caching
         # for the test client session, which is cleaner than cache-busting.
-        app.config['CACHE_TYPE'] = 'null'
+        app.config['CACHE_TYPE'] = 'flask_caching.backends.NullCache'
         cache.init_app(app)
 
     client = app.test_client()
