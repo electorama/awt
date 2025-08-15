@@ -57,6 +57,34 @@
   {{colorlines[cand]}}
   {% endfor %}
 </style>
+
+    <ul>
+      <li><b>STAR winner</b>:
+        {% for cand in ranklist %}
+          {% set j = scoredata['scores'][cand] %}
+          {% if j['candname'] == scoredata['winner'] %}
+            <span class="color-box" style="background-color: {{ colordict[cand] | default('#ccc') }};"></span>
+          {% endif %}
+        {% endfor %}
+        {{ scoredata['winner']}}
+      </li>
+      {% if scoredata['scores'] and ranklist %}
+        {% set top_scorer = ranklist[0] %}
+        {% set top_score_data = scoredata['scores'][top_scorer] %}
+        <li>Finalists: {{ scoredata['fin1n'] }} vs {{ scoredata['fin2n'] }}</li>
+      <li>Runoff result:
+        <ul>
+          <li>{{ scoredata['fin1n'] }}: {{ "{:,}".format(scoredata['fin1votes']) }} votes ({{ "%0.1f"|format((scoredata['fin1votes'] / scoredata['totalvoters']) * 100) if scoredata['totalvoters'] > 0 else 0 }}%)</li>
+          <li>{{ scoredata['fin2n'] }}: {{ "{:,}".format(scoredata['fin2votes']) }} votes ({{ "%0.1f"|format((scoredata['fin2votes'] / scoredata['totalvoters']) * 100) if scoredata['totalvoters'] > 0 else 0 }}%)</li>
+          <li>No preference: {{ scoredata['final_abstentions'] }} voters ({{ "%0.1f"|format((scoredata['final_abstentions'] / scoredata['totalvoters']) * 100) if scoredata['totalvoters'] > 0 else 0 }}%)</li>
+        </ul>
+      </li>
+      {% endif %}
+      <li>Total stars allocated: {{ "{:,}".format(scoredata['total_all_scores']) }}</li>
+      <li><b>Total ballots</b>: {{ "{:,}".format(scoredata['totalvoters']) }}</li>
+    </ul>
+
+
 <div class="flex-container">
   <div class="container">
     <div class="stars star">
@@ -93,9 +121,6 @@
   </div>
   <div>
     <ul>
-      <li>Total voters: {{ "{:,}".format(scoredata['totalvoters']) }}</li>
-      <li>Total stars allocated: {{ "{:,}".format(scoredata['total_all_scores']) }}
-      
       <li>First round:
         <ul>
           {% for cand in ranklist %}
@@ -108,12 +133,11 @@
         <ul>
           {% set fin1n = scoredata['fin1n'] %}
           {% set fin2n = scoredata['fin2n'] %}
-          <li><span class="star g1">★</span>{{ fin1n }} preferred by {{ "{:,}".format(scoredata['fin1votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
+          <li><span class="star g1">★</span><b>{{ fin1n }}</b> (✅ winner) preferred by {{ "{:,}".format(scoredata['fin1votes']) }} of {{ "{:,}".format(scoredata['totalvoters']) }} voters
           <li><span class="star g2">★</span>{{ fin2n }} preferred by {{ "{:,}".format(scoredata['fin2votes']) }} of  {{ "{:,}".format(scoredata['totalvoters']) }} voters
           <li><span class="star g0">★</span>No preference between the finalists: {{ scoredata['final_abstentions']}} </li>
         </ul>
       </li>
-      <li><b>STAR winner</b>: {{ scoredata['winner']}}</li>
     </ul>
   </div>
 </div>

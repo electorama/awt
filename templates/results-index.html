@@ -246,7 +246,7 @@ and can be edited in the field above.</p>
     <div class="method-section" id="condorcet-section" data-method="condorcet">
     {############ condorcet/pairwise ############}
     {% if 'dot' in result_types or 'wlt' in result_types %}
-    <h2><a name="condorcet"></a>Condorcet/Copeland results</h2>
+    <h3><a name="condorcet"></a>Condorcet/Copeland results</h3>
     {% if abif_id %}
     {% set pairwise_pathpart="/id/" + abif_id + "/pairwise#condorcet" %}
     {% set pairwise_abslink=webenv.base_url + pairwise_pathpart %}
@@ -256,22 +256,11 @@ and can be edited in the field above.</p>
     </div>
     {% endif %}
 
-    <!-- Condorcet summary bullets -->
-    <ul>
-      {% if copewinnerstring and FPTP_candnames %}
-        {% set winner_tokens = copewinnerstring.split(',') %}
-        {% set winnerintro = "Condorcet Winners (tie)" if winner_tokens | length > 1 else "Condorcet Winner" %}
-        <li><b>{{winnerintro}}</b>:
-          {%- for tok in winner_tokens -%}
-            {{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
-          {%- endfor -%}
-        </li>
-      {% elif copewinnerstring %}
-        <li><b>Condorcet Winner</b>: {{ copewinnerstring }}</li>
-      {% else %}
-        <li><b>Condorcet Winner</b>: N/A</li>
-      {% endif %}
-    </ul>
+
+    <!-- Include detailed pairwise summary -->
+    {% if pairwise_summary_html %}
+      {{ pairwise_summary_html | safe }}
+    {% endif %}
 
     <!-- Include pairwise results -->
     {% if 'wlt' in result_types and pairwise_html %}

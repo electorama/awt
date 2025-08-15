@@ -82,6 +82,19 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_des
         autoescape=select_autoescape(['html', 'xml'])
     )
     env.filters['escape_css'] = escape_css_selector
+
+    # Generate enhanced pairwise summary using abiflib functions
+    from abiflib.pairwise_tally import calculate_pairwise_victory_sizes
+    victory_method = 'winning-votes'  # Default, could be made configurable
+    victory_data = calculate_pairwise_victory_sizes(pairdict, victory_method)
+
+    # Prepare structured data for template
+    summary_data = {
+        'victory_method': victory_method,
+        'victory_data': victory_data,
+        'total_ballots': abifmodel.get('metadata', {}).get('ballotcount', 0)
+    }
+
     template = env.get_template('pairwise-snippet.html')
     html = template.render(
         title=abifmodel.get('title', 'Pairwise Table'),
@@ -94,7 +107,47 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_des
         wltstr=wltstr,
         has_ties_or_cycles=has_ties_or_cycles,
         svg_text=svg_text,
-        colordict=colordict
+        colordict=colordict,
+        summary_data=summary_data
+    )
+    return html
+
+def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None):
+    """Generate only the pairwise summary bullets (without the table)"""
+    def wltstr(cand):
+        retval = f"{wltdict[cand]['wins']}" + "-"
+        retval += f"{wltdict[cand]['losses']}" + "-"
+        retval += f"{wltdict[cand]['ties']}"
+        return retval
+    candtoks = sorted(
+        pairdict.keys(), key=lambda x: wltdict[x]['wins'], reverse=True)
+    candnames = abifmodel.get('candidates', None)
+
+    env = Environment(
+        loader=FileSystemLoader(os.path.join(
+            os.path.dirname(__file__), 'templates')),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    env.filters['escape_css'] = escape_css_selector
+
+    # Generate enhanced pairwise summary using abiflib functions
+    from abiflib.pairwise_tally import calculate_pairwise_victory_sizes
+    victory_method = 'winning-votes'  # Default, could be made configurable
+    victory_data = calculate_pairwise_victory_sizes(pairdict, victory_method)
+
+    # Prepare structured data for template
+    summary_data = {
+        'victory_method': victory_method,
+        'victory_data': victory_data,
+        'total_ballots': abifmodel.get('metadata', {}).get('ballotcount', 0)
+    }
+
+    template = env.get_template('pairwise-summary-only.html')
+    html = template.render(
+        candnames=candnames,
+        wltdict=wltdict,
+        colordict=colordict,
+        summary_data=summary_data
     )
     return html
 
@@ -715,6 +768,13 @@ def get_by_id(identifier, resulttype=None):
                 add_desc=True,
                 svg_text=None
             )
+            # Generate separate summary for proper positioning
+            resblob['pairwise_summary_html'] = jinja_pairwise_summary_only(
+                jabmod,
+                pairwise_dict,
+                wltdict,
+                colordict=resblob.get('colordict', {})
+            )
             resblob['STAR_html'] = jinja_scorestar_snippet(ratedjabmod)
             if not resulttype or resulttype == 'all':
                 # Use dynamic method ordering based on metadata and ballot type
@@ -760,6 +820,7 @@ def get_by_id(identifier, resulttype=None):
                                    msgs=msgs,
                                    pairwise_dict=resblob['pairwise_dict'],
                                    pairwise_html=resblob['pairwise_html'],
+                                   pairwise_summary_html=resblob.get('pairwise_summary_html', ''),
                                    resblob=resblob,
                                    result_types=rtypelist,
                                    STAR_html=resblob['STAR_html'],
@@ -848,6 +909,13 @@ def awt_post():
                 colordict=resconduit.resblob.get('colordict', {}),
                 add_desc=True,
                 svg_text=None
+            )
+            # Generate separate summary for proper positioning
+            pairwise_summary_html = jinja_pairwise_summary_only(
+                abifmodel,
+                pairwise_dict,
+                wltdict,
+                colordict=resconduit.resblob.get('colordict', {})
             )
         if request.form.get('include_FPTP'):
             rtypelist.append('FPTP')
@@ -938,6 +1006,7 @@ def awt_post():
                            resblob=resblob,
                            copewinnerstring=copewinnerstring,
                            pairwise_html=pairwise_html,
+                           pairwise_summary_html=pairwise_summary_html if 'pairwise_summary_html' in locals() else '',
                            dotsvg_html=dotsvg_html,
                            result_types=rtypelist,
                            STAR_html=STAR_html,
