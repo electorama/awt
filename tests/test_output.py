@@ -94,6 +94,25 @@ html_testlist = [
         True,
         id="output_005_pairwise_margin"
     ),
+
+    pytest.param(
+        {"url_path": "/awt"},
+        "select",
+        ["ul.tab-links"],
+        "count",
+        1,
+        id="homepage_001_tab_structure_exists"
+    ),
+
+    pytest.param(
+        {"url_path": "/awt"},
+        "select",
+        ["div.tab-content.active"],
+        "count",
+        1,
+        marks=pytest.mark.xfail(reason="Broken due to 9341751b", strict=True),
+        id="homepage_002_only_one_active_content"
+    ),
 ]
 
 
