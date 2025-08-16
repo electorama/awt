@@ -580,3 +580,50 @@ svg {
     vertical-align: middle;
     margin-right: 4px;
 }
+
+/* STAR Voting Display Styles */
+.flex-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 5px;
+    text-align: center;
+}
+
+.star-caption {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 0.8em;
+    font-style: italic;
+    width: 200px;
+}
+
+.stars {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 200px;
+}
+
+.r6star {
+    width: 198px;
+}
+
+.r5star { /* 5 stars */
+    width: 165px;
+}
+
+.star {
+    font-size: 27px;
+    line-height: 1;
+    margin: 0 1px;
+    -webkit-text-stroke: 1px #444;
+    text-stroke: 1px #444;
+    color: grey;
+}

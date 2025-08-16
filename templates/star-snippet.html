@@ -1,50 +1,3 @@
-<style>
-.flex-container {
-    display: flex;
-    align-items: flex-start;
-}
-
-.container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: 5px;
-    text-align: center;
-}
-
-.star-caption {
-    text-align: center;
-    margin-top: 12px;
-    font-size: 0.8em;
-    font-style: italic;
-    width: 200px;
-}
-
-.stars {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 200px;
-}
-
-.r6star {
-    width: 198px;
-}
-
-.r5star { /* 5 stars */
-    width: 165px;
-}
-
-.star {
-    font-size: 27px;
-    line-height: 1;
-    margin: 0 1px;
-    -webkit-text-stroke: 1px #444;
-    text-stroke: 1px #444;
-    color: grey;
-}
-</style>
 {% if scorestardict and scorestardict['scoremodel'] and scorestardict['starscale'] %}
 {% set scoredata = scorestardict['scoremodel'] %}
 {% set stardata = scorestardict['starscale'] %}
@@ -74,9 +27,9 @@
         <li>Finalists: {{ scoredata['fin1n'] }} vs {{ scoredata['fin2n'] }}</li>
       <li>Runoff result:
         <ul>
-          <li>{{ scoredata['fin1n'] }}: {{ "{:,}".format(scoredata['fin1votes']) }} votes ({{ "%0.1f"|format((scoredata['fin1votes'] / scoredata['totalvoters']) * 100) if scoredata['totalvoters'] > 0 else 0 }}%)</li>
-          <li>{{ scoredata['fin2n'] }}: {{ "{:,}".format(scoredata['fin2votes']) }} votes ({{ "%0.1f"|format((scoredata['fin2votes'] / scoredata['totalvoters']) * 100) if scoredata['totalvoters'] > 0 else 0 }}%)</li>
-          <li>No preference: {{ scoredata['final_abstentions'] }} voters ({{ "%0.1f"|format((scoredata['final_abstentions'] / scoredata['totalvoters']) * 100) if scoredata['totalvoters'] > 0 else 0 }}%)</li>
+          <li>{{ scoredata['fin1n'] }}: {{ "{:,}".format(scoredata['fin1votes']) }} votes ({{ scoredata['fin1votes_pct_str'] }})</li>
+          <li>{{ scoredata['fin2n'] }}: {{ "{:,}".format(scoredata['fin2votes']) }} votes ({{ scoredata['fin2votes_pct_str'] }})</li>
+          <li>No preference: {{ scoredata['final_abstentions'] }} voters ({{ scoredata['final_abstentions_pct_str'] }})</li>
         </ul>
       </li>
       {% endif %}
@@ -125,7 +78,7 @@
         <ul>
           {% for cand in ranklist %}
           {% set j = scoredata['scores'][cand] %}
-          <li><span class="star g{{ loop.index }}">★</span>#{{ j['rank'] }}: {{ j['candname'] }} received {{ "{:,}".format(j['score']) }} stars from {{ "{:,}".format(j['votercount']) }} voters</li>
+          <li><span class="star g{{ loop.index }}">★</span>#{{ j['rank'] }}: {{ j['candname'] }} received {{ "{:,}".format(j['score']) }} stars ({{ j['score_pct_str'] }}) from {{ "{:,}".format(j['votercount']) }} voters ({{ j['voter_pct_str'] }})</li>
           {% endfor %}
         </ul>
       </li>

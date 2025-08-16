@@ -14,8 +14,9 @@ This is a very incomplete list of incomplete tasks for this project
    - [ ] Clean up Python imports
    - [ ] Generate IRV transfer indicators server-side, not JavaScript.
    - [ ] Unify color styling: Generate CSS classes in one place for use by all voting methods (FPTP, IRV, STAR, etc.)
+   - [ ] Remove dynamic CSS generation from templates: Currently using <style> blocks in templates for candidate colors. Consider CSS custom properties, inline styles, or pre-generated classes instead.
    - [ ] Clean up data structure passed from abiflib to STAR template
-   - [ ] Percentages should be calculated by abiflib, not Jinja templates
+   - [X] Percentages should be calculated by abiflib, not Jinja templates
 * For 0.33.0
   - [X] Sanitize candidate tokens before using them in CSS class names
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list]]
