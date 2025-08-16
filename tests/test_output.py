@@ -110,7 +110,6 @@ html_testlist = [
         ["div.tab-content.active"],
         "count",
         1,
-        marks=pytest.mark.xfail(reason="Broken due to 9341751b", strict=True),
         id="homepage_002_only_one_active_content"
     ),
 ]

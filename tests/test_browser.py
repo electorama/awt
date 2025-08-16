@@ -103,9 +103,6 @@ def awt_server():
         os.unlink(log_path)
 
 
-@pytest.mark.xfail(
-    reason="Homepage tabs broken due to commit 9341751b",
-    strict=True)
 def test_homepage_tab_switching(browser, awt_server):
     """
     Test homepage vertical tabs

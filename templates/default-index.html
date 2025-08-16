@@ -7,7 +7,7 @@
 <div class="example-section">
 <ul class="tab-links">
   {% for item in main_file_array %}
-  <li data-target="example{{loop.index}}">{{loop.index}}. {{item.id}}</li>
+  <li data-target="example{{loop.index}}"{% if loop.first %} class="active"{% endif %}>{{loop.index}}. {{item.id}}</li>
   {% endfor %}
   {% if other_files|length > 0 %}
   <li data-target="more">Other {{tag}} examples...</li>
@@ -15,7 +15,7 @@
   <li data-target="all">All tags</li>
 </ul>
 {% for item in main_file_array %}
-<div class="tab-content active" id="example{{loop.index}}">
+<div class="tab-content{% if loop.first %} active{% endif %}" id="example{{loop.index}}">
   <h3>{{ loop.index }}. {{item.title}}</h3>
   <div class="hatnote">
     🔗 <a href="/id/{{item.id}}">{{item.id}}</a> &nbsp; &nbsp;
