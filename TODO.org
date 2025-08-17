@@ -1,8 +1,8 @@
 This is a very incomplete list of incomplete tasks for this project 
 * Code hygiene
 ** Testing (test)
-   - [ ] Create tests directory and add tests besides per-election smoketests
-   - [ ] Move test_*.py to tests directory
+   - [X] Create tests directory and add tests besides per-election smoketests
+   - [X] Move test_*.py to tests directory
    - [ ] Quicker/easier smoketests
 ** Build & Packaging (build)
    - [ ] Create src directory and move most code to this directory
@@ -19,7 +19,9 @@ This is a very incomplete list of incomplete tasks for this project
    - [X] Percentages should be calculated by abiflib, not Jinja templates
 * For 0.33.0
   - [X] Sanitize candidate tokens before using them in CSS class names
-  - [ ] Review [[https://github.com/electorama/awt/issues][bug list]]
+  - [X] Change where it links to /id/Burl2009/pairwise#condorcet to instead link to /id/Burl2009/pairwise#pairwise
+  - [ ] Fix colorboxes in the Copeland/Condorcet section on /id/2022-08-16_Alaska-U.S._Representative_(Special_General)
+  - [ ] Review [[https://github.com/electorama/awt/issues][bug list on GitHub]]
   - [ ] See [[./CHANGELOG.org]]
 * Post 0.33.0
   - [ ] Create bifhub and figure out awt interface to it [[./docs/bifhub.md]]

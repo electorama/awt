@@ -120,8 +120,9 @@ abiftool/docs/metadata.md for more information.
 - There should be a "🔗http://awt.electorama.com/id/Burl2009/pairwise"
   link at the top of the Condorcet/Copeland/pairwise section
 - Shorten "Condorcet/Copeland/pairwise" to "Condorcet/Copeland" in
-  links to sections that have the word "pairwise" in the body/headers
-  of the sections.
+  some places - particularly for section headers where "pairwise"
+  already appears in subsection titles. Keep "pairwise" terminology
+  in URLs, prose, and places where it's the most descriptive term.
 - Deprecate the "wlt" abbreviation
 - Come up with a slick accordian view for elections with stupidly wide
   tables (e.g. /id/sf2024-mayor )

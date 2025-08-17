@@ -48,7 +48,7 @@ and can be edited in the field above.</p>
         {% for restype in result_types %}
           {% if restype == 'dot' and ('dot' in result_types or 'wlt' in result_types) %}
             <tr>
-              <td style="padding: 8px; border: 1px solid #ddd;"><a href="#condorcet" class="method-link">Condorcet/Copeland</a></td>
+              <td style="padding: 8px; border: 1px solid #ddd;"><a href="#pairwise" class="method-link">Condorcet/Copeland</a></td>
               <td style="padding: 8px; border: 1px solid #ddd;">
                 {% if copewinnerstring and FPTP_candnames %}
                   {%- set winner_tokens = copewinnerstring.split(',') -%}
@@ -187,7 +187,7 @@ and can be edited in the field above.</p>
   <nav class="method-tabs" role="tablist" aria-label="Voting method results navigation">
     {% for restype in result_types %}
       {% if restype == 'dot' and ('dot' in result_types or 'wlt' in result_types) %}
-        <a href="#condorcet" class="method-tab" role="tab" aria-controls="condorcet-section">
+        <a href="#pairwise" class="method-tab" role="tab" aria-controls="condorcet-section">
           {% if copewinnerstring and FPTP_candnames %}
             {%- set winner_tokens = copewinnerstring.split(',') -%}
             {%- for tok in winner_tokens -%}
@@ -246,9 +246,9 @@ and can be edited in the field above.</p>
     <div class="method-section" id="condorcet-section" data-method="condorcet">
     {############ condorcet/pairwise ############}
     {% if 'dot' in result_types or 'wlt' in result_types %}
-    <h3><a name="condorcet"></a>Condorcet/Copeland results</h3>
+    <h3><a name="pairwise"></a>Condorcet/Copeland results</h3>
     {% if abif_id %}
-    {% set pairwise_pathpart="/id/" + abif_id + "/pairwise#condorcet" %}
+    {% set pairwise_pathpart="/id/" + abif_id + "/pairwise#pairwise" %}
     {% set pairwise_abslink=webenv.base_url + pairwise_pathpart %}
     <div class="hatnote">
       {{abif_id}} Condorcet/Copeland results permalink:<br>
