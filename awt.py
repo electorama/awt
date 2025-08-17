@@ -52,7 +52,7 @@ import urllib
 import yaml
 
 
-def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_desc=True, svg_text=None):
+def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_desc=True, svg_text=None, is_copeland_tie=False):
     def wltstr(cand):
         retval = f"{wltdict[cand]['wins']}" + "-"
         retval += f"{wltdict[cand]['losses']}" + "-"
@@ -108,12 +108,13 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_des
         has_ties_or_cycles=has_ties_or_cycles,
         svg_text=svg_text,
         colordict=colordict,
-        summary_data=summary_data
+        summary_data=summary_data,
+        is_copeland_tie=is_copeland_tie
     )
     return html
 
 
-def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None):
+def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None, is_copeland_tie=False, copewinnerstring=None):
     """Generate only the pairwise summary bullets (without the table)"""
     def wltstr(cand):
         retval = f"{wltdict[cand]['wins']}" + "-"
@@ -148,7 +149,9 @@ def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None):
         candnames=candnames,
         wltdict=wltdict,
         colordict=colordict,
-        summary_data=summary_data
+        summary_data=summary_data,
+        is_copeland_tie=is_copeland_tie,
+        copewinnerstring=copewinnerstring
     )
     return html
 
@@ -822,14 +825,17 @@ def get_by_id(identifier, resulttype=None):
                 wltdict,
                 colordict=resblob.get('colordict', {}),
                 add_desc=True,
-                svg_text=None
+                svg_text=None,
+                is_copeland_tie=resblob.get('is_copeland_tie', False)
             )
             # Generate separate summary for proper positioning
             resblob['pairwise_summary_html'] = jinja_pairwise_summary_only(
                 jabmod,
                 pairwise_dict,
                 wltdict,
-                colordict=resblob.get('colordict', {})
+                colordict=resblob.get('colordict', {}),
+                is_copeland_tie=resblob.get('is_copeland_tie', False),
+                copewinnerstring=resblob.get('copewinnerstring', '')
             )
             resblob['STAR_html'] = jinja_scorestar_snippet(ratedjabmod)
             if not resulttype or resulttype == 'all':
@@ -969,14 +975,17 @@ def awt_post():
                 wltdict,
                 colordict=resconduit.resblob.get('colordict', {}),
                 add_desc=True,
-                svg_text=None
+                svg_text=None,
+                is_copeland_tie=resconduit.resblob.get('is_copeland_tie', False)
             )
             # Generate separate summary for proper positioning
             pairwise_summary_html = jinja_pairwise_summary_only(
                 abifmodel,
                 pairwise_dict,
                 wltdict,
-                colordict=resconduit.resblob.get('colordict', {})
+                colordict=resconduit.resblob.get('colordict', {}),
+                is_copeland_tie=resconduit.resblob.get('is_copeland_tie', False),
+                copewinnerstring=resconduit.resblob.get('copewinnerstring', '')
             )
         if request.form.get('include_FPTP'):
             rtypelist.append('FPTP')

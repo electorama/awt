@@ -84,6 +84,7 @@ class ResultConduit:
         cwstring = ", ".join(copewinners)
         self.resblob['copewinners'] = copewinners
         self.resblob['copewinnerstring'] = cwstring
+        self.resblob['is_copeland_tie'] = len(copewinners) > 1
         self.resblob['dotsvg_html'] = copecount_diagram(
             copecount, outformat='svg')
         self.resblob['pairwise_dict'] = pairwise_count_dict(jabmod)

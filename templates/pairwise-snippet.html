@@ -44,7 +44,9 @@
                         {% elif rk == ck %}
                             <td class="pseudo-header">
                                 <div><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }} <br/>
-                                {% if loop.index0 == 0 %}
+                                {% if is_copeland_tie %}
+                                    {{ "{:,}".format(wltdict[rk]['losses']) }} loss{{ 'es' if wltdict[rk]['losses'] != 1 else '' }} / {{ "{:,}".format(wltdict[rk]['wins']) }} victor{{ 'y' if wltdict[rk]['wins'] == 1 else 'ies' }}
+                                {% elif loop.index0 == 0 %}
                                     {{ "{:,}".format(wltdict[rk]['wins']) }} victor{{ 'y' if wltdict[rk]['wins'] == 1 else 'ies' }} ⇣
                                 {% else %}
                                     ⇽ {{ "{:,}".format(wltdict[rk]['losses']) }} loss{{ 'es' if wltdict[rk]['losses'] != 1 else '' }} / {{ "{:,}".format(wltdict[rk]['wins']) }} victor{{ 'y' if wltdict[rk]['wins'] == 1 else 'ies' }} ⇣
