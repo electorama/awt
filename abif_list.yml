@@ -43,7 +43,7 @@
   id: DPL2024
   title: 2024 Debian Project Leader
   desc: 2024 Debian Project Leader election, won by Andreas Tille.
-  tags: debian, actual, orgpriv, featured
+  tags: debian, actual, orgpriv
 - filename: localabif/debian-elections/2023_debian_pl.abif
   id: DPL2023
   title: 2023 Debian Project Leader
@@ -153,7 +153,7 @@
   id: DPL2003
   title: Debian 2003 Project Leader
   desc: 2003 Debian Project Leader election, won by Martin Michlmayr.
-  tags: debian, actual, orgpriv, CondorcetVsIRV, 2003, featured
+  tags: debian, actual, orgpriv, CondorcetVsIRV, 2003, featured, IRVtie
 - filename: localabif/debian-elections/2002_debian_pl.abif
   id: DPL2002
   title: Debian 2002 Project Leader
@@ -166,7 +166,7 @@
 - filename: california/sf2018special-results.abif
   id: sf2018special
   title: Mayor (San Francisco, CA; 2018 Special Election)
-  tags: 2018, RCV, SF, SF_mayor, SanFrancisco_CA, actual, government, USA
+  tags: 2018, RCV, SF, SF_mayor, SanFrancisco_CA, actual, government, USA, mayor
   desc: >
     Electoral results from the San Francisco special election for mayor in 2018.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Portland_ME-city_council_at_large.abif
@@ -460,7 +460,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Mayor_Citywide.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Mayor_Citywide
   title: REP Mayor_Citywide (NYC; 2021-06-22)
-  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06, mayor
   desc: REP Mayor_Citywide (NYC; 2021-06-22). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_18th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_18th_Council_District
@@ -537,7 +537,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Mayor_Citywide.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Mayor_Citywide
   title: DEM Mayor_Citywide (NYC; 2021-06-22)
-  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06, mayor
   desc: DEM Mayor_Citywide (NYC; 2021-06-22). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_23rd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_23rd_Council_District
@@ -590,7 +590,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-2-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-2-Cast-Vote-Record
   title: 2021-Ward-2-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021, CondorcetVsIRV, featured
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021, CondorcetVsIRV, featured, CondorcetCycle
   desc: 2021-Ward-2-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-9-Cast-Vote-Record.abif
@@ -668,7 +668,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Mayor-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Mayor-Cast-Vote-Record
   title: 2021-Mayor-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021, mayor
   desc: 2021-Mayor-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-13-Cast-Vote-Record.abif
@@ -740,7 +740,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Mayor-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Mayor-CVR
   title: 2013-Mayor-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013, mayor
   desc: 2013-Mayor-CVR (Minneapolis; 2013-11-05). Derived from results obtained at
     bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Park-District-5-CVR.abif
@@ -1332,7 +1332,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-School_Director_Dist._4_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-School_Director_Dist._4_-_Oakland
   title: School Director Dist. 4 - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA, CondorcetVsIRV, featured
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA, CondorcetVsIRV, featured, CondorcetCycle
   desc: School Director Dist. 4 - Oakland (AlamedaCounty; 2022-11-08). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Mayor_-_Oakland.abif
@@ -2253,7 +2253,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2009-11-03_PierceCounty_WA-auditor.abif
   id: 2009-11-03_PierceCounty_WA-auditor
   title: auditor (PierceCounty_WA; 2009-11-03)
-  tags: from-bolson, actual, PierceCounty_WA-2009, PierceCounty_WA, 2009-11, 2009
+  tags: from-bolson, actual, PierceCounty_WA-2009, PierceCounty_WA, 2009-11, 2009, WA
   desc: auditor (PierceCounty_WA; 2009-11-03). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-11-06_SanFrancisco-Public_Defender.abif
   id: 2018-11-06_SanFrancisco-Public_Defender
@@ -2305,13 +2305,13 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-06-05_SF_Mayor-Board_of_Supervisors_District_8.abif
   id: 2018-06-05_SF_Mayor-Board_of_Supervisors_District_8
   title: Board of Supervisors District 8 (SF_Mayor; 2018-06-05)
-  tags: 2018-06, from-bolson, actual, 2018, SF_Mayor, mayor, SF_Mayor-2018
+  tags: 2018-06, from-bolson, actual, 2018, SF_Mayor, mayor, SF_Mayor-2018, CA
   desc: Board of Supervisors District 8 (SF_Mayor; 2018-06-05). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-06-05_SF_Mayor-Mayor.abif
   id: 2018-06-05_SF_Mayor-Mayor
   title: Mayor (SF_Mayor; 2018-06-05)
-  tags: 2018-06, from-bolson, actual, 2018, SF_Mayor, mayor, SF_Mayor-2018
+  tags: 2018-06, from-bolson, actual, 2018, SF_Mayor, mayor, SF_Mayor-2018, CA
   desc: Mayor (SF_Mayor; 2018-06-05). Derived from results obtained at bolson.org.
 - filename: localabif/california/sf2024-mayor.abif
   id: sf2024-mayor
