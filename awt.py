@@ -455,7 +455,27 @@ def get_all_tags_in_election_list(election_list):
 
 
 @app.route('/')
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
 def homepage():
+    """Homepage route using homepage-snippet.html"""
+    msgs = []
+    webenv = WebEnv.wenvDict()
+
+    # Handle cache purge
+    if 'purge' in request.args:
+        cache_key = cache_key_from_request(request)
+        cache_file = cache_file_from_key(cache_key)
+        purge_cache_entry(cache_key, cache_file)
+        msgs.append(f"Purged cache entry for homepage")
+
+    return render_template('homepage-index.html',
+                         msgs=msgs,
+                         webenv=webenv), 200
+
+
+@app.route('/edit')
+def edit_interface():
+    """Edit interface route - redirects to /awt for 0.33"""
     return redirect('/awt', code=302)
 
 

@@ -670,3 +670,47 @@ svg {
 .featured-list li {
     margin-bottom: 5px;
 }
+
+/* Homepage Action Boxes */
+.homepage-actions {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.action-box {
+    flex: 1;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+}
+
+.action-box h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.4em;
+}
+
+.action-box h2 a {
+    color: #d02929;
+    text-decoration: none;
+}
+
+.action-box h2 a:hover {
+    text-decoration: underline;
+}
+
+.action-box p {
+    margin: 0;
+    line-height: 1.5;
+    color: #666;
+}
+
+/* Responsive design for small screens */
+@media (max-width: 768px) {
+    .homepage-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
