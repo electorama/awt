@@ -808,6 +808,7 @@ def get_by_id(identifier, resulttype=None):
                                    abif_id=identifier,
                                    election_list=election_list,
                                    copewinnerstring=resblob['copewinnerstring'],
+                                   copewinners=resblob.get('copewinners', []),
                                    dotsvg_html=resblob['dotsvg_html'],
                                    error_html=resblob.get('error_html'),
                                    IRV_dict=resblob['IRV_dict'],
@@ -884,7 +885,8 @@ def awt_post():
         if request.form.get('include_dotsvg'):
             rtypelist.append('dot')
             copecount = full_copecount_from_abifmodel(abifmodel)
-            copewinnerstring = ", ".join(get_Copeland_winners(copecount))
+            copewinners = get_Copeland_winners(copecount)
+            copewinnerstring = ", ".join(copewinners)
             debug_output += "\ncopecount:\n"
             debug_output += pformat(copecount)
             debug_output += "\ncopewinnerstring\n"
@@ -1006,6 +1008,7 @@ def awt_post():
                            abifinput=abifinput,
                            resblob=resblob,
                            copewinnerstring=copewinnerstring,
+                           copewinners=copewinners if 'copewinners' in locals() else [],
                            pairwise_html=pairwise_html,
                            pairwise_summary_html=pairwise_summary_html if 'pairwise_summary_html' in locals() else '',
                            dotsvg_html=dotsvg_html,

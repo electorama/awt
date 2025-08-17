@@ -80,7 +80,9 @@ class ResultConduit:
 
     def update_pairwise_result(self, jabmod) -> "ResultConduit":
         copecount = full_copecount_from_abifmodel(jabmod)
-        cwstring = ", ".join(get_Copeland_winners(copecount))
+        copewinners = get_Copeland_winners(copecount)
+        cwstring = ", ".join(copewinners)
+        self.resblob['copewinners'] = copewinners
         self.resblob['copewinnerstring'] = cwstring
         self.resblob['dotsvg_html'] = copecount_diagram(
             copecount, outformat='svg')

@@ -50,10 +50,9 @@ and can be edited in the field above.</p>
             <tr>
               <td style="padding: 8px; border: 1px solid #ddd;"><a href="#pairwise" class="method-link">Condorcet/Copeland</a></td>
               <td style="padding: 8px; border: 1px solid #ddd;">
-                {% if copewinnerstring and FPTP_candnames %}
-                  {%- set winner_tokens = copewinnerstring.split(',') -%}
-                  {%- for tok in winner_tokens -%}
-                    <span class="color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+                {% if copewinners and FPTP_candnames %}
+                  {%- for tok in copewinners -%}
+                    <span class="color-box" style="background-color: {{ colordict[tok] | default('#ccc') }};"></span>{{ FPTP_candnames[tok] if tok in FPTP_candnames else tok }}{% if not loop.last %}, {% endif %}
                   {%- endfor -%}
                 {% elif copewinnerstring %}
                   {{ copewinnerstring }}
@@ -188,10 +187,9 @@ and can be edited in the field above.</p>
     {% for restype in result_types %}
       {% if restype == 'dot' and ('dot' in result_types or 'wlt' in result_types) %}
         <a href="#pairwise" class="method-tab" role="tab" aria-controls="condorcet-section">
-          {% if copewinnerstring and FPTP_candnames %}
-            {%- set winner_tokens = copewinnerstring.split(',') -%}
-            {%- for tok in winner_tokens -%}
-              <span class="tab-color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{% if not loop.last %}{% endif %}
+          {% if copewinners and FPTP_candnames %}
+            {%- for tok in copewinners -%}
+              <span class="tab-color-box" style="background-color: {{ colordict[tok] | default('#ccc') }};"></span>{% if not loop.last %}{% endif %}
             {%- endfor -%}
           {% endif %}
           Condorcet/Copeland
