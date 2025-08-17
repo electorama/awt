@@ -108,13 +108,14 @@
     {% set majority = IRV_dict['roundmeta'][0]['startingqty'] // 2 + 1 %}
 
     <li><b>{{winnerintro}}</b>:
-      {% if winnerstr and IRV_candnames %}
-        {%- set winner_tokens = winnerstr.split(',') -%}
-        {%- for tok in winner_tokens -%}
-          <span class="color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{{ IRV_candnames[tok.strip()] if tok.strip() in IRV_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+      {% if winner and IRV_candnames %}
+        {%- for winner_token in winner -%}
+          <span class="color-box" style="background-color: {{ colordict[winner_token] | default('#ccc') }};"></span>{{ IRV_candnames[winner_token] if winner_token in IRV_candnames else winner_token }}{% if not loop.last %}, {% endif %}
         {%- endfor -%}
-      {% else %}
+      {% elif winnerstr %}
         {{ winnerstr }}
+      {% else %}
+        No winner determined
       {% endif %}
     </li>
     <li>Number of rounds: {{numrounds}}</li>
