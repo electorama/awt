@@ -20,7 +20,9 @@ This is a very incomplete list of incomplete tasks for this project
 * For 0.33.0
   - [X] Sanitize candidate tokens before using them in CSS class names
   - [X] Change where it links to /id/Burl2009/pairwise#condorcet to instead link to /id/Burl2009/pairwise#pairwise
-  - [ ] Fix colorboxes in the Copeland/Condorcet section on /id/2022-08-16_Alaska-U.S._Representative_(Special_General)
+  - [X] Fix colorboxes in the Copeland/Condorcet section on /id/2022-08-16_Alaska-U.S._Representative_(Special_General)
+  - [ ] Create /browse route for better election discovery
+  - [ ] Redirect /id to /browse prior to 0.33 release
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list on GitHub]]
   - [ ] See [[./CHANGELOG.org]]
 * Post 0.33.0

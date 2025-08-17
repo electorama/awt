@@ -790,7 +790,10 @@ def get_by_id(identifier, resulttype=None):
                     elif method != 'dot':  # Skip 'dot' since we handle it with 'wlt'
                         rtypelist.append(method)
             else:
-                rtypelist = [resulttype]
+                if resulttype == 'pairwise':
+                    rtypelist = ['dot', 'wlt']
+                else:
+                    rtypelist = [resulttype]
 
             debug_output += pformat(resblob.keys()) + "\n"
             debug_output += f"result_types (dynamic order): {rtypelist}\n"
