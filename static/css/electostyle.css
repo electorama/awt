@@ -627,3 +627,46 @@ svg {
     text-stroke: 1px #444;
     color: grey;
 }
+
+/* Tag Browser Styling */
+.tag-browser {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.tag-browser h2 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 1.3em;
+}
+
+.tag-browser p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Featured Elections Styling */
+.featured-elections {
+    background-color: #fffbf0;
+    border: 1px solid #f0c674;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.featured-elections h3 {
+    margin: 0 0 10px 0;
+    color: #b58900;
+}
+
+.featured-list {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.featured-list li {
+    margin-bottom: 5px;
+}

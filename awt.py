@@ -538,6 +538,41 @@ def awt_get(toppage=None, tag=None):
                                       ), 404)
     return retval
 
+# Route for '/browse' - election discovery with tag browser
+@app.route('/browse', methods=['GET'])
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
+def browse_elections():
+    # --- Cache purge support via ?action=purge ---
+    if request.args.get('action') == 'purge':
+        args = request.args.to_dict()
+        args.pop('action', None)
+        canonical_path = request.path
+        cache_dir = app.config.get('CACHE_DIR')
+        logging.getLogger('awt.cache').info(
+            f"[DEBUG] Entering purge logic for path: {canonical_path}")
+        from cache_awt import purge_cache_entries_by_path
+        purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Redirect to same URL without ?action=purge
+        return redirect(url_for(request.endpoint, **args))
+    msgs = {}
+    webenv = WebEnv.wenvDict()
+    WebEnv.sync_web_env()
+    msgs['pagetitle'] = \
+        f"{webenv['statusStr']}ABIF web tool (awt) on Electorama!"
+    msgs['pagetitle'] = "Browse Elections"
+    msgs['lede'] = (
+        "Browse elections by category or view the complete list:"
+    )
+    webenv = WebEnv.wenvDict()
+    WebEnv.sync_web_env()
+    election_list = build_election_list()
+    return render_template('browse-index.html',
+                           msgs=msgs,
+                           webenv=webenv,
+                           election_list=election_list
+                           ), 200
+
+
 # Route for '/id' with no identifier
 
 

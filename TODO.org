@@ -21,11 +21,12 @@ This is a very incomplete list of incomplete tasks for this project
   - [X] Sanitize candidate tokens before using them in CSS class names
   - [X] Change where it links to /id/Burl2009/pairwise#condorcet to instead link to /id/Burl2009/pairwise#pairwise
   - [X] Fix colorboxes in the Copeland/Condorcet section on /id/2022-08-16_Alaska-U.S._Representative_(Special_General)
-  - [ ] Create /browse route for better election discovery
+  - [X] Create /browse route for better election discovery
   - [ ] Redirect /id to /browse prior to 0.33 release
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list on GitHub]]
   - [ ] See [[./CHANGELOG.org]]
 * Post 0.33.0
+  - [ ] Create /edit route for ABIF editing interface (move editing functionality from homepage)
   - [ ] Create bifhub and figure out awt interface to it [[./docs/bifhub.md]]
   - Moar [[Code hygiene]] (see above)
 

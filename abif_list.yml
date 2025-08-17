@@ -1,7 +1,7 @@
 - filename: tenn-example/tennessee-example-simple.abif
   id: TNexample
   title: Simple example (Tennessee capitol)
-  tags: theoretical, CondorcetVsIRV
+  tags: theoretical, CondorcetVsIRV, featured
   desc: >
     This example is compatible with many web election tools.
 - filename: tenn-example/tennessee-example-scores.abif
@@ -15,7 +15,7 @@
 - filename: burl2009/burl2009.abif
   id: Burl2009
   title: Burlington mayoral 2009
-  tags: actual, VT, USA, government, CondorcetVsIRV
+  tags: actual, VT, USA, government, CondorcetVsIRV, featured
   desc: >
     This example is based on the electoral results from the Burlington
     mayoral race in 2009.
@@ -43,7 +43,7 @@
   id: DPL2024
   title: 2024 Debian Project Leader
   desc: 2024 Debian Project Leader election, won by Andreas Tille.
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, featured
 - filename: localabif/debian-elections/2023_debian_pl.abif
   id: DPL2023
   title: 2023 Debian Project Leader
@@ -108,7 +108,7 @@
   id: DPL2012
   title: Debian 2012 Project Leader
   desc: 2012 Debian Project Leader election, won by Stefano Zacchiroli
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2012
 - filename: localabif/debian-elections/dpl2011.abif
   id: DPL2011
   title: Debian 2011 Project Leader
@@ -133,36 +133,36 @@
   id: DPL2007
   title: Debian 2007 Project Leader
   desc: 2007 Debian Project Leader election, won by Sam Hocevar
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2007
 - filename: localabif/debian-elections/dpl2006.abif
   id: DPL2006
   title: Debian 2006 Project Leader
   desc: 2006 Debian Project Leader election, won by Anthony Towns
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2006
 - filename: localabif/debian-elections/dpl2005.abif
   id: DPL2005
   title: Debian 2005 Project Leader
   desc: 2005 Debian Project Leader election, won by Branden Robinson
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2005
 - filename: localabif/debian-elections/dpl2004.abif
   id: DPL2004
   title: Debian 2004 Project Leader
   desc: 2004 Debian Project Leader election, won by Martin Michlmayr
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2004
 - filename: localabif/debian-elections/2003_debian_pl.abif
   id: DPL2003
   title: Debian 2003 Project Leader
   desc: 2003 Debian Project Leader election, won by Martin Michlmayr.
-  tags: debian, actual, orgpriv, CondorcetVsIRV
+  tags: debian, actual, orgpriv, CondorcetVsIRV, 2003, featured
 - filename: localabif/debian-elections/2002_debian_pl.abif
   id: DPL2002
   title: Debian 2002 Project Leader
   desc: 2002 Debian Project Leader election, won by Bdale Garbee.
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2002
 - filename: tenn-example/tennessee-example-irv-tie.abif
   id: TNexampleTie
   title: A modified version of the Tennessee example which demonstrates an IRV tie
-  tags: theoretical, CondorcetVsIRV
+  tags: theoretical, CondorcetVsIRV, featured
 - filename: california/sf2018special-results.abif
   id: sf2018special
   title: Mayor (San Francisco, CA; 2018 Special Election)
@@ -172,2151 +172,2151 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Portland_ME-city_council_at_large.abif
   id: 2021-11-02_Portland_ME-city_council_at_large
   title: city_council_at_large (Portland_ME; 2021-11-02)
-  tags: 2021, from-bolson, Portland_ME-2021, 2021-11, Portland_ME, ME
+  tags: 2021, from-bolson, actual, Portland_ME-2021, 2021-11, Portland_ME, ME
   desc: city_council_at_large (Portland_ME; 2021-11-02). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_19th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_19th_Council_District
   title: REP Council Member_19th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: REP Council Member_19th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_36th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_36th_Council_District
   title: DEM Council Member_36th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_36th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_26th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_26th_Council_District
   title: DEM Council Member_26th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_26th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_33rd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_33rd_Council_District
   title: DEM Council Member_33rd Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_33rd Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_32nd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_32nd_Council_District
   title: DEM Council Member_32nd Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_32nd Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_37th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_37th_Council_District
   title: DEM Council Member_37th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_37th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_38th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_38th_Council_District
   title: DEM Council Member_38th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_38th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_1st_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_1st_Council_District
   title: DEM Council Member_1st Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_1st Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Comptroller_Citywide.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Comptroller_Citywide
   title: DEM Comptroller_Citywide (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Comptroller_Citywide (NYC; 2021-06-22). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_7th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_7th_Council_District
   title: DEM Council Member_7th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_7th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_28th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_28th_Council_District
   title: DEM Council Member_28th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_28th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_23rd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_23rd_Council_District
   title: REP Council Member_23rd Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: REP Council Member_23rd Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_50th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_50th_Council_District
   title: REP Council Member_50th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: REP Council Member_50th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-CON_Council_Member_19th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-CON_Council_Member_19th_Council_District
   title: CON Council Member_19th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: CON Council Member_19th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_46th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_46th_Council_District
   title: DEM Council Member_46th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_46th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_29th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_29th_Council_District
   title: DEM Council Member_29th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_29th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Borough_President_Queens.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Borough_President_Queens
   title: REP Borough President_Queens (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: REP Borough President_Queens (NYC; 2021-06-22). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_21st_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_21st_Council_District
   title: DEM Council Member_21st Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_21st Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_41st_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_41st_Council_District
   title: DEM Council Member_41st Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_41st Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_9th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_9th_Council_District
   title: DEM Council Member_9th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_9th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Borough_President_Richmond.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Borough_President_Richmond
   title: REP Borough President_Richmond (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: REP Borough President_Richmond (NYC; 2021-06-22). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_34th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_34th_Council_District
   title: DEM Council Member_34th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_34th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_35th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_35th_Council_District
   title: DEM Council Member_35th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_35th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_6th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_6th_Council_District
   title: DEM Council Member_6th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_6th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_30th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_30th_Council_District
   title: DEM Council Member_30th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_30th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_14th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_14th_Council_District
   title: DEM Council Member_14th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_14th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_16th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_16th_Council_District
   title: DEM Council Member_16th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_16th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_3rd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_3rd_Council_District
   title: DEM Council Member_3rd Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_3rd Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_31st_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_31st_Council_District
   title: DEM Council Member_31st Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_31st Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_25th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_25th_Council_District
   title: DEM Council Member_25th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_25th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_27th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_27th_Council_District
   title: DEM Council Member_27th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_27th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_8th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_8th_Council_District
   title: DEM Council Member_8th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_8th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_5th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_5th_Council_District
   title: DEM Council Member_5th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_5th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Public_Advocate_Citywide.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Public_Advocate_Citywide
   title: DEM Public Advocate_Citywide (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Public Advocate_Citywide (NYC; 2021-06-22). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_39th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_39th_Council_District
   title: DEM Council Member_39th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_39th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_32nd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_32nd_Council_District
   title: REP Council Member_32nd Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: REP Council Member_32nd Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_17th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_17th_Council_District
   title: DEM Council Member_17th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_17th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_49th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_49th_Council_District
   title: DEM Council Member_49th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_49th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_Richmond.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_Richmond
   title: DEM Borough President_Richmond (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Borough President_Richmond (NYC; 2021-06-22). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_47th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_47th_Council_District
   title: DEM Council Member_47th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_47th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_2nd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_2nd_Council_District
   title: DEM Council Member_2nd Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_2nd Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_15th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_15th_Council_District
   title: REP Council Member_15th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: REP Council Member_15th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_19th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_19th_Council_District
   title: DEM Council Member_19th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_19th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_42nd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_42nd_Council_District
   title: DEM Council Member_42nd Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_42nd Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_22nd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_22nd_Council_District
   title: DEM Council Member_22nd Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_22nd Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_Kings.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_Kings
   title: DEM Borough President_Kings (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Borough President_Kings (NYC; 2021-06-22). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_11th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_11th_Council_District
   title: DEM Council Member_11th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_11th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Mayor_Citywide.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Mayor_Citywide
   title: REP Mayor_Citywide (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: REP Mayor_Citywide (NYC; 2021-06-22). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_18th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_18th_Council_District
   title: DEM Council Member_18th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_18th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_45th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_45th_Council_District
   title: DEM Council Member_45th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_45th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_15th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_15th_Council_District
   title: DEM Council Member_15th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_15th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_10th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_10th_Council_District
   title: DEM Council Member_10th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_10th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_13th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_13th_Council_District
   title: DEM Council Member_13th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_13th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_Bronx.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_Bronx
   title: DEM Borough President_Bronx (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Borough President_Bronx (NYC; 2021-06-22). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_12th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_12th_Council_District
   title: DEM Council Member_12th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_12th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_40th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_40th_Council_District
   title: DEM Council Member_40th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_40th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_20th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_20th_Council_District
   title: DEM Council Member_20th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_20th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_24th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-REP_Council_Member_24th_Council_District
   title: REP Council Member_24th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: REP Council Member_24th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_New_York.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_New_York
   title: DEM Borough President_New York (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Borough President_New York (NYC; 2021-06-22). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_48th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_48th_Council_District
   title: DEM Council Member_48th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_48th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Mayor_Citywide.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Mayor_Citywide
   title: DEM Mayor_Citywide (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Mayor_Citywide (NYC; 2021-06-22). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_23rd_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_23rd_Council_District
   title: DEM Council Member_23rd Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_23rd Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_Queens.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Borough_President_Queens
   title: DEM Borough President_Queens (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Borough President_Queens (NYC; 2021-06-22). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_24th_Council_District.abif
   id: 2021-06-22_NYC-PE2021_CVR_Final-DEM_Council_Member_24th_Council_District
   title: DEM Council Member_24th Council District (NYC; 2021-06-22)
-  tags: 2021, from-bolson, NY, NYC-2021, NYC_NY, 2021-06
+  tags: 2021, from-bolson, actual, NY, NYC-2021, NYC_NY, 2021-06
   desc: DEM Council Member_24th Council District (NYC; 2021-06-22). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Park-5-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Park-5-Cast-Vote-Record
   title: 2021-Park-5-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Park-5-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Park-3-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Park-3-Cast-Vote-Record
   title: 2021-Park-3-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Park-3-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-12-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-12-Cast-Vote-Record
   title: 2021-Ward-12-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-12-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-3-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-3-Cast-Vote-Record
   title: 2021-Ward-3-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-3-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Park-2-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Park-2-Cast-Vote-Record
   title: 2021-Park-2-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Park-2-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-2-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-2-Cast-Vote-Record
   title: 2021-Ward-2-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021, CondorcetVsIRV
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021, CondorcetVsIRV, featured
   desc: 2021-Ward-2-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-9-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-9-Cast-Vote-Record
   title: 2021-Ward-9-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-9-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-10-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-10-Cast-Vote-Record
   title: 2021-Ward-10-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-10-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Park-AL-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Park-AL-Cast-Vote-Record
   title: 2021-Park-AL-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Park-AL-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-7-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-7-Cast-Vote-Record
   title: 2021-Ward-7-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-7-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-BET-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-BET-Cast-Vote-Record
   title: 2021-BET-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-BET-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Park-4-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Park-4-Cast-Vote-Record
   title: 2021-Park-4-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Park-4-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-5-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-5-Cast-Vote-Record
   title: 2021-Ward-5-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-5-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Park-6-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Park-6-Cast-Vote-Record
   title: 2021-Park-6-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Park-6-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-1-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-1-Cast-Vote-Record
   title: 2021-Ward-1-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-1-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-6-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-6-Cast-Vote-Record
   title: 2021-Ward-6-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-6-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-8-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-8-Cast-Vote-Record
   title: 2021-Ward-8-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-8-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-4-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-4-Cast-Vote-Record
   title: 2021-Ward-4-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-4-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Mayor-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Mayor-Cast-Vote-Record
   title: 2021-Mayor-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Mayor-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-13-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-13-Cast-Vote-Record
   title: 2021-Ward-13-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-13-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-11-02_Minneapolis-2021-Ward-11-Cast-Vote-Record.abif
   id: 2021-11-02_Minneapolis-2021-Ward-11-Cast-Vote-Record
   title: 2021-Ward-11-Cast-Vote-Record (Minneapolis; 2021-11-02)
-  tags: Minneapolis_MN, 2021, from-bolson, 2021-11, MN, Minneapolis-2021
+  tags: Minneapolis_MN, 2021, from-bolson, actual, 2021-11, MN, Minneapolis-2021
   desc: 2021-Ward-11-Cast-Vote-Record (Minneapolis; 2021-11-02). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2021-06-_Portland_ME-chater_commissioner.abif
   id: 2021-06-_Portland_ME-chater_commissioner
   title: chater_commissioner (Portland_ME; 2021-06-)
-  tags: 2021, from-bolson, Portland_ME-2021, Portland_ME, 2021-06, ME
+  tags: 2021, from-bolson, actual, Portland_ME-2021, Portland_ME, 2021-06, ME
   desc: chater_commissioner (Portland_ME; 2021-06-). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Park-District-1-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Park-District-1-CVR
   title: 2013-Park-District-1-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Park-District-1-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-2-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-2-CVR
   title: 2013-Council-Ward-2-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-2-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Park-District-3-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Park-District-3-CVR
   title: 2013-Park-District-3-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Park-District-3-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-10-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-10-CVR
   title: 2013-Council-Ward-10-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-10-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Park-District-4-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Park-District-4-CVR
   title: 2013-Park-District-4-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Park-District-4-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-11-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-11-CVR
   title: 2013-Council-Ward-11-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-11-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-12-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-12-CVR
   title: 2013-Council-Ward-12-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-12-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-7-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-7-CVR
   title: 2013-Council-Ward-7-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-7-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Mayor-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Mayor-CVR
   title: 2013-Mayor-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Mayor-CVR (Minneapolis; 2013-11-05). Derived from results obtained at
     bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Park-District-5-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Park-District-5-CVR
   title: 2013-Park-District-5-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Park-District-5-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-8-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-8-CVR
   title: 2013-Council-Ward-8-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-8-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-6-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-6-CVR
   title: 2013-Council-Ward-6-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-6-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Board-of-Estimate-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Board-of-Estimate-CVR
   title: 2013-Board-of-Estimate-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Board-of-Estimate-CVR (Minneapolis; 2013-11-05). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-3-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-3-CVR
   title: 2013-Council-Ward-3-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-3-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Park-District-2-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Park-District-2-CVR
   title: 2013-Park-District-2-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Park-District-2-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Park-District-6-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Park-District-6-CVR
   title: 2013-Park-District-6-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Park-District-6-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-9-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-9-CVR
   title: 2013-Council-Ward-9-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-9-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-4-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-4-CVR
   title: 2013-Council-Ward-4-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-4-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-5-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-5-CVR
   title: 2013-Council-Ward-5-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-5-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-1-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-1-CVR
   title: 2013-Council-Ward-1-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-1-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Park-At-Large-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Park-At-Large-CVR
   title: 2013-Park-At-Large-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Park-At-Large-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2013-11-05_Minneapolis-2013-Council-Ward-13-CVR.abif
   id: 2013-11-05_Minneapolis-2013-Council-Ward-13-CVR
   title: 2013-Council-Ward-13-CVR (Minneapolis; 2013-11-05)
-  tags: Minneapolis_MN, from-bolson, MN, 2013-11, 2013, Minneapolis-2013
+  tags: Minneapolis_MN, from-bolson, actual, MN, 2013-11, 2013, Minneapolis-2013
   desc: 2013-Council-Ward-13-CVR (Minneapolis; 2013-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2008-11-04_Pierce_WA-county_council_2-county_council_2.abif
   id: 2008-11-04_Pierce_WA-county_council_2-county_council_2
   title: county_council_2 (Pierce_WA; 2008-11-04)
-  tags: from-bolson, 2008, PierceCounty_WA, Pierce_WA-2008, WA, 2008-11
+  tags: from-bolson, actual, 2008, PierceCounty_WA, Pierce_WA-2008, WA, 2008-11
   desc: county_council_2 (Pierce_WA; 2008-11-04). Derived from results obtained at
     bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2008-11-04_Pierce_WA-county_executive-county_executive.abif
   id: 2008-11-04_Pierce_WA-county_executive-county_executive
   title: county_executive (Pierce_WA; 2008-11-04)
-  tags: from-bolson, 2008, PierceCounty_WA, Pierce_WA-2008, WA, 2008-11
+  tags: from-bolson, actual, 2008, PierceCounty_WA, Pierce_WA-2008, WA, 2008-11
   desc: county_executive (Pierce_WA; 2008-11-04). Derived from results obtained at
     bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2008-11-04_Pierce_WA-acessor_treasurer-accesor.abif
   id: 2008-11-04_Pierce_WA-acessor_treasurer-accesor
   title: accesor (Pierce_WA; 2008-11-04)
-  tags: from-bolson, 2008, PierceCounty_WA, Pierce_WA-2008, WA, 2008-11
+  tags: from-bolson, actual, 2008, PierceCounty_WA, Pierce_WA-2008, WA, 2008-11
   desc: accesor (Pierce_WA; 2008-11-04). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2014-11-04_SanFrancisco-Board_of_Supervisors_District_10.abif
   id: 2014-11-04_SanFrancisco-Board_of_Supervisors_District_10
   title: Board of Supervisors District 10 (SanFrancisco; 2014-11-04)
-  tags: SanFrancisco-2014, from-bolson, SF, 2014, SanFrancisco_CA, 2014-11, CA
+  tags: SanFrancisco-2014, from-bolson, actual, SF, 2014, SanFrancisco_CA, 2014-11, CA
   desc: Board of Supervisors District 10 (SanFrancisco; 2014-11-04). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Portland_ME-school_board_d3.abif
   id: 2022-11-08_Portland_ME-school_board_d3
   title: school_board_d3 (Portland_ME; 2022-11-08)
-  tags: Portland_ME-2022, from-bolson, 2022, 2022-11, Portland_ME, ME
+  tags: Portland_ME-2022, from-bolson, actual, 2022, 2022-11, Portland_ME, ME
   desc: school_board_d3 (Portland_ME; 2022-11-08). Derived from results obtained at
     bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_SanFrancisco-DISTRICT_ATTORNEY.abif
   id: 2022-11-08_SanFrancisco-DISTRICT_ATTORNEY
   title: DISTRICT ATTORNEY (SanFrancisco; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
+  tags: from-bolson, actual, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
   desc: DISTRICT ATTORNEY (SanFrancisco; 2022-11-08). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_4.abif
   id: 2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_4
   title: BOARD OF SUPERVISORS DISTRICT 4 (SanFrancisco; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
+  tags: from-bolson, actual, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
   desc: BOARD OF SUPERVISORS DISTRICT 4 (SanFrancisco; 2022-11-08). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_SanFrancisco-ASSESSOR-RECORDER.abif
   id: 2022-11-08_SanFrancisco-ASSESSOR-RECORDER
   title: ASSESSOR-RECORDER (SanFrancisco; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
+  tags: from-bolson, actual, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
   desc: ASSESSOR-RECORDER (SanFrancisco; 2022-11-08). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_6.abif
   id: 2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_6
   title: BOARD OF SUPERVISORS DISTRICT 6 (SanFrancisco; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
+  tags: from-bolson, actual, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
   desc: BOARD OF SUPERVISORS DISTRICT 6 (SanFrancisco; 2022-11-08). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_8.abif
   id: 2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_8
   title: BOARD OF SUPERVISORS DISTRICT 8 (SanFrancisco; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
+  tags: from-bolson, actual, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
   desc: BOARD OF SUPERVISORS DISTRICT 8 (SanFrancisco; 2022-11-08). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_SanFrancisco-PUBLIC_DEFENDER.abif
   id: 2022-11-08_SanFrancisco-PUBLIC_DEFENDER
   title: PUBLIC DEFENDER (SanFrancisco; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
+  tags: from-bolson, actual, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
   desc: PUBLIC DEFENDER (SanFrancisco; 2022-11-08). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_10.abif
   id: 2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_10
   title: BOARD OF SUPERVISORS DISTRICT 10 (SanFrancisco; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
+  tags: from-bolson, actual, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
   desc: BOARD OF SUPERVISORS DISTRICT 10 (SanFrancisco; 2022-11-08). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_2.abif
   id: 2022-11-08_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_2
   title: BOARD OF SUPERVISORS DISTRICT 2 (SanFrancisco; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
+  tags: from-bolson, actual, 2022, 2022-11, SF, SanFrancisco_CA, CA, SanFrancisco-2022
   desc: BOARD OF SUPERVISORS DISTRICT 2 (SanFrancisco; 2022-11-08). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Maine-20221108_ME_CD2.abif
   id: 2022-11-08_Maine-20221108_ME_CD2
   title: 20221108_ME_CD2 (Maine; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, Maine-2022, ME
+  tags: from-bolson, actual, 2022, 2022-11, Maine-2022, ME
   desc: 20221108_ME_CD2 (Maine; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_18.abif
   id: 2022-08-16_Alaska-House_District_18
   title: House_District_18 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_18 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_25.abif
   id: 2022-08-16_Alaska-House_District_25
   title: House_District_25 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_25 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_13.abif
   id: 2022-08-16_Alaska-House_District_13
   title: House_District_13 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_13 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-U.S._Representative_(Special_General).abif
   id: 2022-08-16_Alaska-U.S._Representative_(Special_General)
   title: U.S._Representative_(Special_General) (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08, CondorcetVsIRV
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08, CondorcetVsIRV, featured
   desc: U.S._Representative_(Special_General) (Alaska; 2022-08-16). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_12.abif
   id: 2022-08-16_Alaska-House_District_12
   title: House_District_12 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_12 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_34.abif
   id: 2022-08-16_Alaska-House_District_34
   title: House_District_34 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_34 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-U.S._Senator.abif
   id: 2022-08-16_Alaska-U.S._Senator
   title: U.S._Senator (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: U.S._Senator (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_31.abif
   id: 2022-08-16_Alaska-House_District_31
   title: House_District_31 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_31 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_4.abif
   id: 2022-08-16_Alaska-House_District_4
   title: House_District_4 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_4 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_2.abif
   id: 2022-08-16_Alaska-House_District_2
   title: House_District_2 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_2 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_J.abif
   id: 2022-08-16_Alaska-Senate_District_J
   title: Senate_District_J (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_J (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_F.abif
   id: 2022-08-16_Alaska-Senate_District_F
   title: Senate_District_F (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_F (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_1.abif
   id: 2022-08-16_Alaska-House_District_1
   title: House_District_1 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_1 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Governor_|_Lt._Governor.abif
   id: 2022-08-16_Alaska-Governor_|_Lt._Governor
   title: Governor_|_Lt._Governor (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Governor_|_Lt._Governor (Alaska; 2022-08-16). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_16.abif
   id: 2022-08-16_Alaska-House_District_16
   title: House_District_16 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_16 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_5.abif
   id: 2022-08-16_Alaska-House_District_5
   title: House_District_5 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_5 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_33.abif
   id: 2022-08-16_Alaska-House_District_33
   title: House_District_33 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_33 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_21.abif
   id: 2022-08-16_Alaska-House_District_21
   title: House_District_21 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_21 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_40.abif
   id: 2022-08-16_Alaska-House_District_40
   title: House_District_40 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_40 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_6.abif
   id: 2022-08-16_Alaska-House_District_6
   title: House_District_6 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_6 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_R.abif
   id: 2022-08-16_Alaska-Senate_District_R
   title: Senate_District_R (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_R (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_A.abif
   id: 2022-08-16_Alaska-Senate_District_A
   title: Senate_District_A (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_A (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_C.abif
   id: 2022-08-16_Alaska-Senate_District_C
   title: Senate_District_C (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_C (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_27.abif
   id: 2022-08-16_Alaska-House_District_27
   title: House_District_27 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_27 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_22.abif
   id: 2022-08-16_Alaska-House_District_22
   title: House_District_22 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_22 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_28.abif
   id: 2022-08-16_Alaska-House_District_28
   title: House_District_28 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_28 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_N.abif
   id: 2022-08-16_Alaska-Senate_District_N
   title: Senate_District_N (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_N (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_26.abif
   id: 2022-08-16_Alaska-House_District_26
   title: House_District_26 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_26 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_Q.abif
   id: 2022-08-16_Alaska-Senate_District_Q
   title: Senate_District_Q (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_Q (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_I.abif
   id: 2022-08-16_Alaska-Senate_District_I
   title: Senate_District_I (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_I (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_11.abif
   id: 2022-08-16_Alaska-House_District_11
   title: House_District_11 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_11 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_S.abif
   id: 2022-08-16_Alaska-Senate_District_S
   title: Senate_District_S (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_S (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_37.abif
   id: 2022-08-16_Alaska-House_District_37
   title: House_District_37 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_37 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_7.abif
   id: 2022-08-16_Alaska-House_District_7
   title: House_District_7 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_7 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_19.abif
   id: 2022-08-16_Alaska-House_District_19
   title: House_District_19 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_19 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_39.abif
   id: 2022-08-16_Alaska-House_District_39
   title: House_District_39 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_39 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_K.abif
   id: 2022-08-16_Alaska-Senate_District_K
   title: Senate_District_K (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_K (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_24.abif
   id: 2022-08-16_Alaska-House_District_24
   title: House_District_24 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_24 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_G.abif
   id: 2022-08-16_Alaska-Senate_District_G
   title: Senate_District_G (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_G (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_H.abif
   id: 2022-08-16_Alaska-Senate_District_H
   title: Senate_District_H (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_H (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_23.abif
   id: 2022-08-16_Alaska-House_District_23
   title: House_District_23 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_23 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_E.abif
   id: 2022-08-16_Alaska-Senate_District_E
   title: Senate_District_E (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_E (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_P.abif
   id: 2022-08-16_Alaska-Senate_District_P
   title: Senate_District_P (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_P (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_B.abif
   id: 2022-08-16_Alaska-Senate_District_B
   title: Senate_District_B (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_B (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_36.abif
   id: 2022-08-16_Alaska-House_District_36
   title: House_District_36 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_36 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_35.abif
   id: 2022-08-16_Alaska-House_District_35
   title: House_District_35 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_35 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_15.abif
   id: 2022-08-16_Alaska-House_District_15
   title: House_District_15 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_15 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_38.abif
   id: 2022-08-16_Alaska-House_District_38
   title: House_District_38 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_38 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_29.abif
   id: 2022-08-16_Alaska-House_District_29
   title: House_District_29 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_29 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-U.S._Representative.abif
   id: 2022-08-16_Alaska-U.S._Representative
   title: U.S._Representative (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: U.S._Representative (Alaska; 2022-08-16). Derived from results obtained at
     bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_14.abif
   id: 2022-08-16_Alaska-House_District_14
   title: House_District_14 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_14 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_9.abif
   id: 2022-08-16_Alaska-House_District_9
   title: House_District_9 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_9 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_8.abif
   id: 2022-08-16_Alaska-House_District_8
   title: House_District_8 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_8 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_M.abif
   id: 2022-08-16_Alaska-Senate_District_M
   title: Senate_District_M (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_M (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_D.abif
   id: 2022-08-16_Alaska-Senate_District_D
   title: Senate_District_D (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_D (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_17.abif
   id: 2022-08-16_Alaska-House_District_17
   title: House_District_17 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_17 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_30.abif
   id: 2022-08-16_Alaska-House_District_30
   title: House_District_30 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_30 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_O.abif
   id: 2022-08-16_Alaska-Senate_District_O
   title: Senate_District_O (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_O (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_20.abif
   id: 2022-08-16_Alaska-House_District_20
   title: House_District_20 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_20 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_3.abif
   id: 2022-08-16_Alaska-House_District_3
   title: House_District_3 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_3 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-Senate_District_L.abif
   id: 2022-08-16_Alaska-Senate_District_L
   title: Senate_District_L (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: Senate_District_L (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_32.abif
   id: 2022-08-16_Alaska-House_District_32
   title: House_District_32 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_32 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_10.abif
   id: 2022-08-16_Alaska-House_District_10
   title: House_District_10 (Alaska; 2022-08-16)
-  tags: from-bolson, 2022, AK, local, Alaska-2022, 2022-08
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08
   desc: House_District_10 (Alaska; 2022-08-16). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-06-14_Portland_ME-school_board_at_large.abif
   id: 2022-06-14_Portland_ME-school_board_at_large
   title: school_board_at_large (Portland_ME; 2022-06-14)
-  tags: Portland_ME-2022, from-bolson, 2022, Portland_ME, ME, 2022-06
+  tags: Portland_ME-2022, from-bolson, actual, 2022, Portland_ME, ME, 2022-06
   desc: school_board_at_large (Portland_ME; 2022-06-14). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-06-14_Portland_ME-school_board_d5_at_large.abif
   id: 2022-06-14_Portland_ME-school_board_d5_at_large
   title: school_board_d5_at_large (Portland_ME; 2022-06-14)
-  tags: Portland_ME-2022, from-bolson, 2022, Portland_ME, ME, 2022-06
+  tags: Portland_ME-2022, from-bolson, actual, 2022, Portland_ME, ME, 2022-06
   desc: school_board_d5_at_large (Portland_ME; 2022-06-14). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-City_Auditor_-_Berkeley.abif
   id: 2022-11-08_AlamedaCounty-City_Auditor_-_Berkeley
   title: City Auditor - Berkeley (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: City Auditor - Berkeley (AlamedaCounty; 2022-11-08). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._3_-_San_Leandro.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._3_-_San_Leandro
   title: Member City Council Dist. 3 - San Leandro (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 3 - San Leandro (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._4_-_Berkeley.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._4_-_Berkeley
   title: Member City Council Dist. 4 - Berkeley (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 4 - Berkeley (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._1_-_San_Leandro.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._1_-_San_Leandro
   title: Member City Council Dist. 1 - San Leandro (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 1 - San Leandro (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Mayor_-_San_Leandro.abif
   id: 2022-11-08_AlamedaCounty-Mayor_-_San_Leandro
   title: Mayor - San Leandro (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Mayor - San Leandro (AlamedaCounty; 2022-11-08). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._1_-_Berkeley.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._1_-_Berkeley
   title: Member City Council Dist. 1 - Berkeley (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 1 - Berkeley (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._2_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._2_-_Oakland
   title: Member City Council Dist. 2 - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 2 - Oakland (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._7_-_Berkeley.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._7_-_Berkeley
   title: Member City Council Dist. 7 - Berkeley (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 7 - Berkeley (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Members_Board_of_Education_-_Albany.abif
   id: 2022-11-08_AlamedaCounty-Members_Board_of_Education_-_Albany
   title: Members Board of Education - Albany (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Members Board of Education - Albany (AlamedaCounty; 2022-11-08). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Members_City_Council_-_Albany.abif
   id: 2022-11-08_AlamedaCounty-Members_City_Council_-_Albany
   title: Members City Council - Albany (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Members City Council - Albany (AlamedaCounty; 2022-11-08). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-School_Director_Dist._6_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-School_Director_Dist._6_-_Oakland
   title: School Director Dist. 6 - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: School Director Dist. 6 - Oakland (AlamedaCounty; 2022-11-08). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-City_Auditor_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-City_Auditor_-_Oakland
   title: City Auditor - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: City Auditor - Oakland (AlamedaCounty; 2022-11-08). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._4_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._4_-_Oakland
   title: Member City Council Dist. 4 - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 4 - Oakland (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._6_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._6_-_Oakland
   title: Member City Council Dist. 6 - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 6 - Oakland (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._5_-_San_Leandro.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._5_-_San_Leandro
   title: Member City Council Dist. 5 - San Leandro (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 5 - San Leandro (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-School_Director_Dist._2_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-School_Director_Dist._2_-_Oakland
   title: School Director Dist. 2 - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: School Director Dist. 2 - Oakland (AlamedaCounty; 2022-11-08). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-School_Director_Dist._4_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-School_Director_Dist._4_-_Oakland
   title: School Director Dist. 4 - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA, CondorcetVsIRV
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA, CondorcetVsIRV, featured
   desc: School Director Dist. 4 - Oakland (AlamedaCounty; 2022-11-08). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Mayor_-_Oakland.abif
   id: 2022-11-08_AlamedaCounty-Mayor_-_Oakland
   title: Mayor - Oakland (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Mayor - Oakland (AlamedaCounty; 2022-11-08). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_AlamedaCounty-Member_City_Council_Dist._8_-_Berkeley.abif
   id: 2022-11-08_AlamedaCounty-Member_City_Council_Dist._8_-_Berkeley
   title: Member City Council Dist. 8 - Berkeley (AlamedaCounty; 2022-11-08)
-  tags: AlamedaCounty_CA, from-bolson, 2022, AlamedaCounty-2022, 2022-11, CA
+  tags: AlamedaCounty_CA, from-bolson, actual, 2022, AlamedaCounty-2022, 2022-11, CA
   desc: Member City Council Dist. 8 - Berkeley (AlamedaCounty; 2022-11-08). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_27.abif
   id: 2022-11-08_Alaska-House_District_27
   title: House_District_27 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_27 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_31.abif
   id: 2022-11-08_Alaska-House_District_31
   title: House_District_31 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_31 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_C.abif
   id: 2022-11-08_Alaska-Senate_District_C
   title: Senate_District_C (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_C (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_19.abif
   id: 2022-11-08_Alaska-House_District_19
   title: House_District_19 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_19 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_O.abif
   id: 2022-11-08_Alaska-Senate_District_O
   title: Senate_District_O (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_O (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_35.abif
   id: 2022-11-08_Alaska-House_District_35
   title: House_District_35 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_35 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_32.abif
   id: 2022-11-08_Alaska-House_District_32
   title: House_District_32 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_32 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_J.abif
   id: 2022-11-08_Alaska-Senate_District_J
   title: Senate_District_J (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_J (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_7.abif
   id: 2022-11-08_Alaska-House_District_7
   title: House_District_7 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_7 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_18.abif
   id: 2022-11-08_Alaska-House_District_18
   title: House_District_18 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_18 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_R.abif
   id: 2022-11-08_Alaska-Senate_District_R
   title: Senate_District_R (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_R (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_26.abif
   id: 2022-11-08_Alaska-House_District_26
   title: House_District_26 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_26 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_4.abif
   id: 2022-11-08_Alaska-House_District_4
   title: House_District_4 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_4 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_14.abif
   id: 2022-11-08_Alaska-House_District_14
   title: House_District_14 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_14 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_40.abif
   id: 2022-11-08_Alaska-House_District_40
   title: House_District_40 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_40 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_6.abif
   id: 2022-11-08_Alaska-House_District_6
   title: House_District_6 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_6 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_36.abif
   id: 2022-11-08_Alaska-House_District_36
   title: House_District_36 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_36 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Governor_%2F_Lieutenant_Governor.abif
   id: 2022-11-08_Alaska-Governor_%2F_Lieutenant_Governor
   title: Governor_%2F_Lieutenant_Governor (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Governor_%2F_Lieutenant_Governor (Alaska; 2022-11-08). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_37.abif
   id: 2022-11-08_Alaska-House_District_37
   title: House_District_37 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_37 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_K.abif
   id: 2022-11-08_Alaska-Senate_District_K
   title: Senate_District_K (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_K (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_N.abif
   id: 2022-11-08_Alaska-Senate_District_N
   title: Senate_District_N (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_N (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_F.abif
   id: 2022-11-08_Alaska-Senate_District_F
   title: Senate_District_F (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_F (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_P.abif
   id: 2022-11-08_Alaska-Senate_District_P
   title: Senate_District_P (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_P (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_G.abif
   id: 2022-11-08_Alaska-Senate_District_G
   title: Senate_District_G (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_G (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_8.abif
   id: 2022-11-08_Alaska-House_District_8
   title: House_District_8 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_8 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_3.abif
   id: 2022-11-08_Alaska-House_District_3
   title: House_District_3 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_3 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_29.abif
   id: 2022-11-08_Alaska-House_District_29
   title: House_District_29 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_29 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_1.abif
   id: 2022-11-08_Alaska-House_District_1
   title: House_District_1 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_1 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_17.abif
   id: 2022-11-08_Alaska-House_District_17
   title: House_District_17 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_17 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_34.abif
   id: 2022-11-08_Alaska-House_District_34
   title: House_District_34 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_34 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_30.abif
   id: 2022-11-08_Alaska-House_District_30
   title: House_District_30 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_30 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_15.abif
   id: 2022-11-08_Alaska-House_District_15
   title: House_District_15 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_15 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_S.abif
   id: 2022-11-08_Alaska-Senate_District_S
   title: Senate_District_S (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_S (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-U.S._Senator.abif
   id: 2022-11-08_Alaska-U.S._Senator
   title: U.S._Senator (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: U.S._Senator (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_I.abif
   id: 2022-11-08_Alaska-Senate_District_I
   title: Senate_District_I (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_I (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_9.abif
   id: 2022-11-08_Alaska-House_District_9
   title: House_District_9 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_9 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_16.abif
   id: 2022-11-08_Alaska-House_District_16
   title: House_District_16 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_16 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_33.abif
   id: 2022-11-08_Alaska-House_District_33
   title: House_District_33 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_33 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_A.abif
   id: 2022-11-08_Alaska-Senate_District_A
   title: Senate_District_A (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_A (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_10.abif
   id: 2022-11-08_Alaska-House_District_10
   title: House_District_10 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_10 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_23.abif
   id: 2022-11-08_Alaska-House_District_23
   title: House_District_23 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_23 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_5.abif
   id: 2022-11-08_Alaska-House_District_5
   title: House_District_5 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_5 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_38.abif
   id: 2022-11-08_Alaska-House_District_38
   title: House_District_38 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_38 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_25.abif
   id: 2022-11-08_Alaska-House_District_25
   title: House_District_25 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_25 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_28.abif
   id: 2022-11-08_Alaska-House_District_28
   title: House_District_28 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_28 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_Q.abif
   id: 2022-11-08_Alaska-Senate_District_Q
   title: Senate_District_Q (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_Q (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_13.abif
   id: 2022-11-08_Alaska-House_District_13
   title: House_District_13 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_13 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_B.abif
   id: 2022-11-08_Alaska-Senate_District_B
   title: Senate_District_B (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_B (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_E.abif
   id: 2022-11-08_Alaska-Senate_District_E
   title: Senate_District_E (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_E (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_2.abif
   id: 2022-11-08_Alaska-House_District_2
   title: House_District_2 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_2 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_21.abif
   id: 2022-11-08_Alaska-House_District_21
   title: House_District_21 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_21 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_M.abif
   id: 2022-11-08_Alaska-Senate_District_M
   title: Senate_District_M (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_M (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_24.abif
   id: 2022-11-08_Alaska-House_District_24
   title: House_District_24 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_24 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_39.abif
   id: 2022-11-08_Alaska-House_District_39
   title: House_District_39 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_39 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_D.abif
   id: 2022-11-08_Alaska-Senate_District_D
   title: Senate_District_D (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_D (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_H.abif
   id: 2022-11-08_Alaska-Senate_District_H
   title: Senate_District_H (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_H (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-Senate_District_L.abif
   id: 2022-11-08_Alaska-Senate_District_L
   title: Senate_District_L (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: Senate_District_L (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_12.abif
   id: 2022-11-08_Alaska-House_District_12
   title: House_District_12 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_12 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_11.abif
   id: 2022-11-08_Alaska-House_District_11
   title: House_District_11 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_11 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-U.S._Representative.abif
   id: 2022-11-08_Alaska-U.S._Representative
   title: U.S._Representative (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: U.S._Representative (Alaska; 2022-11-08). Derived from results obtained at
     bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_20.abif
   id: 2022-11-08_Alaska-House_District_20
   title: House_District_20 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_20 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-11-08_Alaska-House_District_22.abif
   id: 2022-11-08_Alaska-House_District_22
   title: House_District_22 (Alaska; 2022-11-08)
-  tags: from-bolson, 2022, 2022-11, AK, local, Alaska-2022
+  tags: from-bolson, actual, 2022, 2022-11, AK, local, Alaska-2022
   desc: House_District_22 (Alaska; 2022-11-08). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2019-11-05_SanFrancisco-CITY_ATTORNEY.abif
   id: 2019-11-05_SanFrancisco-CITY_ATTORNEY
   title: CITY_ATTORNEY (SanFrancisco; 2019-11-05)
-  tags: from-bolson, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
+  tags: from-bolson, actual, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
   desc: CITY_ATTORNEY (SanFrancisco; 2019-11-05). Derived from results obtained at
     bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2019-11-05_SanFrancisco-PUBLIC_DEFENDER.abif
   id: 2019-11-05_SanFrancisco-PUBLIC_DEFENDER
   title: PUBLIC_DEFENDER (SanFrancisco; 2019-11-05)
-  tags: from-bolson, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
+  tags: from-bolson, actual, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
   desc: PUBLIC_DEFENDER (SanFrancisco; 2019-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2019-11-05_SanFrancisco-DISTRICT_ATTORNEY.abif
   id: 2019-11-05_SanFrancisco-DISTRICT_ATTORNEY
   title: DISTRICT_ATTORNEY (SanFrancisco; 2019-11-05)
-  tags: from-bolson, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
+  tags: from-bolson, actual, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
   desc: DISTRICT_ATTORNEY (SanFrancisco; 2019-11-05). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2019-11-05_SanFrancisco-MEMBER_BOARD_OF_SUPERVISORS_DISTRICT_5.abif
   id: 2019-11-05_SanFrancisco-MEMBER_BOARD_OF_SUPERVISORS_DISTRICT_5
   title: MEMBER_BOARD_OF_SUPERVISORS_DISTRICT_5 (SanFrancisco; 2019-11-05)
-  tags: from-bolson, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
+  tags: from-bolson, actual, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
   desc: MEMBER_BOARD_OF_SUPERVISORS_DISTRICT_5 (SanFrancisco; 2019-11-05). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2019-11-05_SanFrancisco-MAYOR.abif
   id: 2019-11-05_SanFrancisco-MAYOR
   title: MAYOR (SanFrancisco; 2019-11-05)
-  tags: from-bolson, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
+  tags: from-bolson, actual, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
   desc: MAYOR (SanFrancisco; 2019-11-05). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2019-11-05_SanFrancisco-SHERIFF.abif
   id: 2019-11-05_SanFrancisco-SHERIFF
   title: SHERIFF (SanFrancisco; 2019-11-05)
-  tags: from-bolson, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
+  tags: from-bolson, actual, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
   desc: SHERIFF (SanFrancisco; 2019-11-05). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2019-11-05_SanFrancisco-TREASURER.abif
   id: 2019-11-05_SanFrancisco-TREASURER
   title: TREASURER (SanFrancisco; 2019-11-05)
-  tags: from-bolson, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
+  tags: from-bolson, actual, SF, 2019-11, SanFrancisco_CA, CA, SanFrancisco-2019, 2019
   desc: TREASURER (SanFrancisco; 2019-11-05). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2011_SanFrancisco-DA.abif
   id: 2011_SanFrancisco-DA
   title: DA (SanFrancisco; 2011)
-  tags: from-bolson, SF, 2011, SanFrancisco_CA, CA, SanFrancisco-2011
+  tags: from-bolson, actual, SF, 2011, SanFrancisco_CA, CA, SanFrancisco-2011
   desc: DA (SanFrancisco; 2011). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2011_SanFrancisco-Mayor.abif
   id: 2011_SanFrancisco-Mayor
   title: Mayor (SanFrancisco; 2011)
-  tags: from-bolson, SF, 2011, SanFrancisco_CA, CA, SanFrancisco-2011
+  tags: from-bolson, actual, SF, 2011, SanFrancisco_CA, CA, SanFrancisco-2011
   desc: Mayor (SanFrancisco; 2011). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2011_SanFrancisco-Sheriff.abif
   id: 2011_SanFrancisco-Sheriff
   title: Sheriff (SanFrancisco; 2011)
-  tags: from-bolson, SF, 2011, SanFrancisco_CA, CA, SanFrancisco-2011
+  tags: from-bolson, actual, SF, 2011, SanFrancisco_CA, CA, SanFrancisco-2011
   desc: Sheriff (SanFrancisco; 2011). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_11.abif
   id: 2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_11
   title: BOARD OF SUPERVISORS DISTRICT 11 (SanFrancisco; 2020-11-03)
-  tags: 2020-11, from-bolson, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
+  tags: 2020-11, from-bolson, actual, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
   desc: BOARD OF SUPERVISORS DISTRICT 11 (SanFrancisco; 2020-11-03). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_1.abif
   id: 2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_1
   title: BOARD OF SUPERVISORS DISTRICT 1 (SanFrancisco; 2020-11-03)
-  tags: 2020-11, from-bolson, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
+  tags: 2020-11, from-bolson, actual, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
   desc: BOARD OF SUPERVISORS DISTRICT 1 (SanFrancisco; 2020-11-03). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_3.abif
   id: 2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_3
   title: BOARD OF SUPERVISORS DISTRICT 3 (SanFrancisco; 2020-11-03)
-  tags: 2020-11, from-bolson, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
+  tags: 2020-11, from-bolson, actual, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
   desc: BOARD OF SUPERVISORS DISTRICT 3 (SanFrancisco; 2020-11-03). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_5.abif
   id: 2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_5
   title: BOARD OF SUPERVISORS DISTRICT 5 (SanFrancisco; 2020-11-03)
-  tags: 2020-11, from-bolson, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
+  tags: 2020-11, from-bolson, actual, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
   desc: BOARD OF SUPERVISORS DISTRICT 5 (SanFrancisco; 2020-11-03). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_7.abif
   id: 2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_7
   title: BOARD OF SUPERVISORS DISTRICT 7 (SanFrancisco; 2020-11-03)
-  tags: 2020-11, from-bolson, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
+  tags: 2020-11, from-bolson, actual, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
   desc: BOARD OF SUPERVISORS DISTRICT 7 (SanFrancisco; 2020-11-03). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_9.abif
   id: 2020-11-03_SanFrancisco-BOARD_OF_SUPERVISORS_DISTRICT_9
   title: BOARD OF SUPERVISORS DISTRICT 9 (SanFrancisco; 2020-11-03)
-  tags: 2020-11, from-bolson, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
+  tags: 2020-11, from-bolson, actual, SanFrancisco-2020, SF, SanFrancisco_CA, CA, 2020
   desc: BOARD OF SUPERVISORS DISTRICT 9 (SanFrancisco; 2020-11-03). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-07-14_ME_Primary-ss11.abif
   id: 2020-07-14_ME_Primary-ss11
   title: ss11 (ME_Primary; 2020-07-14)
-  tags: from-bolson, 2020-07, primary_election, ME_Primary-2020, ME, 2020
+  tags: from-bolson, actual, 2020-07, primary_election, ME_Primary-2020, ME, 2020
   desc: ss11 (ME_Primary; 2020-07-14). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-07-14_ME_Primary-sr49.abif
   id: 2020-07-14_ME_Primary-sr49
   title: sr49 (ME_Primary; 2020-07-14)
-  tags: from-bolson, 2020-07, primary_election, ME_Primary-2020, ME, 2020
+  tags: from-bolson, actual, 2020-07, primary_election, ME_Primary-2020, ME, 2020
   desc: sr49 (ME_Primary; 2020-07-14). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-07-14_ME_Primary-sr90.abif
   id: 2020-07-14_ME_Primary-sr90
   title: sr90 (ME_Primary; 2020-07-14)
-  tags: from-bolson, 2020-07, primary_election, ME_Primary-2020, ME, 2020
+  tags: from-bolson, actual, 2020-07, primary_election, ME_Primary-2020, ME, 2020
   desc: sr90 (ME_Primary; 2020-07-14). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-07-14_ME_Primary-sr41.abif
   id: 2020-07-14_ME_Primary-sr41
   title: sr41 (ME_Primary; 2020-07-14)
-  tags: from-bolson, 2020-07, primary_election, ME_Primary-2020, ME, 2020
+  tags: from-bolson, actual, 2020-07, primary_election, ME_Primary-2020, ME, 2020
   desc: sr41 (ME_Primary; 2020-07-14). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-07-14_ME_Primary-sr47.abif
   id: 2020-07-14_ME_Primary-sr47
   title: sr47 (ME_Primary; 2020-07-14)
-  tags: from-bolson, 2020-07, primary_election, ME_Primary-2020, ME, 2020
+  tags: from-bolson, actual, 2020-07, primary_election, ME_Primary-2020, ME, 2020
   desc: sr47 (ME_Primary; 2020-07-14). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-07-14_ME_Primary-cg2.abif
   id: 2020-07-14_ME_Primary-cg2
   title: cg2 (ME_Primary; 2020-07-14)
-  tags: from-bolson, 2020-07, primary_election, ME_Primary-2020, ME, 2020
+  tags: from-bolson, actual, 2020-07, primary_election, ME_Primary-2020, ME, 2020
   desc: cg2 (ME_Primary; 2020-07-14). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._7_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._7_-_Oakland
   title: Member City Council Dist. 7 - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 7 - Oakland (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-City_Attorney_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-City_Attorney_-_Oakland
   title: City Attorney - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: City Attorney - Oakland (AlamedaCounty; 2020-11-03). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-School_Director_Dist._7_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-School_Director_Dist._7_-_Oakland
   title: School Director Dist. 7 - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: School Director Dist. 7 - Oakland (AlamedaCounty; 2020-11-03). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_At-Large_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_At-Large_-_Oakland
   title: Member City Council At-Large - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council At-Large - Oakland (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-School_Director_Dist._5_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-School_Director_Dist._5_-_Oakland
   title: School Director Dist. 5 - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: School Director Dist. 5 - Oakland (AlamedaCounty; 2020-11-03). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._4_-_San_Leandro.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._4_-_San_Leandro
   title: Member City Council Dist. 4 - San Leandro (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 4 - San Leandro (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-School_Director_Dist._3_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-School_Director_Dist._3_-_Oakland
   title: School Director Dist. 3 - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: School Director Dist. 3 - Oakland (AlamedaCounty; 2020-11-03). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._3_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._3_-_Oakland
   title: Member City Council Dist. 3 - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 3 - Oakland (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._3_-_Berkeley.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._3_-_Berkeley
   title: Member City Council Dist. 3 - Berkeley (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 3 - Berkeley (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._2_-_San_Leandro.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._2_-_San_Leandro
   title: Member City Council Dist. 2 - San Leandro (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 2 - San Leandro (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-School_Director_Dist._1_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-School_Director_Dist._1_-_Oakland
   title: School Director Dist. 1 - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: School Director Dist. 1 - Oakland (AlamedaCounty; 2020-11-03). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._1_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._1_-_Oakland
   title: Member City Council Dist. 1 - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 1 - Oakland (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._6_-_Berkeley.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._6_-_Berkeley
   title: Member City Council Dist. 6 - Berkeley (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 6 - Berkeley (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._5_-_Oakland.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._5_-_Oakland
   title: Member City Council Dist. 5 - Oakland (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 5 - Oakland (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._6_-_San_Leandro.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._6_-_San_Leandro
   title: Member City Council Dist. 6 - San Leandro (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 6 - San Leandro (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._5_-_Berkeley.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._5_-_Berkeley
   title: Member City Council Dist. 5 - Berkeley (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 5 - Berkeley (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Member_City_Council_Dist._2_-_Berkeley.abif
   id: 2020-11-03_AlamedaCounty-Member_City_Council_Dist._2_-_Berkeley
   title: Member City Council Dist. 2 - Berkeley (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Member City Council Dist. 2 - Berkeley (AlamedaCounty; 2020-11-03). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2020-11-03_AlamedaCounty-Mayor_-_Berkeley.abif
   id: 2020-11-03_AlamedaCounty-Mayor_-_Berkeley
   title: Mayor - Berkeley (AlamedaCounty; 2020-11-03)
-  tags: AlamedaCounty_CA, 2020-11, from-bolson, CA, AlamedaCounty-2020, 2020
+  tags: AlamedaCounty_CA, 2020-11, from-bolson, actual, CA, AlamedaCounty-2020, 2020
   desc: Mayor - Berkeley (AlamedaCounty; 2020-11-03). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2016-11-06_SanFrancisco-Board_of_Supervisors_District_5.abif
   id: 2016-11-06_SanFrancisco-Board_of_Supervisors_District_5
   title: Board of Supervisors District 5 (SanFrancisco; 2016-11-06)
-  tags: from-bolson, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
+  tags: from-bolson, actual, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
   desc: Board of Supervisors District 5 (SanFrancisco; 2016-11-06). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2016-11-06_SanFrancisco-Board_of_Supervisors_District_7.abif
   id: 2016-11-06_SanFrancisco-Board_of_Supervisors_District_7
   title: Board of Supervisors District 7 (SanFrancisco; 2016-11-06)
-  tags: from-bolson, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
+  tags: from-bolson, actual, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
   desc: Board of Supervisors District 7 (SanFrancisco; 2016-11-06). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2016-11-06_SanFrancisco-Board_of_Supervisors_District_11.abif
   id: 2016-11-06_SanFrancisco-Board_of_Supervisors_District_11
   title: Board of Supervisors District 11 (SanFrancisco; 2016-11-06)
-  tags: from-bolson, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
+  tags: from-bolson, actual, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
   desc: Board of Supervisors District 11 (SanFrancisco; 2016-11-06). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2016-11-06_SanFrancisco-Board_of_Supervisors_District_3.abif
   id: 2016-11-06_SanFrancisco-Board_of_Supervisors_District_3
   title: Board of Supervisors District 3 (SanFrancisco; 2016-11-06)
-  tags: from-bolson, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
+  tags: from-bolson, actual, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
   desc: Board of Supervisors District 3 (SanFrancisco; 2016-11-06). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2016-11-06_SanFrancisco-Board_of_Supervisors_District_1.abif
   id: 2016-11-06_SanFrancisco-Board_of_Supervisors_District_1
   title: Board of Supervisors District 1 (SanFrancisco; 2016-11-06)
-  tags: from-bolson, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
+  tags: from-bolson, actual, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
   desc: Board of Supervisors District 1 (SanFrancisco; 2016-11-06). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2016-11-06_SanFrancisco-Board_of_Supervisors_District_9.abif
   id: 2016-11-06_SanFrancisco-Board_of_Supervisors_District_9
   title: Board of Supervisors District 9 (SanFrancisco; 2016-11-06)
-  tags: from-bolson, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
+  tags: from-bolson, actual, SF, SanFrancisco_CA, 2016, 2016-11, CA, SanFrancisco-2016
   desc: Board of Supervisors District 9 (SanFrancisco; 2016-11-06). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2010_san_francisco-d8.abif
   id: 2010_san_francisco-d8
   title: d8 (san_francisco; 2010)
-  tags: from-bolson, 2010, san_francisco-2010, SF, SanFrancisco_CA, CA
+  tags: from-bolson, actual, 2010, san_francisco-2010, SF, SanFrancisco_CA, CA
   desc: d8 (san_francisco; 2010). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2010_san_francisco-d2.abif
   id: 2010_san_francisco-d2
   title: d2 (san_francisco; 2010)
-  tags: from-bolson, 2010, san_francisco-2010, SF, SanFrancisco_CA, CA
+  tags: from-bolson, actual, 2010, san_francisco-2010, SF, SanFrancisco_CA, CA
   desc: d2 (san_francisco; 2010). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2010_san_francisco-d6.abif
   id: 2010_san_francisco-d6
   title: d6 (san_francisco; 2010)
-  tags: from-bolson, 2010, san_francisco-2010, SF, SanFrancisco_CA, CA
+  tags: from-bolson, actual, 2010, san_francisco-2010, SF, SanFrancisco_CA, CA
   desc: d6 (san_francisco; 2010). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2010_san_francisco-dA.abif
   id: 2010_san_francisco-dA
   title: dA (san_francisco; 2010)
-  tags: from-bolson, 2010, san_francisco-2010, SF, SanFrancisco_CA, CA
+  tags: from-bolson, actual, 2010, san_francisco-2010, SF, SanFrancisco_CA, CA
   desc: dA (san_francisco; 2010). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2010_oakland_mayor-mayor.abif
   id: 2010_oakland_mayor-mayor
   title: mayor (oakland_mayor; 2010)
-  tags: from-bolson, 2010, Oakland_CA, CA, oakland_mayor-2010, mayor
+  tags: from-bolson, actual, 2010, Oakland_CA, CA, oakland_mayor-2010, mayor
   desc: mayor (oakland_mayor; 2010). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2010_san_leandro_mayor-mayor.abif
   id: 2010_san_leandro_mayor-mayor
   title: mayor (san_leandro_mayor; 2010)
-  tags: from-bolson, 2010, san_leandro_mayor-2010, SanLeandro_CA, CA, mayor
+  tags: from-bolson, actual, 2010, san_leandro_mayor-2010, SanLeandro_CA, CA, mayor
   desc: mayor (san_leandro_mayor; 2010). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-REP_Council_Member_47th_Council_District.abif
   id: 2023-06-27_NYC-REP_Council_Member_47th_Council_District
   title: REP Council Member_47th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: REP Council Member_47th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_26th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_26th_Council_District
   title: DEM Council Member_26th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_26th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_1st_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_1st_Council_District
   title: DEM Council Member_1st Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_1st Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_29th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_29th_Council_District
   title: DEM Council Member_29th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_29th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_41st_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_41st_Council_District
   title: DEM Council Member_41st Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_41st Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_9th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_9th_Council_District
   title: DEM Council Member_9th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_9th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_34th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_34th_Council_District
   title: DEM Council Member_34th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_34th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-REP_Council_Member_48th_Council_District.abif
   id: 2023-06-27_NYC-REP_Council_Member_48th_Council_District
   title: REP Council Member_48th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: REP Council Member_48th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_14th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_14th_Council_District
   title: DEM Council Member_14th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_14th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_43rd_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_43rd_Council_District
   title: DEM Council Member_43rd Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_43rd Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_25th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_25th_Council_District
   title: DEM Council Member_25th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_25th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-REP_Council_Member_20th_Council_District.abif
   id: 2023-06-27_NYC-REP_Council_Member_20th_Council_District
   title: REP Council Member_20th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: REP Council Member_20th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-REP_Council_Member_13th_Council_District.abif
   id: 2023-06-27_NYC-REP_Council_Member_13th_Council_District
   title: REP Council Member_13th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: REP Council Member_13th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_2nd_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_2nd_Council_District
   title: DEM Council Member_2nd Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_2nd Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_19th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_19th_Council_District
   title: DEM Council Member_19th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_19th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_42nd_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_42nd_Council_District
   title: DEM Council Member_42nd Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_42nd Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_22nd_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_22nd_Council_District
   title: DEM Council Member_22nd Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_22nd Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_10th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_10th_Council_District
   title: DEM Council Member_10th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_10th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_13th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_13th_Council_District
   title: DEM Council Member_13th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_13th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-REP_Council_Member_43rd_Council_District.abif
   id: 2023-06-27_NYC-REP_Council_Member_43rd_Council_District
   title: REP Council Member_43rd Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: REP Council Member_43rd Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_12th_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_12th_Council_District
   title: DEM Council Member_12th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_12th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-REP_Council_Member_44th_Council_District.abif
   id: 2023-06-27_NYC-REP_Council_Member_44th_Council_District
   title: REP Council Member_44th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: REP Council Member_44th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-DEM_Council_Member_23rd_Council_District.abif
   id: 2023-06-27_NYC-DEM_Council_Member_23rd_Council_District
   title: DEM Council Member_23rd Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: DEM Council Member_23rd Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2023-06-27_NYC-CON_Council_Member_13th_Council_District.abif
   id: 2023-06-27_NYC-CON_Council_Member_13th_Council_District
   title: CON Council Member_13th Council District (NYC; 2023-06-27)
-  tags: from-bolson, NYC-2023, NY, NYC_NY, 2023, 2023-06
+  tags: from-bolson, actual, NYC-2023, NY, NYC_NY, 2023, 2023-06
   desc: CON Council Member_13th Council District (NYC; 2023-06-27). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2015-11-03_SanFrancisco-Mayor.abif
   id: 2015-11-03_SanFrancisco-Mayor
   title: Mayor (SanFrancisco; 2015-11-03)
-  tags: from-bolson, 2015, 2015-11, SF, SanFrancisco_CA, CA, SanFrancisco-2015
+  tags: from-bolson, actual, 2015, 2015-11, SF, SanFrancisco_CA, CA, SanFrancisco-2015
   desc: Mayor (SanFrancisco; 2015-11-03). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2015-11-03_SanFrancisco-Sheriff.abif
   id: 2015-11-03_SanFrancisco-Sheriff
   title: Sheriff (SanFrancisco; 2015-11-03)
-  tags: from-bolson, 2015, 2015-11, SF, SanFrancisco_CA, CA, SanFrancisco-2015
+  tags: from-bolson, actual, 2015, 2015-11, SF, SanFrancisco_CA, CA, SanFrancisco-2015
   desc: Sheriff (SanFrancisco; 2015-11-03). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2015-11-03_SanFrancisco-Board_of_Supervisors_District_3.abif
   id: 2015-11-03_SanFrancisco-Board_of_Supervisors_District_3
   title: Board of Supervisors District 3 (SanFrancisco; 2015-11-03)
-  tags: from-bolson, 2015, 2015-11, SF, SanFrancisco_CA, CA, SanFrancisco-2015
+  tags: from-bolson, actual, 2015, 2015-11, SF, SanFrancisco_CA, CA, SanFrancisco-2015
   desc: Board of Supervisors District 3 (SanFrancisco; 2015-11-03). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-11-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-11-Ballot-Records
   title: 2017-Ward-11-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-11-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Mayor-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Mayor-Ballot-Records
   title: 2017-Mayor-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Mayor-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Park-Board-District-1-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Park-Board-District-1-Ballot-Records
   title: 2017-Park-Board-District-1-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Park-Board-District-1-Ballot-Records (Minneapolis; 2017-11-07). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Council-Ward-5-CVR.abif
   id: 2017-11-07_Minneapolis-2017-Council-Ward-5-CVR
   title: 2017-Council-Ward-5-CVR (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Council-Ward-5-CVR (Minneapolis; 2017-11-07). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-12-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-12-Ballot-Records
   title: 2017-Ward-12-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-12-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-4-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-4-Ballot-Records
   title: 2017-Ward-4-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-4-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Board-of-Estimate-and-Taxation-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Board-of-Estimate-and-Taxation-Ballot-Records
   title: 2017-Board-of-Estimate-and-Taxation-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Board-of-Estimate-and-Taxation-Ballot-Records (Minneapolis; 2017-11-07).
     Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-10-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-10-Ballot-Records
   title: 2017-Ward-10-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-10-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-6-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-6-Ballot-Records
   title: 2017-Ward-6-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-6-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-13-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-13-Ballot-Records
   title: 2017-Ward-13-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-13-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Park-District-3-CVR.abif
   id: 2017-11-07_Minneapolis-2017-Park-District-3-CVR
   title: 2017-Park-District-3-CVR (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Park-District-3-CVR (Minneapolis; 2017-11-07). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Park-District-6-CVR.abif
   id: 2017-11-07_Minneapolis-2017-Park-District-6-CVR
   title: 2017-Park-District-6-CVR (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Park-District-6-CVR (Minneapolis; 2017-11-07). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Park-District-5-CVR.abif
   id: 2017-11-07_Minneapolis-2017-Park-District-5-CVR
   title: 2017-Park-District-5-CVR (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Park-District-5-CVR (Minneapolis; 2017-11-07). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Park-District-2-CVR.abif
   id: 2017-11-07_Minneapolis-2017-Park-District-2-CVR
   title: 2017-Park-District-2-CVR (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Park-District-2-CVR (Minneapolis; 2017-11-07). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-3-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-3-Ballot-Records
   title: 2017-Ward-3-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-3-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-1-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-1-Ballot-Records
   title: 2017-Ward-1-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-1-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-2-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-2-Ballot-Records
   title: 2017-Ward-2-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-2-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-8-Cast-Vote-Record.abif
   id: 2017-11-07_Minneapolis-2017-Ward-8-Cast-Vote-Record
   title: 2017-Ward-8-Cast-Vote-Record (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-8-Cast-Vote-Record (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Park-Board-District-4-Cast-Vote-Record.abif
   id: 2017-11-07_Minneapolis-2017-Park-Board-District-4-Cast-Vote-Record
   title: 2017-Park-Board-District-4-Cast-Vote-Record (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Park-Board-District-4-Cast-Vote-Record (Minneapolis; 2017-11-07). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Park-Board-At-Large-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Park-Board-At-Large-Ballot-Records
   title: 2017-Park-Board-At-Large-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Park-Board-At-Large-Ballot-Records (Minneapolis; 2017-11-07). Derived
     from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Ward-9-Ballot-Records.abif
   id: 2017-11-07_Minneapolis-2017-Ward-9-Ballot-Records
   title: 2017-Ward-9-Ballot-Records (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Ward-9-Ballot-Records (Minneapolis; 2017-11-07). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2017-11-07_Minneapolis-2017-Council-Ward-7-CVR.abif
   id: 2017-11-07_Minneapolis-2017-Council-Ward-7-CVR
   title: 2017-Council-Ward-7-CVR (Minneapolis; 2017-11-07)
-  tags: Minneapolis_MN, from-bolson, 2017-11, MN, 2017, Minneapolis-2017
+  tags: Minneapolis_MN, from-bolson, actual, 2017-11, MN, 2017, Minneapolis-2017
   desc: 2017-Council-Ward-7-CVR (Minneapolis; 2017-11-07). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2009_Burlington_VT-vote.abif
   id: 2009_Burlington_VT-vote
   title: vote (Burlington_VT; 2009)
-  tags: from-bolson, Burlington_VT, VT, Burlington_VT-2009, 2009, CondorcetVsIRV
+  tags: from-bolson, actual, Burlington_VT, VT, Burlington_VT-2009, 2009, CondorcetVsIRV, featured
   desc: vote (Burlington_VT; 2009). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2009-11-03_PierceCounty_WA-auditor.abif
   id: 2009-11-03_PierceCounty_WA-auditor
   title: auditor (PierceCounty_WA; 2009-11-03)
-  tags: from-bolson, PierceCounty_WA-2009, PierceCounty_WA, 2009-11, 2009
+  tags: from-bolson, actual, PierceCounty_WA-2009, PierceCounty_WA, 2009-11, 2009
   desc: auditor (PierceCounty_WA; 2009-11-03). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-11-06_SanFrancisco-Public_Defender.abif
   id: 2018-11-06_SanFrancisco-Public_Defender
   title: Public Defender (SanFrancisco; 2018-11-06)
-  tags: from-bolson, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
+  tags: from-bolson, actual, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
   desc: Public Defender (SanFrancisco; 2018-11-06). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-11-06_SanFrancisco-Board_of_Supervisors_District_4.abif
   id: 2018-11-06_SanFrancisco-Board_of_Supervisors_District_4
   title: Board of Supervisors District 4 (SanFrancisco; 2018-11-06)
-  tags: from-bolson, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
+  tags: from-bolson, actual, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
   desc: Board of Supervisors District 4 (SanFrancisco; 2018-11-06). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-11-06_SanFrancisco-Board_of_Supervisors_District_2.abif
   id: 2018-11-06_SanFrancisco-Board_of_Supervisors_District_2
   title: Board of Supervisors District 2 (SanFrancisco; 2018-11-06)
-  tags: from-bolson, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
+  tags: from-bolson, actual, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
   desc: Board of Supervisors District 2 (SanFrancisco; 2018-11-06). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-11-06_SanFrancisco-Board_of_Supervisors_District_8.abif
   id: 2018-11-06_SanFrancisco-Board_of_Supervisors_District_8
   title: Board of Supervisors District 8 (SanFrancisco; 2018-11-06)
-  tags: from-bolson, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
+  tags: from-bolson, actual, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
   desc: Board of Supervisors District 8 (SanFrancisco; 2018-11-06). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-11-06_SanFrancisco-Board_of_Supervisors_District_6.abif
   id: 2018-11-06_SanFrancisco-Board_of_Supervisors_District_6
   title: Board of Supervisors District 6 (SanFrancisco; 2018-11-06)
-  tags: from-bolson, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
+  tags: from-bolson, actual, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
   desc: Board of Supervisors District 6 (SanFrancisco; 2018-11-06). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-11-06_SanFrancisco-Board_of_Supervisors_District_10.abif
   id: 2018-11-06_SanFrancisco-Board_of_Supervisors_District_10
   title: Board of Supervisors District 10 (SanFrancisco; 2018-11-06)
-  tags: from-bolson, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
+  tags: from-bolson, actual, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
   desc: Board of Supervisors District 10 (SanFrancisco; 2018-11-06). Derived from
     results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-11-06_SanFrancisco-Assessor-Recorder.abif
   id: 2018-11-06_SanFrancisco-Assessor-Recorder
   title: Assessor-Recorder (SanFrancisco; 2018-11-06)
-  tags: from-bolson, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
+  tags: from-bolson, actual, 2018, 2018-11, SF, SanFrancisco_CA, SanFrancisco-2018, CA
   desc: Assessor-Recorder (SanFrancisco; 2018-11-06). Derived from results obtained
     at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-11-06_Maine-20181106_maine_CD2.abif
   id: 2018-11-06_Maine-20181106_maine_CD2
   title: 20181106_maine_CD2 (Maine; 2018-11-06)
-  tags: from-bolson, 2018, 2018-11, ME, Maine-2018
+  tags: from-bolson, actual, 2018, 2018-11, ME, Maine-2018
   desc: 20181106_maine_CD2 (Maine; 2018-11-06). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-06-05_SF_Mayor-Board_of_Supervisors_District_8.abif
   id: 2018-06-05_SF_Mayor-Board_of_Supervisors_District_8
   title: Board of Supervisors District 8 (SF_Mayor; 2018-06-05)
-  tags: 2018-06, from-bolson, 2018, SF_Mayor, mayor, SF_Mayor-2018
+  tags: 2018-06, from-bolson, actual, 2018, SF_Mayor, mayor, SF_Mayor-2018
   desc: Board of Supervisors District 8 (SF_Mayor; 2018-06-05). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-06-05_SF_Mayor-Mayor.abif
   id: 2018-06-05_SF_Mayor-Mayor
   title: Mayor (SF_Mayor; 2018-06-05)
-  tags: 2018-06, from-bolson, 2018, SF_Mayor, mayor, SF_Mayor-2018
+  tags: 2018-06, from-bolson, actual, 2018, SF_Mayor, mayor, SF_Mayor-2018
   desc: Mayor (SF_Mayor; 2018-06-05). Derived from results obtained at bolson.org.
 - filename: localabif/california/sf2024-mayor.abif
   id: sf2024-mayor
   title: MAYOR
-  tags: sf2024, actual, CA, USA, government, 2024, mayor
+  tags: sf2024, actual, CA, USA, government, 2024, mayor, featured
   desc: MAYOR. Derived from SF Elections 2024 CVR data.
 - filename: localabif/california/sf2024-member-board-of-supervisors-district-1.abif
   id: sf2024-member-board-of-supervisors-district-1
