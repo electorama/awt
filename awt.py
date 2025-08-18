@@ -29,8 +29,9 @@ from cache_awt import (
     cache_key_from_request,
     cache_file_from_key,
     log_cache_hit,
+    monkeypatch_cache_get,
     purge_cache_entry,
-    monkeypatch_cache_get
+    purge_cache_entries_by_path
 )
 import conduits
 from dotenv import load_dotenv
@@ -483,6 +484,40 @@ def edit_interface():
 
 
 @app.route('/tag/<tag>', methods=['GET'])
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
+def list_elections(tag=None):
+    """Show list of elections filtered by tag"""
+    # --- Cache purge support via ?action=purge ---
+    if request.args.get('action') == 'purge':
+        args = request.args.to_dict()
+        args.pop('action', None)
+        canonical_path = request.path
+        cache_dir = app.config.get('CACHE_DIR')
+        logging.getLogger('awt.cache').info(
+            f"[DEBUG] Entering purge logic for path: {canonical_path}")
+        from cache_awt import purge_cache_entries_by_path
+        purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Redirect to same URL without ?action=purge
+        return redirect(url_for(request.endpoint, **args))
+
+    msgs = {}
+    webenv = WebEnv.wenvDict()
+    WebEnv.sync_web_env()
+    msgs['pagetitle'] = f"Elections tagged '{tag}'"
+    msgs['lede'] = f"Elections with the '{tag}' tag:"
+
+    # Use bifhub functions
+    from src.bifhub import build_election_list, get_fileentries_by_tag
+    election_list = build_election_list()
+    filtered_elections = get_fileentries_by_tag(tag, election_list)
+
+    return render_template('tag-index.html',
+                           msgs=msgs,
+                           webenv=webenv,
+                           election_list=filtered_elections,
+                           tag=tag), 200
+
+
 @app.route('/<toppage>', methods=['GET'])
 def awt_get(toppage=None, tag=None):
     msgs = {}
@@ -574,7 +609,6 @@ def browse_elections():
         cache_dir = app.config.get('CACHE_DIR')
         logging.getLogger('awt.cache').info(
             f"[DEBUG] Entering purge logic for path: {canonical_path}")
-        from cache_awt import purge_cache_entries_by_path
         purge_cache_entries_by_path(cache, canonical_path, cache_dir)
         # Redirect to same URL without ?action=purge
         return redirect(url_for(request.endpoint, **args))

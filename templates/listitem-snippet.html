@@ -1,0 +1,14 @@
+<li class="election-item">
+  <span class="election-id">
+    <a href="/id/{{item.id}}">{{item.id}}</a>
+  </span>
+  <span class="election-tags">
+    (tags: {% for t in item.taglist %}
+      <a href="/tag/{{t}}">{{t}}</a>{% if not loop.last %}, {% endif %}
+    {% endfor %})
+  </span>
+</li>
+<ul>
+  <li>{{item.title}}</li>
+  <li>{{ item.desc }}</li>
+</ul>

@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Elections by tag</h2>
-<ul>
-  {% for item in tagarray %}
-  <li>{{loop.index}}. <a href="/tag/{{item}}">{{item}}</a></li>
-  {% endfor %}
-  <li><a href="/awt">/awt homepage</a></li>
-</ul>
-{% include 'election-list-snippet.html' %}
-<p>See also: the <a href="/id">full list of elections</a> on this website. In addition to
-   the above elections, one may return to the <a href="/awt">/awt homepage</a>
-   and enter an ABIF-formatted election into the form field.</p>
+<h2>Elections tagged "{{ tag }}"</h2>
+{% if election_list %}
+  <ul>
+    {% for item in election_list %}
+      {% include 'listitem-snippet.html' %}
+    {% endfor %}
+  </ul>
+  <p><a href="/browse">← View all elections</a> | <a href="/">← Homepage</a></p>
+{% else %}
+  <p>No elections found with the "{{ tag }}" tag.</p>
+  <p><a href="/browse">← View all elections</a> | <a href="/">← Homepage</a></p>
+{% endif %}
 {% endblock content %}

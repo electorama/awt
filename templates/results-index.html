@@ -316,6 +316,12 @@ and can be edited in the field above.</p>
     </div>
     <!-- END .hatnote -->
     {% endif %}
+
+    <!-- BEGIN fptp notices -->
+    {% set notices = resblob.notices.fptp %}
+    {% include 'notice-snippet.html' %}
+    <!-- END fptp notices -->
+
     <p>{% include 'fptp-snippet.html' %}</p>
     {% endif %}
     <!-- END FPTP section -->
