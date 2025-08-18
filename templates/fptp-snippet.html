@@ -5,9 +5,8 @@
     {% set winnerintro = "FPTP Winners (tie)" if winners | length > 1 else "FPTP Winner" %}
     <li><b>{{winnerintro}}</b>:
       {% if FPTP_candnames %}
-        {%- set winner_tokens = winnerstr.split(',') -%}
-        {%- for tok in winner_tokens -%}
-          <span class="color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+        {%- for winner in winners -%}
+          <span class="color-box" style="background-color: {{ colordict[winner] | default('#ccc') }};"></span>{{ FPTP_candnames[winner] if winner in FPTP_candnames else winner }}{% if not loop.last %}, {% endif %}
         {%- endfor -%}
       {% else %}
         {{ winnerstr }}
@@ -18,24 +17,23 @@
       {% set sorted_candidates = resblob.FPTP_result.toppicks|dictsort(reverse=true, by='value') %}
       {% if sorted_candidates|length > 1 %}
         {% set runner_up = sorted_candidates[1] %}
-        <li><b>First-place votes</b>: {{ winner_votes }} ({{ "%0.1f"|format((winner_votes / resblob.FPTP_result.total_votes) * 100) if resblob.FPTP_result.total_votes > 0 else 0 }}%)</li>
-        <li><b>Runner-up</b>: {{ FPTP_candnames[runner_up[0]] if FPTP_candnames and runner_up[0] in FPTP_candnames else runner_up[0] }} with {{ runner_up[1] }} first-place votes ({{ "%0.1f"|format((runner_up[1] / resblob.FPTP_result.total_votes) * 100) if resblob.FPTP_result.total_votes > 0 else 0 }}%)</li>
-        <li><b>Margin of victory</b>: {{ winner_votes - runner_up[1] }} votes ({{ "%0.1f"|format(((winner_votes - runner_up[1]) / resblob.FPTP_result.total_votes) * 100) if resblob.FPTP_result.total_votes > 0 else 0 }} percentage points)</li>
+        <li>First-place votes: {{ "{:,}".format(winner_votes) }} ({{ "%0.1f"|format((winner_votes / resblob.FPTP_result.total_votes) * 100) if resblob.FPTP_result.total_votes > 0 else 0 }}%)</li>
+        <li>Runner-up: <span class="color-box" style="background-color: {{ colordict[runner_up[0]] | default('#ccc') }};"></span>{{ FPTP_candnames[runner_up[0]] if FPTP_candnames and runner_up[0] in FPTP_candnames else runner_up[0] }} with {{ "{:,}".format(runner_up[1]) }} first-place votes ({{ "%0.1f"|format((runner_up[1] / resblob.FPTP_result.total_votes) * 100) if resblob.FPTP_result.total_votes > 0 else 0 }}%)</li>
+        <li>Margin of victory: {{ "{:,}".format(winner_votes - runner_up[1]) }} votes ({{ "%0.1f"|format(((winner_votes - runner_up[1]) / resblob.FPTP_result.total_votes) * 100) if resblob.FPTP_result.total_votes > 0 else 0 }} percentage points)</li>
       {% endif %}
-      <li><b>Total ballots</b>: {{ resblob.FPTP_result.total_votes }}</li>
     {% endif %}
-    <li><b>First-place votes</b>
+    <li>First-place votes
     <ul>
     {% for candidate, votes in resblob.FPTP_result.toppicks|dictsort(reverse=true, by='value') %}
     <li>
       <span class="color-box" style="background-color: {{ colordict[candidate] | default('#ccc') }};"></span>
-      {{ FPTP_candnames[candidate] if FPTP_candnames and candidate in FPTP_candnames else candidate }}: {{ votes }} votes
+      {{ FPTP_candnames[candidate] if FPTP_candnames and candidate in FPTP_candnames else candidate }}: {{ "{:,}".format(votes) }} votes
       {% if resblob.FPTP_result.total_votes > 0 %}
       ({{ "%0.1f"|format((votes / resblob.FPTP_result.total_votes) * 100) }} %)
       {% endif %}
     </li>
     {% endfor %}
     </ul></li>
-    <li><b>Total:</b> {{resblob.FPTP_result.total_votes}} votes</li>
+    <li><b>Total ballots:</b> {{ "{:,}".format(resblob.FPTP_result.total_votes) }}</li>
   </ul>
 </div>

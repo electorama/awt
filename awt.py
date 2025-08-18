@@ -472,8 +472,8 @@ def homepage():
         msgs.append(f"Purged cache entry for homepage")
 
     return render_template('homepage-index.html',
-                         msgs=msgs,
-                         webenv=webenv), 200
+                           msgs=msgs,
+                           webenv=webenv), 200
 
 
 @app.route('/edit')
@@ -560,6 +560,7 @@ def awt_get(toppage=None, tag=None):
                                       debug_flag=debug_flag,
                                       ), 404)
     return retval
+
 
 # Route for '/browse' - election discovery with tag browser
 @app.route('/browse', methods=['GET'])

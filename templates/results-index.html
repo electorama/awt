@@ -254,6 +254,10 @@ and can be edited in the field above.</p>
     </div>
     {% endif %}
 
+    <!-- BEGIN pairwise notices -->
+    {% set notices = resblob.notices.pairwise %}
+    {% include 'notice-snippet.html' %}
+    <!-- END pairwise notices -->
 
     <!-- Include detailed pairwise summary -->
     {% if pairwise_summary_html %}

@@ -714,3 +714,12 @@ svg {
         gap: 15px;
     }
 }
+
+/* Footnote styling for pairwise tables */
+.footnote {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 0.5em;
+    font-style: italic;
+    line-height: 1.3;
+}

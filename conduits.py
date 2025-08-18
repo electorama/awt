@@ -14,6 +14,7 @@ from abiflib import (
     STAR_result_from_abifmodel,
     scaled_scores
 )
+from abiflib.pairwise_tally import pairwise_result_from_abifmodel
 from abiflib.approval_tally import (
     approval_result_from_abifmodel,
     get_approval_report
@@ -79,7 +80,12 @@ class ResultConduit:
         return self
 
     def update_pairwise_result(self, jabmod) -> "ResultConduit":
-        copecount = full_copecount_from_abifmodel(jabmod)
+        # Get pairwise result with notices first
+        pairwise_result = pairwise_result_from_abifmodel(jabmod)
+        pairwise_matrix = pairwise_result['pairwise_matrix']
+
+        # Use the same pairwise matrix for copecount to ensure consistency
+        copecount = full_copecount_from_abifmodel(jabmod, pairdict=pairwise_matrix)
         copewinners = get_Copeland_winners(copecount)
         cwstring = ", ".join(copewinners)
         self.resblob['copewinners'] = copewinners
@@ -87,7 +93,9 @@ class ResultConduit:
         self.resblob['is_copeland_tie'] = len(copewinners) > 1
         self.resblob['dotsvg_html'] = copecount_diagram(
             copecount, outformat='svg')
-        self.resblob['pairwise_dict'] = pairwise_count_dict(jabmod)
+        self.resblob['pairwise_dict'] = pairwise_matrix
+        # Extract notices using consistent method (following STAR/approval pattern)
+        self._extract_notices('pairwise', pairwise_result)
         self.resblob['pairwise_html'] = htmltable_pairwise_and_winlosstie(jabmod,
                                                                           snippet=True,
                                                                           validate=True,
@@ -97,7 +105,6 @@ class ResultConduit:
                 jabmod['candidates'].keys())
         else:
             self.resblob['colordict'] = {}
-        self._extract_notices('pairwise', self.resblob['pairwise_dict'])
         return self
 
     def update_STAR_result(self, jabmod, colordict=None) -> "ResultConduit":
