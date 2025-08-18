@@ -14,6 +14,7 @@ from abiflib import (
     STAR_result_from_abifmodel,
     scaled_scores
 )
+from abiflib.irv_tally import IRV_result_from_abifmodel
 from abiflib.pairwise_tally import pairwise_result_from_abifmodel
 from abiflib.approval_tally import (
     approval_result_from_abifmodel,
@@ -63,6 +64,9 @@ class ResultConduit:
             print(f" ------------ [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] "
                   f"Upgrade abiflib to v0.32.1 or later for IRVextra support.")
             self.resblob['IRV_dict'] = IRV_dict_from_jabmod(jabmod)
+
+        # Create the IRV result with summary data
+        self.resblob['IRV_result'] = IRV_result_from_abifmodel(jabmod)
 
         # Convert sets to lists for JSON serialization in templates
         irv_dict = self.resblob['IRV_dict']

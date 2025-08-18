@@ -103,7 +103,8 @@
     {% set winner = IRV_dict['winner'] %}
     {% set winnerstr = IRV_dict['winnerstr'] %}
     {% set winnerintro = "IRV/RCV Winners (tie)" if winner | length > 1 else "IRV/RCV Winner" %}
-    {% set numrounds =  IRV_dict['rounds']|length %}
+    {% set irv_result = resblob['IRV_result'] %}
+    {% set numrounds = IRV_dict['rounds']|length %}
     {% set startingqty = IRV_dict['roundmeta'][0]['startingqty'] %}
     {% set majority = IRV_dict['roundmeta'][0]['startingqty'] // 2 + 1 %}
 
@@ -117,15 +118,18 @@
       {% else %}
         No winner determined
       {% endif %}
+      with {{ "{:,}".format(irv_result['winner_votes']) }} votes ({{ "%.1f"|format(irv_result['winner_percentage']) }}%) in final round
     </li>
-    <li>Number of rounds: {{numrounds}}</li>
-    <li>Total ballots: {{ "{:,}".format(startingqty) }}
-      ({{ "%.1f"|format(100.0 if startingqty else 0) }}%)
-    </li>
-    <li>Majority of ballots: {{ "{:,}".format(majority) }}
-        ({{ "%.3f"|format((majority / startingqty * 100) if startingqty else 0) }}%)</li>
-    <li>Ballots counted in final round: {{ "{:,}".format(IRV_dict['roundmeta'][-1]['countedqty']) }}
-        ({{ "%.1f"|format((IRV_dict['roundmeta'][-1]['countedqty'] / startingqty * 100) if startingqty else 0) }}%)</li>
+
+    {% if irv_result['runner_up'] %}
+      <li>Runner-up: <span class="color-box" style="background-color: {{ colordict[irv_result['runner_up']] | default('#ccc') }};"></span>{{ IRV_candnames[irv_result['runner_up']] if IRV_candnames and irv_result['runner_up'] in IRV_candnames else irv_result['runner_up'] }} with {{ "{:,}".format(irv_result['runner_up_votes']) }} votes ({{ "%.1f"|format(irv_result['runner_up_percentage']) }}%) in final round</li>
+    {% endif %}
+
+    <li>Exhausted ballots in final round: {{ "{:,}".format(irv_result['final_round_exhausted']) }} ({{ "%.1f"|format(irv_result['final_round_exhausted_percentage']) }}%)</li>
+    <li>Number of rounds: {{ irv_result['num_rounds'] }}</li>
+    <li>Ballots counted in final round: {{ "{:,}".format(irv_result['final_round_counted']) }} ({{ "%.1f"|format(irv_result['final_round_counted_percentage']) }}%)</li>
+    <li>Majority of ballots: {{ "{:,}".format(irv_result['majority_threshold']) }} ({{ "%.1f"|format(irv_result['majority_threshold_percentage']) }}%)</li>
+    <li><b>Total ballots:</b> {{ "{:,}".format(irv_result['total_ballots']) }}</li>
   </ul>
   <div class="hscroll">
   <table>
@@ -157,7 +161,7 @@
             ({{ "%.1f"|format((round['countedqty'] / startingqty * 100) if startingqty else 0) }}%)
             <br>
           {% if threshold < majority %}
-          Winning threshold: {{ "{:,}".format(threshold) }} 
+          Winning threshold: {{ "{:,}".format(threshold) }}
           ({{ "%.2f"|format((threshold / startingqty * 100) if startingqty else 0) }}%)<br/>
           {% endif %}
           {% if round['bottomtie'] %}
