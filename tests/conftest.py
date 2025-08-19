@@ -3,6 +3,14 @@ Pytest configuration and hooks for AWT tests.
 """
 import os
 import pytest
+import subprocess
+import tempfile
+import time
+import re
+import signal
+import abiflib
+
+ABIFTOOL_DIR = abiflib.get_abiftool_dir()
 
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
     """
@@ -23,3 +31,46 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
 def awt_dir():
     """Return the absolute path to the awt project root."""
     return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+@pytest.fixture(scope="function")
+def awt_server(request, awt_dir):
+    """Start awt.py in a subprocess and yield the detected port."""
+    cli_args = request.param if hasattr(request, 'param') else []
+    env = os.environ.copy()
+    env['AWT_DIR'] = awt_dir
+    env['ABIFTOOL_DIR'] = ABIFTOOL_DIR
+    env['PYTHONUNBUFFERED'] = '1'
+
+    log_file = tempfile.NamedTemporaryFile(mode='w+', delete=False)
+    log_path = log_file.name
+    print(f"\n[pytest] Logging awt.py output to {log_path}")
+
+    cmd = ['python3', os.path.join(awt_dir, 'awt.py')] + cli_args
+    proc = subprocess.Popen(
+        cmd,
+        stdout=open(log_path, 'w'),
+        stderr=subprocess.STDOUT,
+        env=env,
+        preexec_fn=os.setsid
+    )
+
+    try:
+        port = None
+        for _ in range(30):  # Try for 6 seconds
+            time.sleep(0.2)
+            with open(log_path) as f:
+                output = f.read()
+            match = re.search(r'http://127\.0\.0\.1:(\d+)', output)
+            if match:
+                port = int(match.group(1))
+                break
+
+        if not port:
+            raise RuntimeError("Could not detect Flask port.")
+
+        yield port
+
+    finally:
+        print("\n[pytest] Terminating awt.py server...")
+        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+        proc.wait()
