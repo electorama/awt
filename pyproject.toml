@@ -1,8 +1,8 @@
 [project]
 name = "awt"
-version = "0.32.0"
+version = "0.33.0rc1"
 dependencies = [
-    "abiftool>=0.31.0",
+    "abiftool>=0.33.0rc1",
     "dotenv",
     "Flask",
     "flask-caching",
@@ -32,7 +32,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-py-modules = ["awt", "cache_awt", "conduits"]
+py-modules = ["awt", "cache_awt", "conduits", "html_util"]
 include-package-data = true
 [tool.setuptools.data-files]
 awt-templates = [
