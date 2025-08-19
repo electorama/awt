@@ -34,23 +34,37 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 py-modules = ["awt", "cache_awt", "conduits", "html_util"]
 include-package-data = true
+[tool.setuptools.packages.find]
+include = ["src"]
 [tool.setuptools.data-files]
 awt-templates = [
     "templates/abifbox-snippet.html",
     "templates/all-snippet.html",
     "templates/also-note-snippet.html",
+    "templates/approval-snippet.html",
     "templates/base.html",
+    "templates/browse-index.html",
     "templates/default-index.html",
     "templates/election-list-snippet.html",
+    "templates/featured-snippet.html",
     "templates/footer.snippet.html",
     "templates/fptp-snippet.html",
+    "templates/homepage-index.html",
+    "templates/homepage-snippet.html",
     "templates/id-index.html",
     "templates/intro-snippet.html",
     "templates/irv-snippet.html",
+    "templates/listitem-snippet.html",
+    "templates/notice-snippet.html",
     "templates/not-found.html",
+    "templates/pairwise-snippet.html",
+    "templates/pairwise-summary-only.html",
     "templates/results-index.html",
+    "templates/scorestar-snippet.html",
     "templates/star-snippet.html",
-    "templates/tag-index.html"
+    "templates/tag-browser-snippet.html",
+    "templates/tag-index.html",
+    "templates/tags-index.html"
 ]
 awt-static = [
     "static/css/electostyle.css",
@@ -58,7 +72,10 @@ awt-static = [
     "static/img/awt-electorama.svg",
     "static/img/awtonly.svg",
     "static/img/electodrop.svg",
-    "static/js/abifwebtool.js"
+    "static/js/abifwebtool.js",
+    "static/js/irvDisplay.js",
+    "static/js/main.js",
+    "static/js/popover.js"
 ]
 abif-catalog = [
     "abif_list.yml"
