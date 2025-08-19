@@ -280,6 +280,26 @@ app = Flask(__name__, static_folder=static_folder,
 app.url_map.strict_slashes = False
 app.jinja_env.filters['escape_css'] = escape_css_selector
 
+@app.route('/favicon.ico')
+def favicon():
+    """Serve favicon if present; otherwise, be non-fatal.
+
+    - If a `favicon.ico` exists in the configured static directory, serve it.
+    - If not present or any error occurs, return 204 No Content to avoid
+      triggering the template-based 404 handler.
+    """
+    try:
+        static_dir = AWT_STATIC or app.static_folder
+        if static_dir:
+            favpath = os.path.join(static_dir, 'favicon.ico')
+            if os.path.isfile(favpath):
+                return send_from_directory(static_dir, 'favicon.ico')
+    except Exception:
+        # Fall through to non-fatal response below
+        pass
+    # No favicon available: respond with 204 to keep things quiet in tests
+    return ('', 204)
+
 
 # --- Configure logging to show cache events ---
 logging.basicConfig(
