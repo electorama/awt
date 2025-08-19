@@ -2374,4 +2374,10 @@
   title: TREASURER
   tags: sf2024, actual, CA, USA, government
   desc: TREASURER. Derived from SF Elections 2024 CVR data.
-
+- filename: localabif/newyork/nyc2025-primary-rcv.abif
+  id: NYC2025-Mayor-Primary-Dem
+  title: NYC 2025 Mayoral Primary (Democrats)
+  tags: 2025, actual, NY, NYC-2025, NYC_NY, mayor, primary_election, RCV
+  desc: >
+    2025 New York City Democratic mayoral primary using RCV, in which
+    Zohran Mamdani won and advanced to the general election.
