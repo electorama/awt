@@ -28,5 +28,5 @@ This is a very incomplete list of incomplete tasks for this project
 * Post 0.33.0
   - [ ] Create /edit route for ABIF editing interface (move editing functionality from homepage)
   - [ ] Create bifhub and figure out awt interface to it [[./docs/bifhub.md]]
+  - [ ] Merge tags-index.html and tag-index.html into a single template (consolidate tag index/detail)
   - Moar [[Code hygiene]] (see above)
-

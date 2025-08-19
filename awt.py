@@ -276,6 +276,8 @@ else:
 
 app = Flask(__name__, static_folder=static_folder,
             template_folder=AWT_TEMPLATES, static_url_path=static_url_path)
+# Accept both with and without trailing slashes on routes
+app.url_map.strict_slashes = False
 app.jinja_env.filters['escape_css'] = escape_css_selector
 
 
@@ -481,6 +483,53 @@ def homepage():
 def edit_interface():
     """Edit interface route - redirects to /awt for 0.33"""
     return redirect('/awt', code=302)
+
+
+@app.route('/tag', methods=['GET'])
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
+def list_all_tags():
+    """Show an index of all tags, alphabetically, with counts"""
+    # --- Cache purge support via ?action=purge ---
+    if request.args.get('action') == 'purge':
+        args = request.args.to_dict()
+        args.pop('action', None)
+        canonical_path = request.path
+        cache_dir = app.config.get('CACHE_DIR')
+        logging.getLogger('awt.cache').info(
+            f"[DEBUG] Entering purge logic for path: {canonical_path}")
+        from cache_awt import purge_cache_entries_by_path
+        purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Redirect to same URL without ?action=purge
+        return redirect(url_for(request.endpoint, **args))
+
+    msgs = {}
+    webenv = WebEnv.wenvDict()
+    WebEnv.sync_web_env()
+    msgs['pagetitle'] = "All Tags"
+    msgs['lede'] = "Browse all tags alphabetically."
+
+    # Use bifhub functions to build list and collect tags
+    from src.bifhub import build_election_list
+    election_list = build_election_list()
+
+    # Build counts per tag
+    from collections import Counter
+    counts = Counter()
+    for d in election_list:
+        for t in d.get('taglist', []) or []:
+            if t:
+                counts[t] += 1
+
+    tag_items = [
+        {"name": name, "count": count}
+        for name, count in counts.items()
+    ]
+    tag_items.sort(key=lambda x: x['name'].casefold())
+
+    return render_template('tags-index.html',
+                           msgs=msgs,
+                           webenv=webenv,
+                           tags=tag_items), 200
 
 
 @app.route('/tag/<tag>', methods=['GET'])

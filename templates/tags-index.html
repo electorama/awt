@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>All Tags</h2>
+<p>Browse all tags available across the catalog. Click any tag to see matching elections.</p>
+
+{% if tags %}
+<ul class="tag-list">
+  {% for t in tags %}
+  <li>
+    <a class="tag" href="/tag/{{ t.name }}">{{ t.name }}</a>
+    <span class="tag-count">({{ t.count }})</span>
+  </li>
+  {% endfor %}
+  <li><a href="/browse">← Browse</a> | <a href="/">← Homepage</a></li>
+  </ul>
+{% else %}
+  <p>No tags found.</p>
+  <p><a href="/browse">← Browse</a> | <a href="/">← Homepage</a></p>
+{% endif %}
+
+<style>
+  .tag-list { columns: 3 16rem; -webkit-columns: 3 16rem; -moz-columns: 3 16rem; }
+  .tag-list li { break-inside: avoid; margin: 0.15rem 0; list-style: none; }
+  .tag { text-decoration: none; }
+  .tag-count { color: #666; font-size: 90%; margin-left: 0.25rem; }
+  @media (max-width: 768px) {
+    .tag-list { columns: 2 12rem; }
+  }
+</style>
+{% endblock content %}
+
