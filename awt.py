@@ -53,6 +53,44 @@ import urllib
 import yaml
 
 
+def _template_loader():
+    """Return a Jinja2 FileSystemLoader with robust search paths.
+
+    Searches, in order:
+    - `AWT_TEMPLATES` (env/discovered)
+    - `templates` next to this file (dev tree)
+    - `sys.prefix/awt-templates` (data-files in venv)
+    - `<venv root>/awt-templates` (alt venv layout)
+    - `site-packages/awt-templates` (data-files next to installed module)
+    """
+    paths = []
+    try:
+        if AWT_TEMPLATES:
+            paths.append(AWT_TEMPLATES)
+    except NameError:
+        pass
+    here = os.path.dirname(__file__)
+    paths.append(os.path.join(here, 'templates'))
+    try:
+        paths.append(os.path.join(sys.prefix, 'awt-templates'))
+        exe_path = Path(sys.argv[0]).resolve()
+        if exe_path.name == 'python' or exe_path.name.startswith('python'):
+            exe_path = Path(sys.executable).resolve()
+        venv_root = exe_path.parent.parent
+        paths.append(str(venv_root / 'awt-templates'))
+    except Exception:
+        pass
+    try:
+        import importlib.util as _ilu
+        pkg_dir = Path(_ilu.find_spec('awt').origin).parent
+        paths.append(str(pkg_dir / 'awt-templates'))
+    except Exception:
+        pass
+    seen = set()
+    exists = [p for p in paths if p and os.path.isdir(p) and not (p in seen or seen.add(p))]
+    return FileSystemLoader(exists or [os.path.join(here, 'templates')])
+
+
 def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_desc=True, svg_text=None, is_copeland_tie=False):
     def wltstr(cand):
         retval = f"{wltdict[cand]['wins']}" + "-"
@@ -77,9 +115,9 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_des
         cand_list_str = ", ".join([candnames[c] for c in candtoks])
         desc = f"Candidate matchups for {cand_list_str}"
 
+    # Use robust loader that searches common install locations
     env = Environment(
-        loader=FileSystemLoader(os.path.join(
-            os.path.dirname(__file__), 'templates')),
+        loader=_template_loader(),
         autoescape=select_autoescape(['html', 'xml'])
     )
     env.filters['escape_css'] = escape_css_selector
@@ -127,8 +165,7 @@ def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None, is
     candnames = abifmodel.get('candidates', None)
 
     env = Environment(
-        loader=FileSystemLoader(os.path.join(
-            os.path.dirname(__file__), 'templates')),
+        loader=_template_loader(),
         autoescape=select_autoescape(['html', 'xml'])
     )
     env.filters['escape_css'] = escape_css_selector
@@ -161,8 +198,7 @@ def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None, is
 def jinja_scorestar_snippet(jabmod, basicstar=None, scaled=None):
     content = STAR_report(jabmod)
     env = Environment(
-        loader=FileSystemLoader(os.path.join(
-            os.path.dirname(__file__), 'templates')),
+        loader=_template_loader(),
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('scorestar-snippet.html')
@@ -214,6 +250,19 @@ if not AWT_STATIC or not AWT_TEMPLATES:
         pkg_dir = Path(importlib.util.find_spec('awt').origin).parent
         awt_static_candidate = pkg_dir / 'awt-static'
         awt_templates_candidate = pkg_dir / 'awt-templates'
+        if not AWT_STATIC and awt_static_candidate.is_dir():
+            AWT_STATIC = str(awt_static_candidate)
+        if not AWT_TEMPLATES and awt_templates_candidate.is_dir():
+            AWT_TEMPLATES = str(awt_templates_candidate)
+    except Exception:
+        pass
+
+# 2b. Try awt-static/awt-templates under sys.prefix (typical data-files target)
+if not AWT_STATIC or not AWT_TEMPLATES:
+    try:
+        prefix_dir = Path(sys.prefix)
+        awt_static_candidate = prefix_dir / 'awt-static'
+        awt_templates_candidate = prefix_dir / 'awt-templates'
         if not AWT_STATIC and awt_static_candidate.is_dir():
             AWT_STATIC = str(awt_static_candidate)
         if not AWT_TEMPLATES and awt_templates_candidate.is_dir():
