@@ -401,8 +401,17 @@ if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
 # Use abiflib.util.get_abiftool_dir to set ABIFTOOL_DIR and TESTFILEDIR
 ABIFTOOL_DIR = get_abiftool_dir()
 AWT_DIR = str(awt_py_dir)  # Directory containing this awt.py file
-sys.path.append(ABIFTOOL_DIR)
+if ABIFTOOL_DIR and ABIFTOOL_DIR not in sys.path:
+    sys.path.append(ABIFTOOL_DIR)
 TESTFILEDIR = Path(ABIFTOOL_DIR) / 'testdata'
+# Fallback for packaged installs where testdata is under the venv prefix
+if not TESTFILEDIR.is_dir():
+    prefix_testdata = Path(sys.prefix) / 'testdata'
+    if prefix_testdata.is_dir():
+        TESTFILEDIR = prefix_testdata
+        print(f"[awt.py] Using testdata from venv: {TESTFILEDIR}")
+    else:
+        print(f"[awt.py] WARNING: testdata not found at {TESTFILEDIR}")
 
 # Initialized in main()
 ABIF_CATALOG = None
@@ -477,6 +486,11 @@ def build_election_list():
         try:
             retval[i]['text'] = apath.read_text()
         except FileNotFoundError:
+            # Helpful console debug to show where we looked
+            try:
+                print(f"[awt.py] ABIF lookup miss: {apath}")
+            except Exception:
+                pass
             retval[i]['text'] = f'NOT FOUND: {f["filename"]}\n'
         retval[i]['taglist'] = []
         if type(retval[i].get('tags')) is str:
@@ -1276,6 +1290,8 @@ def main():
                         help="Directory for filesystem cache (default: system temp dir)")
     parser.add_argument("--cache-timeout", type=int, default=AWT_DEFAULT_CACHE_TIMEOUT,
                         help=f"Cache timeout in seconds (default: {AWT_DEFAULT_CACHE_TIMEOUT} seconds)")
+    parser.add_argument("--cache-purge", action="store_true",
+                        help="Purge all cache entries on startup")
     args = parser.parse_args()
 
     abif_catalog_init()
@@ -1295,6 +1311,18 @@ def main():
     app.config['CACHE_DEFAULT_TIMEOUT'] = args.cache_timeout
 
     cache.init_app(app)
+
+    # Optional: purge cache at startup
+    if args.cache_purge:
+        try:
+            cache.clear()
+            cache_dir = app.config.get('CACHE_DIR')
+            if cache_dir:
+                print(f"[awt.py] Cache purged (dir={cache_dir})")
+            else:
+                print("[awt.py] Cache purged")
+        except Exception as e:
+            print(f"[awt.py] Cache purge failed: {e}")
 
     # If using filesystem cache, monkeypatch the cache backend to print cache hits and file paths
     if app.config['CACHE_TYPE'] == 'flask_caching.backends.FileSystemCache':
