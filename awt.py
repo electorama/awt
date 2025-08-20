@@ -813,6 +813,16 @@ def get_svg_dotdiagram(identifier):
     return copecount_diagram(copecount, outformat='svg')
 
 
+@app.route('/id/<this_id>/dot')
+@app.route('/id/<this_id>/wlt')
+def handle_deprecated_dot_wlt(this_id):
+    '''Deprecated in 0.33 - redirects /dot and /wlt to /pairwise anchors.
+    Will be replaced by awt_redirect() in 0.34.'''
+    # Extract route type from request path
+    route_type = request.path.split('/')[-1]  # 'dot' or 'wlt'
+    return redirect(f'/id/{this_id}/pairwise#{route_type}', code=302)
+
+
 @app.route('/id/<identifier>', methods=['GET'])
 @app.route('/id/<identifier>/<resulttype>', methods=['GET'])
 def get_by_id(identifier, resulttype=None):

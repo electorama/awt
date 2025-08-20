@@ -268,7 +268,7 @@ and can be edited in the field above.</p>
     {% if 'wlt' in result_types and pairwise_html %}
       <h4><a name="wlt"></a>Win-loss-tie (Condorcet/Copeland) table</h4>
       {% if abif_id %}
-      {% set wlt_pathpart="/id/" + abif_id + "/wlt#wlt" %}
+      {% set wlt_pathpart="/id/" + abif_id + "/pairwise#wlt" %}
       {% set wlt_abslink=webenv.base_url + wlt_pathpart %}
       <div class="hatnote">
         {{abif_id}} w-l-t table permalink:<br>
@@ -279,9 +279,9 @@ and can be edited in the field above.</p>
     {% endif %}
 
     {% if 'dot' in result_types and dotsvg_html %}
-      <h4><a name="dot"></a>Pairwise (Condorcet/Copeland) diagram</h4>
+      <h4><a name="dot"></a>Pairwise tournament (Copeland ordered)</h4>
       {% if abif_id %}
-      {% set dot_pathpart="/id/" + abif_id + "/dot#dot" %}
+      {% set dot_pathpart="/id/" + abif_id + "/pairwise#dot" %}
       {% set dot_abslink=webenv.base_url + dot_pathpart %}
       <div class="hatnote">
         {{abif_id}} pairwise diagram permalink:<br>
