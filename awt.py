@@ -329,6 +329,7 @@ app = Flask(__name__, static_folder=static_folder,
 app.url_map.strict_slashes = False
 app.jinja_env.filters['escape_css'] = escape_css_selector
 
+
 @app.route('/favicon.ico')
 def favicon():
     """Serve favicon if present; otherwise, be non-fatal.
@@ -547,15 +548,18 @@ def get_all_tags_in_election_list(election_list):
 @cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
 def homepage():
     """Homepage route using homepage-snippet.html"""
-    msgs = []
+    msgs = {}
     webenv = WebEnv.wenvDict()
+    WebEnv.sync_web_env()
 
     # Handle cache purge
     if 'purge' in request.args:
         cache_key = cache_key_from_request(request)
         cache_file = cache_file_from_key(cache_key)
         purge_cache_entry(cache_key, cache_file)
-        msgs.append(f"Purged cache entry for homepage")
+        msgs['purge_message'] = f"Purged cache entry for homepage"
+
+    msgs['pagetitle'] = f"{webenv['statusStr']}ABIF Web Tool (awt)"
 
     return render_template('homepage-index.html',
                            msgs=msgs,
