@@ -323,6 +323,10 @@ svg {
     white-space: nowrap;
 }
 
+a.method-tab {
+    color: #333 !important;
+}
+
 .method-tab:hover {
     background-color: #f0f0f0;
     color: #333;
