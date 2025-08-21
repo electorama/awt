@@ -854,6 +854,7 @@ def get_by_id(identifier, resulttype=None):
         rtypemap = {
             'wlt': 'win-loss-tie (Condorcet) results',
             'dot': 'pairwise (Condorcet) diagram',
+            'pairwise': 'Condorcet/Copeland results',
             'IRV': 'RCV/IRV results',
             'STAR': 'STAR results',
             'FPTP': 'choose-one (FPTP) results',
@@ -909,112 +910,136 @@ def get_by_id(identifier, resulttype=None):
             debug_output += f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
             resconduit = conduits.ResultConduit(jabmod=jabmod)
 
-            t_fptp = time.time()
-            resconduit = resconduit.update_FPTP_result(jabmod)
-            fptp_time = time.time() - t_fptp
-            print(
-                f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]")
-            debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
+            # Determine which computations to run based on route
+            compute_all = (not resulttype) or (resulttype == 'all')
+            do_FPTP = compute_all or (resulttype == 'FPTP')
+            do_IRV = compute_all or (resulttype == 'IRV')
+            do_pairwise = compute_all or (resulttype in ('pairwise', 'dot', 'wlt'))
+            do_STAR = compute_all or (resulttype == 'STAR')
+            do_approval = compute_all or (resulttype == 'approval')
 
-            t_irv = time.time()
-            include_irv_extra = bool(request.args.get('include_irv_extra', True))
-            resconduit = resconduit.update_IRV_result(
-                jabmod, include_irv_extra=include_irv_extra)
-            irv_time = time.time() - t_irv
-            print(
-                f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
-            debug_output += f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
-
-            t_pairwise = time.time()
-            resconduit = resconduit.update_pairwise_result(jabmod)
-            pairwise_time = time.time() - t_pairwise
-            print(
-                f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]")
-            debug_output += f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
-
-            t_starprep = time.time()
-            ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
-            starprep_time = time.time() - t_starprep
-            print(
-                f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
-            debug_output += f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
-
-            # Create consistent candidate ordering based on FPTP results for colors (do this early)
-            resblob = resconduit.resblob
-            if jabmod and 'FPTP_result' in resblob:
-                # Sort candidates by FPTP vote count (descending)
-                # The actual vote counts are in resblob['FPTP_result']['toppicks']
-                fptp_toppicks = resblob['FPTP_result'].get('toppicks', {})
-                if fptp_toppicks:
-                    # Handle cases where vote counts might be lists or other types
-                    def get_vote_count(item):
-                        cand, votes = item
-                        if isinstance(votes, (int, float)):
-                            return votes
-                        elif isinstance(votes, list) and len(votes) > 0:
-                            return votes[0] if isinstance(votes[0], (int, float)) else 0
-                        else:
-                            return 0
-
-                    fptp_ordered_candidates = sorted(fptp_toppicks.items(),
-                                                     key=get_vote_count, reverse=True)
-                    candidate_order = [cand for cand, votes in fptp_ordered_candidates if cand is not None]
-                else:
-                    # Fallback to alphabetical if no toppicks
+            # Compute FPTP first if needed (enables color ordering by votes)
+            candidate_order = []
+            if do_FPTP:
+                t_fptp = time.time()
+                resconduit = resconduit.update_FPTP_result(jabmod)
+                fptp_time = time.time() - t_fptp
+                print(
+                    f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]")
+                debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
+                # Build candidate order from FPTP toppicks if available
+                resblob = resconduit.resblob
+                if jabmod and 'FPTP_result' in resblob:
+                    fptp_toppicks = resblob['FPTP_result'].get('toppicks', {})
+                    if fptp_toppicks:
+                        def get_vote_count(item):
+                            cand, votes = item
+                            if isinstance(votes, (int, float)):
+                                return votes
+                            elif isinstance(votes, list) and len(votes) > 0:
+                                return votes[0] if isinstance(votes[0], (int, float)) else 0
+                            else:
+                                return 0
+                        fptp_ordered_candidates = sorted(
+                            fptp_toppicks.items(), key=get_vote_count, reverse=True)
+                        candidate_order = [cand for cand, votes in fptp_ordered_candidates if cand is not None]
+            # If no FPTP order, fall back to alphabetical
+            if not candidate_order:
+                if jabmod and 'candidates' in jabmod:
                     candidate_order = sorted(jabmod['candidates'].keys())
-            elif jabmod:
-                # Fallback to alphabetical if no FPTP results
-                candidate_order = sorted(jabmod['candidates'].keys())
-            else:
-                candidate_order = []
+                else:
+                    candidate_order = []
 
             # Generate single color dictionary for all voting systems
             consistent_colordict = generate_candidate_colors(
                 [c for c in candidate_order if c is not None])
 
-            t_star = time.time()
-            resconduit = resconduit.update_STAR_result(
-                ratedjabmod, consistent_colordict)
-            star_time = time.time() - t_star
-            print(
-                f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
-            debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
+            # IRV (only if requested/all)
+            if do_IRV:
+                t_irv = time.time()
+                include_irv_extra = bool(request.args.get('include_irv_extra', True))
+                resconduit = resconduit.update_IRV_result(
+                    jabmod, include_irv_extra=include_irv_extra)
+                irv_time = time.time() - t_irv
+                print(
+                    f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
+                debug_output += f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
 
-            t_approval = time.time()
-            resconduit = resconduit.update_approval_result(jabmod)
-            approval_time = time.time() - t_approval
-            print(
-                f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Approval: {approval_time:.2f}s]")
-            debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Approval: {approval_time:.2f}s]\n"
+            # Pairwise/Condorcet (only if requested/all)
+            if do_pairwise:
+                t_pairwise = time.time()
+                # Build pairwise result and summaries using the consistent colors
+                pairwise_dict = pairwise_count_dict(jabmod)
+                wltdict = winlosstie_dict_from_pairdict(
+                    jabmod['candidates'], pairwise_dict)
+                resblob = resconduit.resblob
+                # Ensure notices structure exists to satisfy template expectations
+                if 'notices' not in resblob:
+                    resblob['notices'] = {}
+                resblob['notices'].setdefault('pairwise', [])
+                # Copecount-derived fields
+                from abiflib import full_copecount_from_abifmodel, get_Copeland_winners, copecount_diagram
+                copecount = full_copecount_from_abifmodel(jabmod, pairdict=pairwise_dict)
+                copewinners = get_Copeland_winners(copecount)
+                resblob['copewinners'] = copewinners
+                resblob['copewinnerstring'] = ", ".join(copewinners)
+                resblob['is_copeland_tie'] = len(copewinners) > 1
+                resblob['dotsvg_html'] = copecount_diagram(copecount, outformat='svg')
+                resblob['pairwise_dict'] = pairwise_dict
+                resblob['pairwise_html'] = jinja_pairwise_snippet(
+                    jabmod,
+                    pairwise_dict,
+                    wltdict,
+                    colordict=consistent_colordict,
+                    add_desc=True,
+                    svg_text=None,
+                    is_copeland_tie=resblob.get('is_copeland_tie', False)
+                )
+                resblob['pairwise_summary_html'] = jinja_pairwise_summary_only(
+                    jabmod,
+                    pairwise_dict,
+                    wltdict,
+                    colordict=consistent_colordict,
+                    is_copeland_tie=resblob.get('is_copeland_tie', False),
+                    copewinnerstring=resblob.get('copewinnerstring', '')
+                )
+                pairwise_time = time.time() - t_pairwise
+                print(
+                    f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]")
+                debug_output += f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
+
+            # STAR (only if requested/all)
+            if do_STAR:
+                t_starprep = time.time()
+                ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
+                starprep_time = time.time() - t_starprep
+                print(
+                    f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
+                debug_output += f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
+
+                t_star = time.time()
+                resconduit = resconduit.update_STAR_result(
+                    ratedjabmod, consistent_colordict)
+                resconduit.resblob['STAR_html'] = jinja_scorestar_snippet(ratedjabmod)
+                star_time = time.time() - t_star
+                print(
+                    f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
+                debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
+
+            # Approval (only if requested/all)
+            if do_approval:
+                t_approval = time.time()
+                resconduit = resconduit.update_approval_result(jabmod)
+                approval_time = time.time() - t_approval
+                print(
+                    f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Approval: {approval_time:.2f}s]")
+                debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Approval: {approval_time:.2f}s]\n"
 
             resblob = resconduit.resblob
 
             # Store the consistent colordict and candidate order
             resblob['colordict'] = consistent_colordict
             resblob['candidate_order'] = candidate_order
-
-            pairwise_dict = pairwise_count_dict(jabmod)
-            wltdict = winlosstie_dict_from_pairdict(
-                jabmod['candidates'], pairwise_dict)
-            resblob['pairwise_html'] = jinja_pairwise_snippet(
-                jabmod,
-                pairwise_dict,
-                wltdict,
-                colordict=resblob.get('colordict', {}),
-                add_desc=True,
-                svg_text=None,
-                is_copeland_tie=resblob.get('is_copeland_tie', False)
-            )
-            # Generate separate summary for proper positioning
-            resblob['pairwise_summary_html'] = jinja_pairwise_summary_only(
-                jabmod,
-                pairwise_dict,
-                wltdict,
-                colordict=resblob.get('colordict', {}),
-                is_copeland_tie=resblob.get('is_copeland_tie', False),
-                copewinnerstring=resblob.get('copewinnerstring', '')
-            )
-            resblob['STAR_html'] = jinja_scorestar_snippet(ratedjabmod)
             if not resulttype or resulttype == 'all':
                 # Use dynamic method ordering based on metadata and ballot type
                 base_methods = ['FPTP', 'IRV', 'STAR', 'approval', 'wlt']
@@ -1044,16 +1069,40 @@ def get_by_id(identifier, resulttype=None):
                 prof.disable()
                 prof.dump_stats(cprof_path)
                 print(f"[SERVER PROFILE] Profile saved to {cprof_path}")
+            # Build dynamic method ordering list
+            if not resulttype or resulttype == 'all':
+                # Use dynamic method ordering based on metadata and ballot type
+                base_methods = ['FPTP', 'IRV', 'STAR', 'approval', 'wlt']
+                ordered_methods = get_method_ordering(jabmod, base_methods)
+                # Insert 'dot' before 'wlt' to keep Condorcet methods together
+                rtypelist = []
+                for method in ordered_methods:
+                    if method == 'wlt':
+                        rtypelist.append('dot')
+                        rtypelist.append('wlt')
+                    elif method != 'dot':  # Skip 'dot' since we handle it with 'wlt'
+                        rtypelist.append(method)
+            else:
+                if resulttype == 'pairwise':
+                    rtypelist = ['dot', 'wlt']
+                else:
+                    rtypelist = [resulttype]
+
+            # Navigation ordering (map wlt to single 'pairwise' nav item)
+            nav_base = ['FPTP', 'IRV', 'approval', 'STAR', 'wlt']
+            nav_order = get_method_ordering(jabmod, nav_base)
+            nav_methods = ['pairwise' if m == 'wlt' else m for m in nav_order]
+
             return render_template('results-index.html',
                                    abifinput=fileentry['text'],
                                    abif_id=identifier,
                                    election_list=election_list,
-                                   copewinnerstring=resblob['copewinnerstring'],
+                                   copewinnerstring=resblob.get('copewinnerstring', ''),
                                    copewinners=resblob.get('copewinners', []),
-                                   dotsvg_html=resblob['dotsvg_html'],
+                                   dotsvg_html=resblob.get('dotsvg_html', ''),
                                    error_html=resblob.get('error_html'),
-                                   IRV_dict=resblob['IRV_dict'],
-                                   IRV_text=resblob['IRV_text'],
+                                   IRV_dict=resblob.get('IRV_dict', {}),
+                                   IRV_text=resblob.get('IRV_text', ''),
                                    IRV_candnames=jabmod.get(
                                        'candidates', {}) if jabmod else {},
                                    FPTP_candnames=jabmod.get(
@@ -1061,25 +1110,26 @@ def get_by_id(identifier, resulttype=None):
                                    lower_abif_caption="Input",
                                    lower_abif_text=fileentry['text'],
                                    msgs=msgs,
-                                   pairwise_dict=resblob['pairwise_dict'],
-                                   pairwise_html=resblob['pairwise_html'],
+                                   pairwise_dict=resblob.get('pairwise_dict', {}),
+                                   pairwise_html=resblob.get('pairwise_html', ''),
                                    pairwise_summary_html=resblob.get('pairwise_summary_html', ''),
                                    resblob=resblob,
                                    result_types=rtypelist,
-                                   STAR_html=resblob['STAR_html'],
+                                   STAR_html=resblob.get('STAR_html', ''),
                                    approval_result=resblob.get('approval_result', {}),
                                    approval_text=resblob.get('approval_text', ''),
                                    approval_notices=resblob.get('approval_notices', []),
                                    approval_candnames=jabmod.get(
                                        'candidates', {}) if jabmod else {},
-                                   scorestardict=resblob.get('scorestardict', {'starscale': {
-                                                             'colordict': ratedjabmod.get('colordict', {})}}),
+                                   scorestardict=resblob.get('scorestardict', {}),
                                    colordict=resblob.get('colordict', {}),
                                    candidate_order=resblob.get(
                                        'candidate_order', []),
                                    webenv=webenv,
                                    debug_output=debug_output,
                                    debug_flag=webenv['debugFlag'],
+                                   resulttype=resulttype,
+                                   nav_methods=nav_methods,
                                    )
         else:
             msgs['pagetitle'] = "NOT FOUND"

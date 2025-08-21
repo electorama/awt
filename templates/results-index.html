@@ -15,8 +15,20 @@
 {% endif %}
 {% endblock introduction %}
 {% block content %}
-{% set all_results_generated = (result_types|length == 5) %}
+{# Route-aware detection to avoid masking backend over-computation
+ # Only treat as "all methods" when the route intends it (/id/<id> or /id/<id>/all) #}
+{% set is_all_route = (resulttype is defined and (not resulttype or resulttype == 'all')) %}
+{# Consider 'dot' and 'wlt' together for pairwise; treat as 'all' when each method is available #}
+{% set all_results_generated = is_all_route and (
+  'FPTP' in result_types and
+  'IRV' in result_types and
+  'STAR' in result_types and
+  'approval' in result_types and
+  ('dot' in result_types or 'wlt' in result_types)
+) %}
 {% include 'abifbox-snippet.html' %}
+{# Duplicate the compact methods nav just under the ABIF box #}
+{% include 'methods-nav-snippit.html' %}
 <h2 id="results">{{ webenv.statusStr }}Results</h2>
 {% if abif_id %}
 {% set pathpart="/id/" + abif_id  %}
@@ -148,39 +160,6 @@ and can be edited in the field above.</p>
       </label>
     </div>
   </div>
-  {% if abif_id and not all_results_generated %}
-  <ul>
-    <li>Generate other results for {{abif_id}}:</li>
-    <ul>
-      {% if not 'dot' in result_types and not 'wlt' in result_types %}
-      <li>
-        <a href="/id/{{abif_id}}/pairwise#condorcet">Pairwise (Condorcet/Copeland) results for {{abif_id}}</a>
-      </li>
-      {% endif %}
-      {% if not 'FPTP' in result_types %}
-      <li>
-        <a href="/id/{{abif_id}}/FPTP#FPTP">FPTP results for {{abif_id}}</a>
-      </li>
-      {% endif %}
-      {% if not 'IRV' in result_types %}
-      <li>
-        <a href="/id/{{abif_id}}/IRV#IRV">IRV table for {{abif_id}}</a>
-      </li>
-      {% endif %}
-      {% if not 'STAR' in result_types %}
-      <li>
-        <a href="/id/{{abif_id}}/STAR#STAR">STAR results for {{abif_id}}</a>
-      </li>
-      {% endif %}
-      {% if not 'approval' in result_types %}
-      <li>
-        <a href="/id/{{abif_id}}/approval#approval">Approval voting results for {{abif_id}}</a>
-      </li>
-      {% endif %}
-    </ul>
-    <li><a href="/id/{{abif_id}}/all">Generate all results for {{abif_id}}</a></li>
-    {% endif %}
-  </ul>
 
   <!-- Tabs for various methods -->
   <nav class="method-tabs" role="tablist" aria-label="Voting method results navigation">
@@ -417,5 +396,8 @@ and can be edited in the field above.</p>
 <!-- END resultbox -->
 </div>
 <!-- END .resultbox -->
+
+{% include 'methods-nav-snippit.html' %}
+
 <p>(<a href="/">homepage</a>)</p>
 {% endblock content %}

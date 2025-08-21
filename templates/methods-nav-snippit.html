@@ -1,0 +1,29 @@
+{# Reusable voting methods navigation snippet #}
+{% set is_all_route = (resulttype is defined and (not resulttype or resulttype == 'all')) %}
+{% if abif_id and nav_methods %}
+<p><strong>Voting methods:</strong>
+  {% for method in nav_methods %}
+    {% set label = 'Pairwise' if method == 'pairwise' else method %}
+    {% if method == 'pairwise' %}
+      {% set href = '/id/' ~ abif_id ~ '/pairwise#pairwise' %}
+      {% set is_current = (not is_all_route and ('dot' in result_types or 'wlt' in result_types)) %}
+    {% else %}
+      {% set href = '/id/' ~ abif_id ~ '/' ~ method ~ '#' ~ method %}
+      {% set is_current = (not is_all_route and (method in result_types)) %}
+    {% endif %}
+    {% if is_current %}
+      <span class="current-method" aria-current="page">{{ label }}</span>
+    {% else %}
+      <a href="{{ href }}">{{ label }}</a>
+    {% endif %}
+    {% if not loop.last %} • {% endif %}
+  {% endfor %}
+   • 
+  {% if is_all_route %}
+    <span class="current-method" aria-current="page">All methods</span>
+  {% else %}
+    <a href="/id/{{abif_id}}/all">All methods</a>
+  {% endif %}
+</p>
+{% endif %}
+
