@@ -1,8 +1,20 @@
 Changelog for ABIF web tool (awt):
-* [0.33.FIXME] DATE (REV) Visual refresh; enhanced IRV/RCV display
-  - Font changes and other style changes
-  - Use candidate names instead of candidate tokens in most places
-  - IRV: popovers that display second-choice support among first-choice cohorts
+* [0.33.0] 2025-08-?? (FIXME) tag navigation; approval voting; tabbed interface
+  - Homepage redesign showing featured elections
+    - Old /awt edit interface still available
+  - Approval voting support
+  - Added 2025 NYC Democratic Party mayoral primary
+  - New /browse page with much more organized elections index
+  - Vastly improved tag navigation
+  - Tabbed interface makes it easier to switch between methods
+  - Deprecated /dot and /wlt URLs routes; new /pairwise route
+  - More widespread application of candidate color boxes
+  - RCV/IRV: popovers showing transfer information
+  - Condorcet/Copeland: Moved tournament digraph under pairwise table.
+  - Cleaned up election rendering for all methods
+  - Using candidate names instead of tokens in many more places
+  - Started design work on bifhub
+  - Started using standardized notices across voting methods
 * [0.32.0] 2025-07-22 (58e72644) Caching support
 * [0.31.0] 2025-07-11 (765afe9d) FPTP; test suite; substantial bugfix release
   - Added FPTP support
