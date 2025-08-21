@@ -2,7 +2,7 @@
 {% block content %}
 {% include 'tag-browser-snippet.html' %}
 
-<h2>All Elections (425)</h2>
+<h2>All Elections ({{ election_list|length }})</h2>
 <p>Here are some featured elections to get you started, followed by the complete list:</p>
 
 {% include 'featured-snippet.html' %}
