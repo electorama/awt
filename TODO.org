@@ -1,8 +1,6 @@
 This is a very incomplete list of incomplete tasks for this project 
 * Code hygiene
 ** Testing (test)
-   - [X] Create tests directory and add tests besides per-election smoketests
-   - [X] Move test_*.py to tests directory
    - [ ] Quicker/easier smoketests
    - [ ] Optimize tests/test_routes.py performance: Currently very slow to run. Split into fast/slow tests using pytest marks (@pytest.mark.slow) so normal test runs are quick and comprehensive tests can be run separately with `pytest -m slow`
 ** Build & Packaging (build)
@@ -17,7 +15,8 @@ This is a very incomplete list of incomplete tasks for this project
    - [ ] Unify color styling: Generate CSS classes in one place for use by all voting methods (FPTP, IRV, STAR, etc.)
    - [ ] Remove dynamic CSS generation from templates: Currently using <style> blocks in templates for candidate colors. Consider CSS custom properties, inline styles, or pre-generated classes instead.
    - [ ] Clean up data structure passed from abiflib to STAR template
-   - [X] Percentages should be calculated by abiflib, not Jinja templates
+   - [ ] Move _add_irv_tie_notices() from conduits.py to abiflib
+   - [ ] Move _add_star_tie_notices() from conduits.py to abiflib
 * For 0.33.0
   - [X] Sanitize candidate tokens before using them in CSS class names
   - [X] Change where it links to /id/Burl2009/pairwise#condorcet to instead link to /id/Burl2009/pairwise#pairwise

@@ -13,13 +13,28 @@
 
     <ul>
       <li><b>STAR winner</b>:
-        {% for cand in ranklist %}
-          {% set j = scoredata['scores'][cand] %}
-          {% if j['candname'] == scoredata['winner'] %}
-            <span class="color-box" style="background-color: {{ colordict[cand] | default('#ccc') }};"></span>
-          {% endif %}
-        {% endfor %}
-        {{ scoredata['winner']}}
+        {% if scoredata['winner'] and "tie " in scoredata['winner'] %}
+          {# Handle STAR ties: show color boxes for all candidates mentioned in tie string #}
+          {%- set winners = [] -%}
+          {%- for cand in ranklist -%}
+            {%- set j = scoredata['scores'][cand] -%}
+            {%- if j['candname'] in scoredata['winner'] -%}
+              {%- set _ = winners.append((cand, j['candname'])) -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- for cand_token, candname in winners -%}
+            <span class="color-box" style="background-color: {{ colordict[cand_token] | default('#ccc') }};"></span>{{ candname }}{% if not loop.last %}, {% endif %}
+          {%- endfor -%}
+        {% else %}
+          {# Handle single winner #}
+          {% for cand in ranklist %}
+            {% set j = scoredata['scores'][cand] %}
+            {% if j['candname'] == scoredata['winner'] %}
+              <span class="color-box" style="background-color: {{ colordict[cand] | default('#ccc') }};"></span>
+            {% endif %}
+          {% endfor %}
+          {{ scoredata['winner']}}
+        {% endif %}
       </li>
       {% if scoredata['scores'] and ranklist %}
         {% set top_scorer = ranklist[0] %}

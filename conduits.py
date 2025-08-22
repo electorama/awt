@@ -144,6 +144,41 @@ class ResultConduit:
 
         return result
 
+    def _add_star_tie_notices(self, star_result: dict) -> dict:
+        """Add notices for STAR tie situations"""
+        result = star_result.copy()
+        if 'notices' not in result:
+            result['notices'] = []
+
+        # Check if STAR result is a tie
+        winner_str = star_result.get('winner', '') or ''
+        if "tie " in winner_str:
+            # Extract candidate names from the tie string
+            tied_candidates = []
+            # Look for candidates mentioned in the winner string
+            if star_result.get('scores'):
+                for cand_token, cand_data in star_result['scores'].items():
+                    cand_name = cand_data.get('candname', '')
+                    if cand_name and cand_name in winner_str:
+                        tied_candidates.append(cand_name)
+
+            if len(tied_candidates) >= 2:
+                tied_list = " and ".join(tied_candidates)
+
+                # Get runoff information
+                fin1_votes = star_result.get('fin1votes', 0)
+                fin2_votes = star_result.get('fin2votes', 0)
+                total_voters = star_result.get('totalvoters', 0)
+
+                notice = {
+                    "notice_type": "warning",
+                    "short": "STAR runoff ended in tie",
+                    "long": f"In the STAR runoff, {tied_list} were tied with exactly {fin1_votes} votes each out of {total_voters} total voters. This represents a perfect tie in the automatic runoff between the top two scoring candidates. In a real election, this might be resolved by lot drawing or other official tiebreaker procedure depending on jurisdiction."
+                }
+                result['notices'].append(notice)
+
+        return result
+
     def update_FPTP_result(self, jabmod) -> "ResultConduit":
         """Add FPTP result to resblob"""
         fptp_result = FPTP_result_from_abifmodel(jabmod)
@@ -226,8 +261,11 @@ class ResultConduit:
         scorestar['starscale'] = \
             add_html_hints_to_stardict(
                 scorestar['scoremodel'], stardict, colordict)
+
+        # Generate STAR tie notices if needed
+        star_result_with_notices = self._add_star_tie_notices(scoremodel)
         # Extract notices using consistent method
-        self._extract_notices('star', scoremodel)
+        self._extract_notices('star', star_result_with_notices)
 
         # Keep backward compatibility for now
         star_notices = scoremodel.get('notices', [])
