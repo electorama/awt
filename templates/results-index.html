@@ -213,6 +213,9 @@ and can be edited in the field above.</p>
         </a>
       {% endif %}
     {% endfor %}
+    {% if resulttype and resulttype != 'all' %}
+      <a href="/id/{{ abif_id }}" class="view-all-methods">View All Methods...</a>
+    {% endif %}
   </nav>
 </p>
 <!-- BEGIN .resultbox -->

@@ -327,6 +327,20 @@ a.method-tab {
     color: #333 !important;
 }
 
+/* View All Methods link for single-method pages */
+.view-all-methods {
+    margin-left: 1em;
+    color: #d02929;
+    text-decoration: none;
+    display: inline-block;
+    vertical-align: top;
+    padding: 14px 0 12px 0; /* Slight adjustment: 14px top, 12px bottom */
+}
+
+.view-all-methods:hover {
+    text-decoration: underline;
+}
+
 .method-tab:hover {
     background-color: #f0f0f0;
     color: #333;
