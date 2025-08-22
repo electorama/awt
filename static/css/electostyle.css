@@ -382,16 +382,19 @@ a.method-tab {
     padding: 0.3em 0.6em;
     font-size: 0.85em;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.5em;
+    gap: 0.3em;
     position: relative;
-    top: -2em; /* Move up to align with table */
+    top: -3.5em;
 }
 
 .toggle-label {
-    font-weight: 500;
+    font-weight: 400;
     color: #666;
     white-space: nowrap;
+    font-size: 0.8em;
+    text-transform: lowercase;
 }
 
 /* Toggle switch styling */
@@ -449,12 +452,12 @@ a.method-tab {
 
 .toggle-text.off {
     left: 6px;
-    opacity: 1;
+    opacity: 0; /* Hide OFF text */
 }
 
 .toggle-text.on {
     right: 6px;
-    opacity: 0;
+    opacity: 0; /* Hide ON text */
 }
 
 /* Checked state - now using general sibling selector since checkbox is separate */
@@ -467,11 +470,11 @@ a.method-tab {
 }
 
 #tabbed-mode:checked ~ .view-mode-toggle .toggle-text.off {
-    opacity: 0;
+    opacity: 0; /* Keep OFF text hidden */
 }
 
 #tabbed-mode:checked ~ .view-mode-toggle .toggle-text.on {
-    opacity: 1;
+    opacity: 0; /* Keep ON text hidden */
 }
 
 /* Default: Long-form view (all sections visible) */

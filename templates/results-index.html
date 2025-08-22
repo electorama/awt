@@ -147,17 +147,17 @@ and can be edited in the field above.</p>
     </table>
 
     <!-- Hidden checkbox for CSS selectors -->
-    <input type="checkbox" id="tabbed-mode" class="view-mode-input" checked>
+    <input type="checkbox" id="tabbed-mode" class="view-mode-input"{% if not resulttype or resulttype == 'all' %} checked{% endif %}>
 
     <!-- Compact view mode toggle positioned next to winner table -->
     <div class="view-mode-toggle">
-      <span class="toggle-label">Tabbed view</span>
       <label class="toggle-switch" for="tabbed-mode">
         <span class="toggle-slider">
           <span class="toggle-text off">OFF</span>
           <span class="toggle-text on">ON</span>
         </span>
       </label>
+      <span class="toggle-label">tabbed view</span>
     </div>
   </div>
 
