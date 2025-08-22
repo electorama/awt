@@ -153,7 +153,7 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_des
     return html
 
 
-def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None, is_copeland_tie=False, copewinnerstring=None):
+def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None, is_copeland_tie=False, copewinnerstring=None, copewinners=None):
     """Generate only the pairwise summary bullets (without the table)"""
     def wltstr(cand):
         retval = f"{wltdict[cand]['wins']}" + "-"
@@ -189,7 +189,8 @@ def jinja_pairwise_summary_only(abifmodel, pairdict, wltdict, colordict=None, is
         colordict=colordict,
         summary_data=summary_data,
         is_copeland_tie=is_copeland_tie,
-        copewinnerstring=copewinnerstring
+        copewinnerstring=copewinnerstring,
+        copewinners=copewinners or []
     )
     return html
 
@@ -999,6 +1000,26 @@ def get_by_id(identifier, resulttype=None):
                 resblob['copewinners'] = copewinners
                 resblob['copewinnerstring'] = ", ".join(copewinners)
                 resblob['is_copeland_tie'] = len(copewinners) > 1
+
+                # Add Copeland tie notice if needed (for GET route)
+                if resblob['is_copeland_tie'] and len(copewinners) >= 2:
+                    # Get candidate display names
+                    candnames = jabmod.get('candidates', {}) if jabmod else {}
+                    tied_names = []
+                    for token in copewinners:
+                        display_name = candnames.get(token, token)
+                        tied_names.append(display_name)
+
+                    tied_list = " and ".join(tied_names)
+
+                    # Add Copeland tie notice to notices
+                    copeland_notice = {
+                        "notice_type": "warning",
+                        "short": "No Condorcet winner found",
+                        "long": f"This election has no Condorcet winner. {tied_list} are tied for the most pairwise victories (Copeland tie). Each of these candidates beats the same number of opponents in head-to-head comparisons, creating a cycle in the tournament. The Copeland/pairwise table below shows the detailed win-loss-tie records that result in this tie."
+                    }
+                    resblob['notices']['pairwise'].append(copeland_notice)
+
                 resblob['dotsvg_html'] = copecount_diagram(copecount, outformat='svg')
                 resblob['pairwise_dict'] = pairwise_dict
                 resblob['pairwise_html'] = jinja_pairwise_snippet(
@@ -1016,7 +1037,8 @@ def get_by_id(identifier, resulttype=None):
                     wltdict,
                     colordict=consistent_colordict,
                     is_copeland_tie=resblob.get('is_copeland_tie', False),
-                    copewinnerstring=resblob.get('copewinnerstring', '')
+                    copewinnerstring=resblob.get('copewinnerstring', ''),
+                    copewinners=resblob.get('copewinners', [])
                 )
                 pairwise_time = time.time() - t_pairwise
                 print(
@@ -1227,7 +1249,8 @@ def awt_post():
                 wltdict,
                 colordict=resconduit.resblob.get('colordict', {}),
                 is_copeland_tie=resconduit.resblob.get('is_copeland_tie', False),
-                copewinnerstring=resconduit.resblob.get('copewinnerstring', '')
+                copewinnerstring=resconduit.resblob.get('copewinnerstring', ''),
+                copewinners=resconduit.resblob.get('copewinners', [])
             )
         if request.form.get('include_FPTP'):
             rtypelist.append('FPTP')

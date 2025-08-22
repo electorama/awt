@@ -17,6 +17,8 @@ This is a very incomplete list of incomplete tasks for this project
    - [ ] Clean up data structure passed from abiflib to STAR template
    - [ ] Move _add_irv_tie_notices() from conduits.py to abiflib
    - [ ] Move _add_star_tie_notices() from conduits.py to abiflib
+   - [ ] Move _add_pairwise_tie_notices() from conduits.py to abiflib
+   - [ ] Move Copeland tie notice generation from awt.py GET route to abiflib
 * For 0.33.0
   - [X] Sanitize candidate tokens before using them in CSS class names
   - [X] Change where it links to /id/Burl2009/pairwise#condorcet to instead link to /id/Burl2009/pairwise#pairwise

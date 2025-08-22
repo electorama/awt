@@ -179,6 +179,35 @@ class ResultConduit:
 
         return result
 
+    def _add_pairwise_tie_notices(self, pairwise_result: dict) -> dict:
+        """Add notices for pairwise/Condorcet tie situations"""
+        result = pairwise_result.copy()
+        if 'notices' not in result:
+            result['notices'] = []
+
+        # Check for Copeland ties - use self.resblob data that's already been set
+        if hasattr(self, 'resblob') and self.resblob.get('is_copeland_tie', False):
+            copewinners = self.resblob.get('copewinners', [])
+
+            if len(copewinners) >= 2:
+                # Get candidate display names from resblob context
+                tied_names = []
+                for token in copewinners:
+                    # Use the copewinnerstring which has display names
+                    pass
+
+                # Use the existing copewinnerstring instead of trying to reconstruct
+                copewinnerstring = self.resblob.get('copewinnerstring', '')
+
+                notice = {
+                    "notice_type": "warning",
+                    "short": "No Condorcet winner found",
+                    "long": f"This election has no Condorcet winner. {copewinnerstring} are tied for the most pairwise victories (Copeland tie). Each of these candidates beats the same number of opponents in head-to-head comparisons, creating a cycle in the tournament. The Copeland/pairwise table below shows the detailed win-loss-tie records that result in this tie."
+                }
+                result['notices'].append(notice)
+
+        return result
+
     def update_FPTP_result(self, jabmod) -> "ResultConduit":
         """Add FPTP result to resblob"""
         fptp_result = FPTP_result_from_abifmodel(jabmod)
@@ -237,8 +266,34 @@ class ResultConduit:
         self.resblob['dotsvg_html'] = copecount_diagram(
             copecount, outformat='svg')
         self.resblob['pairwise_dict'] = pairwise_matrix
-        # Extract notices using consistent method (following STAR/approval pattern)
+
+        # Extract notices from original pairwise result (for cycles/ties)
         self._extract_notices('pairwise', pairwise_result)
+
+        # Add Copeland tie notice if needed
+        if self.resblob['is_copeland_tie'] and len(copewinners) >= 2:
+            # Get candidate display names
+            candnames = jabmod.get('candidates', {}) if jabmod else {}
+            tied_names = []
+            for token in copewinners:
+                display_name = candnames.get(token, token)
+                tied_names.append(display_name)
+
+            tied_list = " and ".join(tied_names)
+
+            # Ensure notices structure exists
+            if 'notices' not in self.resblob:
+                self.resblob['notices'] = {}
+            if 'pairwise' not in self.resblob['notices']:
+                self.resblob['notices']['pairwise'] = []
+
+            # Add Copeland tie notice to existing notices
+            copeland_notice = {
+                "notice_type": "warning",
+                "short": "No Condorcet winner found",
+                "long": f"This election has no Condorcet winner. {tied_list} are tied for the most pairwise victories (Copeland tie). Each of these candidates beats the same number of opponents in head-to-head comparisons, creating a cycle in the tournament. The Copeland/pairwise table below shows the detailed win-loss-tie records that result in this tie."
+            }
+            self.resblob['notices']['pairwise'].append(copeland_notice)
         self.resblob['pairwise_html'] = htmltable_pairwise_and_winlosstie(jabmod,
                                                                           snippet=True,
                                                                           validate=True,

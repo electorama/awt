@@ -14,7 +14,15 @@
     {% if candidate_list %}
       <!-- Winner or Copeland tie -->
       {% if is_copeland_tie %}
-        <li><b>No Condorcet winner</b>: Copeland tie between {{ copewinnerstring }}</li>
+        <li><b>No Condorcet winner</b>: Copeland tie between
+        {%- if copewinners and candnames -%}
+          {%- for winner_token in copewinners -%}
+            <span class="color-box" style="background-color: {{ colordict[winner_token] | default('#ccc') }};"></span>{{ candnames[winner_token] if winner_token in candnames else winner_token }}{% if not loop.last %}, {% endif %}
+          {%- endfor -%}
+        {%- else -%}
+          {{ copewinnerstring }}
+        {%- endif -%}
+        </li>
       {% else %}
         {% set winner_token = candidate_list[0][0] %}
         {% set winner_record = candidate_list[0][1] %}
@@ -45,7 +53,11 @@
         {% set runner_up_token = candidate_list[1][0] %}
         {% set runner_up_record = candidate_list[1][1] %}
         {% set runner_up_name = candnames[runner_up_token] if candnames and runner_up_token in candnames else runner_up_token %}
-        <li>Runner-up: <span class="color-box" style="background-color: {{ colordict[runner_up_token] | default('#ccc') }};"></span>{{ runner_up_name }} (beats all other candidates except {{ winner_name }})</li>
+        {% if is_copeland_tie %}
+          <li>Runner-up: <span class="color-box" style="background-color: {{ colordict[runner_up_token] | default('#ccc') }};"></span>{{ runner_up_name }} (beats all other candidates except the tied Condorcet winners)</li>
+        {% else %}
+          <li>Runner-up: <span class="color-box" style="background-color: {{ colordict[runner_up_token] | default('#ccc') }};"></span>{{ runner_up_name }} (beats all other candidates except {{ winner_name }})</li>
+        {% endif %}
       {% endif %}
 
       <!-- Victory margins analysis -->
