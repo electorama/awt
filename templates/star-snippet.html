@@ -24,11 +24,11 @@
       {% if scoredata['scores'] and ranklist %}
         {% set top_scorer = ranklist[0] %}
         {% set top_score_data = scoredata['scores'][top_scorer] %}
-        <li>Finalists: {{ scoredata['fin1n'] }} vs {{ scoredata['fin2n'] }}</li>
+        <li>Finalists: {% for cand in ranklist %}{% set j = scoredata['scores'][cand] %}{% if j['candname'] == scoredata['fin1n'] %}<span class="color-box" style="background-color: {{ colordict[cand] | default('#ccc') }};"></span>{% endif %}{% endfor %}{{ scoredata['fin1n'] }} vs {% for cand in ranklist %}{% set j = scoredata['scores'][cand] %}{% if j['candname'] == scoredata['fin2n'] %}<span class="color-box" style="background-color: {{ colordict[cand] | default('#ccc') }};"></span>{% endif %}{% endfor %}{{ scoredata['fin2n'] }}</li>
       <li>Runoff result:
         <ul>
-          <li>{{ scoredata['fin1n'] }}: {{ "{:,}".format(scoredata['fin1votes']) }} votes ({{ scoredata['fin1votes_pct_str'] }})</li>
-          <li>{{ scoredata['fin2n'] }}: {{ "{:,}".format(scoredata['fin2votes']) }} votes ({{ scoredata['fin2votes_pct_str'] }})</li>
+          <li>{% for cand in ranklist %}{% set j = scoredata['scores'][cand] %}{% if j['candname'] == scoredata['fin1n'] %}<span class="color-box" style="background-color: {{ colordict[cand] | default('#ccc') }};"></span>{% endif %}{% endfor %}{{ scoredata['fin1n'] }}: {{ "{:,}".format(scoredata['fin1votes']) }} votes ({{ scoredata['fin1votes_pct_str'] }})</li>
+          <li>{% for cand in ranklist %}{% set j = scoredata['scores'][cand] %}{% if j['candname'] == scoredata['fin2n'] %}<span class="color-box" style="background-color: {{ colordict[cand] | default('#ccc') }};"></span>{% endif %}{% endfor %}{{ scoredata['fin2n'] }}: {{ "{:,}".format(scoredata['fin2votes']) }} votes ({{ scoredata['fin2votes_pct_str'] }})</li>
           <li>No preference: {{ scoredata['final_abstentions'] }} voters ({{ scoredata['final_abstentions_pct_str'] }})</li>
         </ul>
       </li>

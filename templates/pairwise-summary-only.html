@@ -45,7 +45,7 @@
         {% set runner_up_token = candidate_list[1][0] %}
         {% set runner_up_record = candidate_list[1][1] %}
         {% set runner_up_name = candnames[runner_up_token] if candnames and runner_up_token in candnames else runner_up_token %}
-        <li>Runner-up: {{ runner_up_name }} (beats all other candidates except {{ winner_name }})</li>
+        <li>Runner-up: <span class="color-box" style="background-color: {{ colordict[runner_up_token] | default('#ccc') }};"></span>{{ runner_up_name }} (beats all other candidates except {{ winner_name }})</li>
       {% endif %}
 
       <!-- Victory margins analysis -->
@@ -64,12 +64,12 @@
         {% set smallest_winner_name = candnames[smallest_victory['winner']] if candnames and smallest_victory['winner'] in candnames else smallest_victory['winner'] %}
         {% set smallest_loser_name = candnames[smallest_victory['loser']] if candnames and smallest_victory['loser'] in candnames else smallest_victory['loser'] %}
         {% set smallest_margin = smallest_victory['winner_votes'] - smallest_victory['loser_votes'] %}
-        <li>Smallest margin: {{ smallest_winner_name }} over {{ smallest_loser_name }} ({{ "{:,}".format(smallest_victory['winner_votes']) }}-{{ "{:,}".format(smallest_victory['loser_votes']) }}; margin: {{ "{:,}".format(smallest_margin) }})</li>
+        <li>Smallest margin: <span class="color-box" style="background-color: {{ colordict[smallest_victory['winner']] | default('#ccc') }};"></span>{{ smallest_winner_name }} over <span class="color-box" style="background-color: {{ colordict[smallest_victory['loser']] | default('#ccc') }};"></span>{{ smallest_loser_name }} ({{ "{:,}".format(smallest_victory['winner_votes']) }}-{{ "{:,}".format(smallest_victory['loser_votes']) }}; margin: {{ "{:,}".format(smallest_margin) }})</li>
 
         {% set largest_winner_name = candnames[largest_victory['winner']] if candnames and largest_victory['winner'] in candnames else largest_victory['winner'] %}
         {% set largest_loser_name = candnames[largest_victory['loser']] if candnames and largest_victory['loser'] in candnames else largest_victory['loser'] %}
         {% set largest_margin = largest_victory['winner_votes'] - largest_victory['loser_votes'] %}
-        <li>Largest margin: {{ largest_winner_name }} over {{ largest_loser_name }} ({{ "{:,}".format(largest_victory['winner_votes']) }}-{{ "{:,}".format(largest_victory['loser_votes']) }}; margin: {{ "{:,}".format(largest_margin) }})</li>
+        <li>Largest margin: <span class="color-box" style="background-color: {{ colordict[largest_victory['winner']] | default('#ccc') }};"></span>{{ largest_winner_name }} over <span class="color-box" style="background-color: {{ colordict[largest_victory['loser']] | default('#ccc') }};"></span>{{ largest_loser_name }} ({{ "{:,}".format(largest_victory['winner_votes']) }}-{{ "{:,}".format(largest_victory['loser_votes']) }}; margin: {{ "{:,}".format(largest_margin) }})</li>
       {% endif %}
 
       <!-- Ties -->

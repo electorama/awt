@@ -89,7 +89,7 @@ html_testlist = [
     pytest.param(
         {"url_path": "/id/TNexample"},
         "find",
-        [{"string": "Largest margin: Chat over Knox (83-17; margin: 66)"}],
+        [{"string": "Knox (83-17; margin: 66)"}],
         "exists",
         True,
         id="output_005_pairwise_margin"
