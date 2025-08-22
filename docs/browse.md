@@ -1,6 +1,6 @@
 # Browse Route Implementation
 
-## Current Implementation (0.33)
+## Implemented in 0.33
 
 `/browse` route with hardcoded tag browser.
 
@@ -24,6 +24,6 @@
 
 ## Future Implementation Plans
 
-### 0.34: Dynamic Tag Counts + Manual Categories
+### Post‑0.33: Dynamic Tag Counts + Manual Categories
 - Add dynamic tag counting to show current election counts next to each tag link.
   Example: `<a href="/tag/CA">California ("CA") (95)</a>`

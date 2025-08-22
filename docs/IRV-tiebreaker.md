@@ -1,8 +1,8 @@
-# IRV Tiebreaker Implementation for future release (0.34? 0.35?)
+# IRV Tiebreaker Implementation (post‑0.33)
 
 ## Problem Statement
 
-In v0.33.0, abiftool uses `random.choice()` for IRV elimination ties,
+In v0.33.0, abiftool used `random.choice()` for IRV elimination ties,
 creating non-deterministic results that break caching and
 auditability. DPL2003 demonstrates this issue where Round 3 has Bdale
 Garbee and Martin Michlmayr tied at 146 votes, leading to different
@@ -31,7 +31,7 @@ winners depending on which candidate is randomly eliminated.
    - Multiple rules applied in order
    - Example: Previous round → Initial round → Alphabetical
 
-## Implementation Options for 0.34
+## Implementation Options (post‑0.33)
 
 ### Option 1: Simulated Deterministic Lot Drawing
 ```python
@@ -78,7 +78,7 @@ def irv_with_ghost_candidates(ballots):
 **Pros:** Shows all possible outcomes, most informative for analysis
 **Cons:** Major architectural change, complex UI requirements, performance impact
 
-## Implementation Plan for 0.34
+## Implementation Plan (post‑0.33)
 
 ### Phase 1: Research and Design
 1. **Survey real jurisdictions** - Document actual tiebreaker rules used

@@ -220,7 +220,7 @@ resblob = {
 
 ## Potential Future Direction
 
-The following sections outline possible future work, but are not a firm roadmap. The focus for the immediate future is on stabilizing the 0.33 release.
+The following sections outline possible future work, but are not a firm roadmap. 0.33 focused on stabilization.
 
 
 
@@ -294,7 +294,7 @@ class Notice:
 
 ## Current Cross-Cutting Concerns Analysis
 
-### Candidate Color System (Priority Target for 0.34)
+### Candidate Color System (Priority Target Post‑0.33)
 
 The candidate color system represents a fragile cross-cutting concern that affects multiple template sections:
 

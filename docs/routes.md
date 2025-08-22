@@ -6,8 +6,8 @@ This document describes the current URL routes (endpoints) available in the ABIF
 
 ### `/`
 - **Method**: GET
-- **Purpose**: Root homepage that redirects to `/awt`
-- **Description**: Entry point that redirects users to the main application
+- **Purpose**: Root homepage
+- **Description**: Entry point for discovery and navigation (introduced in 0.33)
 
 ### `/awt`
 - **Methods**: GET, POST
@@ -22,15 +22,15 @@ This document describes the current URL routes (endpoints) available in the ABIF
 
 ### `/browse`
 - **Method**: GET
-- **Purpose**: Enhanced election discovery interface (0.33+ feature)
+- **Purpose**: Enhanced election discovery interface (introduced in 0.33)
 - **Description**: Organized, searchable interface for browsing elections with filtering capabilities
 - **Features**: Improved UX compared to raw `/id` listing
 
 ### `/edit`
 - **Method**: GET
 - **Purpose**: Election editing interface (future feature)
-- **Description**: Planned interface for editing ABIF election data
-- **Status**: Route exists but functionality not yet implemented
+- **Description**: Redirects to `/awt` (as of 0.33); planned to become primary upload/analysis interface in a later release
+- **Status**: Redirect to `/awt` (introduced in 0.33)
 
 ### `/id`
 - **Method**: GET
@@ -71,7 +71,7 @@ This document describes the current URL routes (endpoints) available in the ABIF
 - **Content-Type**: image/svg+xml
 - **Description**: Generates Graphviz-based pairwise comparison diagrams
 
-## Deprecated Routes (0.33+)
+## Deprecated Routes (since 0.33)
 
 ### `/id/<identifier>/dot` (Deprecated)
 - **Method**: GET
@@ -101,7 +101,7 @@ This document describes the current URL routes (endpoints) available in the ABIF
 ## Route Hierarchy
 
 ```
-/                           # Root redirect
+/                           # Root homepage
 ├── awt                     # Homepage/main app
 ├── browse                  # Enhanced election discovery
 ├── edit                    # Election editing (future)
@@ -117,7 +117,7 @@ This document describes the current URL routes (endpoints) available in the ABIF
 
 ## Notes
 
-- Most user interaction flows through `/awt` (homepage) and `/id/<identifier>` (election results)
+- Most user interaction flows through `/awt` (edit/upload) and `/id/<identifier>` (election results)
 - The `/id` route serves as a discovery mechanism but has usability challenges due to the large number of elections
 - Tag-based filtering via `/tag/<tag>` provides some organization but is not prominently featured
 - Route naming follows a pattern where `/id` is for browsing elections and `/id/<identifier>` is for viewing specific election results

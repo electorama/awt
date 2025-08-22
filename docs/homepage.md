@@ -8,11 +8,11 @@ The current `/` route redirects to `/awt`, which serves dual purposes:
 
 This creates UX confusion where users land on an upload form rather than a proper homepage.
 
-## Proposed Changes
+## Changes in 0.33
 
-### 0.33: Minimal Homepage Split with /edit Migration
+### In 0.33: Minimal Homepage Split with /edit Migration
 
-**Conservative approach for Tuesday release:**
+**Conservative approach used:**
 
 1. **New `/` route**: Clean homepage focused on discovery and guidance
    - Uses `templates/homepage-snippet.html` (not index.html - snippet approach for modular content)
@@ -21,7 +21,7 @@ This creates UX confusion where users land on an upload form rather than a prope
    - Minimal, focused design
 
 2. **New `/edit` route**: Future-focused edit interface
-   - **For 0.33**: Simple redirect to `/awt` to maintain functionality
+   - **In 0.33**: Implemented a simple redirect to `/awt` to maintain functionality
    - **Future**: Will become the primary upload/analysis interface with simplified tutorial
    - **Long-term**: `/awt` will be deprecated in favor of `/edit`
 
@@ -30,12 +30,12 @@ This creates UX confusion where users land on an upload form rather than a prope
    - Can be reused on homepage, browse page, or other discovery interfaces
    - Clean separation of concerns
 
-4. **Preserve `/awt` route**: Keep existing interface unchanged for 0.33
-   - All current functionality preserved
+4. **Preserve `/awt` route**: Kept existing interface unchanged in 0.33
+   - All current functionality preserved (in 0.33)
    - Gradual deprecation path planned for future releases
    - Existing bookmarks and links continue working
 
-### Implementation for 0.33
+### Implementation completed in 0.33
 
 **Files to create/modify:**
 - `awt.py`: Add `/` route using homepage-snippet, add `/edit` redirect to `/awt`
@@ -54,16 +54,16 @@ This creates UX confusion where users land on an upload form rather than a prope
 /tag/<tag>  → Tag-filtered elections
 ```
 
-### Future Versions (0.34+)
+### Post‑0.33
 
-**Enhanced Homepage (0.34):**
+**Enhanced Homepage (post‑0.33):**
 - Dynamic featured elections from bifhub
 - Recent elections section
 - Popular tags widget
 - Search functionality
 - Better visual design
 
-**Advanced Edit Interface (0.34+):**
+**Advanced Edit Interface (post‑0.33):**
 - **Replace `/edit` redirect with full tutorial interface**
 - Simplified step-by-step ABIF creation tutorial
 - Format detection and conversion helpers
@@ -73,13 +73,13 @@ This creates UX confusion where users land on an upload form rather than a prope
 - Multi-step wizard for election upload
 - Integration with bifhub for saving elections
 
-**Deprecation Timeline:**
-- **0.33**: `/edit` redirects to `/awt`, navigation updated
-- **0.34**: `/edit` becomes full tutorial interface, `/awt` still functional
-- **0.35**: `/awt` shows deprecation notice, encourages `/edit` usage
-- **0.36**: `/awt` route removed, redirects to `/edit`
+**Staged Deprecation (post‑0.33):**
+- Initially: `/edit` redirects to `/awt`; navigation updated
+- Later: `/edit` becomes full tutorial interface, `/awt` still functional
+- Subsequently: `/awt` shows deprecation notice, encourages `/edit` usage
+- Eventually: `/awt` route redirects to `/edit`
 
-**Unified Design System (0.35+):**
+**Unified Design System (later):**
 - Consistent navigation across all routes
 - Responsive design patterns
 - Accessibility improvements
@@ -153,13 +153,13 @@ This creates UX confusion where users land on an upload form rather than a prope
 
 ## Success Metrics
 
-### 0.33 Release
+### 0.33 Release Outcomes
 - Homepage loads in <1 second
 - Clear user flow from discovery to analysis
 - No broken links or missing functionality
 - Positive user feedback on separation of concerns
 
-### Future Releases
+### Post‑0.33 Releases
 - Increased election discovery via browse patterns
 - Higher conversion from browsing to uploading
 - Reduced user confusion about AWT's purpose

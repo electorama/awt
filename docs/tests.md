@@ -31,7 +31,7 @@ Should be **exceptionally rare**. Use only when:
 - Different fixture requirements that create complex dependency chains
 - Performance testing vs functional testing with different timeouts/resources
 
-## Current Issues for 0.34+ Improvement
+## Post‑0.33 Improvements
 
 ### test_performance.py
 - **Remove `indirect=True` parametrization**: Use parametrized fixture pattern instead

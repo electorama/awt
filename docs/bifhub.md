@@ -1,5 +1,7 @@
 # Vision for bifhub
 
+After 0.33, bifhub is expected to be a primary focus, subject to planning and final prioritization.
+
 ## Overview
 
 **bifhub** is envisioned as a dedicated component responsible for the discovery, cataloging, and management of ABIF (`.abif`) election data files. It will serve as a centralized "ballot box" or registry, providing a stable and queryable interface for other tools in the ecosystem, most notably `awt` (the web frontend) and `abiflib` (the core tallying library).
@@ -38,6 +40,14 @@ bifhub will sit between the raw data sources (web servers, local files) and the 
 ```
 
 By creating this clear separation, `awt` can focus entirely on being a web frontend, and `abiflib` can focus on pure tallying logic, while bifhub handles the data logistics.
+
+## Interfaces (planned)
+
+Client applications (like `awt`) are expected to rely on a simple, stable query surface:
+- By ID: fetch a specific election’s metadata and paths
+- By tag: list/filter elections and provide tag counts
+- By metadata: filter by year, jurisdiction, office, and provenance
+- Featured sets: expose curated or recently updated elections
 
 ## Implementation Path
 

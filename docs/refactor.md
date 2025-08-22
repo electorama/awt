@@ -101,3 +101,5 @@ Recent notice system development revealed **route processing duplication**: GET 
 ## Benefits
 
 By following this plan, `awt.py` will evolve into a clean, dedicated web interface, while the core logic becomes a well-organized and reusable library. The modular structure also prepares for the eventual split of bifhub into a separate service for catalog management.
+
+Note on timing: initial consolidation of catalog logic into `src/bifhub.py` is expected post‑0.33; extraction into a separate service may follow in a later release.

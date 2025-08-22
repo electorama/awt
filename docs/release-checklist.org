@@ -4,6 +4,7 @@ Checklist for every release
   * Add at least one notable election
   * Note any API changes
   * Ensure every test has a unique ID associated with it
+  * Update docs versioning/tenses (0.33 in past tense; future phrased relative to 0.33)
 * Versioning & Changelog
   * Bump version in pyproject.toml (or setup.py)
   * Ensure MANIFEST.in has all necessary files

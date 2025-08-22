@@ -118,7 +118,7 @@ Add validation to prevent:
 
 ### Dynamic Tag Generation
 
-For future bifhub implementation, consider auto-generating certain tags:
+For future bifhub implementation (post‑0.33), consider auto-generating certain tags:
 - Year tags from date metadata
 - Geographic tags from jurisdiction fields
 - Method tags from ballot type analysis
