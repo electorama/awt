@@ -26,6 +26,47 @@ from dataclasses import dataclass, field
 from typing import Dict, Any
 
 
+def get_canonical_candidate_order(jabmod):
+    """
+    Get consistent candidate ordering based on FPTP vote totals.
+
+    Args:
+        jabmod: The ABIF model
+
+    Returns:
+        list: Candidates ordered by FPTP vote count (highest first),
+              falling back to alphabetical if FPTP unavailable
+    """
+    # Compute FPTP to get vote-based ordering
+    from abiflib.fptp_tally import FPTP_result_from_abifmodel
+
+    try:
+        fptp_result = FPTP_result_from_abifmodel(jabmod)
+        fptp_toppicks = fptp_result.get('toppicks', {})
+
+        if fptp_toppicks:
+            def get_vote_count(item):
+                cand, votes = item
+                if isinstance(votes, (int, float)):
+                    return votes
+                elif isinstance(votes, list) and len(votes) > 0:
+                    return votes[0] if isinstance(votes[0], (int, float)) else 0
+                else:
+                    return 0
+
+            fptp_ordered_candidates = sorted(
+                fptp_toppicks.items(), key=get_vote_count, reverse=True)
+            return [cand for cand, votes in fptp_ordered_candidates if cand is not None]
+    except Exception:
+        pass
+
+    # Fallback to alphabetical ordering
+    if jabmod and 'candidates' in jabmod:
+        return sorted(jabmod['candidates'].keys())
+    else:
+        return []
+
+
 @dataclass
 class ResultConduit:
     jabmod: Dict[str, Any] = field(default_factory=dict)
@@ -105,8 +146,9 @@ class ResultConduit:
                                                                           validate=True,
                                                                           modlimit=2500)
         if jabmod and 'candidates' in jabmod:
-            self.resblob['colordict'] = generate_candidate_colors(
-                jabmod['candidates'].keys())
+            # Use canonical FPTP-based candidate ordering for consistent colors
+            canonical_order = get_canonical_candidate_order(jabmod)
+            self.resblob['colordict'] = generate_candidate_colors(canonical_order)
         else:
             self.resblob['colordict'] = {}
         return self

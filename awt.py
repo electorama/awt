@@ -964,8 +964,10 @@ def get_by_id(identifier, resulttype=None):
                     candidate_order = []
 
             # Generate single color dictionary for all voting systems
-            consistent_colordict = generate_candidate_colors(
-                [c for c in candidate_order if c is not None])
+            # Use the same canonical ordering logic as conduits.py
+            from conduits import get_canonical_candidate_order
+            canonical_order = get_canonical_candidate_order(jabmod)
+            consistent_colordict = generate_candidate_colors(canonical_order)
 
             # IRV (only if requested/all)
             if do_IRV:
@@ -1278,8 +1280,10 @@ def awt_post():
             candidate_order = []
 
         # Generate single color dictionary for all voting systems
-        consistent_colordict = generate_candidate_colors(
-            [c for c in candidate_order if c is not None])
+        # Use the same canonical ordering logic as conduits.py
+        from conduits import get_canonical_candidate_order
+        canonical_order = get_canonical_candidate_order(abifmodel)
+        consistent_colordict = generate_candidate_colors(canonical_order)
 
         if request.form.get('include_STAR'):
             rtypelist.append('STAR')
