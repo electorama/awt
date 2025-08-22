@@ -167,7 +167,7 @@ class BordaConversionDetector(NoticeDetector):
     
     def generate_notice(self, context):
         return Notice(
-            notice_type="conversion",
+            notice_type="note",
             scope=["star"],
             short="STAR ratings estimated from ranked ballots using Borda scoring",
             long=self._generate_borda_explanation(context)
@@ -195,7 +195,7 @@ class CondorcetCycleDetector(NoticeDetector):
 @dataclass
 class Notice:
     """Enhanced notice with metadata for better management."""
-    notice_type: str       # "conversion", "methodology", "data_quality", "warning"
+    notice_type: str       # "note", "warning", "info", "debug"
     scope: List[str]       # Affected methods: ["star", "pairwise"]
     short: str             # Brief explanation
     long: str              # Detailed explanation

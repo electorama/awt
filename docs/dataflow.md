@@ -218,140 +218,44 @@ resblob = {
 4. **Template Simplification**: Web templates only format, never calculate
 5. **CLI/Web Consistency**: Both interfaces use same underlying data structures
 
-## Release-Based Roadmap for Data Flow Improvements
+## Potential Future Direction
 
-### Release 0.33: Stability and Foundation
+The following sections outline possible future work, but are not a firm roadmap. The focus for the immediate future is on stabilizing the 0.33 release.
 
-**Goals**: Complete existing pattern standardization, fix critical bugs, prepare stable foundation for 0.34.
 
-#### Core Infrastructure Tasks:
-- **Complete IRV CLI Transition** 
-  - Update `get_IRV_report()` to use `IRV_result` structure
-  - Ensure CLI and web consistency for IRV results
-  - Document function naming relationships (`*_dict_from_jabmod()` vs `*_result_from_abifmodel()`)
 
-- **Bug Fixes and Stability**
-  - Address critical issues blocking 0.33 release
-  - Ensure color consistency across existing functionality
-  - Fix any template regressions or display issues
+### Possible Future Exploration (Post-0.33)
 
-- **Documentation for 0.34 Planning**
-  - Document current notice infrastructure limitations (fragmented `_extract_notices`, abiflib/awt coupling issues)
-  - Identify cross-cutting concerns that need architectural work (candidate colors, notice infrastructure)
-  - Assess what infrastructure improvements are needed before template simplification
+After the 0.33 release, several areas could be explored to improve the system's architecture, scalability, and developer experience. These are ideas for consideration, not committed features.
 
-#### Expected Outcomes:
-- Stable, working codebase ready for release
-- All voting methods follow consistent implementation patterns
-- Clear documentation of architectural issues to address in 0.34
-- Foundation ready for cross-cutting concerns work
+#### Potential Area: Cross-Cutting Concerns
+A significant area for future work could be establishing patterns for handling cross-cutting concerns like notices and candidate color assignments.
 
-### Release 0.34: Cross-Cutting Concerns and Scaling
+- **Notice Infrastructure**: One could redesign how notices are passed between `abiflib` and `awt` to eliminate duplicated logic and create a more centralized system.
+- **Candidate Color System**: Another area of exploration could be to centralize the candidate color assignment logic to ensure consistency across all views and methods.
+- **Template Data Standardization**: Future work might involve creating a more robust helper library to standardize the data passed to templates, reducing logic in the presentation layer.
 
-**Goals**: Establish cross-cutting concerns patterns, support many more elections, begin candidate color system standardization.
+#### Potential Area: Import Pipeline
+The process of importing new elections could be streamlined.
 
-#### Cross-Cutting Concerns Infrastructure:
-- **Notice Infrastructure Redesign**
-  - Redesign notice passing between abiflib and awt (eliminate fragmented `_extract_notices` pattern)
-  - Create cleaner abiflib notice infrastructure that awt can consume directly
-  - Establish notice system as foundation pattern for other cross-cutting concerns
+- **Unified Converters**: The various format converters could be unified under a standard interface for metadata handling.
+- **Enhanced Metadata**: The system could be improved to handle metadata from large elections more efficiently.
 
-- **Candidate Color System Standardization**
-  - Investigate and document candidate token mapping across voting methods
-  - Centralize color assignment logic in conduits.py 
-  - Ensure consistent candidate colors across summary tables, detailed results, and tabs
-  - Create automated tests for color consistency
+#### Potential Area: Template Simplification
+If the cross-cutting concern patterns prove successful, they could be applied to simplify the Jinja2 templates.
 
-- **Template Data Standardization**
-  - Apply proven cross-cutting patterns to NEW features first
-  - Build helper method library based on successful notice infrastructure
-  - Establish guidelines for when to use Python vs template logic
+- **Selective Refactoring**: Logic could be moved from templates into Python code, one method at a time.
+- **Helper Library**: A library of helper functions could be built out to support the simplified templates.
 
-#### Import Pipeline Enhancements:
-- **Unified Format Converter Interface**
-  - Standardize metadata setting across all converters (sftxt, preflib, nycdem)
-  - Automatic `ballot_type` detection and validation
-  - Consistent conversion notice generation
+#### Potential Area: Advanced Analysis and API
+Further out, the system could be enhanced with more advanced features.
 
-- **Enhanced Metadata System**
-  - Improve abiflib metadata processing for large elections
-  - Better memory usage for bulk election processing
-  - Validation pipeline for imported election data
+- **Cross-Method Analysis**: The notice system could be made more intelligent, for example, by detecting when different voting methods produce different winners.
+- **bifhub Service**: The `bifhub` component could be separated into a standalone service with its own API.
+- **Performance**: Caching and data loading strategies could be improved to support larger-scale analysis.
+- **API Stabilization**: A stable, versioned JSON API could be created for third-party integrations.
 
-#### Expected Outcomes:
-- Candidate color consistency across all voting method displays
-- Proven patterns for cross-cutting concerns using ResultConduit
-- Capacity for 10x more elections without performance degradation  
-- Streamlined import process for new election sources
-- Clear guidelines for template vs Python logic decisions
-
-### Release 0.35: Template Simplification and Advanced Cross-Method Analysis
-
-**Goals**: Apply proven cross-cutting patterns to template simplification, intelligent notice aggregation, enhanced developer experience.
-
-#### Template Simplification (Based on 0.34 Patterns):
-- **Selective Template Logic Replacement**
-  - Start with simplest cross-cutting concerns after color system is stable
-  - Replace template calculations using proven ResultConduit patterns
-  - Incremental replacement with thorough testing (one voting method at a time)
-  - Maintain strict "no regressions" policy
-
-- **Enhanced Template Helper Library**
-  - Build on successful 0.34 helper method patterns
-  - Create reusable components for common template operations
-  - Standardize template data structures across voting methods
-
-#### Advanced Notice System:
-- **Cross-Method Intelligence**
-  - Cross-method notice generation (e.g., "IRV and Condorcet disagree")
-  - Context-sensitive notice text based on ballot type and election characteristics
-  - Notice prioritization and smart grouping to reduce information overload
-
-- **Enhanced Import Validation**
-  - Data quality warnings and validation notices
-  - Standardized conversion notices across all format converters
-  - Import pipeline notices for debugging election data issues
-
-#### Expected Outcomes:
-- Proven template simplification approach based on stable cross-cutting infrastructure
-- Intelligent notice system that provides insights across voting methods
-- Better user education about election methodology trade-offs
-- Enhanced debugging capabilities for election imports
-- Maintainable template architecture with clear Python vs Jinja2 boundaries
-
-### Release 0.36: Architectural Completion and Optimization
-
-**Goals**: Complete bifhub separation, performance optimization, stable external APIs.
-
-#### bifhub Service Separation:
-- **Complete Service Extraction**
-  - Separate bifhub as standalone service
-  - API for election discovery and metadata management
-  - Database backend for election catalog
-
-- **Performance Optimization**
-  - Lazy loading for large election datasets
-  - Caching strategies for frequently accessed elections
-  - Memory usage optimization for bulk processing
-
-#### API Stabilization:
-- **External API Compatibility**
-  - Stable JSON API for third-party integrations
-  - Versioned data structures
-  - Comprehensive API documentation
-
-- **Developer Experience**
-  - Clear patterns for adding new voting methods
-  - Comprehensive testing framework
-  - Migration guides for API changes
-
-#### Expected Outcomes:
-- Fully separated, scalable architecture
-- Stable APIs for external integrations
-- Optimized performance for large-scale election analysis
-- Clear patterns for future development
-
-## Proposed Enhanced Notice System (0.35 Target)
+## Proposed Enhanced Notice System
 
 ### Centralized Notice Architecture
 ```python
@@ -379,7 +283,7 @@ class CrossMethodDisagreementDetector(NoticeDetector):
 ```python
 @dataclass
 class Notice:
-    notice_type: str       # "conversion", "methodology", "disagreement"
+    notice_type: str       # "note", "warning", "info", "debug""
     scope: List[str]       # Affected methods: ["star", "pairwise"]
     short: str             # Brief explanation
     long: str              # Detailed explanation  
@@ -387,52 +291,6 @@ class Notice:
     context_data: dict = field(default_factory=dict)
 ```
 
-## Migration and Compatibility Strategy
-
-### Backward Compatibility Guarantees:
-- **0.33**: Existing APIs remain functional, enhanced with new patterns
-- **0.34**: Legacy `*_dict_from_jabmod()` functions maintained during transition
-- **0.35**: Clear migration path for notice system changes
-- **0.36**: Deprecated APIs removed with comprehensive migration guide
-
-### Risk Management:
-- **Incremental Changes**: Each release builds on previous foundation
-- **Feature Flags**: New functionality can be enabled/disabled during transition
-- **Regression Testing**: Comprehensive test suite for existing election results
-- **Documentation**: Clear upgrade guides for each release
-
-### Performance Considerations:
-- **0.33**: Optimize existing patterns before adding complexity
-- **0.34**: Design import pipeline for large-scale datasets
-- **0.35**: Intelligent caching for notice generation
-- **0.36**: Full performance optimization and profiling
-
-## Success Metrics by Release
-
-### 0.33 Success Criteria:
-- All voting methods use consistent `*_result_from_abifmodel()` pattern
-- Templates contain no arithmetic calculations  
-- CLI and web outputs are identical for same inputs
-- Function naming clarity (`*_dict_from_jabmod()` vs `*_result_from_abifmodel()` relationship documented)
-- Critical bugs fixed, stable release ready
-
-### 0.34 Success Criteria:  
-- Support for 10x more elections without performance degradation
-- New election import process streamlined (fewer manual steps)
-- Bifhub foundation established (catalog separation begun)
-- Tech debt metrics improved (code duplication reduced)
-
-### 0.35 Success Criteria:
-- Cross-method notices provide valuable insights to users
-- Notice system reduces user confusion about methodology differences
-- Developer experience improved (easier to add new voting methods)
-- Import pipeline handles edge cases gracefully
-
-### 0.36 Success Criteria:
-- bifhub operates as separate, scalable service
-- External API usage demonstrates adoption
-- Performance metrics meet large-scale usage requirements
-- Architecture supports future voting method additions with minimal effort
 
 ## Current Cross-Cutting Concerns Analysis
 
@@ -460,19 +318,7 @@ The candidate color system represents a fragile cross-cutting concern that affec
 
 This system would be an excellent candidate for the ResultConduit cross-cutting concerns pattern, as it requires coordination across all voting methods and has clear template integration points.
 
-## Immediate Priorities for 0.33
-
-Based on current development focus, the recommended next tasks are:
-
-1. **Bug Fixes** - Address critical issues blocking 0.33 release
-2. **Complete IRV CLI Transition** - Update `get_IRV_report()` to use `IRV_result` structure  
-3. **Function Naming Documentation** - Clarify `*_dict_from_jabmod()` vs `*_result_from_abifmodel()` usage
-4. **Architecture Documentation** - Document notice infrastructure limitations and cross-cutting concerns for 0.34 planning
-
-**Notice infrastructure redesign is deferred to 0.34** to allow focus on stability and bug fixes for 0.33 release.
-
 ## Conclusion
 
-This release-based roadmap addresses the core problems constraining scaling and import pipeline improvements while maintaining the architectural vision of conduits.py as an intelligent data broker. The approach emphasizes **pragmatic shared infrastructure** over complex hierarchies, focusing on eliminating duplication while keeping structures flat and maintainable.
-
-Each release builds systematically toward supporting many more elections with easier import processes, with 0.33 establishing the foundation, 0.34 focusing on scaling and imports, 0.35 adding intelligent cross-method analysis, and 0.36 completing the bifhub separation and optimization work.
+Data should flow from abiflib into Jinja through conduits.py.  Exactly
+how is TBD.
