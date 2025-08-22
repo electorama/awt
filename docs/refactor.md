@@ -92,6 +92,12 @@ The refactoring should proceed incrementally to minimize risk and allow testing 
 
 Each step should be fully tested before proceeding to the next, ensuring `awt.py` remains functional throughout the process.
 
+## Current Architecture Issues
+
+Recent notice system development revealed **route processing duplication**: GET requests process data in `awt.py` while POST requests use `conduits.py`, requiring duplicate business logic implementation. This creates developer friction and maintenance burden.
+
+**Priority fix:** Consolidate route processing so both GET and POST requests use the same `conduits.py` pipeline, eliminating duplicate logic and enabling centralized notice generation.
+
 ## Benefits
 
 By following this plan, `awt.py` will evolve into a clean, dedicated web interface, while the core logic becomes a well-organized and reusable library. The modular structure also prepares for the eventual split of bifhub into a separate service for catalog management.

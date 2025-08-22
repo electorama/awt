@@ -339,3 +339,114 @@ def update_all_results(self, jabmod):
 The current balkanized notice system works but creates maintenance burden and limits extensibility. A centralized design would provide better user experience, easier maintenance, and enable advanced features like cross-method analysis and notice prioritization.
 
 The proposed migration strategy allows for gradual implementation while maintaining backward compatibility, making it a low-risk improvement with significant long-term benefits.
+
+## Current Implementation Challenges (August 2025 Update)
+
+### Real-World Experience: The Route Duplication Problem
+
+Recent development work revealed a significant architectural issue with the balkanized notice system: **route duplication**. When adding pairwise tie notices, the implementation had to be duplicated across different request handling paths:
+
+#### The Problem
+- **GET requests** (e.g., `/id/TNexampleTie`): Process pairwise data directly in `awt.py` main route
+- **POST requests** (e.g., form submissions): Process pairwise data through `conduits.py` pipeline
+- **Result**: Same notice generation logic had to be implemented in **both places**
+
+#### Code Locations of Duplicated Logic
+```python
+# Location 1: conduits.py (for POST route)
+def update_pairwise_result(self, jabmod):
+    # ... pairwise processing ...
+    if self.resblob['is_copeland_tie'] and len(copewinners) >= 2:
+        # Generate Copeland tie notice
+        copeland_notice = {...}
+        self.resblob['notices']['pairwise'].append(copeland_notice)
+
+# Location 2: awt.py (for GET route) - DUPLICATE LOGIC
+def get_by_id(this_id, resulttype=None):
+    # ... pairwise processing ...
+    if resblob['is_copeland_tie'] and len(copewinners) >= 2:
+        # Generate Copeland tie notice - SAME CODE, DIFFERENT LOCATION
+        copeland_notice = {...}
+        resblob['notices']['pairwise'].append(copeland_notice)
+```
+
+### Lessons for Future Notice Development
+
+#### 1. **Expect Route Duplication**
+Adding notices to the current system is **not** straightforward. Developers must implement the same logic in multiple places:
+- `conduits.py` for form-based POST requests
+- `awt.py` for direct GET requests
+- Potentially other routes for API endpoints
+
+#### 2. **Template Integration Gotchas**
+- Notice extraction happens via `_extract_notices()` method calls
+- **Timing matters**: Multiple `_extract_notices()` calls can override each other
+- Debug with `fetch_awt_url.py`, not just template inspection
+- Notice structure must exist before extraction: `resblob['notices']['method'] = []`
+
+#### 3. **Testing Complexity**
+- Same notice must work across multiple request types (GET/POST)
+- Template rendering can differ between routes
+- Need to test both `/id/election` and form submissions
+- PEP8 compliance failures are common (trailing whitespace)
+
+### Recommendations for Legacy System Development
+
+#### For Developers Adding New Notices
+
+**Before implementing:**
+1. **Read this document first** - understand the architectural challenges
+2. **Identify all code paths** - trace GET routes, POST routes, and API endpoints
+3. **Plan for duplication** - expect to implement logic in multiple places
+4. **Test comprehensively** - verify notices work across all request types
+
+#### For Improving the Legacy System
+
+**Short-term improvements that would help developers:**
+
+1. **Create Notice Helper Functions**
+   ```python
+   # In a shared utility module
+   def generate_copeland_tie_notice(copewinners, jabmod):
+       """Shared logic for Copeland tie notices across routes."""
+       # Single implementation used by both conduits.py and awt.py
+   ```
+
+2. **Standardize Notice Injection Points**
+   ```python
+   # Add to conduits.py
+   def inject_notices_for_method(self, method_name, notices):
+       """Standardized way to add notices to resblob."""
+       if 'notices' not in self.resblob:
+           self.resblob['notices'] = {}
+       if method_name not in self.resblob['notices']:
+           self.resblob['notices'][method_name] = []
+       self.resblob['notices'][method_name].extend(notices)
+   ```
+
+3. **Route Processing Consolidation**
+   - Consider making GET routes use `conduits.py` pipeline consistently
+   - Or create shared processing functions that both routes can use
+   - Avoid duplicating calculation and notice logic across routes
+
+4. **Debug Utilities**
+   ```python
+   # Debug helper for notice development
+   def debug_notice_pipeline(resblob, method_name):
+       """Print notice pipeline state for debugging."""
+       notices = resblob.get('notices', {}).get(method_name, [])
+       print(f"DEBUG: {method_name} has {len(notices)} notices")
+       for i, notice in enumerate(notices):
+           print(f"  Notice {i+1}: {notice.get('short', 'No short text')}")
+   ```
+
+#### Current Technical Debt from Notice Development
+
+**Items that need refactoring:**
+- **Duplicate Copeland tie detection**: Same logic in `conduits.py:274-296` and `awt.py:1004-1021`
+- **Inconsistent notice extraction**: Some methods use `_extract_notices()`, others manually build `resblob['notices']`
+- **Route-dependent behavior**: Same election shows different notices depending on GET vs POST access
+- **Template debugging complexity**: Notice positioning issues require end-to-end testing with `fetch_awt_url.py`
+
+**Priority for centralized system:**
+The route duplication problem makes a strong case for the proposed centralized `NoticeRegistry` system. A single analysis phase would eliminate the need to implement notices in multiple request handling paths.

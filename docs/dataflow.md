@@ -83,7 +83,14 @@ The notice system reveals the core problem: each voting method implements its ow
 - **Testing Complexity**: Each method needs separate notice and display testing
 - **Memory Usage**: Inefficient data structures for large election datasets
 
-### 4. **conduits.py as Bottleneck**
+### 4. **Route Processing Duplication**
+- **Dual Processing Paths**: GET requests bypass conduits.py, POST requests use it
+- **Duplicate Business Logic**: Same calculations implemented in both `awt.py` and `conduits.py`
+- **Notice System Impact**: Requires implementing same notice logic in multiple places
+- **Developer Friction**: Adding features requires changes in multiple code paths
+- **Testing Complexity**: Same functionality must be verified across different routes
+
+### 5. **conduits.py as Bottleneck**
 - **Mixed Patterns**: Some methods bypass conduits, others use it heavily
 - **Inconsistent Interface**: No standard pattern for how conduits processes abiflib results
 - **Notice Aggregation**: No centralized place for cross-method notice generation

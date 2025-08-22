@@ -20,12 +20,29 @@ This document describes the current URL routes (endpoints) available in the ABIF
   - Tabbed examples section with 5 featured elections
   - "Other examples..." tab showing additional elections
 
+### `/browse`
+- **Method**: GET
+- **Purpose**: Enhanced election discovery interface (0.33+ feature)
+- **Description**: Organized, searchable interface for browsing elections with filtering capabilities
+- **Features**: Improved UX compared to raw `/id` listing
+
+### `/edit`
+- **Method**: GET
+- **Purpose**: Election editing interface (future feature)
+- **Description**: Planned interface for editing ABIF election data
+- **Status**: Route exists but functionality not yet implemented
+
 ### `/id`
 - **Method**: GET
 - **Purpose**: Lists all available elections (currently 425 elections)
 - **Description**: Shows a comprehensive but unsorted list of all elections in the system
 - **Format**: Numbered list with election identifiers, descriptions, and tag links
 - **Issues**: Large list is difficult to navigate and discover specific elections
+
+### `/tag`
+- **Method**: GET
+- **Purpose**: Shows list of available tags
+- **Description**: Displays all available tags for filtering elections
 
 ### `/tag/<tag>`
 - **Method**: GET
@@ -54,6 +71,20 @@ This document describes the current URL routes (endpoints) available in the ABIF
 - **Content-Type**: image/svg+xml
 - **Description**: Generates Graphviz-based pairwise comparison diagrams
 
+## Deprecated Routes (0.33+)
+
+### `/id/<identifier>/dot` (Deprecated)
+- **Method**: GET
+- **Purpose**: Legacy route for pairwise diagrams
+- **Status**: Redirects to `/id/<identifier>/pairwise#dot` (HTTP 302)
+- **Migration**: Use `/id/<identifier>/pairwise` instead
+
+### `/id/<identifier>/wlt` (Deprecated)
+- **Method**: GET
+- **Purpose**: Legacy route for win-loss-tie tables
+- **Status**: Redirects to `/id/<identifier>/pairwise#wlt` (HTTP 302)
+- **Migration**: Use `/id/<identifier>/pairwise` instead
+
 ## Static Asset Routes
 
 ### `/static/<path>`
@@ -72,12 +103,16 @@ This document describes the current URL routes (endpoints) available in the ABIF
 ```
 /                           # Root redirect
 ├── awt                     # Homepage/main app
-├── id                      # Election discovery
-│   ├── <identifier>        # Individual election
-│   │   ├── <resulttype>    # Specific results
-│   │   └── dot/svg         # SVG diagrams
-├── tag/<tag>               # Tag-filtered elections
-└── static/<path>           # Assets
+├── browse                  # Enhanced election discovery
+├── edit                    # Election editing (future)
+├── id                      # Election listing
+│   └── <identifier>        # Individual election
+│       ├── <resulttype>    # Specific results
+│       └── dot/svg         # SVG diagrams
+├── tag                     # Tag listing
+│   └── <tag>               # Tag-filtered elections
+├── static/<path>           # Assets
+└── <toppage>               # Catch-all
 ```
 
 ## Notes
