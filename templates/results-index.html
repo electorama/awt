@@ -322,6 +322,10 @@ and can be edited in the field above.</p>
       🔗<a href="{{abslink}}">{{abslink}}</a>
     </div>
     {% endif %}
+    <!-- BEGIN irv notices -->
+    {% set notices = resblob.notices.irv %}
+    {% include 'notice-snippet.html' %}
+    <!-- END irv notices -->
     <!-- BEGIN results-container -->
     <div id="results-container" data-candidate-colors='{{ colordict | tojson | safe }}'>
         <p>{% include 'irv-snippet.html' %}</p>

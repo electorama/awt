@@ -4,6 +4,7 @@ This is a very incomplete list of incomplete tasks for this project
    - [X] Create tests directory and add tests besides per-election smoketests
    - [X] Move test_*.py to tests directory
    - [ ] Quicker/easier smoketests
+   - [ ] Optimize tests/test_routes.py performance: Currently very slow to run. Split into fast/slow tests using pytest marks (@pytest.mark.slow) so normal test runs are quick and comprehensive tests can be run separately with `pytest -m slow`
 ** Build & Packaging (build)
    - [ ] Create src directory and move most code to this directory
    - [ ] Potentially add [tool.setuptools] include-package-data = true

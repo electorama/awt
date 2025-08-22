@@ -84,6 +84,66 @@ class ResultConduit:
             self.resblob['notices'] = {}
         self.resblob['notices'][method_tag] = result_dict.get('notices', [])
 
+    def _add_irv_tie_notices(self, irv_dict: dict) -> dict:
+        """Add notices for IRV tiebreaker situations"""
+        result = irv_dict.copy()
+        result['notices'] = []
+
+        # Check if election had ties
+        if not irv_dict.get('has_tie', False):
+            return result
+
+        # Look for rounds with random elimination
+        roundmeta = irv_dict.get('roundmeta', [])
+        tie_rounds = []
+
+        for round_data in roundmeta:
+            if round_data.get('random_elim', False):
+                tie_info = {
+                    'round_num': round_data.get('roundnum', 0),
+                    'tied_candidates': round_data.get('tiecandlist', []),
+                    'eliminated': round_data.get('eliminated', []),
+                    'vote_count': round_data.get('bottom_votes_percand', 0)
+                }
+                tie_rounds.append(tie_info)
+
+        # Generate notices for each tie
+        for tie in tie_rounds:
+            if len(tie['tied_candidates']) >= 2:
+                tied_names = []
+                eliminated_names = []
+
+                # Get candidate display names
+                canddict = irv_dict.get('canddict', {})
+                for cand_token in tie['tied_candidates']:
+                    display_name = canddict.get(cand_token, cand_token)
+                    tied_names.append(display_name)
+
+                for cand_token in tie['eliminated']:
+                    if cand_token in tie['tied_candidates']:
+                        display_name = canddict.get(cand_token, cand_token)
+                        eliminated_names.append(display_name)
+
+                # Create notice
+                tied_list = " and ".join(tied_names)
+
+                # Handle case where no one was eliminated (final round tie)
+                if eliminated_names:
+                    eliminated_list = " and ".join(eliminated_names)
+                    notice_text = f"In Round {tie['round_num']}, {tied_list} were tied with exactly {tie['vote_count']} votes each for fewest votes. IRV rules require eliminating the candidate(s) with fewest votes. This result used simulated random selection, eliminating {eliminated_list}. In a real election, this would be resolved by lot drawing or other official tiebreaker procedure."
+                else:
+                    # Final round tie - no elimination, both win
+                    notice_text = f"In Round {tie['round_num']}, {tied_list} were tied with exactly {tie['vote_count']} votes each in the final round. Since this is a tie for the most votes in the final round, both candidates are declared IRV winners. In a real election, this might be resolved by lot drawing or other official tiebreaker procedure depending on jurisdiction."
+
+                notice = {
+                    "notice_type": "warning",
+                    "short": f"Round {tie['round_num']} tiebreaker used",
+                    "long": notice_text
+                }
+                result['notices'].append(notice)
+
+        return result
+
     def update_FPTP_result(self, jabmod) -> "ResultConduit":
         """Add FPTP result to resblob"""
         fptp_result = FPTP_result_from_abifmodel(jabmod)
@@ -121,7 +181,10 @@ class ResultConduit:
                         round_meta[key] = list(round_meta[key])
 
         self.resblob['IRV_text'] = get_IRV_report(self.resblob['IRV_dict'])
-        self._extract_notices('irv', self.resblob['IRV_dict'])
+
+        # Generate IRV tiebreaker notices if needed
+        irv_result_with_notices = self._add_irv_tie_notices(self.resblob['IRV_dict'])
+        self._extract_notices('irv', irv_result_with_notices)
         return self
 
     def update_pairwise_result(self, jabmod) -> "ResultConduit":
