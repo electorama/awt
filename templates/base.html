@@ -5,7 +5,7 @@
 <html>
   <head>
       <meta charset="UTF-8">
-      <title>{{msgs.pagetitle}}</title>
+      <title>{% if 'awt' not in msgs.pagetitle.lower() %}{{msgs.pagetitle}} — (awt){% else %}{{msgs.pagetitle}}{% endif %}</title>
       <link rel="stylesheet"
             type="text/css"
             href="{{ url_for('static', filename='css/electostyle.css') }}">
@@ -27,7 +27,7 @@
       (see <a href="#debug">debug output below</a>)<br>
       {% endif %}
       {% block introduction %}
-      {% if webenv.toppage == 'awt' %}
+      {% if webenv.toppage == 'edit' %}
       {% include 'intro-snippet.html' %}
       {% endif %}
       {% endblock introduction %}

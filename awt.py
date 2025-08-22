@@ -560,10 +560,15 @@ def homepage():
         msgs['purge_message'] = f"Purged cache entry for homepage"
 
     msgs['pagetitle'] = f"{webenv['statusStr']}ABIF Web Tool (awt)"
+    webenv['toppage'] = 'homepage'
+    # Get election list for dynamic count
+    from src.bifhub import build_election_list
+    election_list = build_election_list()
 
     return render_template('homepage-index.html',
                            msgs=msgs,
-                           webenv=webenv), 200
+                           webenv=webenv,
+                           election_list=election_list), 200
 
 
 @app.route('/edit')
@@ -671,7 +676,11 @@ def awt_get(toppage=None, tag=None):
     if tag is not None:
         toppage = "tag"
 
-    webenv['toppage'] = toppage
+    # Map both /awt and /edit to 'edit' for template logic
+    if toppage in ['awt', 'edit']:
+        webenv['toppage'] = 'edit'
+    else:
+        webenv['toppage'] = toppage
 
     mytagarray = sorted(get_all_tags_in_election_list(election_list),
                         key=str.casefold)
