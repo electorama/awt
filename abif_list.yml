@@ -1,7 +1,7 @@
 - filename: tenn-example/tennessee-example-simple.abif
   id: TNexample
   title: Simple example (Tennessee capitol)
-  tags: theoretical, CondorcetVsIRV, featured
+  tags: theoretical, CondorcetVsIRV, CenterSqueeze, featured
   desc: >
     This example is compatible with many web election tools.
 - filename: tenn-example/tennessee-example-scores.abif
@@ -15,7 +15,7 @@
 - filename: burl2009/burl2009.abif
   id: Burl2009
   title: Burlington mayoral 2009
-  tags: actual, VT, USA, government, CondorcetVsIRV, featured
+  tags: actual, VT, USA, government, CondorcetVsIRV, CenterSqueeze, featured
   desc: >
     This example is based on the electoral results from the Burlington
     mayoral race in 2009.
@@ -921,7 +921,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-U.S._Representative_(Special_General).abif
   id: 2022-08-16_Alaska-U.S._Representative_(Special_General)
   title: U.S._Representative_(Special_General) (Alaska; 2022-08-16)
-  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08, CondorcetVsIRV, featured
+  tags: from-bolson, actual, 2022, AK, local, Alaska-2022, 2022-08, CondorcetVsIRV, CenterSqueeze, featured
   desc: U.S._Representative_(Special_General) (Alaska; 2022-08-16). Derived from results
     obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2022-08-16_Alaska-House_District_12.abif
@@ -2248,7 +2248,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2009_Burlington_VT-vote.abif
   id: 2009_Burlington_VT-vote
   title: vote (Burlington_VT; 2009)
-  tags: from-bolson, actual, Burlington_VT, VT, Burlington_VT-2009, 2009, CondorcetVsIRV, featured
+  tags: from-bolson, actual, Burlington_VT, VT, Burlington_VT-2009, 2009, CondorcetVsIRV, CenterSqueeze, featured
   desc: vote (Burlington_VT; 2009). Derived from results obtained at bolson.org.
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2009-11-03_PierceCounty_WA-auditor.abif
   id: 2009-11-03_PierceCounty_WA-auditor
