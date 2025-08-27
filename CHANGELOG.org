@@ -1,5 +1,5 @@
 Changelog for ABIF web tool (awt):
-* [0.33.0] 2025-08-?? (FIXME) tag navigation; approval voting; tabbed interface
+* [0.33.0] 2025-08-22 (c607afaf) tag navigation; approval voting; tabbed interface
   - Homepage redesign showing featured elections
     - Old /awt edit interface still available
   - Approval voting support
