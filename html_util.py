@@ -7,6 +7,34 @@ import colorsys
 import re
 
 
+def format_notice_paragraphs(text):
+    """Convert paragraph breaks in notice text to HTML paragraphs.
+
+    Converts double newlines (\n\n) to <p> tags with modest styling.
+    Designed for reusable formatting across all voting methods.
+
+    Args:
+        text (str): Plain text with \n\n paragraph breaks
+
+    Returns:
+        str: HTML with <p> tags for paragraph formatting
+    """
+    if not text:
+        return text
+
+    # Split on double newlines to get paragraphs
+    paragraphs = text.split('\n\n')
+
+    # Wrap each paragraph in <p> tags with modest styling
+    html_paragraphs = []
+    for i, paragraph in enumerate(paragraphs):
+        if paragraph.strip():  # Skip empty paragraphs
+            margin_style = 'margin-bottom: 0.4em; margin-top: 0.4em;'
+            html_paragraphs.append(f'<p style="{margin_style}">{paragraph.strip()}</p>')
+
+    return ''.join(html_paragraphs)
+
+
 def generate_golden_angle_palette(count=250, start_hex='#d0ffce',
                                   initial_colors=None,
                                   master_list_size=250):

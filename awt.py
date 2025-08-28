@@ -330,6 +330,10 @@ app = Flask(__name__, static_folder=static_folder,
 app.url_map.strict_slashes = False
 app.jinja_env.filters['escape_css'] = escape_css_selector
 
+# Add template globals for reusable functions
+from html_util import format_notice_paragraphs
+app.jinja_env.globals['format_notice_paragraphs'] = format_notice_paragraphs
+
 
 @app.route('/favicon.ico')
 def favicon():
