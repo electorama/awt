@@ -127,48 +127,45 @@ def compose_preview_svg(identifier: str, max_names: int = 4) -> str:
     candnames = jabmod.get('candidates', {})
 
     # Calculate results via ResultConduit for consistency
-    resconduit = ResultConduit(jabmod=jabmod)
-    resconduit = resconduit.update_FPTP_result(jabmod)
-    resconduit = resconduit.update_IRV_result(jabmod)
-    resconduit = resconduit.update_pairwise_result(jabmod)
+    from conduits import get_complete_resblob_for_linkpreview, get_winners_by_method
+    resblob = get_complete_resblob_for_linkpreview(jabmod)
+    winners_by_method = get_winners_by_method(resblob, jabmod)
 
-    rated_for_star = add_ratings_to_jabmod_votelines(jabmod)
-    resconduit = resconduit.update_STAR_result(rated_for_star)
-    resconduit = resconduit.update_approval_result(jabmod)
-
-    # Extract winners from each method
-    fptp_result = resconduit.resblob.get('FPTP_result', {})
-    fptp_winners = fptp_result.get('winners', [])
+    # Get FPTP data for vote counts
+    fptp_result = resblob.get('FPTP_result', {})
     fptp_toppicks = fptp_result.get('toppicks', {})
-
-    irv_dict = resconduit.resblob.get('IRV_dict', {})
-    irv_winners = irv_dict.get('winner', [])
-    if not irv_winners and irv_dict.get('winnerstr'):
-        irv_winners = [irv_dict.get('winnerstr')]
-
-    cope_winners = resconduit.resblob.get('copewinners', [])
-
-    approval_result = resconduit.resblob.get('approval_result', {})
-    approval_winners = approval_result.get('winners', [])
-
-    star_model = resconduit.resblob.get('scorestardict', {}).get('scoremodel', {})
-    star_winner = star_model.get('winner')
 
     # Pick primary winners using canonical order
     order_tokens = list(canonical_order) if canonical_order else sorted(candnames.keys())
 
-    irv_primary = pick_primary_candidate(irv_winners, order_tokens, candnames)
-    cope_primary = pick_primary_candidate(cope_winners, order_tokens, candnames)
-    fptp_primary = pick_primary_candidate(fptp_winners, order_tokens, candnames)
+    irv_primary = pick_primary_candidate(winners_by_method.get('IRV', []), order_tokens, candnames)
+    cope_primary = pick_primary_candidate(winners_by_method.get('Condorcet', []), order_tokens, candnames)
+    fptp_primary = pick_primary_candidate(winners_by_method.get('FPTP', []), order_tokens, candnames)
 
-    # Detect clash: IRV vs Condorcet winners differ
-    clash = bool(irv_primary and cope_primary and (irv_primary != cope_primary))
+    # Detect clash: any method disagreement (not just IRV vs Condorcet)
+    all_primary_winners = set()
+    if irv_primary:
+        all_primary_winners.add(irv_primary)
+    if cope_primary:
+        all_primary_winners.add(cope_primary)
+    if fptp_primary:
+        all_primary_winners.add(fptp_primary)
+
+    clash = len(all_primary_winners) > 1
+
+    # Get other winners for SVG content
+    star_winners = winners_by_method.get('STAR', [])
+    star_winner = star_winners[0] if star_winners else None
+    approval_winners = winners_by_method.get('Approval', [])
+
+    # Convert STAR token back to name for _build_svg_content compatibility
+    star_winner_name = candnames.get(star_winner) if star_winner else None
 
     # Build dynamic SVG content
     svg_content = _build_svg_content(
         fileentry, jabmod, clash, irv_primary, cope_primary, fptp_primary,
-        star_winner, approval_winners, colordict, candnames, fptp_toppicks,
-        resconduit, order_tokens, max_names
+        star_winner_name, approval_winners, colordict, candnames, fptp_toppicks,
+        resblob, order_tokens, max_names
     )
 
     # Insert content into frame SVG
@@ -378,55 +375,77 @@ def _get_fptp_candidate_order(fptp_toppicks: Dict, fallback_order: List[str]) ->
     return [c for c, _ in sorted(fptp_toppicks.items(), key=get_vote_count, reverse=True) if c is not None]
 
 
-def _get_method_vote_info(method_label: str, token: str, resconduit, candnames: Dict) -> str:
+def _get_method_vote_info(method_label: str, token: str, resblob, candnames: Dict) -> str:
     """Get vote information string for a specific method and candidate."""
     if not token:
         return ""
 
     try:
         if method_label == 'IRV':
-            irv_result = resconduit.resblob.get('IRV_result', {})
+            irv_result = resblob.get('IRV_result', {})
             votes = irv_result.get('winner_votes')
             percentage = irv_result.get('winner_percentage')
             if votes is not None and percentage is not None:
                 return f" — {votes:,} votes ({percentage:.1f}%) in final round"
 
         elif method_label == 'FPTP':
-            fptp_result = resconduit.resblob.get('FPTP_result', {})
+            fptp_result = resblob.get('FPTP_result', {})
             fptp_toppicks = fptp_result.get('toppicks', {})
             votes = get_candidate_vote_count(token, fptp_toppicks)
-            if votes is not None:
-                return f" — {votes:,} first-place votes"
+            total_votes = fptp_result.get('total_votes_recounted', 0)
+
+            if votes is not None and total_votes > 0:
+                percentage = (votes / total_votes) * 100
+                # Check if this is ranked ballot data
+                ballot_type = None
+                # Look for ballot_type in various places in resblob
+                if 'approval_result' in resblob:
+                    ballot_type = resblob['approval_result'].get('ballot_type')
+
+                vote_type = "first-place votes" if ballot_type == "ranked" else "votes"
+                return f" — {votes:,} {vote_type} ({percentage:.1f}%)"
+            elif votes is not None:
+                return f" — {votes:,} votes"
 
         elif method_label == 'Approval':
-            approval = resconduit.resblob.get('approval_result', {})
+            approval = resblob.get('approval_result', {})
             counts = approval.get('approval_counts', {})
             approval_count = counts.get(token)
-            if isinstance(approval_count, (int, float)):
+            total_approvals = approval.get('total_approvals', 0)
+
+            if isinstance(approval_count, (int, float)) and total_approvals > 0:
+                percentage = (approval_count / total_approvals) * 100
+                return f" — {int(approval_count):,} approvals ({percentage:.1f}%)"
+            elif isinstance(approval_count, (int, float)):
                 return f" — {int(approval_count):,} approvals"
 
         elif method_label == 'STAR':
-            star_model = resconduit.resblob.get('scorestardict', {}).get('scoremodel', {})
-            winner_name = star_model.get('winner')
-            fin1_name = star_model.get('fin1n')
-            fin2_name = star_model.get('fin2n')
+            star_model = resblob.get('scorestardict', {}).get('scoremodel', {})
+            star_model_winner_name = star_model.get('winner')
+            fin1_token = star_model.get('fin1')
+            fin2_token = star_model.get('fin2')
 
-            if winner_name == fin1_name:
-                votes = star_model.get('fin1votes')
-                pct_str = star_model.get('fin1votes_pct_str')
-            elif winner_name == fin2_name:
-                votes = star_model.get('fin2votes')
-                pct_str = star_model.get('fin2votes_pct_str')
-            else:
-                return ""
+            # Convert token to candidate name for comparison with STAR winner
+            candidate_name = candnames.get(token, token)
 
-            if isinstance(votes, (int, float)) and pct_str:
-                return f" — {int(votes):,} final-round votes ({pct_str})"
+            # Only show vote info for the actual STAR winner
+            if candidate_name == star_model_winner_name:
+                if token == fin1_token:
+                    votes = star_model.get('fin1votes')
+                    pct_str = star_model.get('fin1votes_pct_str')
+                elif token == fin2_token:
+                    votes = star_model.get('fin2votes')
+                    pct_str = star_model.get('fin2votes_pct_str')
+                else:
+                    return ""
+
+                if isinstance(votes, (int, float)) and pct_str:
+                    return f" — {int(votes):,} final-round votes ({pct_str})"
 
         elif method_label.startswith('Condorcet'):
             # Import here to avoid circular dependency
             from abiflib.pairwise_tally import winlosstie_dict_from_pairdict
-            pairdict = resconduit.resblob.get('pairwise_dict', {})
+            pairdict = resblob.get('pairwise_dict', {})
             wltdict = winlosstie_dict_from_pairdict(candnames, pairdict)
             if token in wltdict:
                 w = wltdict[token]['wins']
@@ -577,6 +596,7 @@ def get_election_preview_metadata(identifier: str) -> Dict[str, str]:
     # Import here to avoid circular imports
     from awt import build_election_list, get_fileentry_from_election_list, convert_abif_to_jabmod
     from conduits import ResultConduit
+    from html_util import get_method_ordering
 
     election_list = build_election_list()
     fileentry = get_fileentry_from_election_list(identifier, election_list)
@@ -586,39 +606,37 @@ def get_election_preview_metadata(identifier: str) -> Dict[str, str]:
     jabmod = convert_abif_to_jabmod(fileentry['text'], cleanws=True)
     candnames = jabmod.get('candidates', {})
 
-    # Get winners for description
-    resconduit = ResultConduit(jabmod=jabmod)
-    resconduit = resconduit.update_IRV_result(jabmod)
-    resconduit = resconduit.update_pairwise_result(jabmod)
+    # Use conduits.py to get all results (same pattern as awt.py election pages)
+    from conduits import get_complete_resblob_for_linkpreview, get_winners_by_method
+    resblob = get_complete_resblob_for_linkpreview(jabmod)
+    winners_by_method = get_winners_by_method(resblob, jabmod)
 
     title_plain = fileentry.get('title') or identifier
 
-    # Build description with winner info
+    # Build description using standardized winner data
     summary_parts = []
 
-    # IRV winners
-    irv_dict = resconduit.resblob.get('IRV_dict', {})
-    irv_winners = []
-    if irv_dict.get('winner'):
-        irv_winners = [candnames.get(tok, tok) for tok in irv_dict['winner']]
-    elif irv_dict.get('winnerstr'):
-        irv_winners = [irv_dict['winnerstr']]
-
-    if irv_winners:
-        summary_parts.append(f"IRV: {', '.join(irv_winners)}")
-
-    # Condorcet winners
-    cope_winners = resconduit.resblob.get('copewinners', [])
-    if cope_winners:
-        cope_names = [candnames.get(tok, tok) for tok in cope_winners]
-        summary_parts.append(f"Condorcet/Copeland: {', '.join(cope_names)}")
-    elif resconduit.resblob.get('copewinnerstring'):
-        summary_parts.append(f"Condorcet/Copeland: {resconduit.resblob['copewinnerstring']}")
+    for method, winner_tokens in winners_by_method.items():
+        if winner_tokens:
+            winner_names = [candnames.get(tok, tok) for tok in winner_tokens]
+            summary_parts.append(f"{method}: {', '.join(winner_names)}")
 
     if summary_parts:
-        description = f"{title_plain} — " + "; ".join(summary_parts)
+        # Check if all winners are the same
+        all_winner_sets = []
+        for method, winner_tokens in winners_by_method.items():
+            if winner_tokens:
+                all_winner_sets.append(set(winner_tokens))
+
+        if len(all_winner_sets) > 1 and len(set().union(*all_winner_sets)) == 1:
+            # All methods have same single winner
+            first_winner = list(all_winner_sets[0])[0]
+            winner_name = candnames.get(first_winner, first_winner)
+            description = f"All voting methods agree on the winner: {winner_name}"
+        else:
+            description = f"Voting methods show different winners ({'; '.join(summary_parts)})"
     else:
-        description = f"{title_plain} — Compare IRV, Condorcet, STAR, and Approval."
+        description = f"Compare FPTP, IRV, Condorcet, STAR, and Approval."
 
     # Truncate long descriptions
     if len(description) > 240:

@@ -9,7 +9,7 @@ os.environ.setdefault('AWT_CACHE_TYPE', 'none')
 
 from awt import app, cache
 
-def fetch_url(url, use_cache=False, follow_redirects=False):
+def fetch_url(url, use_cache=False, follow_redirects=False, debug=False):
     """Fetch content from a local AWT URL via Flask test client.
 
     Returns the full response object so callers can decide how to handle
@@ -19,6 +19,9 @@ def fetch_url(url, use_cache=False, follow_redirects=False):
         # Disable caching for this session for clearer debugging
         app.config['CACHE_TYPE'] = 'flask_caching.backends.NullCache'
         cache.init_app(app)
+
+    if debug:
+        app.debug = True
 
     client = app.test_client()
     return client.get(url, follow_redirects=follow_redirects)
@@ -60,9 +63,14 @@ def main():
         action="store_true",
         help="Follow HTTP redirects (useful for routes that 302 to static content)."
     )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable debug mode for server (does not auto-append ?debug=json)."
+    )
     args = parser.parse_args()
 
-    resp = fetch_url(args.url, use_cache=args.cache, follow_redirects=args.follow)
+    resp = fetch_url(args.url, use_cache=args.cache, follow_redirects=args.follow, debug=args.debug)
     if args.headers:
         import sys
         sys.stderr.write(f"Status: {resp.status}\n")

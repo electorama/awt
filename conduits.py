@@ -353,3 +353,64 @@ class ResultConduit:
         resconduit = resconduit.update_STAR_result(jabmod)
         resconduit = resconduit.update_approval_result(jabmod)
         return self
+
+
+def get_winners_by_method(resblob, jabmod=None):
+    """Extract winners from each voting method in a standardized format.
+
+    Args:
+        resblob: Complete ResultConduit resblob with all method results
+        jabmod: Original jabmod (for candidate name lookup if needed)
+
+    Returns:
+        dict: Method names mapped to list of winner tokens
+        Example: {'FPTP': ['BrandenRobinson'], 'IRV': ['MartinMichlmayr'], 'Condorcet': ['MartinMichlmayr']}
+    """
+    winners = {}
+
+    # FPTP winners
+    fptp_result = resblob.get('FPTP_result', {})
+    if fptp_result.get('winners'):
+        winners['FPTP'] = fptp_result['winners']
+
+    # IRV winners
+    irv_dict = resblob.get('IRV_dict', {})
+    if irv_dict.get('winner'):
+        winners['IRV'] = irv_dict['winner']
+
+    # Condorcet/Copeland winners
+    if resblob.get('copewinners'):
+        winners['Condorcet'] = resblob['copewinners']
+
+    # STAR winners
+    star_model = resblob.get('scorestardict', {}).get('scoremodel', {})
+    star_winner_tokens = star_model.get('winner_tokens')
+    if star_winner_tokens:
+        winners['STAR'] = star_winner_tokens
+
+    # Approval winners
+    approval_result = resblob.get('approval_result', {})
+    if approval_result.get('winners'):
+        winners['Approval'] = approval_result['winners']
+
+    return winners
+
+
+def get_complete_resblob_for_linkpreview(jabmod):
+    """Get complete resblob for link preview generation (temporary debug function).
+
+    This follows the same pattern as awt.py election pages to ensure consistency.
+    """
+    from awt import add_ratings_to_jabmod_votelines
+
+    resconduit = ResultConduit(jabmod=jabmod)
+    resconduit = resconduit.update_FPTP_result(jabmod)
+    resconduit = resconduit.update_IRV_result(jabmod, include_irv_extra=True)
+    resconduit = resconduit.update_pairwise_result(jabmod)
+
+    # For STAR, use rated jabmod just like awt.py does
+    ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
+    resconduit = resconduit.update_STAR_result(ratedjabmod)
+
+    resconduit = resconduit.update_approval_result(jabmod)
+    return resconduit.resblob

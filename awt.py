@@ -38,6 +38,8 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, send_from_directory, url_for, Response
 from flask_caching import Cache
 from html_util import generate_candidate_colors, escape_css_selector, add_html_hints_to_stardict, get_method_ordering, format_notice_paragraphs
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+import json
 try:
     from src.linkpreview import compose_preview_svg, render_svg_to_png, render_frame_png, get_election_preview_metadata, render_generic_preview_png
 except ImportError:
@@ -47,7 +49,6 @@ except ImportError:
     render_frame_png = None
     get_election_preview_metadata = None
     render_generic_preview_png = None
-from jinja2 import Environment, FileSystemLoader, select_autoescape
 import logging
 from markupsafe import escape
 from pathlib import Path
@@ -765,7 +766,7 @@ def awt_get(toppage=None, tag=None):
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
     msgs['lede'] = "FIXME-flaskabif.py"
-    msgs['og_description'] = "awt page"
+    msgs['og_description'] = "The ABIF Web Tool (awt) is an online tool for analyzing elections using multiple voting methods including IRV/RCV, Approval, STAR, and Condorcet/Copeland. ABIF is the \"Aggregated Ballot Information Format\", which is a reasonably simple way to express election results, whether those elections were conducted with ranked (ordinal) ballots, rated (cardinal) ballots, or just a list of checkboxes next to the candidates (as done with plurality and approval elections)."
     election_list = build_election_list()
     debug_flag = webenv['debugFlag']
     debug_output = webenv['debugIntro']
@@ -1292,6 +1293,44 @@ def get_by_id(identifier, resulttype=None):
                                    msgs=msgs,
                                    webenv=webenv
                                    ), 404
+
+    # Debug JSON mode
+    if request.args.get('debug') == 'json':
+        if not app.debug:
+            return {"error": "Debug mode required"}, 403
+
+        from conduits import get_complete_resblob_for_linkpreview, get_winners_by_method
+
+        election_list = build_election_list()
+        fileentry = get_fileentry_from_election_list(identifier, election_list)
+        if not fileentry:
+            return {"error": f"Election not found: {identifier}"}, 404
+
+        jabmod = convert_abif_to_jabmod(fileentry['text'], cleanws=True)
+        resblob = get_complete_resblob_for_linkpreview(jabmod)
+        winners_by_method = get_winners_by_method(resblob, jabmod)
+
+        webenv = WebEnv.wenvDict()
+        debug_data = {
+            "msgs": {
+                "identifier": identifier,
+                "resulttype": resulttype,
+                "title": fileentry.get('title'),
+                "filename": fileentry.get('filename'),
+                "tags": fileentry.get('tags')
+            },
+            "webenv": webenv,
+            "resblob": resblob,
+            "jabmod": jabmod,
+            "fileentry": fileentry,
+            "winners_by_method": winners_by_method
+        }
+
+        return Response(
+            json.dumps(debug_data, indent=2, default=str),
+            mimetype='application/json'
+        )
+
     return cached_get_by_id(identifier, resulttype)
 
 

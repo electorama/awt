@@ -1,4 +1,4 @@
-This is a very incomplete list of incomplete tasks for this project 
+This is a very incomplete list of incomplete tasks for this project
 * Code hygiene
 ** Testing (test)
    - [ ] Quicker/easier smoketests
@@ -29,6 +29,7 @@ This is a very incomplete list of incomplete tasks for this project
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list on GitHub]]
   - [ ] See [[./CHANGELOG.org]]
 * Post 0.34.0
+  - [ ] Fix link previews for method-specific pages (/id/<election-id>/<method>)
   - [ ] Implement /edit route functionality (route exists but not implemented - see routes.md)
   - [ ] Create bifhub and figure out awt interface to it [[./docs/bifhub.md]]
   - [ ] Merge tags-index.html and tag-index.html into a single template (consolidate tag index/detail)

@@ -20,8 +20,8 @@ Emit Open Graph metadata and provide stable 1200×630 images (PNG from an SVG fr
 - Image routes: `/preview-img/site/generic.png`, `/preview-img/id/<election_id>.png` (CairoSVG PNG; 302 to frame SVG if unavailable). Cached via Flask‑Caching.
 - Image content from conduits (no recomputation in templates):
   - Consensus: one large winner line + smaller runners (FPTP order).
-  - Disagreement: stacked IRV, FPTP, Approval, STAR, Condorcet/Copeland with brief figures.
-- Frame: `static/img/awt-electorama-linkpreview-frame.svg` has a white background.
+  - Disagreement: stacked IRV, FPTP, Approval, STAR, Condorcet/Copeland with brief figures, including percentages of total ballots for each listed method.
+  - Frame: `static/img/awt-electorama-linkpreview-frame.svg` has a white background.
 
 ## Testing
 
@@ -36,6 +36,7 @@ Emit Open Graph metadata and provide stable 1200×630 images (PNG from an SVG fr
   - Facebook Sharing Debugger: paste the page URL and Scrape Again to see OG output.
   - Slack/Discord: paste the link in a test channel and verify the unfurl (they honor OG tags).
 - Fallbacks: test an election with >4 candidates; verify truncation/"+N more" behavior. Test missing/invalid data and confirm generic preview.
+- Clash mode percentages: for elections where methods disagree, verify each method line shows a percentage of total ballots (method‑appropriate metric) and that values are plausible and consistent with on‑page figures.
 
 ## Refactor Plan (brief)
 
