@@ -127,9 +127,10 @@ def compose_preview_svg(identifier: str, max_names: int = 4) -> str:
     candnames = jabmod.get('candidates', {})
 
     # Calculate results via ResultConduit for consistency
-    from conduits import get_complete_resblob_for_linkpreview, get_winners_by_method
+    from conduits import get_complete_resblob_for_linkpreview, get_winners_by_method, get_method_display_info
     resblob = get_complete_resblob_for_linkpreview(jabmod)
     winners_by_method = get_winners_by_method(resblob, jabmod)
+    display_info_dict = get_method_display_info(resblob, jabmod)
 
     # Get FPTP data for vote counts
     fptp_result = resblob.get('FPTP_result', {})
@@ -165,7 +166,7 @@ def compose_preview_svg(identifier: str, max_names: int = 4) -> str:
     svg_content = _build_svg_content(
         fileentry, jabmod, clash, irv_primary, cope_primary, fptp_primary,
         star_winner_name, approval_winners, colordict, candnames, fptp_toppicks,
-        resblob, order_tokens, max_names
+        resblob, order_tokens, max_names, display_info_dict
     )
 
     # Insert content into frame SVG
@@ -179,7 +180,8 @@ def _build_svg_content(fileentry: Dict, jabmod: Dict, clash: bool,
                       irv_primary: str, cope_primary: str, fptp_primary: str,
                       star_winner: str, approval_winners: List[str],
                       colordict: Dict, candnames: Dict, fptp_toppicks: Dict,
-                      resconduit, order_tokens: List[str], max_names: int) -> str:
+                      resblob: Dict, order_tokens: List[str], max_names: int,
+                      display_info_dict: Dict) -> str:
     """Build the dynamic SVG content string."""
     px = px_to_viewbox
 
@@ -224,7 +226,7 @@ def _build_svg_content(fileentry: Dict, jabmod: Dict, clash: bool,
     if clash:
         _add_clash_layout(parts, irv_primary, cope_primary, fptp_primary,
                          star_winner, approval_winners, colordict, candnames,
-                         resconduit, px)
+                         resblob, jabmod, px, display_info_dict)
     else:
         _add_consensus_layout(parts, irv_primary, fptp_primary, order_tokens,
                             colordict, candnames, fptp_toppicks, max_names, px)
@@ -235,7 +237,8 @@ def _build_svg_content(fileentry: Dict, jabmod: Dict, clash: bool,
 
 def _add_clash_layout(parts: List[str], irv_primary: str, cope_primary: str,
                      fptp_primary: str, star_winner: str, approval_winners: List[str],
-                     colordict: Dict, candnames: Dict, resconduit, px) -> None:
+                     colordict: Dict, candnames: Dict, resblob: Dict, jabmod: Dict, px,
+                     display_info_dict: Dict) -> None:
     """Add clash layout showing multiple method winners."""
     # Map STAR winner name back to token
     def name_to_token(name):
@@ -287,8 +290,7 @@ def _add_clash_layout(parts: List[str], irv_primary: str, cope_primary: str,
             f'fill="{color}" />'
         )
 
-        # Get method-specific vote info
-        votes_info = _get_method_vote_info(label, token, resconduit, candnames)
+        votes_info = display_info_dict.get(f'{label}_{token}', '')
 
         parts.append(
             f'<text x="{(x_left + px(56)):.3f}" y="{y_line:.3f}" '
@@ -374,89 +376,6 @@ def _get_fptp_candidate_order(fptp_toppicks: Dict, fallback_order: List[str]) ->
 
     return [c for c, _ in sorted(fptp_toppicks.items(), key=get_vote_count, reverse=True) if c is not None]
 
-
-def _get_method_vote_info(method_label: str, token: str, resblob, candnames: Dict) -> str:
-    """Get vote information string for a specific method and candidate."""
-    if not token:
-        return ""
-
-    try:
-        if method_label == 'IRV':
-            irv_result = resblob.get('IRV_result', {})
-            votes = irv_result.get('winner_votes')
-            percentage = irv_result.get('winner_percentage')
-            if votes is not None and percentage is not None:
-                return f" — {votes:,} votes ({percentage:.1f}%) in final round"
-
-        elif method_label == 'FPTP':
-            fptp_result = resblob.get('FPTP_result', {})
-            fptp_toppicks = fptp_result.get('toppicks', {})
-            votes = get_candidate_vote_count(token, fptp_toppicks)
-            total_votes = fptp_result.get('total_votes_recounted', 0)
-
-            if votes is not None and total_votes > 0:
-                percentage = (votes / total_votes) * 100
-                # Check if this is ranked ballot data
-                ballot_type = None
-                # Look for ballot_type in various places in resblob
-                if 'approval_result' in resblob:
-                    ballot_type = resblob['approval_result'].get('ballot_type')
-
-                vote_type = "first-place votes" if ballot_type == "ranked" else "votes"
-                return f" — {votes:,} {vote_type} ({percentage:.1f}%)"
-            elif votes is not None:
-                return f" — {votes:,} votes"
-
-        elif method_label == 'Approval':
-            approval = resblob.get('approval_result', {})
-            counts = approval.get('approval_counts', {})
-            approval_count = counts.get(token)
-            total_approvals = approval.get('total_approvals', 0)
-
-            if isinstance(approval_count, (int, float)) and total_approvals > 0:
-                percentage = (approval_count / total_approvals) * 100
-                return f" — {int(approval_count):,} approvals ({percentage:.1f}%)"
-            elif isinstance(approval_count, (int, float)):
-                return f" — {int(approval_count):,} approvals"
-
-        elif method_label == 'STAR':
-            star_model = resblob.get('scorestardict', {}).get('scoremodel', {})
-            star_model_winner_name = star_model.get('winner')
-            fin1_token = star_model.get('fin1')
-            fin2_token = star_model.get('fin2')
-
-            # Convert token to candidate name for comparison with STAR winner
-            candidate_name = candnames.get(token, token)
-
-            # Only show vote info for the actual STAR winner
-            if candidate_name == star_model_winner_name:
-                if token == fin1_token:
-                    votes = star_model.get('fin1votes')
-                    pct_str = star_model.get('fin1votes_pct_str')
-                elif token == fin2_token:
-                    votes = star_model.get('fin2votes')
-                    pct_str = star_model.get('fin2votes_pct_str')
-                else:
-                    return ""
-
-                if isinstance(votes, (int, float)) and pct_str:
-                    return f" — {int(votes):,} final-round votes ({pct_str})"
-
-        elif method_label.startswith('Condorcet'):
-            # Import here to avoid circular dependency
-            from abiflib.pairwise_tally import winlosstie_dict_from_pairdict
-            pairdict = resblob.get('pairwise_dict', {})
-            wltdict = winlosstie_dict_from_pairdict(candnames, pairdict)
-            if token in wltdict:
-                w = wltdict[token]['wins']
-                l = wltdict[token]['losses']
-                t = wltdict[token]['ties']
-                return f" — {w} wins, {l} losses, {t} ties"
-
-    except Exception as e:
-        logger.warning(f"Failed to get vote info for {method_label}/{token}: {e}")
-
-    return ""
 
 
 def render_svg_to_png(svg_text: str, width: int = PREVIEW_WIDTH,
@@ -632,9 +551,9 @@ def get_election_preview_metadata(identifier: str) -> Dict[str, str]:
             # All methods have same single winner
             first_winner = list(all_winner_sets[0])[0]
             winner_name = candnames.get(first_winner, first_winner)
-            description = f"All voting methods agree on the winner: {winner_name}"
+            description = f"All abiflib voting methods agree on the winner: {winner_name}"
         else:
-            description = f"Voting methods show different winners ({'; '.join(summary_parts)})"
+            description = f"abiflib voting methods show different winners ({'; '.join(summary_parts)})"
     else:
         description = f"Compare FPTP, IRV, Condorcet, STAR, and Approval."
 

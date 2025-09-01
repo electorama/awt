@@ -79,6 +79,7 @@ This module serves as the adapter between abiflib's raw election analysis and we
 
 *   `ResultConduit` class and all its methods
 *   Notice consolidation and `resblob` construction logic
+*   **Voting method display logic** (temporary) - `get_method_display_info()` and related functions that extract vote counts, percentages, and formatted display strings for each voting method. These functions contain workarounds for abiflib deficiencies and should eventually be pushed down to abiflib once it provides structured, display-ready output for all voting methods.
 
 ### Remaining in `awt.py` (The Web Layer)
 

@@ -396,6 +396,99 @@ def get_winners_by_method(resblob, jabmod=None):
     return winners
 
 
+def get_method_display_info(resblob, jabmod=None):
+    """Get display-ready vote information for each method's winners.
+
+    Args:
+        resblob: Complete ResultConduit resblob with all method results
+        jabmod: Original jabmod (for candidate name lookup if needed)
+
+    Returns:
+        dict: Method-candidate pairs mapped to display info strings
+        Example: {'FPTP_BdaleGarbee': ' — 227 first-place votes (47.8%)',
+                 'STAR_BdaleGarbee': ' — 291 final-round votes (61.3%)'}
+    """
+    display_info = {}
+    candnames = jabmod.get('candidates', {}) if jabmod else {}
+
+    # FPTP display info
+    fptp_result = resblob.get('FPTP_result', {})
+    fptp_toppicks = fptp_result.get('toppicks', {})
+    total_votes = fptp_result.get('total_votes_recounted', 0)
+
+    # Determine ballot type for FPTP terminology
+    ballot_type = None
+    if 'approval_result' in resblob:
+        ballot_type = resblob['approval_result'].get('ballot_type')
+
+    for token, votes in fptp_toppicks.items():
+        if isinstance(votes, (int, float)) and total_votes > 0:
+            percentage = (votes / total_votes) * 100
+            vote_type = "first-place votes" if ballot_type == "ranked" else "votes"
+            display_info[f'FPTP_{token}'] = f" — {int(votes):,} {vote_type} ({percentage:.1f}%)"
+        elif isinstance(votes, (int, float)):
+            display_info[f'FPTP_{token}'] = f" — {int(votes):,} votes"
+
+    # IRV display info
+    irv_result = resblob.get('IRV_result', {})
+    irv_winners = resblob.get('IRV_dict', {}).get('winner', [])
+    if irv_winners:
+        winner_votes = irv_result.get('winner_votes')
+        winner_percentage = irv_result.get('winner_percentage')
+        for token in irv_winners:
+            if winner_votes is not None and winner_percentage is not None:
+                display_info[f'IRV_{token}'] = f" — {winner_votes:,} votes ({winner_percentage:.1f}%) in final round"
+
+    # STAR display info
+    star_model = resblob.get('scorestardict', {}).get('scoremodel', {})
+    star_winner_tokens = star_model.get('winner_tokens', [])
+
+    for token in star_winner_tokens:
+        fin1_token = star_model.get('fin1')
+        fin2_token = star_model.get('fin2')
+
+        if token == fin1_token:
+            votes = star_model.get('fin1votes')
+            pct_str = star_model.get('fin1votes_pct_str')
+        elif token == fin2_token:
+            votes = star_model.get('fin2votes')
+            pct_str = star_model.get('fin2votes_pct_str')
+        else:
+            continue
+
+        if isinstance(votes, (int, float)) and pct_str:
+            display_info[f'STAR_{token}'] = f" — {int(votes):,} final-round votes ({pct_str})"
+
+    # Approval display info
+    approval_result = resblob.get('approval_result', {})
+    approval_counts = approval_result.get('approval_counts', {})
+    total_approvals = approval_result.get('total_approvals', 0)
+
+    for token, count in approval_counts.items():
+        if isinstance(count, (int, float)) and total_approvals > 0:
+            percentage = (count / total_approvals) * 100
+            display_info[f'Approval_{token}'] = f" — {int(count):,} approvals ({percentage:.1f}%)"
+        elif isinstance(count, (int, float)):
+            display_info[f'Approval_{token}'] = f" — {int(count):,} approvals"
+
+    # Condorcet display info
+    try:
+        from abiflib.pairwise_tally import winlosstie_dict_from_pairdict
+        pairdict = resblob.get('pairwise_dict', {})
+        wltdict = winlosstie_dict_from_pairdict(candnames, pairdict)
+
+        for token, wlt_data in wltdict.items():
+            wins = wlt_data['wins']
+            losses = wlt_data['losses']
+            ties = wlt_data['ties']
+            display_info[f'Condorcet/Copeland_{token}'] = \
+                f" — {wins} wins, {losses} losses, {ties} ties"
+    except Exception:
+        pass
+
+    return display_info
+
+
 def get_complete_resblob_for_linkpreview(jabmod):
     """Get complete resblob for link preview generation (temporary debug function).
 
