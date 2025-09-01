@@ -7,7 +7,7 @@ Test parameters:
 - post_data: Dictionary of form data to POST to /awt
 - selector_method: BeautifulSoup method name ('find', 'find_all', 'select', etc.)
 - selector_args: Arguments to pass to the selector method
-- test_type: Type of test ('exists', 'count', 'text_contains', 'text_equals', 'attr_equals')
+- test_type: Type of test ('exists', 'count', 'text_contains', 'text_equals', 'attr_equals', 'attr_contains')
 - expected_value: Expected result value
 """
 
@@ -112,6 +112,14 @@ html_testlist = [
         1,
         id="homepage_002_only_one_active_content"
     ),
+    pytest.param(
+        {"url_path": "/"},
+        "find",
+        ["meta", {"property": "og:description"}],
+        "attr_contains",
+        ("content", "The ABIF Web Tool"),
+        id="homepage_og_description_full_text"
+    ),
 ]
 
 
@@ -198,6 +206,11 @@ def run_bs4_test(html, selector_method, selector_args, test_type, expected_value
         attr_name, attr_value = expected_value
         assert result is not None, f"No element found with {selector_method}({selector_args})"
         assert result.get(attr_name) == attr_value
+    elif test_type == "attr_contains":
+        # expected_value should be tuple of (attr_name, attr_value)
+        attr_name, attr_value = expected_value
+        assert result is not None, f"No element found with {selector_method}({selector_args})"
+        assert attr_value in result.get(attr_name, "")
     else:
         raise ValueError(f"Unknown test_type: {test_type}")
 

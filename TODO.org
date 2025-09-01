@@ -20,14 +20,15 @@ This is a very incomplete list of incomplete tasks for this project
    - [ ] Move _add_pairwise_tie_notices() from conduits.py to abiflib
    - [ ] Move Copeland tie notice generation from awt.py GET route to abiflib
    - [ ] Consolidate route processing: Make GET requests use conduits.py pipeline to eliminate duplicate business logic (fixes notice system route duplication problem)
-* For 0.33.0
+   - [ ] Replace string-based SVG insertion in linkpreview with xml.etree.ElementTree using <g id="awt-dynamic-content"/> slot
+* For 0.34.0
   - [X] Sanitize candidate tokens before using them in CSS class names
   - [X] Change where it links to /id/Burl2009/pairwise#condorcet to instead link to /id/Burl2009/pairwise#pairwise
   - [X] Fix colorboxes in the Copeland/Condorcet section on /id/2022-08-16_Alaska-U.S._Representative_(Special_General)
   - [X] Create /browse route for better election discovery
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list on GitHub]]
   - [ ] See [[./CHANGELOG.org]]
-* Post 0.33.0
+* Post 0.34.0
   - [ ] Implement /edit route functionality (route exists but not implemented - see routes.md)
   - [ ] Create bifhub and figure out awt interface to it [[./docs/bifhub.md]]
   - [ ] Merge tags-index.html and tag-index.html into a single template (consolidate tag index/detail)

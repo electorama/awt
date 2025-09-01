@@ -35,9 +35,18 @@ from cache_awt import (
 )
 import conduits
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, send_from_directory, url_for
+from flask import Flask, render_template, request, redirect, send_from_directory, url_for, Response
 from flask_caching import Cache
-from html_util import generate_candidate_colors, escape_css_selector, add_html_hints_to_stardict, get_method_ordering
+from html_util import generate_candidate_colors, escape_css_selector, add_html_hints_to_stardict, get_method_ordering, format_notice_paragraphs
+try:
+    from src.linkpreview import compose_preview_svg, render_svg_to_png, render_frame_png, get_election_preview_metadata, render_generic_preview_png
+except ImportError:
+    # Graceful fallback if linkpreview module unavailable
+    compose_preview_svg = None
+    render_svg_to_png = None
+    render_frame_png = None
+    get_election_preview_metadata = None
+    render_generic_preview_png = None
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import logging
 from markupsafe import escape
@@ -331,7 +340,6 @@ app.url_map.strict_slashes = False
 app.jinja_env.filters['escape_css'] = escape_css_selector
 
 # Add template globals for reusable functions
-from html_util import format_notice_paragraphs
 app.jinja_env.globals['format_notice_paragraphs'] = format_notice_paragraphs
 
 
@@ -402,6 +410,88 @@ if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
     @app.route('/static/<filename>')
     def static_file(filename):
         return send_from_directory(AWT_STATIC, filename)
+
+
+# --- Preview image rendering (using src.linkpreview module) ---
+
+
+@app.route('/preview-img/id/<identifier>.svg')
+def preview_svg_debug(identifier):
+    """Debug: return composed SVG for inspection.
+
+    Not referenced in templates; useful to verify dynamic injection.
+    """
+    if compose_preview_svg is None:
+        return ("preview module unavailable", 503)
+    try:
+        svg_text = compose_preview_svg(identifier, max_names=4)
+        return Response(svg_text, mimetype='image/svg+xml')
+    except Exception:
+        # Fallback to the static frame
+        static_dir = AWT_STATIC or app.static_folder
+        svg_path = os.path.join(static_dir or 'static', 'img', 'awt-electorama-linkpreview-frame.svg')
+        if os.path.isfile(svg_path):
+            with open(svg_path, 'r', encoding='utf-8') as f:
+                return Response(f.read(), mimetype='image/svg+xml')
+        return ("not found", 404)
+
+
+@app.route('/preview-img/id/<identifier>.png')
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
+def preview_image_for_id(identifier):
+    """Election preview image (PNG).
+
+    Validates election exists and renders dynamic PNG, with graceful fallback.
+    """
+    if render_svg_to_png is None or compose_preview_svg is None:
+        return redirect('/static/img/awt-electorama-linkpreview-frame.svg', code=302)
+
+    try:
+        # Validate identifier exists
+        election_list = build_election_list()
+        fileentry = get_fileentry_from_election_list(identifier, election_list)
+        if not fileentry:
+            return redirect('/preview-img/site/generic.png', code=302)
+
+        # Compose and render
+        svg_text = compose_preview_svg(identifier, max_names=4)
+        png_bytes = render_svg_to_png(svg_text)
+        resp = Response(png_bytes, mimetype='image/png')
+        resp.headers['Cache-Control'] = f"public, max-age={app.config.get('CACHE_DEFAULT_TIMEOUT', AWT_DEFAULT_CACHE_TIMEOUT)}"
+        return resp
+    except Exception as e:
+        print(f"[preview] PNG render failed for {identifier}: {e}")
+        return redirect('/static/img/awt-electorama-linkpreview-frame.svg', code=302)
+
+
+@app.route('/preview-img/site/generic.png')
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
+def preview_image_generic():
+    """Generic preview image (PNG).
+
+    Renders the generic preview image; falls back to SVG if PNG rendering fails.
+    """
+    if render_generic_preview_png is None:
+        return redirect('/static/img/awt-generic-linkpreview.svg', code=302)
+
+    try:
+        png_bytes = render_generic_preview_png()
+        resp = Response(png_bytes, mimetype='image/png')
+        resp.headers['Cache-Control'] = f"public, max-age={app.config.get('CACHE_DEFAULT_TIMEOUT', AWT_DEFAULT_CACHE_TIMEOUT)}"
+        return resp
+    except Exception as e:
+        logging.getLogger('awt.preview').warning(f"Generic preview PNG render failed: {e}")
+        # Prefer PNG/200 fallback for crawlers
+        try:
+            if render_frame_png is not None:
+                png_bytes = render_frame_png()
+                resp = Response(png_bytes, mimetype='image/png')
+                resp.headers['Cache-Control'] = f"public, max-age={app.config.get('CACHE_DEFAULT_TIMEOUT', AWT_DEFAULT_CACHE_TIMEOUT)}"
+                return resp
+        except Exception as e2:
+            logging.getLogger('awt.preview').warning(f"Frame PNG fallback failed: {e2}")
+        # Last resort: serve the static SVG
+        return redirect('/static/img/awt-generic-linkpreview.svg', code=302)
 
 
 # Use abiflib.util.get_abiftool_dir to set ABIFTOOL_DIR and TESTFILEDIR
@@ -565,6 +655,7 @@ def homepage():
         msgs['purge_message'] = f"Purged cache entry for homepage"
 
     msgs['pagetitle'] = f"{webenv['statusStr']}ABIF Web Tool (awt)"
+    msgs['og_description'] = "The ABIF Web Tool (awt) is an online tool for analyzing elections using multiple voting methods including IRV/RCV, Approval, STAR, and Condorcet/Copeland. ABIF is the \"Aggregated Ballot Information Format\", which is a reasonably simple way to express election results, whether those elections were conducted with ranked (ordinal) ballots, rated (cardinal) ballots, or just a list of checkboxes next to the candidates (as done with plurality and approval elections)."
     webenv['toppage'] = 'homepage'
     # Get election list for dynamic count
     from src.bifhub import build_election_list
@@ -674,6 +765,7 @@ def awt_get(toppage=None, tag=None):
     msgs['placeholder'] = \
         "Enter ABIF here, possibly using one of the examples below..."
     msgs['lede'] = "FIXME-flaskabif.py"
+    msgs['og_description'] = "awt page"
     election_list = build_election_list()
     debug_flag = webenv['debugFlag']
     debug_output = webenv['debugIntro']
@@ -810,9 +902,15 @@ def id_no_identifier():
     msgs['lede'] = (
         "Please select one of the elections below:"
     )
+    msgs['og_description'] = (
+        "A list of the many elections available on this website."
+    )
     webenv = WebEnv.wenvDict()
     WebEnv.sync_web_env()
     election_list = build_election_list()
+    election_count = len(election_list)
+    hostname = webenv.get('hostname', 'abif.electorama.com')
+    msgs['og_description'] = f"A list of {election_count} elections available on {hostname}."
     return render_template('id-index.html',
                            msgs=msgs,
                            webenv=webenv,
@@ -1105,6 +1203,17 @@ def get_by_id(identifier, resulttype=None):
             print(
                 f" 00012 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
             debug_output += f" 00012 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+
+            # --- Build Open Graph metadata strings ---
+            if get_election_preview_metadata is not None:
+                try:
+                    og_metadata = get_election_preview_metadata(identifier)
+                    msgs['og_title'] = og_metadata['og_title']
+                    msgs['og_description'] = og_metadata['og_description']
+                    msgs['og_image'] = f"{webenv['base_url']}{og_metadata['og_image']}"
+                except Exception:
+                    # Fail quietly; base.html will fall back to defaults
+                    pass
 
             if prof:
                 prof.disable()

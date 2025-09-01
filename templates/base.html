@@ -6,6 +6,20 @@
   <head>
       <meta charset="UTF-8">
       <title>{% if 'awt' not in msgs.pagetitle.lower() %}{{msgs.pagetitle}} — (awt){% else %}{{msgs.pagetitle}}{% endif %}</title>
+      {# Basic SEO description mirrors OG description #}
+      {% if msgs.og_description %}
+      <meta name="description" content="{{ msgs.og_description }}">
+      {% endif %}
+      {# Open Graph (for Facebook/Slack/Discord) #}
+      <meta property="og:type" content="website">
+      <meta property="og:title" content="{{ msgs.og_title or msgs.pagetitle }}">
+      <meta property="og:description" content="{{ msgs.og_description or msgs.lede }}">
+      <meta property="og:url" content="{{ webenv.base_url ~ webenv.pathportion }}">
+      {% set default_og_image = webenv.base_url ~ '/preview-img/site/generic.png' %}
+      {% set og_image_url = msgs.og_image or default_og_image %}
+      <meta property="og:image" content="{{ og_image_url }}">
+      {% set og_image_type = 'image/png' if '.png' in og_image_url else 'image/svg+xml' %}
+      <meta property="og:image:type" content="{{ og_image_type }}">
       <link rel="stylesheet"
             type="text/css"
             href="{{ url_for('static', filename='css/electostyle.css') }}">

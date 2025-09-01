@@ -12,6 +12,7 @@ This document outlines a proposed roadmap for refactoring the `awt.py` monolith 
 2.  **Single Responsibility**: Each new module should have a single, well-defined purpose.
 3.  **Incremental Changes**: The refactoring can be done in stages to minimize disruption.
 4.  **Thin Web Layer**: `awt.py` should become a minimal Flask application with nearly all logic moved to `src/`.
+5.  **Import/Logging Hygiene**: `src/` modules must not import from `awt.py`; avoid nested imports in hot paths; no `print()` in production code — use `logging` consistently.
 
 ## Proposed Future Structure
 
@@ -28,7 +29,8 @@ awt/
 │   ├── conduits.py     # (Data transformation layer: abiflib → web-friendly structures)
 │   ├── bifhub.py       # (Catalog management - future separate service)
 │   ├── html_util.py    # (For presentation logic)
-│   └── server_util.py  # (For server-related helpers)
+│   ├── server_util.py  # (For server-related helpers)
+│   └── linkpreview.py  # (Link preview composition + rendering; no imports from awt)
 ├── static/
 └── templates/
 ```
@@ -62,6 +64,15 @@ This module will contain helper functions related to running the web server itse
 
 *   `find_free_port`
 
+### To `src/linkpreview.py` (Link Previews)
+
+Link preview composition, rendering, and metadata helpers; this module must not import from `awt.py`.
+
+*   `compose_preview_svg` (dynamic SVG content injection)
+*   `render_svg_to_png` / `render_frame_png` (PNG rasterization)
+*   `get_election_preview_metadata` (OG title/description/image)
+*   Small helpers/constants (px conversion, truncation, FPTP ordering)
+
 ### To `src/conduits.py` (Data Transformation Layer)
 
 This module serves as the adapter between abiflib's raw election analysis and web-friendly data structures for Flask/Jinja templates.
@@ -89,6 +100,7 @@ The refactoring should proceed incrementally to minimize risk and allow testing 
 2.  **src/server_util.py** - Simple utilities with minimal coupling
 3.  **src/bifhub.py** - Catalog management functions (prepares for future service split)
 4.  **src/conduits.py** - Data transformation layer (requires coordination with template updates)
+5.  **src/linkpreview.py** - Finalize decoupling from `awt` and switch to XML insertion slot
 
 Each step should be fully tested before proceeding to the next, ensuring `awt.py` remains functional throughout the process.
 
@@ -97,6 +109,20 @@ Each step should be fully tested before proceeding to the next, ensuring `awt.py
 Recent notice system development revealed **route processing duplication**: GET requests process data in `awt.py` while POST requests use `conduits.py`, requiring duplicate business logic implementation. This creates developer friction and maintenance burden.
 
 **Priority fix:** Consolidate route processing so both GET and POST requests use the same `conduits.py` pipeline, eliminating duplicate logic and enabling centralized notice generation.
+
+Additionally, converge on `src/bifhub` for catalog helpers (`build_election_list`, `get_fileentry_from_election_list`, etc.) and remove duplicates from `awt.py` to maintain a single source of truth.
+
+## Testing Gates and Acceptance Criteria
+
+Before and after each migration step:
+
+- Run route tests and unit tests; add missing tests to lock observable behavior.
+- Acceptance for a step includes:
+  - `awt.py` no longer defines the moved functions/classes.
+  - `awt.py` imports only from `src.*` (not vice versa).
+  - No `print()` introduced; logging used consistently.
+  - Imports in hot paths are top-level (avoid nested imports unless guarding optional deps).
+  - Link preview: PNG routes return 200 with PNG (fallback OK), and XML insertion replaces string replace.
 
 ## Benefits
 
