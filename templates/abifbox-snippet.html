@@ -1,4 +1,4 @@
-{% set formActive = True if webenv.toppage != 'tag' else False %}
+{% set formActive = True if webenv.toppage not in ['tag', 'id'] else False %}
 {% set classList = "active" if formActive else "" %}
 {% set showHideText = "hide" if formActive else "show"%}
 <form action="/awt#results" method="POST">

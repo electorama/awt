@@ -967,6 +967,7 @@ def get_by_id(identifier, resulttype=None):
     def cached_get_by_id(identifier, resulttype=None):
         webenv = WebEnv.wenvDict()
         debug_output = webenv.get('debugIntro') or ""
+        webenv['toppage'] = 'id'
         WebEnv.sync_web_env()
         rtypemap = {
             'wlt': 'win-loss-tie (Condorcet) results',
