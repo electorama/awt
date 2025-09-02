@@ -108,29 +108,29 @@ and can be edited in the field above.</p>
             <tr>
               <td style="padding: 8px; border: 1px solid #ddd;"><a href="#STAR" class="method-link">STAR</a></td>
               <td style="padding: 8px; border: 1px solid #ddd;">
-                {% if scorestardict and scorestardict['scoremodel']['winner'] and FPTP_candnames %}
+                {% if scorestardict and scorestardict['scoremodel']['winner'] %}
                   {% set winner_name = scorestardict['scoremodel']['winner'] %}
-                  {# Handle both single winners and ties in STAR results #}
-                  {% if "tie " in winner_name %}
-                    {# Handle STAR ties: extract candidate names from tie string #}
-                    {%- for token, name in FPTP_candnames.items() -%}
-                      {%- if name in winner_name -%}
-                        <span class="color-box" style="background-color: {{ colordict[token] | default('#ccc') }};"></span>{{ name }}{% if not loop.last and loop.index < FPTP_candnames|length %}, {% endif %}
-                      {%- endif -%}
-                    {%- endfor -%}
+                  {% if FPTP_candnames %}
+                    {# Handle both single winners and ties in STAR results #}
+                    {% if "tie " in winner_name %}
+                      {# Handle STAR ties: extract candidate names from tie string #}
+                      {%- for token, name in FPTP_candnames.items() -%}
+                        {%- if name in winner_name -%}
+                          <span class="color-box" style="background-color: {{ colordict[token] | default('#ccc') }};"></span>{{ name }}{% if not loop.last and loop.index < FPTP_candnames|length %}, {% endif %}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {% else %}
+                      {# Handle single winner - find matching candidate name #}
+                      {%- for token, name in FPTP_candnames.items() -%}
+                        {%- if winner_name == name -%}
+                          <span class="color-box" style="background-color: {{ colordict[token] | default('#ccc') }};"></span>{{ winner_name }}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {% endif %}
                   {% else %}
-                    {# Handle single winner #}
-                    {% set winner_found = false %}
-                    {% for token, name in FPTP_candnames.items() if not winner_found %}
-                      {% if winner_name == name %}
-                        <span class="color-box" style="background-color: {{ colordict[token] | default('#ccc') }};"></span>{{ winner_name }}
-                        {% set winner_found = true %}
-                      {% endif %}
-                    {% endfor %}
-                    {% if not winner_found %}{{ winner_name }}{% endif %}
+                    {# No FPTP_candnames available, show raw winner #}
+                    {{ winner_name }}
                   {% endif %}
-                {% elif scorestardict and scorestardict['scoremodel']['winner'] %}
-                  {{ scorestardict['scoremodel']['winner'] }}
                 {% else %}
                   N/A
                 {% endif %}
