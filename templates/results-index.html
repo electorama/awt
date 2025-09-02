@@ -47,8 +47,10 @@ and can be edited in the field above.</p>
 <p>Below are various abiftool output blocks for the ABIF above.
   {% endif %}
 
-  <!-- Summary table with winner information -->
-  <div class="results-summary">
+  <!-- Election overview with summary table and preview image -->
+  <div class="election-overview">
+    <div class="summary-section">
+      <!-- Summary table with winner information -->
     <table style="max-width: 60em; border-collapse: collapse; margin: 1em 0; font-size: 0.9em;">
       <thead>
         <tr style="background-color: #f5f5f5;">
@@ -154,11 +156,32 @@ and can be edited in the field above.</p>
       </tbody>
     </table>
 
+
+    </div>
+
+    <!-- Preview image sidebar -->
+    <div class="preview-sidebar">
+      {% if abif_id %}
+      <figure class="election-preview">
+        <img src="/preview-img/id/{{ abif_id }}.png"
+             alt="Election results summary showing voting method winners"
+             class="preview-image"
+             onclick="openImageModal(this.src, '{{ msgs.og_description | replace('\'', '\\\'') }}')"
+             style="cursor: pointer;">
+        <figcaption class="preview-caption">
+          <em>click/tap to expand</em>
+        </figcaption>
+      </figure>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Toggle positioned above tabs, aligned right -->
+  <div class="tab-controls">
     <!-- Hidden checkbox for CSS selectors -->
     <input type="checkbox" id="tabbed-mode" class="view-mode-input"{% if not resulttype or resulttype == 'all' %} checked{% endif %}>
-
-    <!-- Compact view mode toggle positioned next to winner table -->
-    <div class="view-mode-toggle">
+    <!-- View mode toggle positioned above tabs -->
+    <div class="view-mode-toggle-tabs">
       <label class="toggle-switch" for="tabbed-mode">
         <span class="toggle-slider">
           <span class="toggle-text off">OFF</span>

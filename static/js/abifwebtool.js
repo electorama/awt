@@ -172,6 +172,72 @@ function showActiveMethodSectionGlobal() {
 
 document.addEventListener('DOMContentLoaded', handleWinnerTableLinks);
 
+// Image modal functionality for preview image click-to-expand
+function openImageModal(imageSrc, caption) {
+  // Create modal if it doesn't exist
+  let modal = document.getElementById('image-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'image-modal';
+    modal.className = 'image-modal';
+    modal.innerHTML = `
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeImageModal()">&times;</button>
+        <img src="" alt="Expanded election preview">
+        <p class="modal-caption"></p>
+        <p class="modal-instructions">Press Esc to close</p>
+      </div>`;
+    document.body.appendChild(modal);
+
+    // Close modal when clicking outside the content
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeImageModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.style.display === 'block') {
+        closeImageModal();
+      }
+    });
+  }
+
+  // Set image source, caption and show modal
+  const modalImg = modal.querySelector('img');
+  const modalCaption = modal.querySelector('.modal-caption');
+  modalImg.src = imageSrc;
+  modalCaption.textContent = caption || '';
+
+  // Add hash to URL for back button support
+  if (!window.location.hash.includes('modal')) {
+    history.pushState({modal: true}, '', window.location.href + '#modal');
+  }
+
+  modal.style.display = 'block';
+}
+
+function closeImageModal() {
+  const modal = document.getElementById('image-modal');
+  if (modal) {
+    modal.style.display = 'none';
+
+    // Remove modal hash from URL if present
+    if (window.location.hash.includes('modal')) {
+      history.back();
+    }
+  }
+}
+
+// Handle browser back button to close modal
+window.addEventListener('popstate', function(e) {
+  const modal = document.getElementById('image-modal');
+  if (modal && modal.style.display === 'block') {
+    modal.style.display = 'none';
+  }
+});
+
 function pushTextFromID(exampleID) {
   var exampleText = document.getElementById(exampleID).value;
   document.getElementById("abifbox").classList.add('active');

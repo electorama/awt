@@ -460,20 +460,20 @@ a.method-tab {
     opacity: 0; /* Hide ON text */
 }
 
-/* Checked state - now using general sibling selector since checkbox is separate */
-#tabbed-mode:checked ~ .view-mode-toggle .toggle-slider {
+/* Checked state - using child selector for tab-controls structure */
+#tabbed-mode:checked ~ .view-mode-toggle-tabs .toggle-slider {
     background-color: #666;
 }
 
-#tabbed-mode:checked ~ .view-mode-toggle .toggle-slider:before {
+#tabbed-mode:checked ~ .view-mode-toggle-tabs .toggle-slider:before {
     transform: translateX(36px);
 }
 
-#tabbed-mode:checked ~ .view-mode-toggle .toggle-text.off {
+#tabbed-mode:checked ~ .view-mode-toggle-tabs .toggle-text.off {
     opacity: 0; /* Keep OFF text hidden */
 }
 
-#tabbed-mode:checked ~ .view-mode-toggle .toggle-text.on {
+#tabbed-mode:checked ~ .view-mode-toggle-tabs .toggle-text.on {
     opacity: 0; /* Keep ON text hidden */
 }
 
@@ -510,7 +510,7 @@ a.method-tab {
     .view-mode-toggle {
         display: none;
     }
-    
+
     .results-container .method-content {
         display: block !important;
     }
@@ -733,8 +733,135 @@ a.method-tab {
     color: #666;
 }
 
+/* ============= Election overview layout ============= */
+
+.election-overview {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2em;
+  margin-bottom: 2em;
+}
+
+.summary-section {
+  min-width: 0; /* Prevent grid overflow */
+}
+
+.preview-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.election-preview {
+  margin: 0;
+  text-align: center;
+}
+
+.preview-image {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.preview-caption {
+  margin-top: 0.5em;
+  font-size: 0.85em;
+  color: #666;
+  line-height: 1.3;
+}
+
+/* Tab controls positioned above tabs */
+.tab-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.view-mode-toggle-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9em;
+}
+
+/* Image modal styles */
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  cursor: pointer;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2vh;
+  cursor: default;
+}
+
+.image-modal img {
+  max-width: 90%;
+  max-height: 75vh;
+  border-radius: 4px;
+  margin-bottom: 1em;
+}
+
+.modal-caption {
+  color: white;
+  font-size: 1.1em;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 80%;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1001;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+.modal-close:hover {
+  color: #ccc;
+}
+
+.modal-instructions {
+  color: #ccc;
+  font-size: 0.9em;
+  margin: 0.5em 0 0 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
 /* Responsive design for small screens */
 @media (max-width: 768px) {
+    .election-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .preview-sidebar {
+        order: -1; /* Show preview above summary on mobile */
+        margin-bottom: 1em;
+    }
     .homepage-actions {
         flex-direction: column;
         gap: 15px;
