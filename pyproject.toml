@@ -1,14 +1,17 @@
 [project]
 name = "awt"
-version = "0.33.0"
+version = "0.34.0rc1"
 dependencies = [
     "abiftool>=0.33.0",
     "dotenv",
     "Flask",
     "flask-caching",
+    "logging",
     "PyYAML",
-    "setuptools"
+    "setuptools",
+    "typing"
 ]
+
 description = "awt == 'abif web tool'. It's a web interface for abiftool & abiflib."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -23,6 +26,9 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Sociology :: History"
 ]
+
+[project.optional-dependencies]
+linkpreview = ["cairosvg"]
 
 [project.scripts]
 awt = "awt:main"
@@ -55,6 +61,7 @@ awt-templates = [
     "templates/intro-snippet.html",
     "templates/irv-snippet.html",
     "templates/listitem-snippet.html",
+    "templates/methods-nav-snippit.html",
     "templates/notice-snippet.html",
     "templates/not-found.html",
     "templates/pairwise-snippet.html",

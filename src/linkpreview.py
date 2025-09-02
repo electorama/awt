@@ -6,7 +6,6 @@ link previews (Facebook, Slack, Discord, etc.).
 """
 
 import os
-import logging
 from pathlib import Path
 from html import escape
 from typing import Optional, Dict, List, Tuple
@@ -17,7 +16,6 @@ try:
 except ImportError:
     cairosvg = None
 
-logger = logging.getLogger('awt.preview')
 
 # Constants
 PREVIEW_WIDTH = 1200
