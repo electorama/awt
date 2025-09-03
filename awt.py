@@ -417,6 +417,7 @@ if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
 
 
 @app.route('/preview-img/id/<identifier>.svg')
+@cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
 def preview_svg_debug(identifier):
     """Debug: return composed SVG for inspection.
 
@@ -426,14 +427,18 @@ def preview_svg_debug(identifier):
         return ("preview module unavailable", 503)
     try:
         svg_text = compose_preview_svg(identifier, max_names=4)
-        return Response(svg_text, mimetype='image/svg+xml')
+        resp = Response(svg_text, mimetype='image/svg+xml')
+        resp.headers['Cache-Control'] = f"public, max-age={app.config.get('CACHE_DEFAULT_TIMEOUT', AWT_DEFAULT_CACHE_TIMEOUT)}"
+        return resp
     except Exception:
         # Fallback to the static frame
         static_dir = AWT_STATIC or app.static_folder
         svg_path = os.path.join(static_dir or 'static', 'img', 'awt-electorama-linkpreview-frame.svg')
         if os.path.isfile(svg_path):
             with open(svg_path, 'r', encoding='utf-8') as f:
-                return Response(f.read(), mimetype='image/svg+xml')
+                resp = Response(f.read(), mimetype='image/svg+xml')
+                resp.headers['Cache-Control'] = f"public, max-age={app.config.get('CACHE_DEFAULT_TIMEOUT', AWT_DEFAULT_CACHE_TIMEOUT)}"
+                return resp
         return ("not found", 404)
 
 
