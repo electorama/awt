@@ -396,6 +396,33 @@ def get_winners_by_method(resblob, jabmod=None):
     return winners
 
 
+def has_method_clash(resblob, jabmod=None):
+    """Determine if voting methods disagree on winners.
+
+    Args:
+        resblob: Complete ResultConduit resblob with all method results
+        jabmod: Original jabmod (for candidate name lookup if needed)
+
+    Returns:
+        bool: True if methods disagree, False if consensus
+    """
+    winners_by_method = get_winners_by_method(resblob, jabmod)
+
+    # Get primary winner from each method (first winner if multiple)
+    primary_winners = set()
+
+    for method, winners in winners_by_method.items():
+        if winners:
+            # For ties/cycles, pick first winner alphabetically for comparison
+            if isinstance(winners, list) and winners:
+                primary_winners.add(winners[0])
+            elif isinstance(winners, str):
+                primary_winners.add(winners)
+
+    # Clash if more than one distinct primary winner
+    return len(primary_winners) > 1
+
+
 def get_method_display_info(resblob, jabmod=None):
     """Get display-ready vote information for each method's winners.
 

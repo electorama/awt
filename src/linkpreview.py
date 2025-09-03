@@ -141,16 +141,9 @@ def compose_preview_svg(identifier: str, max_names: int = 4) -> str:
     cope_primary = pick_primary_candidate(winners_by_method.get('Condorcet', []), order_tokens, candnames)
     fptp_primary = pick_primary_candidate(winners_by_method.get('FPTP', []), order_tokens, candnames)
 
-    # Detect clash: any method disagreement (not just IRV vs Condorcet)
-    all_primary_winners = set()
-    if irv_primary:
-        all_primary_winners.add(irv_primary)
-    if cope_primary:
-        all_primary_winners.add(cope_primary)
-    if fptp_primary:
-        all_primary_winners.add(fptp_primary)
-
-    clash = len(all_primary_winners) > 1
+    # Use centralized clash detection from conduits.py
+    from conduits import has_method_clash
+    clash = has_method_clash(resblob, jabmod)
 
     # Get other winners for SVG content
     star_winners = winners_by_method.get('STAR', [])
@@ -164,7 +157,7 @@ def compose_preview_svg(identifier: str, max_names: int = 4) -> str:
     svg_content = _build_svg_content(
         fileentry, jabmod, clash, irv_primary, cope_primary, fptp_primary,
         star_winner_name, approval_winners, colordict, candnames, fptp_toppicks,
-        resblob, order_tokens, max_names, display_info_dict
+        resblob, order_tokens, max_names, display_info_dict, winners_by_method
     )
 
     # Insert content into frame SVG
@@ -179,7 +172,7 @@ def _build_svg_content(fileentry: Dict, jabmod: Dict, clash: bool,
                       star_winner: str, approval_winners: List[str],
                       colordict: Dict, candnames: Dict, fptp_toppicks: Dict,
                       resblob: Dict, order_tokens: List[str], max_names: int,
-                      display_info_dict: Dict) -> str:
+                      display_info_dict: Dict, winners_by_method: Dict) -> str:
     """Build the dynamic SVG content string."""
     px = px_to_viewbox
 
@@ -224,7 +217,7 @@ def _build_svg_content(fileentry: Dict, jabmod: Dict, clash: bool,
     if clash:
         _add_clash_layout(parts, irv_primary, cope_primary, fptp_primary,
                          star_winner, approval_winners, colordict, candnames,
-                         resblob, jabmod, px, display_info_dict)
+                         resblob, jabmod, px, display_info_dict, winners_by_method)
     else:
         _add_consensus_layout(parts, irv_primary, fptp_primary, order_tokens,
                             colordict, candnames, fptp_toppicks, max_names, px)
@@ -236,7 +229,7 @@ def _build_svg_content(fileentry: Dict, jabmod: Dict, clash: bool,
 def _add_clash_layout(parts: List[str], irv_primary: str, cope_primary: str,
                      fptp_primary: str, star_winner: str, approval_winners: List[str],
                      colordict: Dict, candnames: Dict, resblob: Dict, jabmod: Dict, px,
-                     display_info_dict: Dict) -> None:
+                     display_info_dict: Dict, winners_by_method: Dict) -> None:
     """Add clash layout showing multiple method winners."""
     # Map STAR winner name back to token
     def name_to_token(name):
@@ -276,28 +269,66 @@ def _add_clash_layout(parts: List[str], irv_primary: str, cope_primary: str,
             f'{escape(label)}</text>'
         )
 
-        # Color box and candidate name
+        # Calculate y position for content
         y_line = y_pos + px(24)
-        color = colordict.get(token, '#bbb') if token else '#bbb'
-        name = candnames.get(token, token) if token else '—'
 
-        parts.append(
-            f'<rect x="{x_left:.3f}" y="{(y_line - box_size*0.8):.3f}" '
-            f'width="{box_size:.3f}" height="{box_size:.3f}" '
-            f'rx="{(box_size*0.1):.3f}" ry="{(box_size*0.1):.3f}" '
-            f'fill="{color}" />'
-        )
+        # Handle Copeland ties specially
+        if label == 'Condorcet/Copeland' and len(winners_by_method.get('Condorcet', [])) > 1:
+            # Show all three color boxes at the beginning
+            tied_candidates = winners_by_method.get('Condorcet', [])
 
-        votes_info = display_info_dict.get(f'{label}_{token}', '')
+            # Draw all color boxes first
+            for j, tied_token in enumerate(tied_candidates):
+                box_x = x_left + j * px(32)
+                color = colordict.get(tied_token, '#bbb')
+                parts.append(
+                    f'<rect x="{box_x:.3f}" y="{(y_line - box_size*0.8):.3f}" '
+                    f'width="{box_size:.3f}" height="{box_size:.3f}" '
+                    f'rx="{(box_size*0.1):.3f}" ry="{(box_size*0.1):.3f}" '
+                    f'fill="{color}" />'
+                )
 
-        parts.append(
-            f'<text x="{(x_left + px(56)):.3f}" y="{y_line:.3f}" '
-            f'style="font-family: DejaVu Sans, Noto Sans, Arial, sans-serif; '
-            f'font-size:{line_fs:.3f}px; font-weight:700; fill:#111;">'
-            f'{escape(str(name))}'
-            f'<tspan style="font-size:{(line_fs*0.8):.3f}px; fill:#666;">'
-            f'{escape(votes_info)}</tspan></text>'
-        )
+            # Calculate text start position after all boxes
+            text_start_x = x_left + len(tied_candidates) * px(32) + px(8)
+
+            # Build the text with proper formatting
+            candidate_names = [candnames.get(token, token) for token in tied_candidates]
+            names_text = ", ".join(candidate_names)
+            full_text = f"Copeland tie between {names_text}"
+
+            # Truncate if too long (roughly 60 chars fits in remaining width)
+            display_text = truncate_text(full_text, 60)
+
+            # Split text into bold "Copeland tie" and grey rest
+            parts.append(
+                f'<text x="{text_start_x:.3f}" y="{y_line:.3f}" '
+                f'style="font-family: DejaVu Sans, Noto Sans, Arial, sans-serif; '
+                f'font-size:{line_fs:.3f}px; font-weight:700; fill:#111;">'
+                f'Copeland tie'
+                f'<tspan style="font-weight:400; fill:#666;"> between {escape(names_text)}</tspan></text>'
+            )
+        else:
+            # Normal single winner display
+            color = colordict.get(token, '#bbb') if token else '#bbb'
+            name = candnames.get(token, token) if token else '—'
+
+            parts.append(
+                f'<rect x="{x_left:.3f}" y="{(y_line - box_size*0.8):.3f}" '
+                f'width="{box_size:.3f}" height="{box_size:.3f}" '
+                f'rx="{(box_size*0.1):.3f}" ry="{(box_size*0.1):.3f}" '
+                f'fill="{color}" />'
+            )
+
+            votes_info = display_info_dict.get(f'{label}_{token}', '')
+
+            parts.append(
+                f'<text x="{(x_left + px(56)):.3f}" y="{y_line:.3f}" '
+                f'style="font-family: DejaVu Sans, Noto Sans, Arial, sans-serif; '
+                f'font-size:{line_fs:.3f}px; font-weight:700; fill:#111;">'
+                f'{escape(str(name))}'
+                f'<tspan style="font-size:{(line_fs*0.8):.3f}px; fill:#666;">'
+                f'{escape(votes_info)}</tspan></text>'
+            )
 
 
 def _add_consensus_layout(parts: List[str], irv_primary: str, fptp_primary: str,

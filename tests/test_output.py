@@ -120,6 +120,15 @@ html_testlist = [
         ("content", "The ABIF Web Tool"),
         id="homepage_og_description_full_text"
     ),
+    # Test SVG preview for Minneapolis Ward 2 Copeland tie display
+    pytest.param(
+        {"url_path": "/preview-img/id/2021-11-02_Minneapolis-2021-Ward-2-Cast-Vote-Record.svg"},
+        "find_all",
+        ["text"],
+        "text_contains",
+        "Copeland tie",
+        id="output_minneapolis_ward2_copeland_tie_svg"
+    ),
 ]
 
 
