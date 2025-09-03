@@ -191,7 +191,15 @@ function openImageModal(imageSrc, caption) {
 
     // Close modal when clicking outside the content
     modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
+      if (e.target === modal || !modal.querySelector('.modal-content').contains(e.target)) {
+        closeImageModal();
+      }
+    });
+
+    // Also close when clicking directly on the modal-content background (not its children)
+    const modalContent = modal.querySelector('.modal-content');
+    modalContent.addEventListener('click', function(e) {
+      if (e.target === modalContent) {
         closeImageModal();
       }
     });
