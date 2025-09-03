@@ -163,11 +163,16 @@ and can be edited in the field above.</p>
     <div class="preview-sidebar">
       {% if abif_id %}
       <figure class="election-preview">
-        <img src="/preview-img/id/{{ abif_id }}.png"
-             alt="Election results summary showing voting method winners"
-             class="preview-image"
-             onclick="openImageModal(this.src, '{{ msgs.og_description | replace('\'', '\\\'') }}')"
-             style="cursor: pointer;">
+        <picture>
+          <source srcset="/preview-img/id/{{ abif_id }}.svg" type="image/svg+xml">
+          <img src="/preview-img/id/{{ abif_id }}.png"
+               alt="Election results summary showing voting method winners"
+               class="preview-image"
+               onclick="openImageModal(this.currentSrc || this.src, '{{ msgs.og_description | replace('\'', '\\\'') }}')"
+               style="cursor: pointer;">
+        </picture>
+        <!-- Preload PNG so the modal's PNG switch is instant -->
+        <img src="/preview-img/id/{{ abif_id }}.png" alt="" aria-hidden="true" loading="eager" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
         <figcaption class="preview-caption">
           <em>click/tap to expand</em>
         </figcaption>
