@@ -182,7 +182,13 @@ function openImageModal(imageSrc, caption) {
     modal.className = 'image-modal';
     modal.innerHTML = `
       <div class="modal-content">
-        <button class="modal-close" onclick="closeImageModal()">&times;</button>
+        <div class="modal-header">
+          <div class="format-switcher">
+            <button class="format-btn active" data-format="svg">SVG</button>
+            <button class="format-btn" data-format="png">PNG</button>
+          </div>
+          <button class="modal-close" onclick="closeImageModal()">&times;</button>
+        </div>
         <img src="" alt="Expanded election preview">
         <p class="modal-caption"></p>
         <p class="modal-instructions">Press Esc to close</p>
@@ -210,13 +216,45 @@ function openImageModal(imageSrc, caption) {
         closeImageModal();
       }
     });
+
+    // Format switcher functionality
+    modal.querySelectorAll('.format-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent modal close
+
+        // Update active button
+        modal.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        // Switch image format
+        const modalImg = modal.querySelector('img');
+        const currentSrc = modalImg.src;
+        const newFormat = this.dataset.format;
+
+        if (newFormat === 'svg' && currentSrc.endsWith('.png')) {
+          modalImg.src = currentSrc.replace('.png', '.svg');
+        } else if (newFormat === 'png' && currentSrc.endsWith('.svg')) {
+          modalImg.src = currentSrc.replace('.svg', '.png');
+        }
+      });
+    });
   }
 
   // Set image source, caption and show modal
   const modalImg = modal.querySelector('img');
   const modalCaption = modal.querySelector('.modal-caption');
-  modalImg.src = imageSrc;
+
+  // Default to SVG format
+  const svgSrc = imageSrc.endsWith('.png') ? imageSrc.replace('.png', '.svg') : imageSrc;
+  modalImg.src = svgSrc;
   modalCaption.textContent = caption || '';
+
+  // Update format buttons to match current format
+  const formatBtns = modal.querySelectorAll('.format-btn');
+  formatBtns.forEach(btn => btn.classList.remove('active'));
+  const activeFormat = svgSrc.endsWith('.svg') ? 'svg' : 'png';
+  const activeBtn = modal.querySelector(`[data-format="${activeFormat}"]`);
+  if (activeBtn) activeBtn.classList.add('active');
 
   // Add hash to URL for back button support
   if (!window.location.hash.includes('modal')) {

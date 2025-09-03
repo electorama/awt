@@ -11,16 +11,23 @@ The AWT lightbox modal system provides click-to-expand functionality for preview
 - **URL integration**: Adds `#modal` hash for back button support
 - **Responsive display**: Modal adapts to different screen sizes
 - **Captions**: Shows descriptive text below expanded image
+- **Format switcher**: Sticky SVG/PNG toggle in the modal header
 
 ## Implementation
 
-**File**: `static/js/abifwebtool.js` (lines 176-239)
+**File**: `static/js/abifwebtool.js`
 
 **HTML Structure**:
 ```html
 <div id="image-modal" class="image-modal">
   <div class="modal-content">
-    <button class="modal-close">&times;</button>
+    <div class="modal-header">
+      <div class="format-switcher">
+        <button class="format-btn active" data-format="svg">SVG</button>
+        <button class="format-btn" data-format="png">PNG</button>
+      </div>
+      <button class="modal-close">&times;</button>
+    </div>
     <img src="..." alt="Expanded election preview">
     <p class="modal-caption">Caption text</p>
     <p class="modal-instructions">Press Esc to close</p>
@@ -28,27 +35,27 @@ The AWT lightbox modal system provides click-to-expand functionality for preview
 </div>
 ```
 
-**Current Click Handler**:
-```javascript
-modal.addEventListener('click', function(e) {
-  if (e.target === modal || !modal.querySelector('.modal-content').contains(e.target)) {
-    closeImageModal();
-  }
-});
-```
-
 ## Event Handling
 
 **Close Methods**:
 1. **X Button**: `onclick="closeImageModal()"` on close button
 2. **Esc Key**: Document-level keydown listener for Escape key
-3. **Click Outside**: Click listener on modal background
+3. **Click Outside**: Click listener on overlay and empty modal padding
 4. **Browser Back**: Popstate listener removes modal when navigating back
 
 **Click-Outside Logic**:
 ```javascript
-modal.addEventListener('click', function(e) {
+// Overlay (backdrop) click
+modal.addEventListener('click', (e) => {
   if (e.target === modal || !modal.querySelector('.modal-content').contains(e.target)) {
+    closeImageModal();
+  }
+});
+
+// Click on empty areas of the content container (its own padding/background)
+const modalContent = modal.querySelector('.modal-content');
+modalContent.addEventListener('click', (e) => {
+  if (e.target === modalContent) {
     closeImageModal();
   }
 });
@@ -65,8 +72,10 @@ modal.addEventListener('click', function(e) {
 **File**: `static/css/electostyle.css`
 
 **Key Classes**:
-- `.image-modal` - Full-screen overlay with dark background
-- `.modal-content` - Centered container for image and controls
+- `.image-modal` - Full-screen overlay; flex container centers content
+- `.modal-content` - Scrollable container (`max-height: 90vh; overflow-y: auto`)
+- `.modal-header` - Sticky header (`position: sticky; top: 0`) with controls
+- `.format-switcher`/`.format-btn` - SVG/PNG toggle styling
 - `.modal-close` - X button styling
 - `.modal-caption` - Caption text below image
 - `.modal-instructions` - "Press Esc to close" helper text
@@ -80,20 +89,14 @@ modal.addEventListener('click', function(e) {
 ## Troubleshooting
 
 **Common Issues**:
-1. **Click-outside not working**: Check CSS overlay coverage and event propagation
-2. **Caption display**: Verify `modal-caption` element exists and has content
-3. **Back button**: Ensure hash management doesn't conflict with other hash usage
-4. **Multiple modals**: System assumes single modal instance per page
-
-**Debugging Tools**:
-- Browser dev tools to inspect modal DOM structure when open
-- Console.log click targets: `console.log('Clicked:', e.target, e.target.className)`
-- Check CSS computed styles for overlay positioning
+1. Click-outside not working: Ensure overlay fills viewport and `.modal-content` doesn’t cover it
+2. Header clipped: Confirm `.modal-content` uses `max-height` with scroll and header is sticky
+3. Back button/hash: Verify `pushState`/`popstate` aren’t overridden elsewhere
 
 **CSS Requirements**:
-- Modal overlay must cover full viewport
-- Modal content should be centered and not cover entire overlay
-- Z-index should be higher than other page elements
+- Overlay covers full viewport and centers content
+- Content doesn’t consume full overlay height; allow backdrop/padding clicks
+- Sticky header remains visible; sufficient z-index
 
 ## Test URLs
 
@@ -115,6 +118,8 @@ modal.addEventListener('click', function(e) {
 2. **`static/css/electostyle.css`** - Modal styling and overlay appearance
 3. **`templates/results-index.html`** - Image click triggers and modal activation
 
-## Development History
+## Development Notes
 
-The lightbox was added in awt 0.34.
+- Introduced in awt 0.34.
+- Modal HTML is created once and re-used; listeners attach only on first open.
+- Default image format is SVG; the header switcher toggles between SVG and PNG.
