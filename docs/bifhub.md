@@ -52,3 +52,7 @@ Client applications (like `awt`) are expected to rely on a simple, stable query 
 ## Implementation Path
 
 The bifhub functionality will initially be implemented as `src/bifhub.py` within the `awt` project during the refactoring process described in `refactor.md`. This allows the catalog management logic to be properly separated and tested before eventual extraction into a standalone service.
+
+## Provenance and Source URLs (important)
+
+As part of bifhub migration, ensure that most (ideally all) generated `.abif` files include a `metadata.source_url` indicating the exact URL used to fetch the raw container or file. This should be populated by the fetch/conversion layer (e.g., from `url`/`urls` in fetchspecs). This improves traceability and auditability, and will help downstream tools present reliable provenance to users.
