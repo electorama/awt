@@ -99,6 +99,30 @@
   title: Debian 2014 Project Leader
   desc: 2014 Debian Project Leader election, won by Lucas Nussbaum
   tags: debian, actual, orgpriv
+- filename: localabif/stlouis/stl-2025-mayor.abif
+  id: stl-2025-mayor
+  title: St. Louis 2025 Mayoral Election
+  tags: actual, MO, USA, government, approval, featured
+  desc: >
+    2025 St. Louis mayoral election using approval voting.
+- filename: localabif/stlouis/stl-2025-comptroller.abif
+  id: stl-2025-comptroller
+  title: St. Louis 2025 Comptroller Election
+  tags: actual, MO, USA, government, approval
+  desc: >
+    2025 St. Louis comptroller election using approval voting.
+- filename: localabif/stlouis/stl-2025-alderman-ward3.abif
+  id: stl-2025-alderman-ward3
+  title: St. Louis 2025 Alderman, Ward 3
+  tags: actual, MO, USA, government, approval
+  desc: >
+    2025 St. Louis aldermanic election for Ward 3 using approval voting.
+- filename: localabif/stlouis/stl-2025-alderman-ward11.abif
+  id: stl-2025-alderman-ward11
+  title: St. Louis 2025 Alderman, Ward 11
+  tags: actual, MO, USA, government, approval
+  desc: >
+    2025 St. Louis aldermanic election for Ward 11 using approval voting.
 - filename: localabif/debian-elections/dpl2013.abif
   id: DPL2013
   title: Debian 2013 Project Leader
