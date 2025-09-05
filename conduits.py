@@ -253,9 +253,9 @@ class ResultConduit:
         self._extract_notices('irv', irv_with_tie_notices)
         return self
 
-    def update_pairwise_result(self, jabmod) -> "ResultConduit":
+    def update_pairwise_result(self, jabmod, transform_ballots: bool = False) -> "ResultConduit":
         # Get pairwise result with notices first
-        pairwise_result = pairwise_result_from_abifmodel(jabmod)
+        pairwise_result = pairwise_result_from_abifmodel(jabmod, transform_ballots=transform_ballots)
         pairwise_matrix = pairwise_result['pairwise_matrix']
 
         # Use the same pairwise matrix for copecount to ensure consistency

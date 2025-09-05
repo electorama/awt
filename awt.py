@@ -1097,6 +1097,11 @@ def get_by_id(identifier, resulttype=None):
             if do_pairwise:
                 t_pairwise = time.time()
                 # Build pairwise result and summaries using the consistent colors
+                # Respect transform_ballots flag similar to IRV
+                _tb_val_pair = request.args.get('transform_ballots')
+                transform_ballots = True if _tb_val_pair is None else (_tb_val_pair.lower() in ('1', 'true', 'yes', 'on'))
+                # Update conduit to capture notices and core results (matrix + notices)
+                resconduit = resconduit.update_pairwise_result(jabmod, transform_ballots=transform_ballots)
                 pairwise_dict = pairwise_count_dict(jabmod)
                 wltdict = winlosstie_dict_from_pairdict(
                     jabmod['candidates'], pairwise_dict)
@@ -1477,8 +1482,20 @@ def awt_post():
             resconduit = resconduit.update_STAR_result(ratedjabmod, consistent_colordict)
             STAR_html = jinja_scorestar_snippet(ratedjabmod)
             scorestardict = resconduit.resblob['scorestardict']
-
-        if request.form.get('include_approval'):
+        # Merge Approval into transform_ballots behavior:
+        # - For choose_many inputs, always show Approval
+        # - For ranked/rated inputs, show Approval only if transform_ballots is checked
+        try:
+            from abiflib.util import find_ballot_type
+            bt = find_ballot_type(abifmodel)
+        except Exception:
+            bt = None
+        show_approval = False
+        if bt == 'choose_many':
+            show_approval = True
+        else:
+            show_approval = bool(request.form.get('transform_ballots'))
+        if show_approval:
             rtypelist.append('approval')
             resconduit = resconduit.update_approval_result(abifmodel)
 
