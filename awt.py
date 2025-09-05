@@ -1083,8 +1083,11 @@ def get_by_id(identifier, resulttype=None):
             if do_IRV:
                 t_irv = time.time()
                 include_irv_extra = bool(request.args.get('include_irv_extra', True))
+                # Default transform on GET when param is absent; respect explicit off
+                _tb_val = request.args.get('transform_ballots')
+                transform_ballots = True if _tb_val is None else (_tb_val.lower() in ('1', 'true', 'yes', 'on'))
                 resconduit = resconduit.update_IRV_result(
-                    jabmod, include_irv_extra=include_irv_extra)
+                    jabmod, include_irv_extra=include_irv_extra, transform_ballots=transform_ballots)
                 irv_time = time.time() - t_irv
                 print(
                     f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
@@ -1424,8 +1427,10 @@ def awt_post():
         if request.form.get('include_IRV'):
             rtypelist.append('IRV')
             include_irv_extra = bool(request.form.get('include_irv_extra'))
+            # For POST checkboxes: present when checked, absent when unchecked
+            transform_ballots = bool(request.form.get('transform_ballots'))
             resconduit = resconduit.update_IRV_result(
-                abifmodel, include_irv_extra=include_irv_extra)
+                abifmodel, include_irv_extra=include_irv_extra, transform_ballots=transform_ballots)
             IRV_dict = resconduit.resblob['IRV_dict']
             IRV_text = resconduit.resblob['IRV_text']
             # Add candidate full names for template use

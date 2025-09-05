@@ -14,7 +14,7 @@ from abiflib import (
     STAR_result_from_abifmodel,
     scaled_scores
 )
-from abiflib.irv_tally import IRV_result_from_abifmodel
+from abiflib.irv_tally import IRV_result_from_abifmodel, IRV_dict_from_jabmod
 from abiflib.pairwise_tally import pairwise_result_from_abifmodel
 from abiflib.approval_tally import (
     approval_result_from_abifmodel,
@@ -87,7 +87,9 @@ class ResultConduit:
     def _add_irv_tie_notices(self, irv_dict: dict) -> dict:
         """Add notices for IRV tiebreaker situations"""
         result = irv_dict.copy()
-        result['notices'] = []
+        # Preserve any notices provided by abiflib and append tie notices
+        existing = irv_dict.get('notices', []) or []
+        result['notices'] = list(existing)
 
         # Check if election had ties
         if not irv_dict.get('has_tie', False):
@@ -216,22 +218,22 @@ class ResultConduit:
         # self.resblob['FPTP_text'] = get_FPTP_report(jabmod)
         return self
 
-    def update_IRV_result(self, jabmod, include_irv_extra=False) -> "ResultConduit":
-        """Add IRV result to resblob"""
+    def update_IRV_result(self, jabmod, include_irv_extra=False, transform_ballots=True) -> "ResultConduit":
+        """Add IRV result to resblob, delegating transforms/notices to abiflib."""
 
         # Backwards compatibility with abiflib v0.32.0
         try:
             # TODO: rename to "IRV_result"
-            self.resblob['IRV_dict'] = IRV_dict_from_jabmod(
-                jabmod, include_irv_extra=include_irv_extra)
+            # Build IRV result (handles optional transform + notices)
+            irv_result = IRV_result_from_abifmodel(jabmod, transform_ballots=transform_ballots, include_irv_extra=include_irv_extra)
+            self.resblob['IRV_result'] = irv_result
+            self.resblob['IRV_dict'] = irv_result['irv_dict']
         except TypeError as e:
             import datetime
             print(f" ------------ [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] "
                   f"Upgrade abiflib to v0.32.1 or later for IRVextra support.")
             self.resblob['IRV_dict'] = IRV_dict_from_jabmod(jabmod)
-
-        # Create the IRV result with summary data
-        self.resblob['IRV_result'] = IRV_result_from_abifmodel(jabmod)
+            self.resblob['IRV_result'] = IRV_result_from_abifmodel(jabmod, transform_ballots=transform_ballots)
 
         # Convert sets to lists for JSON serialization in templates
         irv_dict = self.resblob['IRV_dict']
@@ -246,9 +248,9 @@ class ResultConduit:
 
         self.resblob['IRV_text'] = get_IRV_report(self.resblob['IRV_dict'])
 
-        # Generate IRV tiebreaker notices if needed
-        irv_result_with_notices = self._add_irv_tie_notices(self.resblob['IRV_dict'])
-        self._extract_notices('irv', irv_result_with_notices)
+        # Append tiebreaker notices if needed (preserving any from abiflib)
+        irv_with_tie_notices = self._add_irv_tie_notices(self.resblob['IRV_dict'])
+        self._extract_notices('irv', irv_with_tie_notices)
         return self
 
     def update_pairwise_result(self, jabmod) -> "ResultConduit":
