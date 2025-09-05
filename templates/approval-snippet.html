@@ -10,12 +10,11 @@
     {% set winnerintro = "Approval Winners (tie)" if winners | length > 1 else "Approval Winner" %}
     <li><b>{{winnerintro}}</b>:
       {% if FPTP_candnames %}
-        {%- set winner_tokens = winnerstr.split(',') -%}
-        {%- for tok in winner_tokens -%}
-          <span class="color-box" style="background-color: {{ colordict[tok.strip()] | default('#ccc') }};"></span>{{ FPTP_candnames[tok.strip()] if tok.strip() in FPTP_candnames else tok.strip() }}{% if not loop.last %}, {% endif %}
+        {%- for tok in winners -%}
+          <span class="color-box" style="background-color: {{ colordict[tok] | default('#ccc') }};"></span>{{ FPTP_candnames.get(tok, tok) }}{% if not loop.last %}, {% endif %}
         {%- endfor -%}
       {% else %}
-        {{ winnerstr }}
+        {{ winners | join(', ') }}
       {% endif %}
     </li>
     <li><b>Approval Results</b>:
