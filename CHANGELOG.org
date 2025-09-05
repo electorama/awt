@@ -1,4 +1,13 @@
 Changelog for ABIF web tool (awt):
+* [0.34.0] 2025-09-XX (FIXME-githash) link previews + lightbox; STL 2025; debug JSON
+  - Some 2025 St. Louis primary elections added
+  - Link preview images (SVG/PNG) and og:descriptions for sharing on social
+  - Image lightbox for viewing preview images included on /id/* pages
+  - Condorcet/Copeland: many fixes where cycles happened
+  - Hide ABIF submission area by default on `/id/*` pages
+  - Added several tags (e.g. "CenterSqueeze", "CondorcetCycle")
+  - Debugging: `?debug=json` output when awt started with --debug flag
+  - Many minor fixes, polish, and internal refactors in `conduits.py` and preview code.
 * [0.33.0] 2025-08-22 (c607afaf) tag navigation; approval voting; tabbed interface
   - Homepage redesign showing featured elections
     - Old /awt edit interface still available
