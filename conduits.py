@@ -84,6 +84,30 @@ class ResultConduit:
             self.resblob['notices'] = {}
         self.resblob['notices'][method_tag] = result_dict.get('notices', [])
 
+    def _record_transformed_abif(self, *, method_tag: str, transformed_jabmod: dict, target_type: str) -> None:
+        """Store transformed ABIF/meta for a method in a method-agnostic place.
+
+        Writes to resblob['transforms'][method_tag] = {
+            'abif': <text>, 'meta': <dict>, 'target_type': <str>
+        }
+        """
+        if not transformed_jabmod:
+            return
+        try:
+            from abiflib.core import convert_jabmod_to_abif
+        except Exception:
+            return
+        try:
+            abif_text = convert_jabmod_to_abif(transformed_jabmod)
+        except Exception:
+            abif_text = None
+        meta = transformed_jabmod.get('_conversion_meta') or {}
+        self.resblob.setdefault('transforms', {})[method_tag] = {
+            'abif': abif_text,
+            'meta': meta,
+            'target_type': target_type,
+        }
+
     def _add_irv_tie_notices(self, irv_dict: dict) -> dict:
         """Add notices for IRV tiebreaker situations"""
         result = irv_dict.copy()
@@ -251,6 +275,21 @@ class ResultConduit:
         # Append tiebreaker notices if needed (preserving any from abiflib)
         irv_with_tie_notices = self._add_irv_tie_notices(self.resblob['IRV_dict'])
         self._extract_notices('irv', irv_with_tie_notices)
+
+        # Expose transformed ABIF if a transformation applies for IRV
+        if transform_ballots:
+            try:
+                from abiflib.util import find_ballot_type
+                bt = find_ballot_type(jabmod)
+            except Exception:
+                bt = None
+            if bt and bt != 'ranked':
+                try:
+                    from abiflib.approval_tally import build_ranked_from_choose_many
+                    ranked_for_irv = build_ranked_from_choose_many(jabmod)
+                    self._record_transformed_abif(method_tag='IRV', transformed_jabmod=ranked_for_irv, target_type='ranked')
+                except Exception:
+                    pass
         return self
 
     def update_pairwise_result(self, jabmod, transform_ballots: bool = False) -> "ResultConduit":
@@ -319,6 +358,21 @@ class ResultConduit:
                     'no_pref_pct': no_pref_pct,
                 }
         self.resblob['paircells'] = paircells
+
+        # Expose transformed ABIF if a transformation applies for pairwise
+        if transform_ballots:
+            try:
+                from abiflib.util import find_ballot_type
+                bt = find_ballot_type(jabmod)
+            except Exception:
+                bt = None
+            if bt and bt != 'ranked':
+                try:
+                    from abiflib.approval_tally import build_ranked_from_choose_many
+                    ranked_for_pairwise = build_ranked_from_choose_many(jabmod)
+                    self._record_transformed_abif(method_tag='pairwise', transformed_jabmod=ranked_for_pairwise, target_type='ranked')
+                except Exception:
+                    pass
         return self
 
     def update_STAR_result(self, jabmod, colordict=None) -> "ResultConduit":

@@ -124,7 +124,7 @@ abiftool/docs/metadata.md for more information.
   already appears in subsection titles. Keep "pairwise" terminology
   in URLs, prose, and places where it's the most descriptive term.
 - Deprecate the "wlt" abbreviation
-- Come up with a slick accordian view for elections with stupidly wide
+- Come up with a slick accordion view for elections with stupidly wide
   tables (e.g. /id/sf2024-mayor )
 
 ### Step 7: URL hackability/stability/maintainability
@@ -162,5 +162,4 @@ abiftool/docs/metadata.md for more information.
 - Verify print formatting remains intact
 - Cross-browser compatibility testing
 - Mobile responsiveness validation
-
 

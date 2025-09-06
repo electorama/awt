@@ -23,7 +23,7 @@ This is a very incomplete list of incomplete tasks for this project
    - [ ] Replace string-based SVG insertion in linkpreview with xml.etree.ElementTree using <g id="awt-dynamic-content"/> slot
 * For 0.34.0
   - [ ] Finalize 0.34.0 changelog
-  - [ ] AWT: When transform_ballots is enabled for a method (IRV/Pairwise), add a "See transformed ballots" accordion link that reveals the transformed ABIF (returned by abiflib) inline on the results page.
+  - [ ] AWT: When transform_ballots is enabled for any voting method, add a "See transformed ballots" accordion link that reveals the transformed ABIF (returned by abiflib) inline on the results page.
   - [ ] Verify STL entries load: stl-2025-mayor (featured), stl-2025-comptroller, stl-2025-alderman-ward3, stl-2025-alderman-ward11
   - [ ] Confirm IRV disclaimer shows for non-ranked ballots (e.g., STL 2025) and does not regress ranked-election IRV output
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list on GitHub]]

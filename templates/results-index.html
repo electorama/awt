@@ -290,6 +290,15 @@ and can be edited in the field above.</p>
     {% set notices = resblob.notices.pairwise %}
     {% include 'notice-snippet.html' %}
     <!-- END pairwise notices -->
+    {# Transformed ballots accordion for Condorcet/Copeland when available (directly under notices) #}
+    {% set _tx = resblob.get('transforms', {}).get('pairwise') if resblob else None %}
+    {% if _tx and _tx.get('abif') %}
+      {% set transformed_abif = _tx.get('abif') %}
+      {% set conversion_meta = _tx.get('meta') or {} %}
+      {% set method_label = 'Condorcet/Copeland' %}
+      {% set target_type = _tx.get('target_type') %}
+      {% include 'transform-accordion-snippet.html' %}
+    {% endif %}
 
     <!-- Include detailed pairwise summary -->
     {% if pairwise_summary_html %}
@@ -308,6 +317,16 @@ and can be edited in the field above.</p>
       </div>
       {% endif %}
       {{ pairwise_html | safe }}
+    {% endif %}
+
+    {# Transformed ballots accordion for Condorcet/Copeland when available #}
+    {% set _tx = resblob.get('transforms', {}).get('pairwise') if resblob else None %}
+    {% if _tx and _tx.get('abif') %}
+      {% set transformed_abif = _tx.get('abif') %}
+      {% set conversion_meta = _tx.get('meta') or {} %}
+      {% set method_label = 'Condorcet/Copeland' %}
+      {% set target_type = _tx.get('target_type') %}
+      {% include 'transform-accordion-snippet.html' %}
     {% endif %}
 
     {% if 'dot' in result_types and dotsvg_html %}
@@ -376,12 +395,20 @@ and can be edited in the field above.</p>
     {% set notices = resblob.notices.irv %}
     {% include 'notice-snippet.html' %}
     <!-- END irv notices -->
+    {# Transformed ballots accordion for IRV when available (directly under notices) #}
+    {% set _tx = resblob.get('transforms', {}).get('IRV') if resblob else None %}
+    {% if _tx and _tx.get('abif') %}
+      {% set transformed_abif = _tx.get('abif') %}
+      {% set conversion_meta = _tx.get('meta') or {} %}
+      {% set method_label = 'IRV/RCV' %}
+      {% set target_type = _tx.get('target_type') %}
+      {% include 'transform-accordion-snippet.html' %}
+    {% endif %}
     <!-- BEGIN results-container -->
     <div id="results-container" data-candidate-colors='{{ colordict | tojson | safe }}'>
         <p>{% include 'irv-snippet.html' %}</p>
     </div>
     <!-- END results-container -->
-
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% endif %}
     <!-- END IRV section -->
