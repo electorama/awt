@@ -6,19 +6,79 @@
     <legend>ABIF submission area
 (<a href="#" id="abifshowhide" onclick="javascript:toggleShowHide({target:'abifbox', targactive: {{"true" if formActive else "false"}}});">{{showHideText}}</a>)
     </legend>
-    <div id="abifbox" class="{{classList}}">
-    <textarea id="abifinput" name="abifinput"
-              rows="{{ webenv.inputRows }}" cols="{{ webenv.inputCols }}"
-              placeholder="{{ msgs.placeholder }}"
-              >{{ abifinput }}</textarea><br>
-    <input type="checkbox" name="include_dotsvg" value="yes" checked>pairwise tournament diagram?&nbsp;
-    <input type="checkbox" name="include_pairtable" value="yes" checked>pairwise (Condorcet) table?&nbsp;
-    <input type="checkbox" name="include_FPTP" value="yes" checked>FPTP results?&nbsp;
-    <input type="checkbox" name="include_IRV" value="yes" checked>IRV results?&nbsp;
-    <input type="checkbox" name="include_irv_extra" value="yes" checked>IRV extra analysis?&nbsp;
-    <input type="checkbox" name="transform_ballots" value="yes" checked>Transform ballots (use ballot-type metadata)?&nbsp;
-    <input type="checkbox" name="include_STAR" value="yes" checked>STAR results?&nbsp;
-    <input type="submit" value="Submit" id="submitButton">
+    <div id="abifbox" class="{{classList}}" style="display: flex; gap: 16px; align-items: flex-start;">
+      <!-- Left: ABIF input -->
+      <div style="flex: 1 1 auto; min-width: 0;">
+        <textarea id="abifinput" name="abifinput"
+                  rows="{{ webenv.inputRows }}" cols="{{ webenv.inputCols }}"
+                  placeholder="{{ msgs.placeholder }}"
+                  style="width: 100%;"
+                  >{{ abifinput }}</textarea>
+      </div>
+
+      <!-- Right: Method options -->
+      <div style="flex: 0 0 clamp(10vw, 18vw, 20vw); max-width: 20vw;">
+        <fieldset>
+          <legend>Method options</legend>
+          <div>
+            <label>
+              <input type="checkbox" name="include_FPTP" value="yes" checked>
+              FPTP results?
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="include_IRV" value="yes" checked>
+              IRV/RCV results?
+            </label>
+          </div>
+          <div style="margin-left: 1.5em;">
+            <label>
+              <input type="checkbox" name="include_irv_extra" value="yes" checked>
+              IRV extra analysis?
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="include_approval" value="yes" checked>
+              Approval results?
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="include_STAR" value="yes" checked>
+              STAR results?
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="include_pairtable" value="yes" checked>
+              pairwise (Condorcet/Copeland) results?
+            </label>
+          </div>
+          <div style="margin-left: 1.5em;">
+            <label>
+              <input type="checkbox" name="include_dotsvg" value="yes" checked>
+              pairwise tournament diagram?
+            </label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    <!-- Bottom row: ballot options (left) and submit button (right) -->
+    <div style="display: flex; gap: 16px; align-items: flex-end; margin-top: 10px;">
+      <div style="flex: 1 1 auto; min-width: 0;">
+        <fieldset>
+          <legend>Ballot options</legend>
+          <label>
+            <input type="checkbox" name="transform_ballots" value="yes" checked>
+            Transform ballots (using ballot-type metadata)?
+          </label>
+        </fieldset>
+      </div>
+      <div style="flex: 0 0 clamp(10vw, 18vw, 20vw); max-width: 20vw; text-align: right;">
+        <input type="submit" value="Submit" id="submitButton">
+      </div>
     </div>
   </fieldset>
 </form>

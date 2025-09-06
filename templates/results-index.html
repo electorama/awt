@@ -470,6 +470,15 @@ and can be edited in the field above.</p>
     {% set notices = resblob.notices.approval %}
     {% include 'notice-snippet.html' %}
     <!-- END approval notices -->
+    {# Transformed ballots accordion for Approval when available (directly under notices) #}
+    {% set _tx = resblob.get('transforms', {}).get('approval') if resblob else None %}
+    {% if _tx and _tx.get('abif') %}
+      {% set transformed_abif = _tx.get('abif') %}
+      {% set conversion_meta = _tx.get('meta') or {} %}
+      {% set method_label = 'Approval' %}
+      {% set target_type = _tx.get('target_type') %}
+      {% include 'transform-accordion-snippet.html' %}
+    {% endif %}
 
     {% include 'approval-snippet.html' %}
     {% endif %}

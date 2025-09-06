@@ -1474,20 +1474,7 @@ def awt_post():
             resconduit = resconduit.update_STAR_result(ratedjabmod, consistent_colordict)
             STAR_html = jinja_scorestar_snippet(ratedjabmod)
             scorestardict = resconduit.resblob['scorestardict']
-        # Merge Approval into transform_ballots behavior:
-        # - For choose_many inputs, always show Approval
-        # - For ranked/rated inputs, show Approval only if transform_ballots is checked
-        try:
-            from abiflib.util import find_ballot_type
-            bt = find_ballot_type(abifmodel)
-        except Exception:
-            bt = None
-        show_approval = False
-        if bt == 'choose_many':
-            show_approval = True
-        else:
-            show_approval = bool(request.form.get('transform_ballots'))
-        if show_approval:
+        if request.form.get('include_approval'):
             rtypelist.append('approval')
             resconduit = resconduit.update_approval_result(abifmodel)
 

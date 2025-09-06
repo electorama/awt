@@ -410,6 +410,19 @@ class ResultConduit:
         self._extract_notices('approval', approval_result)
         # Keep backward compatibility
         self.resblob['approval_notices'] = approval_result.get('notices', [])
+        # Record transformed ABIF for Approval when source isn't choose_many
+        try:
+            from abiflib.util import find_ballot_type
+            bt = find_ballot_type(jabmod)
+        except Exception:
+            bt = None
+        if bt and bt != 'choose_many':
+            try:
+                from abiflib.approval_tally import convert_to_approval_favorite_viable_half
+                transformed = convert_to_approval_favorite_viable_half(jabmod)
+                self._record_transformed_abif(method_tag='approval', transformed_jabmod=transformed, target_type='choose_many')
+            except Exception:
+                pass
         return self
 
     def update_all(self, jabmod):
