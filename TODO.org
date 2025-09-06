@@ -22,10 +22,6 @@ This is a very incomplete list of incomplete tasks for this project
    - [ ] Consolidate route processing: Make GET requests use conduits.py pipeline to eliminate duplicate business logic (fixes notice system route duplication problem)
    - [ ] Replace string-based SVG insertion in linkpreview with xml.etree.ElementTree using <g id="awt-dynamic-content"/> slot
 * For 0.34.0
-  - [X] Sanitize candidate tokens before using them in CSS class names
-  - [X] Change where it links to /id/Burl2009/pairwise#condorcet to instead link to /id/Burl2009/pairwise#pairwise
-  - [X] Fix colorboxes in the Copeland/Condorcet section on /id/2022-08-16_Alaska-U.S._Representative_(Special_General)
-  - [X] Create /browse route for better election discovery
   - [ ] Finalize 0.34.0 changelog
   - [ ] AWT: When transform_ballots is enabled for a method (IRV/Pairwise), add a "See transformed ballots" accordion link that reveals the transformed ABIF (returned by abiflib) inline on the results page.
   - [ ] Verify STL entries load: stl-2025-mayor (featured), stl-2025-comptroller, stl-2025-alderman-ward3, stl-2025-alderman-ward11
@@ -33,7 +29,6 @@ This is a very incomplete list of incomplete tasks for this project
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list on GitHub]]
   - [ ] See [[./CHANGELOG.org]]
 * Post 0.34.0
-  - [ ] Pairwise/Condorcet: add "no preference" count per matchup and include it in displayed percentages (denominator = total ballots). Show three numbers per cell: wins, losses, and no-preference; update text/HTML accordingly.
   - [ ] Fix link previews for method-specific pages (/id/<election-id>/<method>)
   - [ ] Implement /edit route functionality (route exists but not implemented - see routes.md)
   - [ ] Create bifhub and figure out awt interface to it [[./docs/bifhub.md]]

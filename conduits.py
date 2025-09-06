@@ -283,6 +283,42 @@ class ResultConduit:
             self.resblob['colordict'] = generate_candidate_colors(canonical_order)
         else:
             self.resblob['colordict'] = {}
+
+        # --- Precompute no-preference counts and percentages (minimal AWT-side plan)
+        try:
+            total_ballots = int(jabmod.get('metadata', {}).get('ballotcount', 0) or 0)
+        except Exception:
+            total_ballots = 0
+        self.resblob['total_ballots'] = total_ballots
+
+        # Build paircells: per matchup counts and percentages (denominator = total_ballots)
+        candtoks = list(pairwise_matrix.keys())
+        paircells = {}
+        for rk in candtoks:
+            paircells[rk] = {}
+            for ck in candtoks:
+                if rk == ck:
+                    paircells[rk][ck] = None
+                    continue
+                ck_score = int((pairwise_matrix.get(ck, {}) or {}).get(rk, 0) or 0)
+                rk_score = int((pairwise_matrix.get(rk, {}) or {}).get(ck, 0) or 0)
+                if total_ballots > 0:
+                    no_pref = max(total_ballots - (ck_score + rk_score), 0)
+                    ck_pct = (ck_score / total_ballots) * 100.0
+                    rk_pct = (rk_score / total_ballots) * 100.0
+                    no_pref_pct = (no_pref / total_ballots) * 100.0
+                else:
+                    no_pref = 0
+                    ck_pct = rk_pct = no_pref_pct = 0.0
+                paircells[rk][ck] = {
+                    'ck_score': ck_score,
+                    'rk_score': rk_score,
+                    'no_pref': no_pref,
+                    'ck_pct': ck_pct,
+                    'rk_pct': rk_pct,
+                    'no_pref_pct': no_pref_pct,
+                }
+        self.resblob['paircells'] = paircells
         return self
 
     def update_STAR_result(self, jabmod, colordict=None) -> "ResultConduit":

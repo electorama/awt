@@ -101,7 +101,7 @@ def _template_loader():
     return FileSystemLoader(exists or [os.path.join(here, 'templates')])
 
 
-def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_desc=True, svg_text=None, is_copeland_tie=False):
+def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_desc=True, svg_text=None, is_copeland_tie=False, paircells=None):
     def wltstr(cand):
         retval = f"{wltdict[cand]['wins']}" + "-"
         retval += f"{wltdict[cand]['losses']}" + "-"
@@ -158,6 +158,7 @@ def jinja_pairwise_snippet(abifmodel, pairdict, wltdict, colordict=None, add_des
         svg_text=svg_text,
         colordict=colordict,
         summary_data=summary_data,
+        paircells=paircells,
         is_copeland_tie=is_copeland_tie
     )
     return html
@@ -1107,7 +1108,8 @@ def get_by_id(identifier, resulttype=None):
                 transform_ballots = True if _tb_val_pair is None else (_tb_val_pair.lower() in ('1', 'true', 'yes', 'on'))
                 # Update conduit to capture notices and core results (matrix + notices)
                 resconduit = resconduit.update_pairwise_result(jabmod, transform_ballots=transform_ballots)
-                pairwise_dict = pairwise_count_dict(jabmod)
+                # Harmonize: use the same pairwise matrix computed by conduits
+                pairwise_dict = resconduit.resblob.get('pairwise_dict', {})
                 wltdict = winlosstie_dict_from_pairdict(
                     jabmod['candidates'], pairwise_dict)
                 resblob = resconduit.resblob
@@ -1134,7 +1136,8 @@ def get_by_id(identifier, resulttype=None):
                     colordict=consistent_colordict,
                     add_desc=True,
                     svg_text=None,
-                    is_copeland_tie=resblob.get('is_copeland_tie', False)
+                    is_copeland_tie=resblob.get('is_copeland_tie', False),
+                    paircells=resblob.get('paircells')
                 )
                 resblob['pairwise_summary_html'] = jinja_pairwise_summary_only(
                     jabmod,
@@ -1394,7 +1397,8 @@ def awt_post():
                 colordict=resconduit.resblob.get('colordict', {}),
                 add_desc=True,
                 svg_text=None,
-                is_copeland_tie=resconduit.resblob.get('is_copeland_tie', False)
+                is_copeland_tie=resconduit.resblob.get('is_copeland_tie', False),
+                paircells=resconduit.resblob.get('paircells')
             )
             # Generate separate summary for proper positioning
             pairwise_summary_html = jinja_pairwise_summary_only(

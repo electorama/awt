@@ -26,19 +26,35 @@
                         {% if candtoks.index(rk) > candtoks.index(ck) %}
                             <td>
                                 <div class="matchup-cell-inner">
+                                    {% set cell = paircells[rk][ck] if paircells else None %}
+                                    {% if cell %}
                                     <div class="matchup-row">
                                         <span class="cand-name"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}:</span>
-                                        {% set total_votes = pairdict[ck][rk] + pairdict[rk][ck] %}
-                                        {% set ck_score = pairdict[ck][rk] %}
-                                        {% set ck_percentage = (ck_score / total_votes * 100) if total_votes > 0 else 0 %}
-                                        <span class="cand-score">{{ "{:,}".format(ck_score) }}<span class="score-percentage">({{ "%.1f"|format(ck_percentage) }}%)</span></span>
+                                        <span class="cand-score">{{ "{:,}".format(cell.ck_score) }}<span class="score-percentage">({{ "%.1f"|format(cell.ck_pct) }}%)</span></span>
                                     </div>
                                     <div class="matchup-row">
                                         <span class="cand-name"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}:</span>
-                                        {% set rk_score = pairdict[rk][ck] %}
-                                        {% set rk_percentage = (rk_score / total_votes * 100) if total_votes > 0 else 0 %}
+                                        <span class="cand-score">{{ "{:,}".format(cell.rk_score) }}<span class="score-percentage">({{ "%.1f"|format(cell.rk_pct) }}%)</span>{% if not (pairdict[ck][rk] > pairdict[rk][ck]) %}<sup>†</sup>{% endif %}</span>
+                                    </div>
+                                    <div class="no-pref-line" style="font-size:0.85em; color:#666; font-style:italic; text-align:center; margin-top:4px;">
+                                        (No preference: {{ "{:,}".format(cell.no_pref) }}; {{ "%.1f"|format(cell.no_pref_pct) }}%)
+                                    </div>
+                                    {% else %}
+                                    {# Fallback to original two-row layout if paircells missing #}
+                                    {% set total_votes = pairdict[ck][rk] + pairdict[rk][ck] %}
+                                    {% set ck_score = pairdict[ck][rk] %}
+                                    {% set ck_percentage = (ck_score / total_votes * 100) if total_votes > 0 else 0 %}
+                                    <div class="matchup-row">
+                                        <span class="cand-name"><span class="colorblock color-{{ ck | escape_css }}"></span> {{ candnames[ck] }}:</span>
+                                        <span class="cand-score">{{ "{:,}".format(ck_score) }}<span class="score-percentage">({{ "%.1f"|format(ck_percentage) }}%)</span></span>
+                                    </div>
+                                    {% set rk_score = pairdict[rk][ck] %}
+                                    {% set rk_percentage = (rk_score / total_votes * 100) if total_votes > 0 else 0 %}
+                                    <div class="matchup-row">
+                                        <span class="cand-name"><span class="colorblock color-{{ rk | escape_css }}"></span> {{ candnames[rk] }}:</span>
                                         <span class="cand-score">{{ "{:,}".format(rk_score) }}<span class="score-percentage">({{ "%.1f"|format(rk_percentage) }}%)</span>{% if not (pairdict[ck][rk] > pairdict[rk][ck]) %}<sup>†</sup>{% endif %}</span>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </td>
                         {% elif rk == ck %}
