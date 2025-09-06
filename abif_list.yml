@@ -15,7 +15,7 @@
 - filename: burl2009/burl2009.abif
   id: Burl2009
   title: Burlington mayoral 2009
-  tags: actual, VT, USA, government, CondorcetVsIRV, CenterSqueeze, featured
+  tags: 2009, actual, VT, USA, government, CondorcetVsIRV, CenterSqueeze, featured
   desc: >
     This example is based on the electoral results from the Burlington
     mayoral race in 2009.
@@ -43,91 +43,67 @@
   id: DPL2024
   title: 2024 Debian Project Leader
   desc: 2024 Debian Project Leader election, won by Andreas Tille.
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2024
 - filename: localabif/debian-elections/2023_debian_pl.abif
   id: DPL2023
   title: 2023 Debian Project Leader
   desc: 2023 Debian Project Leader election, won by Jonathan Carter.
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2023
 - filename: localabif/debian-elections/2022_debian_pl.abif
   id: DPL2022
   title: 2022 Debian Project Leader
   desc: 2022 Debian Project Leader election, won by Jonathan Carter.
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2022
 - filename: localabif/debian-elections/2021_debian_general_resolution.abif
   id: GenResRMS2021
   title: Debian 2021 General Resolution 001
   desc: Debian 2021 General Resolution about Richard Stallman
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2021
 - filename: localabif/debian-elections/2021_debian_pl.abif
   id: DPL2021
   title: Debian 2021 Project Leader
   desc: 2021 Debian Project Leader election, won by Jonathan Carter.
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2021
 - filename: localabif/debian-elections/dpl2020.abif
   id: DPL2020
   title: Debian 2020 Project Leader
   desc: 2020 Debian Project Leader election, won by Jonathan Carter.
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2020
 - filename: localabif/debian-elections/dpl2019.abif
   id: DPL2019
   title: Debian 2019 Project Leader
   desc: 2019 Debian Project Leader election, won by Sam Hartman
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2019
 - filename: localabif/debian-elections/dpl2018.abif
   id: DPL2018
   title: Debian 2018 Project Leader
   desc: 2018 Debian Project Leader election, won by Chris Lamb
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2018
 - filename: localabif/debian-elections/dpl2017.abif
   id: DPL2017
   title: Debian 2017 Project Leader
   desc: 2017 Debian Project Leader election, won by Chris Lamb
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2017
 - filename: localabif/debian-elections/dpl2016.abif
   id: DPL2016
   title: Debian 2016 Project Leader
   desc: 2016 Debian Project Leader election, won by Mehdi Dogguy
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2016
 - filename: localabif/debian-elections/dpl2015.abif
   id: DPL2015
   title: Debian 2015 Project Leader
   desc: 2015 Debian Project Leader election, won by Neil McGovern
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2015
 - filename: localabif/debian-elections/dpl2014.abif
   id: DPL2014
   title: Debian 2014 Project Leader
   desc: 2014 Debian Project Leader election, won by Lucas Nussbaum
-  tags: debian, actual, orgpriv
-- filename: localabif/stlouis/stl-2025-mayor.abif
-  id: stl-2025-mayor
-  title: St. Louis 2025 Mayoral Election
-  tags: actual, MO, USA, government, approval, featured
-  desc: >
-    2025 St. Louis mayoral election using approval voting.
-- filename: localabif/stlouis/stl-2025-comptroller.abif
-  id: stl-2025-comptroller
-  title: St. Louis 2025 Comptroller Election
-  tags: actual, MO, USA, government, approval
-  desc: >
-    2025 St. Louis comptroller election using approval voting.
-- filename: localabif/stlouis/stl-2025-alderman-ward3.abif
-  id: stl-2025-alderman-ward3
-  title: St. Louis 2025 Alderman, Ward 3
-  tags: actual, MO, USA, government, approval
-  desc: >
-    2025 St. Louis aldermanic election for Ward 3 using approval voting.
-- filename: localabif/stlouis/stl-2025-alderman-ward11.abif
-  id: stl-2025-alderman-ward11
-  title: St. Louis 2025 Alderman, Ward 11
-  tags: actual, MO, USA, government, approval
-  desc: >
-    2025 St. Louis aldermanic election for Ward 11 using approval voting.
+  tags: debian, actual, orgpriv, 2014
 - filename: localabif/debian-elections/dpl2013.abif
   id: DPL2013
   title: Debian 2013 Project Leader
   desc: 2013 Debian Project Leader election, won by Lucas Nussbaum
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2013
 - filename: localabif/debian-elections/dpl2012.abif
   id: DPL2012
   title: Debian 2012 Project Leader
@@ -137,22 +113,22 @@
   id: DPL2011
   title: Debian 2011 Project Leader
   desc: 2011 Debian Project Leader election, won by Stefano Zacchiroli
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2011
 - filename: localabif/debian-elections/dpl2010.abif
   id: DPL2010
   title: Debian 2010 Project Leader
   desc: 2010 Debian Project Leader election, won by Stefano Zacchiroli
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2010
 - filename: localabif/debian-elections/dpl2009.abif
   id: DPL2009
   title: Debian 2009 Project Leader
   desc: 2009 Debian Project Leader election, won by Steve McIntyre
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2009
 - filename: localabif/debian-elections/dpl2008.abif
   id: DPL2008
   title: Debian 2008 Project Leader
   desc: 2008 Debian Project Leader election, won by Steve McIntyre
-  tags: debian, actual, orgpriv
+  tags: debian, actual, orgpriv, 2008
 - filename: localabif/debian-elections/dpl2007.abif
   id: DPL2007
   title: Debian 2007 Project Leader
@@ -2335,7 +2311,7 @@
 - filename: localabif/bolson-nameq/votedata-2024-01-27/2018-06-05_SF_Mayor-Mayor.abif
   id: 2018-06-05_SF_Mayor-Mayor
   title: Mayor (SF_Mayor; 2018-06-05)
-  tags: 2018-06, from-bolson, actual, 2018, SF_Mayor, mayor, SF_Mayor-2018, CA
+  tags: 2018, 2018-06, from-bolson, actual, 2018, SF_Mayor, mayor, SF_Mayor-2018, CA
   desc: Mayor (SF_Mayor; 2018-06-05). Derived from results obtained at bolson.org.
 - filename: localabif/california/sf2024-mayor.abif
   id: sf2024-mayor
@@ -2345,58 +2321,58 @@
 - filename: localabif/california/sf2024-member-board-of-supervisors-district-1.abif
   id: sf2024-member-board-of-supervisors-district-1
   title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 1
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 1. Derived from SF Elections 2024 CVR
     data.
 - filename: localabif/california/sf2024-member-board-of-supervisors-district-3.abif
   id: sf2024-member-board-of-supervisors-district-3
   title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 3
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 3. Derived from SF Elections 2024 CVR
     data.
 - filename: localabif/california/sf2024-member-board-of-supervisors-district-5.abif
   id: sf2024-member-board-of-supervisors-district-5
   title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 5
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 5. Derived from SF Elections 2024 CVR
     data.
 - filename: localabif/california/sf2024-member-board-of-supervisors-district-7.abif
   id: sf2024-member-board-of-supervisors-district-7
   title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 7
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 7. Derived from SF Elections 2024 CVR
     data.
 - filename: localabif/california/sf2024-member-board-of-supervisors-district-9.abif
   id: sf2024-member-board-of-supervisors-district-9
   title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 9
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 9. Derived from SF Elections 2024 CVR
     data.
 - filename: localabif/california/sf2024-member-board-of-supervisors-district-11.abif
   id: sf2024-member-board-of-supervisors-district-11
   title: MEMBER, BOARD OF SUPERVISORS, DISTRICT 11
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: MEMBER, BOARD OF SUPERVISORS, DISTRICT 11. Derived from SF Elections 2024
     CVR data.
 - filename: localabif/california/sf2024-city-attorney.abif
   id: sf2024-city-attorney
   title: CITY ATTORNEY
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: CITY ATTORNEY. Derived from SF Elections 2024 CVR data.
 - filename: localabif/california/sf2024-district-attorney.abif
   id: sf2024-district-attorney
   title: DISTRICT ATTORNEY
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: DISTRICT ATTORNEY. Derived from SF Elections 2024 CVR data.
 - filename: localabif/california/sf2024-sheriff.abif
   id: sf2024-sheriff
   title: SHERIFF
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: SHERIFF. Derived from SF Elections 2024 CVR data.
 - filename: localabif/california/sf2024-treasurer.abif
   id: sf2024-treasurer
   title: TREASURER
-  tags: sf2024, actual, CA, USA, government
+  tags: 2024, sf2024, actual, CA, USA, government
   desc: TREASURER. Derived from SF Elections 2024 CVR data.
 - filename: localabif/newyork/nyc2025-primary-rcv.abif
   id: NYC2025-Mayor-Primary-Dem
@@ -2405,3 +2381,27 @@
   desc: >
     2025 New York City Democratic Party mayoral primary using RCV,
     with Zohran Mamdani winning in all methods.
+- filename: localabif/stlouis/stl-2025-mayor.abif
+  id: stl-2025-mayor
+  title: St. Louis 2025 Mayoral Election
+  tags: actual, MO, USA, government, approval, featured, 2025
+  desc: >
+    2025 St. Louis mayoral election using approval voting.
+- filename: localabif/stlouis/stl-2025-comptroller.abif
+  id: stl-2025-comptroller
+  title: St. Louis 2025 Comptroller Election
+  tags: actual, MO, USA, government, approval, 2025
+  desc: >
+    2025 St. Louis comptroller election using approval voting.
+- filename: localabif/stlouis/stl-2025-alderman-ward3.abif
+  id: stl-2025-alderman-ward3
+  title: St. Louis 2025 Alderman, Ward 3
+  tags: actual, MO, USA, government, approval, 2025
+  desc: >
+    2025 St. Louis aldermanic election for Ward 3 using approval voting.
+- filename: localabif/stlouis/stl-2025-alderman-ward11.abif
+  id: stl-2025-alderman-ward11
+  title: St. Louis 2025 Alderman, Ward 11
+  tags: actual, MO, USA, government, approval, 2025
+  desc: >
+    2025 St. Louis aldermanic election for Ward 11 using approval voting.
