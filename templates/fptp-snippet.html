@@ -18,7 +18,10 @@
     </li>
     {% if winners and resblob.FPTP_result.toppicks %}
       {% set winner_votes = resblob.FPTP_result.toppicks[winners[0]] %}
-      {% set sorted_candidates = resblob.FPTP_result.toppicks|dictsort(reverse=true, by='value') %}
+      {# Build candidate list excluding None for runner-up computation #}
+      {% set sorted_candidates = resblob.FPTP_result.toppicks.items() | list %}
+      {% set sorted_candidates = sorted_candidates | selectattr('0', 'ne', None) | list %}
+      {% set sorted_candidates = sorted_candidates | sort(attribute='1', reverse=true) %}
       {% if sorted_candidates|length > 1 %}
         {% set runner_up = sorted_candidates[1] %}
         <li>Runner-up: <span class="color-box" style="background-color: {{ colordict[runner_up[0]] | default('#ccc') }};"></span>{{ FPTP_candnames[runner_up[0]] if FPTP_candnames and runner_up[0] in FPTP_candnames else runner_up[0] }} with {{ "{:,}".format(runner_up[1]) }} first-place votes ({{ "%0.1f"|format((runner_up[1] / resblob.FPTP_result.total_votes) * 100) if resblob.FPTP_result.total_votes > 0 else 0 }}%)</li>
@@ -28,15 +31,26 @@
     <li>First-place votes
     <ul>
     {% for candidate, votes in resblob.FPTP_result.toppicks|dictsort(reverse=true, by='value') %}
-    <li>
-      <span class="color-box" style="background-color: {{ colordict[candidate] | default('#ccc') }};"></span>
-      {{ FPTP_candnames[candidate] if FPTP_candnames and candidate in FPTP_candnames else candidate }}: {{ "{:,}".format(votes) }} votes
-      {% if resblob.FPTP_result.total_votes > 0 %}
-      ({{ "%0.1f"|format((votes / resblob.FPTP_result.total_votes) * 100) }} %)
-      {% endif %}
-    </li>
+    {% if candidate is not none %}
+      <li>
+        <span class="color-box" style="background-color: {{ colordict[candidate] | default('#ccc') }};"></span>
+        {{ FPTP_candnames[candidate] if FPTP_candnames and candidate in FPTP_candnames else candidate }}: {{ "{:,}".format(votes) }} votes
+        {% if resblob.FPTP_result.total_votes > 0 %}
+        ({{ "%0.1f"|format((votes / resblob.FPTP_result.total_votes) * 100) }} %)
+        {% endif %}
+      </li>
+    {% endif %}
     {% endfor %}
     </ul></li>
+    {% set overvotes = resblob.FPTP_result.get('overvote_ballots', resblob.FPTP_result.get('invalid_ballots', 0)) %}
+    {% set none_total = resblob.FPTP_result.toppicks.get(None, 0) %}
+    {% set blanks = (none_total - overvotes) if (none_total is not none) else 0 %}
+    {% if overvotes > 0 %}
+      <li><b>Overvotes</b>: {{ "{:,}".format(overvotes) }}{% if resblob.FPTP_result.total_votes > 0 %} ({{ "%0.1f"|format((overvotes / resblob.FPTP_result.total_votes) * 100) }} %){% endif %}</li>
+    {% endif %}
+    {% if blanks > 0 %}
+      <li><b>Blanks</b>: {{ "{:,}".format(blanks) }}{% if resblob.FPTP_result.total_votes > 0 %} ({{ "%0.1f"|format((blanks / resblob.FPTP_result.total_votes) * 100) }} %){% endif %}</li>
+    {% endif %}
     <li><b>Total ballots:</b> {{ "{:,}".format(resblob.FPTP_result.total_votes) }}</li>
   </ul>
 </div>

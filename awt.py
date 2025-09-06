@@ -1032,6 +1032,11 @@ def get_by_id(identifier, resulttype=None):
                 f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
             debug_output += f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
             resconduit = conduits.ResultConduit(jabmod=jabmod)
+            # Record detected ballot type for display
+            try:
+                msgs['ballot_type'] = find_ballot_type(jabmod) if jabmod else None
+            except Exception:
+                msgs['ballot_type'] = None
 
             # Determine which computations to run based on route
             compute_all = (not resulttype) or (resulttype == 'all')
@@ -1517,6 +1522,11 @@ def awt_post():
     msgs['placeholder'] = \
         "Try other ABIF, or try tweaking your input (see below)...."
     webenv = WebEnv.wenvDict()
+    # Record detected ballot type for display on POST route
+    try:
+        msgs['ballot_type'] = bt if 'bt' in locals() else find_ballot_type(abifmodel) if abifmodel else None
+    except Exception:
+        msgs['ballot_type'] = None
 
     return render_template('results-index.html',
                            abifinput=abifinput,
