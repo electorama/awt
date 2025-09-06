@@ -1123,24 +1123,7 @@ def get_by_id(identifier, resulttype=None):
                 resblob['copewinnerstring'] = ", ".join(copewinners)
                 resblob['is_copeland_tie'] = len(copewinners) > 1
 
-                # Add Copeland tie notice if needed (for GET route)
-                if resblob['is_copeland_tie'] and len(copewinners) >= 2:
-                    # Get candidate display names
-                    candnames = jabmod.get('candidates', {}) if jabmod else {}
-                    tied_names = []
-                    for token in copewinners:
-                        display_name = candnames.get(token, token)
-                        tied_names.append(display_name)
-
-                    tied_list = " and ".join(tied_names)
-
-                    # Add Copeland tie notice to notices
-                    copeland_notice = {
-                        "notice_type": "warning",
-                        "short": "No Condorcet winner found",
-                        "long": f"This election has no Condorcet winner. {tied_list} are tied for the most pairwise victories (Copeland tie). Each of these candidates beats the same number of opponents in head-to-head comparisons, creating a cycle in the tournament. The Copeland/pairwise table below shows the detailed win-loss-tie records that result in this tie."
-                    }
-                    resblob['notices']['pairwise'].append(copeland_notice)
+                # Pairwise/Copeland tie notices are generated in abiflib.pairwise_tally
 
                 resblob['dotsvg_html'] = copecount_diagram(copecount, outformat='svg')
                 resblob['pairwise_dict'] = pairwise_dict
