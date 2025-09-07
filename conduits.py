@@ -283,7 +283,7 @@ class ResultConduit:
                 bt = find_ballot_type(jabmod)
             except Exception:
                 bt = None
-            if bt and bt != 'ranked':
+            if bt in ('approval', 'choose_many'):
                 try:
                     from abiflib.approval_tally import build_ranked_from_choose_many
                     ranked_for_irv = build_ranked_from_choose_many(jabmod)
@@ -366,7 +366,7 @@ class ResultConduit:
                 bt = find_ballot_type(jabmod)
             except Exception:
                 bt = None
-            if bt and bt != 'ranked':
+            if bt in ('approval', 'choose_many'):
                 try:
                     from abiflib.approval_tally import build_ranked_from_choose_many
                     ranked_for_pairwise = build_ranked_from_choose_many(jabmod)
@@ -415,13 +415,14 @@ class ResultConduit:
         # Keep backward compatibility
         self.resblob['approval_notices'] = approval_result.get('notices', [])
         # Record transformed ABIF for Approval only when transform_ballots is True
+        # and only for ranked/rated sources (not choose_one or native approval)
         if transform_ballots:
             try:
                 from abiflib.util import find_ballot_type
                 bt = find_ballot_type(jabmod)
             except Exception:
                 bt = None
-            if bt and bt != 'choose_many':
+            if bt in ('ranked', 'rated'):
                 try:
                     from abiflib.approval_tally import convert_to_approval_favorite_viable_half
                     transformed = convert_to_approval_favorite_viable_half(jabmod)

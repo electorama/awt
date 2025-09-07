@@ -2374,6 +2374,42 @@
   title: TREASURER
   tags: 2024, sf2024, actual, CA, USA, government
   desc: TREASURER. Derived from SF Elections 2024 CVR data.
+# --- San Francisco 2024 choose_one (federal) ---
+- filename: localabif/california/sf2024-president-and-vice-president.abif
+  id: sf2024-president-and-vice-president
+  title: PRESIDENT AND VICE PRESIDENT
+  tags: 2024, sf2024, actual, CA, USA, government, federal, potus
+  desc: PRESIDENT AND VICE PRESIDENT. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-united-states-senator.abif
+  id: sf2024-united-states-senator
+  title: UNITED STATES SENATOR
+  tags: 2024, sf2024, actual, CA, USA, government, federal, senate
+  desc: UNITED STATES SENATOR. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-united-states-senator-partial-term.abif
+  id: sf2024-united-states-senator-partial-term
+  title: UNITED STATES SENATOR PARTIAL TERM
+  tags: 2024, sf2024, actual, CA, USA, government, federal, senate
+  desc: UNITED STATES SENATOR PARTIAL TERM. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-united-states-representative-district-11.abif
+  id: sf2024-united-states-representative-district-11
+  title: UNITED STATES REPRESENTATIVE, DISTRICT 11
+  tags: 2024, sf2024, actual, CA, USA, government, federal, house
+  desc: UNITED STATES REPRESENTATIVE, DISTRICT 11. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-united-states-representative-district-12.abif
+  id: sf2024-united-states-representative-district-12
+  title: UNITED STATES REPRESENTATIVE, DISTRICT 12
+  tags: 2024, sf2024, actual, CA, USA, government, federal, house
+  desc: UNITED STATES REPRESENTATIVE, DISTRICT 12. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-united-states-representative-district-15.abif
+  id: sf2024-united-states-representative-district-15
+  title: UNITED STATES REPRESENTATIVE, DISTRICT 15
+  tags: 2024, sf2024, actual, CA, USA, government, federal, house
+  desc: UNITED STATES REPRESENTATIVE, DISTRICT 15. Derived from SF Elections 2024 CVR data.
+- filename: localabif/california/sf2024-united-states-representative-district-2.abif
+  id: sf2024-united-states-representative-district-2
+  title: UNITED STATES REPRESENTATIVE, DISTRICT 2
+  tags: 2024, sf2024, actual, CA, USA, government, federal, house
+  desc: UNITED STATES REPRESENTATIVE, DISTRICT 2. Derived from SF Elections 2024 CVR data.
 - filename: localabif/newyork/nyc2025-primary-rcv.abif
   id: NYC2025-Mayor-Primary-Dem
   title: NYC 2025 Mayoral Primary (Democratic Party)
