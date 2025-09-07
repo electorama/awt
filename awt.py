@@ -1085,13 +1085,14 @@ def get_by_id(identifier, resulttype=None):
             canonical_order = get_canonical_candidate_order(jabmod)
             consistent_colordict = generate_candidate_colors(canonical_order)
 
+            # Compute transform_ballots once for GET (applies to all methods)
+            _tb_val = request.args.get('transform_ballots')
+            transform_ballots = True if _tb_val is None else (_tb_val.lower() in ('1', 'true', 'yes', 'on'))
+
             # IRV (only if requested/all)
             if do_IRV:
                 t_irv = time.time()
                 include_irv_extra = bool(request.args.get('include_irv_extra', True))
-                # Default transform on GET when param is absent; respect explicit off
-                _tb_val = request.args.get('transform_ballots')
-                transform_ballots = True if _tb_val is None else (_tb_val.lower() in ('1', 'true', 'yes', 'on'))
                 resconduit = resconduit.update_IRV_result(
                     jabmod, include_irv_extra=include_irv_extra, transform_ballots=transform_ballots)
                 irv_time = time.time() - t_irv
@@ -1103,9 +1104,6 @@ def get_by_id(identifier, resulttype=None):
             if do_pairwise:
                 t_pairwise = time.time()
                 # Build pairwise result and summaries using the consistent colors
-                # Respect transform_ballots flag similar to IRV
-                _tb_val_pair = request.args.get('transform_ballots')
-                transform_ballots = True if _tb_val_pair is None else (_tb_val_pair.lower() in ('1', 'true', 'yes', 'on'))
                 # Update conduit to capture notices and core results (matrix + notices)
                 resconduit = resconduit.update_pairwise_result(jabmod, transform_ballots=transform_ballots)
                 # Harmonize: use the same pairwise matrix computed by conduits
@@ -1174,7 +1172,19 @@ def get_by_id(identifier, resulttype=None):
             # Approval (only if requested/all)
             if do_approval:
                 t_approval = time.time()
-                resconduit = resconduit.update_approval_result(jabmod)
+                approval_input = jabmod
+                try:
+                    _bt = find_ballot_type(jabmod)
+                except Exception:
+                    _bt = None
+                # When transforms are disabled, use simple ranked→choose_many pre-transform
+                if (not transform_ballots) and _bt and _bt != 'choose_many':
+                    try:
+                        from abiflib.transform_core import ranked_to_choose_many_all_ranked_approved
+                        approval_input = ranked_to_choose_many_all_ranked_approved(jabmod)
+                    except Exception:
+                        approval_input = jabmod
+                resconduit = resconduit.update_approval_result(approval_input, transform_ballots=transform_ballots)
                 approval_time = time.time() - t_approval
                 print(
                     f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Approval: {approval_time:.2f}s]")
@@ -1421,11 +1431,12 @@ def awt_post():
             # debug_output += pformat(FPTP_text)
             # debug_output += "\n"
 
+        # Compute transform_ballots once for POST (applies to all methods)
+        transform_ballots = bool(request.form.get('transform_ballots'))
+
         if request.form.get('include_IRV'):
             rtypelist.append('IRV')
             include_irv_extra = bool(request.form.get('include_irv_extra'))
-            # For POST checkboxes: present when checked, absent when unchecked
-            transform_ballots = bool(request.form.get('transform_ballots'))
             resconduit = resconduit.update_IRV_result(
                 abifmodel, include_irv_extra=include_irv_extra, transform_ballots=transform_ballots)
             IRV_dict = resconduit.resblob['IRV_dict']
@@ -1474,9 +1485,25 @@ def awt_post():
             resconduit = resconduit.update_STAR_result(ratedjabmod, consistent_colordict)
             STAR_html = jinja_scorestar_snippet(ratedjabmod)
             scorestardict = resconduit.resblob['scorestardict']
+        # Pairwise in POST: honor transform_ballots consistently
+        if request.form.get('include_pairtable') or request.form.get('include_dotsvg'):
+            resconduit = resconduit.update_pairwise_result(abifmodel, transform_ballots=transform_ballots)
         if request.form.get('include_approval'):
+            # Always show Approval. If transforms are disabled and source isn't choose_many,
+            # pre-transform ranked→choose_many using "all ranked are approved" rule.
+            try:
+                _bt_post = find_ballot_type(abifmodel)
+            except Exception:
+                _bt_post = None
+            approval_input = abifmodel
+            if (not transform_ballots) and _bt_post and _bt_post != 'choose_many':
+                try:
+                    from abiflib.transform_core import ranked_to_choose_many_all_ranked_approved
+                    approval_input = ranked_to_choose_many_all_ranked_approved(abifmodel)
+                except Exception:
+                    approval_input = abifmodel
             rtypelist.append('approval')
-            resconduit = resconduit.update_approval_result(abifmodel)
+            resconduit = resconduit.update_approval_result(approval_input, transform_ballots=transform_ballots)
 
         resblob = resconduit.resblob
 

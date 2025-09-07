@@ -44,21 +44,8 @@ and can be edited in the field above.</p>
 {# msgs.results_lede is DEPRECATED as of 2024-06-19 #}
 <p>{{ msgs.results_lede | safe }}</p>
 {% else %}
-<p>Below are various abiftool output blocks for the ABIF above{% if msgs.ballot_type %} (detected ballot type: {{ msgs.ballot_type }}){% endif %}.
-{% if msgs.ballot_type %}
-  {% if msgs.ballot_type == 'choose_many' %}
-    Some methods may transform these ballots for analysis; see method notices for details.
-  {% elif msgs.ballot_type == 'ranked' %}
-    FPTP uses first choices; IRV uses full rankings.
-  {% elif msgs.ballot_type == 'choose_one' %}
-    Standard plurality/choose-one ballots.
-  {% elif msgs.ballot_type == 'rated' %}
-    Some methods may transform ratings; see notices for details.
-  {% else %}
-    Ballot type could not be determined.
-  {% endif %}
+<p>Below are the results of the election represented above using various election methods with abiftool/abiflib.  {% if msgs.ballot_type %} The detected ballot type from the ABIF above is "{{ msgs.ballot_type }}"{% endif %}.  Some methods may transform these ballots for analysis; see method notices for details.  Resubmit the ABIF with "Transform ballots" turned off to minimize the transformations.
 {% endif %}
-  {% endif %}
 
   <!-- Election overview with summary table and preview image -->
   <div class="election-overview">
@@ -319,15 +306,7 @@ and can be edited in the field above.</p>
       {{ pairwise_html | safe }}
     {% endif %}
 
-    {# Transformed ballots accordion for Condorcet/Copeland when available #}
-    {% set _tx = resblob.get('transforms', {}).get('pairwise') if resblob else None %}
-    {% if _tx and _tx.get('abif') %}
-      {% set transformed_abif = _tx.get('abif') %}
-      {% set conversion_meta = _tx.get('meta') or {} %}
-      {% set method_label = 'Condorcet/Copeland' %}
-      {% set target_type = _tx.get('target_type') %}
-      {% include 'transform-accordion-snippet.html' %}
-    {% endif %}
+    {# (accordion already rendered directly under notices above) #}
 
     {% if 'dot' in result_types and dotsvg_html %}
       <h4><a name="dot"></a>Pairwise tournament (Copeland ordered)</h4>

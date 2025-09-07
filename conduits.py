@@ -401,8 +401,12 @@ class ResultConduit:
         self.resblob['scorestardict'] = scorestar
         return self
 
-    def update_approval_result(self, jabmod) -> "ResultConduit":
-        """Add approval voting result to resblob"""
+    def update_approval_result(self, jabmod, transform_ballots: bool = False) -> "ResultConduit":
+        """Add approval voting result to resblob.
+
+        When transform_ballots is True and source is not choose_many, also
+        record a transformed ABIF for the Approval method accordion.
+        """
         approval_result = approval_result_from_abifmodel(jabmod)
         self.resblob['approval_result'] = approval_result
         self.resblob['approval_text'] = get_approval_report(jabmod)
@@ -410,19 +414,20 @@ class ResultConduit:
         self._extract_notices('approval', approval_result)
         # Keep backward compatibility
         self.resblob['approval_notices'] = approval_result.get('notices', [])
-        # Record transformed ABIF for Approval when source isn't choose_many
-        try:
-            from abiflib.util import find_ballot_type
-            bt = find_ballot_type(jabmod)
-        except Exception:
-            bt = None
-        if bt and bt != 'choose_many':
+        # Record transformed ABIF for Approval only when transform_ballots is True
+        if transform_ballots:
             try:
-                from abiflib.approval_tally import convert_to_approval_favorite_viable_half
-                transformed = convert_to_approval_favorite_viable_half(jabmod)
-                self._record_transformed_abif(method_tag='approval', transformed_jabmod=transformed, target_type='choose_many')
+                from abiflib.util import find_ballot_type
+                bt = find_ballot_type(jabmod)
             except Exception:
-                pass
+                bt = None
+            if bt and bt != 'choose_many':
+                try:
+                    from abiflib.approval_tally import convert_to_approval_favorite_viable_half
+                    transformed = convert_to_approval_favorite_viable_half(jabmod)
+                    self._record_transformed_abif(method_tag='approval', transformed_jabmod=transformed, target_type='choose_many')
+                except Exception:
+                    pass
         return self
 
     def update_all(self, jabmod):
@@ -433,7 +438,7 @@ class ResultConduit:
         resconduit = resconduit.update_IRV_result(jabmod)
         resconduit = resconduit.update_pairwise_result(jabmod)
         resconduit = resconduit.update_STAR_result(jabmod)
-        resconduit = resconduit.update_approval_result(jabmod)
+        resconduit = resconduit.update_approval_result(jabmod, transform_ballots=True)
         return self
 
 
@@ -614,5 +619,5 @@ def get_complete_resblob_for_linkpreview(jabmod):
     ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
     resconduit = resconduit.update_STAR_result(ratedjabmod)
 
-    resconduit = resconduit.update_approval_result(jabmod)
+    resconduit = resconduit.update_approval_result(jabmod, transform_ballots=True)
     return resconduit.resblob
