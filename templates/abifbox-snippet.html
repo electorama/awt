@@ -22,43 +22,43 @@
           <legend>Method options</legend>
           <div>
             <label>
-              <input type="checkbox" name="include_FPTP" value="yes" checked>
+              <input type="checkbox" name="include_FPTP" value="yes" {% if result_types is defined and 'FPTP' in result_types %}checked{% endif %}>
               FPTP results?
             </label>
           </div>
           <div>
             <label>
-              <input type="checkbox" name="include_IRV" value="yes" checked>
+              <input type="checkbox" id="include_IRV" name="include_IRV" value="yes" {% if result_types is defined and 'IRV' in result_types %}checked{% endif %}>
               IRV/RCV results?
             </label>
           </div>
           <div style="margin-left: 1.5em;">
             <label>
-              <input type="checkbox" name="include_irv_extra" value="yes" checked>
+              <input type="checkbox" id="include_irv_extra" name="include_irv_extra" value="yes" {% if result_types is defined and 'IRV' in result_types %}checked{% endif %} {% if not (result_types is defined and 'IRV' in result_types) %}disabled{% endif %}>
               IRV extra analysis?
             </label>
           </div>
           <div>
             <label>
-              <input type="checkbox" name="include_approval" value="yes" checked>
+              <input type="checkbox" name="include_approval" value="yes" {% if result_types is defined and 'approval' in result_types %}checked{% endif %}>
               Approval results?
             </label>
           </div>
           <div>
             <label>
-              <input type="checkbox" name="include_STAR" value="yes" checked>
+              <input type="checkbox" name="include_STAR" value="yes" {% if result_types is defined and 'STAR' in result_types %}checked{% endif %}>
               STAR results?
             </label>
           </div>
           <div>
             <label>
-              <input type="checkbox" name="include_pairtable" value="yes" checked>
+              <input type="checkbox" id="include_pairtable" name="include_pairtable" value="yes" {% if result_types is defined and 'wlt' in result_types %}checked{% endif %}>
               pairwise (Condorcet/Copeland) results?
             </label>
           </div>
           <div style="margin-left: 1.5em;">
             <label>
-              <input type="checkbox" name="include_dotsvg" value="yes" checked>
+              <input type="checkbox" id="include_dotsvg" name="include_dotsvg" value="yes" {% if result_types is defined and 'dot' in result_types %}checked{% endif %} {% if not (result_types is defined and 'wlt' in result_types) %}disabled{% endif %}>
               pairwise tournament diagram?
             </label>
           </div>
@@ -71,7 +71,7 @@
         <fieldset>
           <legend>Ballot options</legend>
           <label>
-            <input type="checkbox" name="transform_ballots" value="yes" checked>
+            <input type="checkbox" id="transform_ballots" name="transform_ballots" value="yes" {% if transform_ballots %}checked{% endif %}>
             Transform ballots (using ballot-type metadata)?
           </label>
         </fieldset>

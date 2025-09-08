@@ -284,6 +284,33 @@ window.addEventListener('popstate', function(e) {
   }
 });
 
+// Dependent checkbox logic: disable child when parent is unchecked
+function initDependentCheckbox(parentId, childId) {
+  const parent = document.getElementById(parentId);
+  const child = document.getElementById(childId);
+  if (!parent || !child) return;
+  const update = () => {
+    if (!parent.checked) {
+      // Uncheck and disable child when parent is off
+      child.checked = false;
+      child.disabled = true;
+    } else {
+      // Re-enable child when parent is on (leave unchecked until user opts in)
+      child.disabled = false;
+    }
+  };
+  // Initialize and bind
+  update();
+  parent.addEventListener('change', update);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Pairwise diagram depends on pairwise results
+  initDependentCheckbox('include_pairtable', 'include_dotsvg');
+  // IRV extra depends on IRV results
+  initDependentCheckbox('include_IRV', 'include_irv_extra');
+});
+
 function pushTextFromID(exampleID) {
   var exampleText = document.getElementById(exampleID).value;
   document.getElementById("abifbox").classList.add('active');

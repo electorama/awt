@@ -1263,6 +1263,7 @@ def get_by_id(identifier, resulttype=None):
                                    abifinput=fileentry['text'],
                                    abif_id=identifier,
                                    election_list=election_list,
+                                   transform_ballots=transform_ballots,
                                    copewinnerstring=resblob.get('copewinnerstring', ''),
                                    copewinners=resblob.get('copewinners', []),
                                    dotsvg_html=resblob.get('dotsvg_html', ''),
@@ -1531,6 +1532,7 @@ def awt_post():
 
     return render_template('results-index.html',
                            abifinput=abifinput,
+                           transform_ballots=transform_ballots,
                            resblob=resblob,
                            copewinnerstring=copewinnerstring,
                            copewinners=copewinners if 'copewinners' in locals() else [],
