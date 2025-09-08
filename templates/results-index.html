@@ -60,16 +60,17 @@ and can be edited in the field above.</p>
       </thead>
       <tbody>
         {% for restype in result_types %}
-          {% if restype == 'dot' and ('dot' in result_types or 'wlt' in result_types) %}
+          {% if (restype == 'dot' or (restype == 'wlt' and not ('dot' in result_types))) and ('dot' in result_types or 'wlt' in result_types) %}
             <tr>
               <td style="padding: 8px; border: 1px solid #ddd;"><a href="#pairwise" class="method-link">Condorcet/Copeland</a></td>
               <td style="padding: 8px; border: 1px solid #ddd;">
-                {% if copewinners and FPTP_candnames %}
-                  {%- for tok in copewinners -%}
+                {% set _cope = copewinners if copewinners else resblob.get('copewinners', []) %}
+                {% if _cope and FPTP_candnames %}
+                  {%- for tok in _cope -%}
                     <span class="color-box" style="background-color: {{ colordict[tok] | default('#ccc') }};"></span>{{ FPTP_candnames[tok] if tok in FPTP_candnames else tok }}{% if not loop.last %}, {% endif %}
                   {%- endfor -%}
-                {% elif copewinnerstring %}
-                  {{ copewinnerstring }}
+                {% elif copewinnerstring or resblob.get('copewinnerstring') %}
+                  {{ copewinnerstring or resblob.get('copewinnerstring') }}
                 {% else %}
                   N/A
                 {% endif %}
@@ -200,10 +201,11 @@ and can be edited in the field above.</p>
   <!-- Tabs for various methods -->
   <nav class="method-tabs" role="tablist" aria-label="Voting method results navigation">
     {% for restype in result_types %}
-      {% if restype == 'dot' and ('dot' in result_types or 'wlt' in result_types) %}
+      {% if (restype == 'dot' or (restype == 'wlt' and not ('dot' in result_types))) and ('dot' in result_types or 'wlt' in result_types) %}
         <a href="#pairwise" class="method-tab" role="tab" aria-controls="condorcet-section">
-          {% if copewinners and FPTP_candnames %}
-            {%- for tok in copewinners -%}
+          {% set _cope = copewinners if copewinners else resblob.get('copewinners', []) %}
+          {% if _cope and FPTP_candnames %}
+            {%- for tok in _cope -%}
               <span class="tab-color-box" style="background-color: {{ colordict[tok] | default('#ccc') }};"></span>{% if not loop.last %}{% endif %}
             {%- endfor -%}
           {% endif %}
@@ -259,7 +261,7 @@ and can be edited in the field above.</p>
 <div class="resultbox results-container">
 <!-- BEGIN resultbox -->
 {% for restype in result_types %}
-  {% if restype == 'dot' %}
+  {% if restype == 'dot' or (restype == 'wlt' and not ('dot' in result_types)) %}
     <div class="method-section" id="condorcet-section" data-method="condorcet">
     {############ condorcet/pairwise ############}
     {% if 'dot' in result_types or 'wlt' in result_types %}
