@@ -6,7 +6,7 @@
     <legend>ABIF submission area
 (<a href="#" id="abifshowhide" onclick="javascript:toggleShowHide({target:'abifbox', targactive: {{"true" if formActive else "false"}}});">{{showHideText}}</a>)
     </legend>
-    <div id="abifbox" class="{{classList}}" style="display: flex; gap: 16px; align-items: flex-start;">
+    <div id="abifbox" class="{{classList}}">
       <!-- Left: ABIF input -->
       <div style="flex: 1 1 auto; min-width: 0;">
         <textarea id="abifinput" name="abifinput"
@@ -66,7 +66,7 @@
       </div>
     </div>
     <!-- Bottom row: ballot options (left) and submit button (right) -->
-    <div style="display: flex; gap: 16px; align-items: flex-end; margin-top: 10px;">
+    <div id="abif-bottomrow" class="abif-bottomrow" data-testid="abif-bottomrow">
       <div style="flex: 1 1 auto; min-width: 0;">
         <fieldset>
           <legend>Ballot options</legend>

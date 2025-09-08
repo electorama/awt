@@ -28,6 +28,10 @@ This is a very incomplete list of incomplete tasks for this project
   - [ ] Confirm IRV disclaimer shows for non-ranked ballots (e.g., STL 2025) and does not regress ranked-election IRV output
   - [ ] Review [[https://github.com/electorama/awt/issues][bug list on GitHub]]
   - [ ] See [[./CHANGELOG.org]]
+  - [ ] choose_many → choose_one transform (stl-2025-mayor pilot)
+    - Default method: least_approval_first_top (pick, on each approval ballot, the approved candidate with the lowest global approvals). Rationale: voters favoring frontrunners tend to bullet vote; voters favoring underdogs often also approve a frontrunner. Thus, when both an underdog and frontrunner are approved, prefer the underdog as the implied favorite.
+    - Scope: what‑if FPTP only; do not alter native FPTP. Emit clear abiflib notice with method name and original_ballot_type=choose_many. No alternative transforms exposed yet (see Post 0.34 task below).
+    - Evaluation: compare LAF-Top FPTP what‑if against native Approval and other methods on /id/stl-2025-mayor; document intuitions/differences.
 * Post 0.34.0
   - [ ] Fix width of "Ballot options" fieldset (layout: ensure it fills all available space left of Submit; responsive with method options width)
   - [ ] Fix link previews for method-specific pages (/id/<election-id>/<method>)
@@ -35,4 +39,7 @@ This is a very incomplete list of incomplete tasks for this project
   - [ ] Create bifhub and figure out awt interface to it [[./docs/bifhub.md]]
   - [ ] Merge tags-index.html and tag-index.html into a single template (consolidate tag index/detail)
   - [ ] Implement centralized notice system (see docs/notices.md) to replace balkanized approach
+  - [ ] Alternative choose_many → choose_one transforms (do not expose before 0.34)
+    - most_approval_first_top (pick strongest approved); deterministic tiebreak by token.
+    - Other heuristics (e.g., co‑approval weights, precinct covariates) — research only; not in UI.
   - Moar [[Code hygiene]] (see above)

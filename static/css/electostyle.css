@@ -152,7 +152,21 @@ svg {
 }
 
 #abifbox.active {
-  display: block;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* Hide bottom row by default; show only when the top box is active */
+.abif-bottomrow {
+  display: none;
+}
+
+#abifbox.active + .abif-bottomrow {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  margin-top: 10px;
 }
 
 .tab-content {

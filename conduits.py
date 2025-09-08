@@ -283,7 +283,7 @@ class ResultConduit:
                 bt = find_ballot_type(jabmod)
             except Exception:
                 bt = None
-            if bt in ('approval', 'choose_many'):
+            if bt == 'choose_many':
                 try:
                     from abiflib.approval_tally import build_ranked_from_choose_many
                     ranked_for_irv = build_ranked_from_choose_many(jabmod)
@@ -366,7 +366,7 @@ class ResultConduit:
                 bt = find_ballot_type(jabmod)
             except Exception:
                 bt = None
-            if bt in ('approval', 'choose_many'):
+            if bt == 'choose_many':
                 try:
                     from abiflib.approval_tally import build_ranked_from_choose_many
                     ranked_for_pairwise = build_ranked_from_choose_many(jabmod)
