@@ -1,0 +1,25 @@
+{#
+  Reusable accordion snippet to display transformed ballots (ABIF text).
+  Expects the following variables to be set by the includer:
+    - transformed_abif: string with ABIF contents
+    - conversion_meta: dict with keys like 'original_ballot_type', 'method', 'parameters', 'target_type'
+    - method_label: short label of the method context (e.g., 'IRV/RCV', 'Condorcet/Copeland')
+    - target_type: optional override for the target ballot type label (defaults sensibly to 'ranked')
+#}
+
+{% set _source_type = (conversion_meta.original_ballot_type if conversion_meta else None) or 'unknown' %}
+{% set _target_type = target_type or (conversion_meta.target_type if conversion_meta and conversion_meta.target_type else 'ranked') %}
+{% set _method = (conversion_meta.method if conversion_meta else None) %}
+
+{% if transformed_abif %}
+<details class="transformed-ballots-accordion">
+  <summary>See transformed ballots</summary>
+  <div class="transformed-ballots-note">
+    <p><strong>Note:</strong> For {{ method_label }}, these {{ _target_type }} ballots are inferred from {{ _source_type }} ballots.</p>
+    {% if _method %}
+      <p><em>Conversion method:</em> {{ _method }}</p>
+    {% endif %}
+  </div>
+  <pre class="abif-content"><code>{{ transformed_abif }}</code></pre>
+</details>
+{% endif %}
