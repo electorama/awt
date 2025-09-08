@@ -12,6 +12,9 @@
 </style>
 
     <ul>
+      {% if scoredata['totalvoters'] == 0 %}
+      <li>No ballots recorded for this contest.</li>
+      {% endif %}
       <li><b>STAR winner</b>:
         {% if scoredata['winner'] and "tie " in scoredata['winner'] %}
           {# Handle STAR ties: show color boxes for all candidates mentioned in tie string #}

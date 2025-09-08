@@ -1,5 +1,10 @@
 <div>
   <ul>
+    {% set total_votes = resblob.FPTP_result.total_votes | default(0) %}
+    {% if total_votes == 0 %}
+      <li><b>Total ballots:</b> 0</li>
+      <li>No first-place votes recorded for this contest.</li>
+    {% else %}
     {% set winners = resblob['FPTP_result']['winners'] %}
     {% set winnerstr = ", ".join(winners) %}
     {% set winnerintro = "FPTP Winners (tie)" if winners | length > 1 else "FPTP Winner" %}
@@ -52,5 +57,6 @@
       <li><b>Blanks</b>: {{ "{:,}".format(blanks) }}{% if resblob.FPTP_result.total_votes > 0 %} ({{ "%0.1f"|format((blanks / resblob.FPTP_result.total_votes) * 100) }} %){% endif %}</li>
     {% endif %}
     <li><b>Total ballots:</b> {{ "{:,}".format(resblob.FPTP_result.total_votes) }}</li>
+    {% endif %}
   </ul>
 </div>

@@ -5,6 +5,10 @@
 {% set sorted_candidates = sorted_candidates | selectattr('0', 'ne', None) | list %}
 
 <ul>
+    {% if approval_result.total_votes == 0 %}
+      <li><b>Total</b>: 0 ballots (0 total approvals)</li>
+      <li>No approvals recorded for this contest.</li>
+    {% else %}
     {% set winners = approval_result.winners %}
     {% set winnerstr = ", ".join(winners) %}
     {% set winnerintro = "Approval Winners (tie)" if winners | length > 1 else "Approval Winner" %}
@@ -39,6 +43,7 @@
   {% endif %}
 
   <li><b>Total</b>: {{ "{:,}".format(approval_result.total_votes) }} ballots ({{ "{:,}".format(approval_result.total_approvals) }} total approvals)</li>
+    {% endif %}
 </ul>
 
 {% else %}
