@@ -31,7 +31,11 @@ from cache_awt import (
     log_cache_hit,
     monkeypatch_cache_get,
     purge_cache_entry,
-    purge_cache_entries_by_path
+    purge_cache_entries_by_path,
+    enable_sqlite_request_log,
+    enable_cache_indexing,
+    DEFAULT_CACHE_DIR,
+    DEFAULT_REQUEST_LOG_DB,
 )
 import conduits
 from dotenv import load_dotenv
@@ -387,13 +391,35 @@ elif wsgi_cache_type == "simple":
     app.config['CACHE_TYPE'] = 'flask_caching.backends.SimpleCache'
 else:  # filesystem
     app.config['CACHE_TYPE'] = 'flask_caching.backends.FileSystemCache'
-    app.config['CACHE_DIR'] = os.environ.get(
-        "AWT_CACHE_DIR", os.path.join(tempfile.gettempdir(), 'awt_flask_cache'))
+    # Default cache dir unless AWT_CACHE_DIR is set
+    app.config['CACHE_DIR'] = os.environ.get("AWT_CACHE_DIR", DEFAULT_CACHE_DIR)
+    try:
+        os.makedirs(app.config['CACHE_DIR'], exist_ok=True)
+    except Exception:
+        pass
 
 app.config['CACHE_DEFAULT_TIMEOUT'] = int(
     os.environ.get("AWT_CACHE_TIMEOUT", AWT_DEFAULT_CACHE_TIMEOUT))
 
 cache.init_app(app)
+
+# Enable passive SQLite request logging by default when using FileSystemCache
+if app.config.get('CACHE_TYPE') == 'flask_caching.backends.FileSystemCache':
+    try:
+        # Default DB unless AWT_REQUEST_LOG_DB is set
+        reqlog_db = os.environ.get('AWT_REQUEST_LOG_DB', DEFAULT_REQUEST_LOG_DB)
+        db_dir = os.path.dirname(reqlog_db)
+        if db_dir:
+            try:
+                os.makedirs(db_dir, exist_ok=True)
+            except Exception:
+                pass
+        enable_sqlite_request_log(app, reqlog_db)
+        # Enable sidecar cache indexing (can be toggled off with AWT_CACHE_INDEX=0)
+        if os.environ.get('AWT_CACHE_INDEX', '1') not in ('0', 'false', 'False', 'no', 'NO'):
+            enable_cache_indexing(app, cache, reqlog_db)
+    except Exception as e:
+        print(f"[awt.py] WARNING: request log init failed: {e}")
 
 # Custom static file routes for flattened venv installs
 if AWT_STATIC and Path(AWT_STATIC).name == 'awt-static':
@@ -1579,8 +1605,9 @@ def main():
                         help="If set, enables server-side profiling and writes .cprof to this path")
     parser.add_argument("--caching", choices=["none", "simple", "filesystem"], default="filesystem",
                         help="Caching backend: none (no cache), simple (in-memory), filesystem (default)")
-    parser.add_argument("--cache-dir", type=str, default=os.path.join(tempfile.gettempdir(), 'awt_flask_cache'),
-                        help="Directory for filesystem cache (default: system temp dir)")
+    parser.add_argument("--cache-dir", type=str,
+                        default=DEFAULT_CACHE_DIR,
+                        help=f"Directory for filesystem cache (default: {DEFAULT_CACHE_DIR})")
     parser.add_argument("--cache-timeout", type=int, default=AWT_DEFAULT_CACHE_TIMEOUT,
                         help=f"Cache timeout in seconds (default: {AWT_DEFAULT_CACHE_TIMEOUT} seconds)")
     parser.add_argument("--cache-purge", action="store_true",
@@ -1620,6 +1647,24 @@ def main():
     # If using filesystem cache, monkeypatch the cache backend to print cache hits and file paths
     if app.config['CACHE_TYPE'] == 'flask_caching.backends.FileSystemCache':
         monkeypatch_cache_get(app, cache)
+        # Enable passive SQLite request logging by default
+        try:
+            reqlog_db = os.environ.get('AWT_REQUEST_LOG_DB', DEFAULT_REQUEST_LOG_DB)
+            db_dir = os.path.dirname(reqlog_db)
+            if db_dir:
+                try:
+                    os.makedirs(db_dir, exist_ok=True)
+                except Exception:
+                    pass
+            enable_sqlite_request_log(app, reqlog_db)
+            # Also enable cache filename sidecar indexing (same DB)
+            if os.environ.get('AWT_CACHE_INDEX', '1') not in ('0', 'false', 'False', 'no', 'NO'):
+                try:
+                    enable_cache_indexing(app, cache, reqlog_db)
+                except Exception:
+                    pass
+        except Exception as e:
+            print(f"[awt.py] WARNING: request log init failed: {e}")
 
     # Print cache configuration for debugging
     print(f"[awt.py] Flask-Caching: CACHE_TYPE={app.config['CACHE_TYPE']}")
