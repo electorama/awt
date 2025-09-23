@@ -241,7 +241,7 @@ else:
 
 
 # Global default cache timeout (1 week)
-AWT_DEFAULT_CACHE_TIMEOUT = 7 * 24 * 3600
+AWT_DEFAULT_CACHE_TIMEOUT = 90 * 24 * 3600
 # Allow overriding port via env or CLI
 DEFAULT_PORT = int(os.environ.get("PORT", 0))
 
