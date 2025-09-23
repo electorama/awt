@@ -2424,7 +2424,7 @@
   tags: actual, MO, USA, government, approval, 2025
   desc: >
     2025 St. Louis aldermanic election for Ward 11 using approval voting.
-- filename: localabif/newyork/nyc2025-primary-rcv.abif
+- filename: localabif/newyork/nyc2025-primary-dem-mayor-citywide.abif
   id: NYC2025-Mayor-Primary-Dem
   title: NYC 2025 Mayoral Primary (Democratic Party)
   tags: 2025, actual, NY, NYC-2025, NYC_NY, mayor, primary_election, RCV, featured
