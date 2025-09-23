@@ -2400,13 +2400,6 @@
   title: UNITED STATES REPRESENTATIVE, DISTRICT 15
   tags: 2024, sf2024, actual, CA, USA, government, federal, house
   desc: UNITED STATES REPRESENTATIVE, DISTRICT 15. Derived from SF Elections 2024 CVR data.
-- filename: localabif/newyork/nyc2025-primary-rcv.abif
-  id: NYC2025-Mayor-Primary-Dem
-  title: NYC 2025 Mayoral Primary (Democratic Party)
-  tags: 2025, actual, NY, NYC-2025, NYC_NY, mayor, primary_election, RCV, featured
-  desc: >
-    2025 New York City Democratic Party mayoral primary using RCV,
-    with Zohran Mamdani winning in all methods.
 - filename: localabif/stlouis/stl-2025-mayor.abif
   id: stl-2025-mayor
   title: St. Louis 2025 Mayoral Election
@@ -2431,3 +2424,560 @@
   tags: actual, MO, USA, government, approval, 2025
   desc: >
     2025 St. Louis aldermanic election for Ward 11 using approval voting.
+- filename: localabif/newyork/nyc2025-primary-rcv.abif
+  id: NYC2025-Mayor-Primary-Dem
+  title: NYC 2025 Mayoral Primary (Democratic Party)
+  tags: 2025, actual, NY, NYC-2025, NYC_NY, mayor, primary_election, RCV, featured
+  desc: >
+    2025 New York City Democratic Party mayoral primary using RCV,
+    with Zohran Mamdani winning in all methods.
+- filename: localabif/newyork/nyc2025-primary-dem-public-advocate.abif
+  id: nyc2025-primary-dem-public-advocate
+  title: NYC 2025 Primary DEM Public Advocate
+  desc: 2025 NYC Primary Election - DEM Public Advocate
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-comptroller.abif
+  id: nyc2025-primary-dem-comptroller
+  title: NYC 2025 Primary DEM Comptroller
+  desc: 2025 NYC Primary Election - DEM Comptroller
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-manhattan-borough-president.abif
+  id: nyc2025-primary-dem-manhattan-borough-president
+  title: NYC 2025 Primary DEM Manhattan Borough President
+  desc: 2025 NYC Primary Election - DEM Manhattan Borough President
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-bronx-borough-president.abif
+  id: nyc2025-primary-dem-bronx-borough-president
+  title: NYC 2025 Primary DEM Bronx Borough President
+  desc: 2025 NYC Primary Election - DEM Bronx Borough President
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-brooklyn-borough-president.abif
+  id: nyc2025-primary-dem-brooklyn-borough-president
+  title: NYC 2025 Primary DEM Brooklyn Borough President
+  desc: 2025 NYC Primary Election - DEM Brooklyn Borough President
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-queens-borough-president.abif
+  id: nyc2025-primary-dem-queens-borough-president
+  title: NYC 2025 Primary DEM Queens Borough President
+  desc: 2025 NYC Primary Election - DEM Queens Borough President
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-staten-island-borough-president.abif
+  id: nyc2025-primary-dem-staten-island-borough-president
+  title: NYC 2025 Primary DEM Staten Island Borough President
+  desc: 2025 NYC Primary Election - DEM Staten Island Borough President
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d01.abif
+  id: nyc2025-primary-dem-council-member-d01
+  title: NYC 2025 Primary DEM Council Member District 01
+  desc: 2025 NYC Primary Election - DEM Council Member District 01
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d02.abif
+  id: nyc2025-primary-dem-council-member-d02
+  title: NYC 2025 Primary DEM Council Member District 02
+  desc: 2025 NYC Primary Election - DEM Council Member District 02
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d03.abif
+  id: nyc2025-primary-dem-council-member-d03
+  title: NYC 2025 Primary DEM Council Member District 03
+  desc: 2025 NYC Primary Election - DEM Council Member District 03
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d04.abif
+  id: nyc2025-primary-dem-council-member-d04
+  title: NYC 2025 Primary DEM Council Member District 04
+  desc: 2025 NYC Primary Election - DEM Council Member District 04
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d05.abif
+  id: nyc2025-primary-dem-council-member-d05
+  title: NYC 2025 Primary DEM Council Member District 05
+  desc: 2025 NYC Primary Election - DEM Council Member District 05
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d06.abif
+  id: nyc2025-primary-dem-council-member-d06
+  title: NYC 2025 Primary DEM Council Member District 06
+  desc: 2025 NYC Primary Election - DEM Council Member District 06
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d07.abif
+  id: nyc2025-primary-dem-council-member-d07
+  title: NYC 2025 Primary DEM Council Member District 07
+  desc: 2025 NYC Primary Election - DEM Council Member District 07
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d08.abif
+  id: nyc2025-primary-dem-council-member-d08
+  title: NYC 2025 Primary DEM Council Member District 08
+  desc: 2025 NYC Primary Election - DEM Council Member District 08
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d09.abif
+  id: nyc2025-primary-dem-council-member-d09
+  title: NYC 2025 Primary DEM Council Member District 09
+  desc: 2025 NYC Primary Election - DEM Council Member District 09
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d10.abif
+  id: nyc2025-primary-dem-council-member-d10
+  title: NYC 2025 Primary DEM Council Member District 10
+  desc: 2025 NYC Primary Election - DEM Council Member District 10
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d11.abif
+  id: nyc2025-primary-dem-council-member-d11
+  title: NYC 2025 Primary DEM Council Member District 11
+  desc: 2025 NYC Primary Election - DEM Council Member District 11
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d12.abif
+  id: nyc2025-primary-dem-council-member-d12
+  title: NYC 2025 Primary DEM Council Member District 12
+  desc: 2025 NYC Primary Election - DEM Council Member District 12
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d13.abif
+  id: nyc2025-primary-dem-council-member-d13
+  title: NYC 2025 Primary DEM Council Member District 13
+  desc: 2025 NYC Primary Election - DEM Council Member District 13
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d14.abif
+  id: nyc2025-primary-dem-council-member-d14
+  title: NYC 2025 Primary DEM Council Member District 14
+  desc: 2025 NYC Primary Election - DEM Council Member District 14
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d15.abif
+  id: nyc2025-primary-dem-council-member-d15
+  title: NYC 2025 Primary DEM Council Member District 15
+  desc: 2025 NYC Primary Election - DEM Council Member District 15
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d16.abif
+  id: nyc2025-primary-dem-council-member-d16
+  title: NYC 2025 Primary DEM Council Member District 16
+  desc: 2025 NYC Primary Election - DEM Council Member District 16
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d17.abif
+  id: nyc2025-primary-dem-council-member-d17
+  title: NYC 2025 Primary DEM Council Member District 17
+  desc: 2025 NYC Primary Election - DEM Council Member District 17
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d18.abif
+  id: nyc2025-primary-dem-council-member-d18
+  title: NYC 2025 Primary DEM Council Member District 18
+  desc: 2025 NYC Primary Election - DEM Council Member District 18
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d19.abif
+  id: nyc2025-primary-dem-council-member-d19
+  title: NYC 2025 Primary DEM Council Member District 19
+  desc: 2025 NYC Primary Election - DEM Council Member District 19
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d20.abif
+  id: nyc2025-primary-dem-council-member-d20
+  title: NYC 2025 Primary DEM Council Member District 20
+  desc: 2025 NYC Primary Election - DEM Council Member District 20
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d21.abif
+  id: nyc2025-primary-dem-council-member-d21
+  title: NYC 2025 Primary DEM Council Member District 21
+  desc: 2025 NYC Primary Election - DEM Council Member District 21
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d22.abif
+  id: nyc2025-primary-dem-council-member-d22
+  title: NYC 2025 Primary DEM Council Member District 22
+  desc: 2025 NYC Primary Election - DEM Council Member District 22
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d23.abif
+  id: nyc2025-primary-dem-council-member-d23
+  title: NYC 2025 Primary DEM Council Member District 23
+  desc: 2025 NYC Primary Election - DEM Council Member District 23
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d24.abif
+  id: nyc2025-primary-dem-council-member-d24
+  title: NYC 2025 Primary DEM Council Member District 24
+  desc: 2025 NYC Primary Election - DEM Council Member District 24
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d25.abif
+  id: nyc2025-primary-dem-council-member-d25
+  title: NYC 2025 Primary DEM Council Member District 25
+  desc: 2025 NYC Primary Election - DEM Council Member District 25
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d26.abif
+  id: nyc2025-primary-dem-council-member-d26
+  title: NYC 2025 Primary DEM Council Member District 26
+  desc: 2025 NYC Primary Election - DEM Council Member District 26
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d27.abif
+  id: nyc2025-primary-dem-council-member-d27
+  title: NYC 2025 Primary DEM Council Member District 27
+  desc: 2025 NYC Primary Election - DEM Council Member District 27
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d28.abif
+  id: nyc2025-primary-dem-council-member-d28
+  title: NYC 2025 Primary DEM Council Member District 28
+  desc: 2025 NYC Primary Election - DEM Council Member District 28
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d29.abif
+  id: nyc2025-primary-dem-council-member-d29
+  title: NYC 2025 Primary DEM Council Member District 29
+  desc: 2025 NYC Primary Election - DEM Council Member District 29
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d30.abif
+  id: nyc2025-primary-dem-council-member-d30
+  title: NYC 2025 Primary DEM Council Member District 30
+  desc: 2025 NYC Primary Election - DEM Council Member District 30
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d31.abif
+  id: nyc2025-primary-dem-council-member-d31
+  title: NYC 2025 Primary DEM Council Member District 31
+  desc: 2025 NYC Primary Election - DEM Council Member District 31
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d32.abif
+  id: nyc2025-primary-dem-council-member-d32
+  title: NYC 2025 Primary DEM Council Member District 32
+  desc: 2025 NYC Primary Election - DEM Council Member District 32
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d33.abif
+  id: nyc2025-primary-dem-council-member-d33
+  title: NYC 2025 Primary DEM Council Member District 33
+  desc: 2025 NYC Primary Election - DEM Council Member District 33
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d34.abif
+  id: nyc2025-primary-dem-council-member-d34
+  title: NYC 2025 Primary DEM Council Member District 34
+  desc: 2025 NYC Primary Election - DEM Council Member District 34
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d35.abif
+  id: nyc2025-primary-dem-council-member-d35
+  title: NYC 2025 Primary DEM Council Member District 35
+  desc: 2025 NYC Primary Election - DEM Council Member District 35
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d36.abif
+  id: nyc2025-primary-dem-council-member-d36
+  title: NYC 2025 Primary DEM Council Member District 36
+  desc: 2025 NYC Primary Election - DEM Council Member District 36
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d37.abif
+  id: nyc2025-primary-dem-council-member-d37
+  title: NYC 2025 Primary DEM Council Member District 37
+  desc: 2025 NYC Primary Election - DEM Council Member District 37
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d38.abif
+  id: nyc2025-primary-dem-council-member-d38
+  title: NYC 2025 Primary DEM Council Member District 38
+  desc: 2025 NYC Primary Election - DEM Council Member District 38
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d39.abif
+  id: nyc2025-primary-dem-council-member-d39
+  title: NYC 2025 Primary DEM Council Member District 39
+  desc: 2025 NYC Primary Election - DEM Council Member District 39
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d40.abif
+  id: nyc2025-primary-dem-council-member-d40
+  title: NYC 2025 Primary DEM Council Member District 40
+  desc: 2025 NYC Primary Election - DEM Council Member District 40
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d41.abif
+  id: nyc2025-primary-dem-council-member-d41
+  title: NYC 2025 Primary DEM Council Member District 41
+  desc: 2025 NYC Primary Election - DEM Council Member District 41
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d42.abif
+  id: nyc2025-primary-dem-council-member-d42
+  title: NYC 2025 Primary DEM Council Member District 42
+  desc: 2025 NYC Primary Election - DEM Council Member District 42
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d43.abif
+  id: nyc2025-primary-dem-council-member-d43
+  title: NYC 2025 Primary DEM Council Member District 43
+  desc: 2025 NYC Primary Election - DEM Council Member District 43
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d44.abif
+  id: nyc2025-primary-dem-council-member-d44
+  title: NYC 2025 Primary DEM Council Member District 44
+  desc: 2025 NYC Primary Election - DEM Council Member District 44
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d45.abif
+  id: nyc2025-primary-dem-council-member-d45
+  title: NYC 2025 Primary DEM Council Member District 45
+  desc: 2025 NYC Primary Election - DEM Council Member District 45
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d46.abif
+  id: nyc2025-primary-dem-council-member-d46
+  title: NYC 2025 Primary DEM Council Member District 46
+  desc: 2025 NYC Primary Election - DEM Council Member District 46
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d47.abif
+  id: nyc2025-primary-dem-council-member-d47
+  title: NYC 2025 Primary DEM Council Member District 47
+  desc: 2025 NYC Primary Election - DEM Council Member District 47
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d48.abif
+  id: nyc2025-primary-dem-council-member-d48
+  title: NYC 2025 Primary DEM Council Member District 48
+  desc: 2025 NYC Primary Election - DEM Council Member District 48
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d49.abif
+  id: nyc2025-primary-dem-council-member-d49
+  title: NYC 2025 Primary DEM Council Member District 49
+  desc: 2025 NYC Primary Election - DEM Council Member District 49
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d50.abif
+  id: nyc2025-primary-dem-council-member-d50
+  title: NYC 2025 Primary DEM Council Member District 50
+  desc: 2025 NYC Primary Election - DEM Council Member District 50
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-dem-council-member-d51.abif
+  id: nyc2025-primary-dem-council-member-d51
+  title: NYC 2025 Primary DEM Council Member District 51
+  desc: 2025 NYC Primary Election - DEM Council Member District 51
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-comptroller.abif
+  id: nyc2025-primary-rep-comptroller
+  title: NYC 2025 Primary REP Comptroller
+  desc: 2025 NYC Primary Election - REP Comptroller
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d01.abif
+  id: nyc2025-primary-rep-council-member-d01
+  title: NYC 2025 Primary REP Council Member District 01
+  desc: 2025 NYC Primary Election - REP Council Member District 01
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d02.abif
+  id: nyc2025-primary-rep-council-member-d02
+  title: NYC 2025 Primary REP Council Member District 02
+  desc: 2025 NYC Primary Election - REP Council Member District 02
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d03.abif
+  id: nyc2025-primary-rep-council-member-d03
+  title: NYC 2025 Primary REP Council Member District 03
+  desc: 2025 NYC Primary Election - REP Council Member District 03
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d04.abif
+  id: nyc2025-primary-rep-council-member-d04
+  title: NYC 2025 Primary REP Council Member District 04
+  desc: 2025 NYC Primary Election - REP Council Member District 04
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d05.abif
+  id: nyc2025-primary-rep-council-member-d05
+  title: NYC 2025 Primary REP Council Member District 05
+  desc: 2025 NYC Primary Election - REP Council Member District 05
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d06.abif
+  id: nyc2025-primary-rep-council-member-d06
+  title: NYC 2025 Primary REP Council Member District 06
+  desc: 2025 NYC Primary Election - REP Council Member District 06
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d07.abif
+  id: nyc2025-primary-rep-council-member-d07
+  title: NYC 2025 Primary REP Council Member District 07
+  desc: 2025 NYC Primary Election - REP Council Member District 07
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d08.abif
+  id: nyc2025-primary-rep-council-member-d08
+  title: NYC 2025 Primary REP Council Member District 08
+  desc: 2025 NYC Primary Election - REP Council Member District 08
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d09.abif
+  id: nyc2025-primary-rep-council-member-d09
+  title: NYC 2025 Primary REP Council Member District 09
+  desc: 2025 NYC Primary Election - REP Council Member District 09
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d10.abif
+  id: nyc2025-primary-rep-council-member-d10
+  title: NYC 2025 Primary REP Council Member District 10
+  desc: 2025 NYC Primary Election - REP Council Member District 10
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d11.abif
+  id: nyc2025-primary-rep-council-member-d11
+  title: NYC 2025 Primary REP Council Member District 11
+  desc: 2025 NYC Primary Election - REP Council Member District 11
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d12.abif
+  id: nyc2025-primary-rep-council-member-d12
+  title: NYC 2025 Primary REP Council Member District 12
+  desc: 2025 NYC Primary Election - REP Council Member District 12
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d13.abif
+  id: nyc2025-primary-rep-council-member-d13
+  title: NYC 2025 Primary REP Council Member District 13
+  desc: 2025 NYC Primary Election - REP Council Member District 13
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d14.abif
+  id: nyc2025-primary-rep-council-member-d14
+  title: NYC 2025 Primary REP Council Member District 14
+  desc: 2025 NYC Primary Election - REP Council Member District 14
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d15.abif
+  id: nyc2025-primary-rep-council-member-d15
+  title: NYC 2025 Primary REP Council Member District 15
+  desc: 2025 NYC Primary Election - REP Council Member District 15
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d16.abif
+  id: nyc2025-primary-rep-council-member-d16
+  title: NYC 2025 Primary REP Council Member District 16
+  desc: 2025 NYC Primary Election - REP Council Member District 16
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d17.abif
+  id: nyc2025-primary-rep-council-member-d17
+  title: NYC 2025 Primary REP Council Member District 17
+  desc: 2025 NYC Primary Election - REP Council Member District 17
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d18.abif
+  id: nyc2025-primary-rep-council-member-d18
+  title: NYC 2025 Primary REP Council Member District 18
+  desc: 2025 NYC Primary Election - REP Council Member District 18
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d19.abif
+  id: nyc2025-primary-rep-council-member-d19
+  title: NYC 2025 Primary REP Council Member District 19
+  desc: 2025 NYC Primary Election - REP Council Member District 19
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d20.abif
+  id: nyc2025-primary-rep-council-member-d20
+  title: NYC 2025 Primary REP Council Member District 20
+  desc: 2025 NYC Primary Election - REP Council Member District 20
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d21.abif
+  id: nyc2025-primary-rep-council-member-d21
+  title: NYC 2025 Primary REP Council Member District 21
+  desc: 2025 NYC Primary Election - REP Council Member District 21
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d22.abif
+  id: nyc2025-primary-rep-council-member-d22
+  title: NYC 2025 Primary REP Council Member District 22
+  desc: 2025 NYC Primary Election - REP Council Member District 22
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d23.abif
+  id: nyc2025-primary-rep-council-member-d23
+  title: NYC 2025 Primary REP Council Member District 23
+  desc: 2025 NYC Primary Election - REP Council Member District 23
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d24.abif
+  id: nyc2025-primary-rep-council-member-d24
+  title: NYC 2025 Primary REP Council Member District 24
+  desc: 2025 NYC Primary Election - REP Council Member District 24
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d25.abif
+  id: nyc2025-primary-rep-council-member-d25
+  title: NYC 2025 Primary REP Council Member District 25
+  desc: 2025 NYC Primary Election - REP Council Member District 25
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d26.abif
+  id: nyc2025-primary-rep-council-member-d26
+  title: NYC 2025 Primary REP Council Member District 26
+  desc: 2025 NYC Primary Election - REP Council Member District 26
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d27.abif
+  id: nyc2025-primary-rep-council-member-d27
+  title: NYC 2025 Primary REP Council Member District 27
+  desc: 2025 NYC Primary Election - REP Council Member District 27
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d28.abif
+  id: nyc2025-primary-rep-council-member-d28
+  title: NYC 2025 Primary REP Council Member District 28
+  desc: 2025 NYC Primary Election - REP Council Member District 28
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d29.abif
+  id: nyc2025-primary-rep-council-member-d29
+  title: NYC 2025 Primary REP Council Member District 29
+  desc: 2025 NYC Primary Election - REP Council Member District 29
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d30.abif
+  id: nyc2025-primary-rep-council-member-d30
+  title: NYC 2025 Primary REP Council Member District 30
+  desc: 2025 NYC Primary Election - REP Council Member District 30
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d31.abif
+  id: nyc2025-primary-rep-council-member-d31
+  title: NYC 2025 Primary REP Council Member District 31
+  desc: 2025 NYC Primary Election - REP Council Member District 31
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d32.abif
+  id: nyc2025-primary-rep-council-member-d32
+  title: NYC 2025 Primary REP Council Member District 32
+  desc: 2025 NYC Primary Election - REP Council Member District 32
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d33.abif
+  id: nyc2025-primary-rep-council-member-d33
+  title: NYC 2025 Primary REP Council Member District 33
+  desc: 2025 NYC Primary Election - REP Council Member District 33
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d34.abif
+  id: nyc2025-primary-rep-council-member-d34
+  title: NYC 2025 Primary REP Council Member District 34
+  desc: 2025 NYC Primary Election - REP Council Member District 34
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d35.abif
+  id: nyc2025-primary-rep-council-member-d35
+  title: NYC 2025 Primary REP Council Member District 35
+  desc: 2025 NYC Primary Election - REP Council Member District 35
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d36.abif
+  id: nyc2025-primary-rep-council-member-d36
+  title: NYC 2025 Primary REP Council Member District 36
+  desc: 2025 NYC Primary Election - REP Council Member District 36
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d37.abif
+  id: nyc2025-primary-rep-council-member-d37
+  title: NYC 2025 Primary REP Council Member District 37
+  desc: 2025 NYC Primary Election - REP Council Member District 37
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d38.abif
+  id: nyc2025-primary-rep-council-member-d38
+  title: NYC 2025 Primary REP Council Member District 38
+  desc: 2025 NYC Primary Election - REP Council Member District 38
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d39.abif
+  id: nyc2025-primary-rep-council-member-d39
+  title: NYC 2025 Primary REP Council Member District 39
+  desc: 2025 NYC Primary Election - REP Council Member District 39
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d40.abif
+  id: nyc2025-primary-rep-council-member-d40
+  title: NYC 2025 Primary REP Council Member District 40
+  desc: 2025 NYC Primary Election - REP Council Member District 40
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d41.abif
+  id: nyc2025-primary-rep-council-member-d41
+  title: NYC 2025 Primary REP Council Member District 41
+  desc: 2025 NYC Primary Election - REP Council Member District 41
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d42.abif
+  id: nyc2025-primary-rep-council-member-d42
+  title: NYC 2025 Primary REP Council Member District 42
+  desc: 2025 NYC Primary Election - REP Council Member District 42
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d43.abif
+  id: nyc2025-primary-rep-council-member-d43
+  title: NYC 2025 Primary REP Council Member District 43
+  desc: 2025 NYC Primary Election - REP Council Member District 43
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d44.abif
+  id: nyc2025-primary-rep-council-member-d44
+  title: NYC 2025 Primary REP Council Member District 44
+  desc: 2025 NYC Primary Election - REP Council Member District 44
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d45.abif
+  id: nyc2025-primary-rep-council-member-d45
+  title: NYC 2025 Primary REP Council Member District 45
+  desc: 2025 NYC Primary Election - REP Council Member District 45
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d46.abif
+  id: nyc2025-primary-rep-council-member-d46
+  title: NYC 2025 Primary REP Council Member District 46
+  desc: 2025 NYC Primary Election - REP Council Member District 46
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d47.abif
+  id: nyc2025-primary-rep-council-member-d47
+  title: NYC 2025 Primary REP Council Member District 47
+  desc: 2025 NYC Primary Election - REP Council Member District 47
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d48.abif
+  id: nyc2025-primary-rep-council-member-d48
+  title: NYC 2025 Primary REP Council Member District 48
+  desc: 2025 NYC Primary Election - REP Council Member District 48
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d49.abif
+  id: nyc2025-primary-rep-council-member-d49
+  title: NYC 2025 Primary REP Council Member District 49
+  desc: 2025 NYC Primary Election - REP Council Member District 49
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d50.abif
+  id: nyc2025-primary-rep-council-member-d50
+  title: NYC 2025 Primary REP Council Member District 50
+  desc: 2025 NYC Primary Election - REP Council Member District 50
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
+- filename: localabif/newyork/nyc2025-primary-rep-council-member-d51.abif
+  id: nyc2025-primary-rep-council-member-d51
+  title: NYC 2025 Primary REP Council Member District 51
+  desc: 2025 NYC Primary Election - REP Council Member District 51
+  tags: nyc, 2025, actual, NY, NYC-2025, NYC_NY, primary_election, RCV
