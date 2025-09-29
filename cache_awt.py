@@ -435,7 +435,6 @@ def show_config_command():
             print(f"  {db_path}: does not exist ({source})")
 
 
-
 def main():
     parser = argparse.ArgumentParser(description="AWT cache utility")
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
@@ -547,8 +546,11 @@ def main():
                         total_rows = len(cf_rows)
                         break
                     # Fallback: older DB schema without sidecar index
-                    for url, hsh, cnt, first_seen, last_seen, last_status in conn.execute(
-                        "SELECT url, hash, count, first_seen, last_seen, last_status FROM urls ORDER BY last_seen DESC"):
+                    for url, hsh, cnt, first_seen, last_seen, last_status \
+                        in conn.execute(
+                            "SELECT url, hash, count, first_seen, "
+                            "last_seen, last_status FROM urls "
+                            "ORDER BY last_seen DESC"):
                         url_to_stats[url] = {
                             'url': url,
                             'count': cnt or 0,
