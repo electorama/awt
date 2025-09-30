@@ -1,8 +1,8 @@
 [project]
 name = "awt"
-version = "0.34.0rc2"
+version = "0.34.0"
 dependencies = [
-    "abiftool>=0.34.rc2",
+    "abiftool>=0.34.0",
     "dotenv",
     "Flask",
     "flask-caching",
