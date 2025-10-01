@@ -38,6 +38,7 @@ from cache_awt import (
     DEFAULT_REQUEST_LOG_DB,
 )
 import conduits
+from src.server_util import RouteProfiler
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, send_from_directory, url_for, Response
 from flask_caching import Cache
@@ -54,6 +55,7 @@ except ImportError:
     get_election_preview_metadata = None
     render_generic_preview_png = None
 import logging
+
 from markupsafe import escape
 from pathlib import Path
 from pprint import pformat
@@ -377,6 +379,7 @@ logging.basicConfig(
     datefmt='%d/%b/%Y %H:%M:%S'
 )
 logging.getLogger('awt.cache').setLevel(logging.INFO)
+logging.getLogger('awt.routes.id').setLevel(logging.INFO)
 
 
 # --- Flask-Caching Initialization for WSGI ---
@@ -998,74 +1001,108 @@ def get_by_id(identifier, resulttype=None):
     @cache.cached(timeout=AWT_DEFAULT_CACHE_TIMEOUT, query_string=True)
     def cached_get_by_id(identifier, resulttype=None):
         webenv = WebEnv.wenvDict()
-        debug_output = webenv.get('debugIntro') or ""
+        debug_intro = webenv.get('debugIntro') or ""
         webenv['toppage'] = 'id'
         WebEnv.sync_web_env()
-        rtypemap = {
-            'wlt': 'win-loss-tie (Condorcet) results',
-            'dot': 'pairwise (Condorcet) diagram',
-            'pairwise': 'Condorcet/Copeland results',
-            'IRV': 'RCV/IRV results',
-            'STAR': 'STAR results',
-            'FPTP': 'choose-one (FPTP) results',
-            'approval': 'approval voting results'
-        }
-        print(
-            f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})")
-        debug_output += \
-            f" 00001 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id({identifier=} {resulttype=})\n"
-        msgs = {}
-        msgs['placeholder'] = "Enter ABIF here, possibly using one of the examples below..."
-        election_list = build_election_list()
-        fileentry = get_fileentry_from_election_list(identifier, election_list)
-        print(
-            f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-        debug_output += \
-            f" 00002 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+        query_string = ''
+        try:
+            query_string = request.query_string.decode('utf-8', errors='ignore')
+        except Exception:
+            query_string = ''
+        profiler = RouteProfiler(identifier, resulttype, request_path=request.path, query_string=query_string)
+        try:
+            full_path = getattr(request, 'full_path', request.path)
+            cache_type = app.config.get('CACHE_TYPE')
+            profiler.log_request_start(path=full_path, cache_type=cache_type, args_count=len(request.args))
+            profiler.debug_checkpoint("00001", f"get_by_id(identifier={identifier!r} resulttype={resulttype!r})")
 
-        # --- Server-side profiling if AWT_PROFILE_OUTPUT is set ---
-        prof = None
-        cprof_path = os.environ.get('AWT_PROFILE_OUTPUT')
-        if cprof_path:
-            prof = cProfile.Profile()
-            prof.enable()
+            rtypemap = {
+                'wlt': 'win-loss-tie (Condorcet) results',
+                'dot': 'pairwise (Condorcet) diagram',
+                'pairwise': 'Condorcet/Copeland results',
+                'IRV': 'RCV/IRV results',
+                'STAR': 'STAR results',
+                'FPTP': 'choose-one (FPTP) results',
+                'approval': 'approval voting results'
+            }
+            msgs = {}
+            msgs['placeholder'] = "Enter ABIF here, possibly using one of the examples below..."
 
-        if fileentry:
-            print(
-                f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-            debug_output += \
-                f" 00003 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+            election_list, catalog_elapsed = profiler.time_block(
+                'build_election_list',
+                build_election_list,
+                log_fields={'function': 'awt.build_election_list'}
+            )
+            profiler.log("catalog loaded", entries=len(election_list), elapsed_s=f"{catalog_elapsed:.3f}")
+            profiler.debug_checkpoint("00002", f"get_by_id() catalog loaded ({len(election_list)} entries) [{catalog_elapsed:.2f}s]")
+
+            fileentry = get_fileentry_from_election_list(identifier, election_list)
+            if not fileentry:
+                profiler.log("catalog miss", status=404)
+                msgs['pagetitle'] = "NOT FOUND"
+                msgs['lede'] = (
+                    "I'm not sure what you're looking for, "
+                    "but you shouldn't look here."
+                )
+                return render_template('not-found.html',
+                                       identifier=identifier,
+                                       msgs=msgs,
+                                       webenv=webenv
+                                       ), 404
+
+            profiler.debug_checkpoint("00003", "get_by_id() file entry resolved")
             msgs['pagetitle'] = f"{webenv['statusStr']}{fileentry['title']}"
             msgs['lede'] = (
-                f"Below is the ABIF from the \"{fileentry['id']}\" election" +
+                f"Below is the ABIF from the \"{fileentry['id']}\" election"
                 f" ({fileentry['title']})"
             )
             msgs['results_name'] = rtypemap.get(resulttype)
             msgs['taglist'] = fileentry['taglist']
 
+            convert_exc = None
+            ballot_count = None
+            candidate_count = 0
+            prof = None
+            cprof_path = os.environ.get('AWT_PROFILE_OUTPUT')
+            if cprof_path:
+                prof = cProfile.Profile()
+                prof.enable()
+                profiler.log("cprofile enabled", output=cprof_path)
+
+            def _convert():
+                return convert_abif_to_jabmod(fileentry['text'])
+
             try:
-                jabmod = convert_abif_to_jabmod(fileentry['text'])
+                jabmod, parse_elapsed = profiler.time_block(
+                    'convert_abif_to_jabmod',
+                    _convert,
+                    log_fields={'text_len': len(fileentry['text']), 'function': 'abiflib.convert_abif_to_jabmod'}
+                )
+            except ABIFVotelineException as exc:
+                convert_exc = exc
+                jabmod = None
+                error_html = exc.message
+                profiler.debug_checkpoint("00004", f"convert_abif_to_jabmod failed: {exc}")
+            else:
                 if fileentry.get('desc'):
                     jabmod['desc'] = fileentry['desc']
                 if fileentry.get('title'):
                     jabmod['title'] = fileentry['title']
                 error_html = None
-            except ABIFVotelineException as e:
-                jabmod = None
-                error_html = e.message
+                ballot_count = jabmod.get('metadata', {}).get('ballotcount')
+                candidate_count = len(jabmod.get('candidates', {}) or {})
+                profiler.log("abif parsed", ballots=ballot_count, candidates=candidate_count, elapsed_s=f"{parse_elapsed:.3f}")
+                profiler.debug_checkpoint("00004", f"Result conduit setup (parse {parse_elapsed:.2f}s)")
 
-            import time
-            print(
-                f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-            debug_output += f" 00004 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+            if jabmod is None:
+                raise convert_exc or RuntimeError("convert_abif_to_jabmod returned no data")
+
             resconduit = conduits.ResultConduit(jabmod=jabmod)
-            # Record detected ballot type for display
             try:
                 msgs['ballot_type'] = find_ballot_type(jabmod) if jabmod else None
             except Exception:
                 msgs['ballot_type'] = None
 
-            # Determine which computations to run based on route
             compute_all = (not resulttype) or (resulttype == 'all')
             do_FPTP = compute_all or (resulttype == 'FPTP')
             do_IRV = compute_all or (resulttype == 'IRV')
@@ -1073,165 +1110,185 @@ def get_by_id(identifier, resulttype=None):
             do_STAR = compute_all or (resulttype == 'STAR')
             do_approval = compute_all or (resulttype == 'approval')
 
-            # Compute FPTP first if needed (enables color ordering by votes)
             candidate_order = []
             if do_FPTP:
-                t_fptp = time.time()
-                resconduit = resconduit.update_FPTP_result(jabmod)
-                fptp_time = time.time() - t_fptp
-                print(
-                    f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]")
-                debug_output += f" 00006 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [FPTP: {fptp_time:.2f}s]\n"
-                # Build candidate order from FPTP toppicks if available
-                resblob = resconduit.resblob
-                if jabmod and 'FPTP_result' in resblob:
-                    fptp_toppicks = resblob['FPTP_result'].get('toppicks', {})
-                    if fptp_toppicks:
-                        def get_vote_count(item):
-                            cand, votes = item
-                            if isinstance(votes, (int, float)):
-                                return votes
-                            elif isinstance(votes, list) and len(votes) > 0:
-                                return votes[0] if isinstance(votes[0], (int, float)) else 0
-                            else:
+                def _run_fptp():
+                    nonlocal resconduit, candidate_order
+                    resconduit = resconduit.update_FPTP_result(jabmod)
+                    resblob_local = resconduit.resblob
+                    if jabmod and 'FPTP_result' in resblob_local:
+                        fptp_toppicks = resblob_local['FPTP_result'].get('toppicks', {})
+                        if fptp_toppicks:
+                            def get_vote_count(item):
+                                cand, votes = item
+                                if isinstance(votes, (int, float)):
+                                    return votes
+                                if isinstance(votes, list) and len(votes) > 0 and isinstance(votes[0], (int, float)):
+                                    return votes[0]
                                 return 0
-                        fptp_ordered_candidates = sorted(
-                            fptp_toppicks.items(), key=get_vote_count, reverse=True)
-                        candidate_order = [cand for cand, votes in fptp_ordered_candidates if cand is not None]
-            # If no FPTP order, fall back to alphabetical
+                            ordered = sorted(fptp_toppicks.items(), key=get_vote_count, reverse=True)
+                            candidate_order = [cand for cand, votes in ordered if cand is not None]
+                    return resconduit
+
+                _, fptp_time = profiler.time_block(
+                    'FPTP',
+                    _run_fptp,
+                    log_fields={'ballots': ballot_count, 'candidates': candidate_count, 'function': 'conduits.ResultConduit.update_FPTP_result'}
+                )
+                profiler.debug_checkpoint("00006", f"get_by_id() [FPTP: {fptp_time:.2f}s]")
+            else:
+                profiler.log_skip('FPTP', reason='resulttype filter')
+
             if not candidate_order:
                 if jabmod and 'candidates' in jabmod:
                     candidate_order = sorted(jabmod['candidates'].keys())
                 else:
                     candidate_order = []
 
-            # Generate single color dictionary for all voting systems
-            # Use the same canonical ordering logic as conduits.py
             from conduits import get_canonical_candidate_order
             canonical_order = get_canonical_candidate_order(jabmod)
             consistent_colordict = generate_candidate_colors(canonical_order)
 
-            # Compute transform_ballots once for GET (applies to all methods)
             _tb_val = request.args.get('transform_ballots')
-            transform_ballots = True if _tb_val is None else (_tb_val.lower() in ('1', 'true', 'yes', 'on'))
+            if _tb_val is None:
+                transform_ballots = True
+            else:
+                transform_ballots = str(_tb_val).lower() in ('1', 'true', 'yes', 'on')
 
-            # IRV (only if requested/all)
             if do_IRV:
-                t_irv = time.time()
-                include_irv_extra = bool(request.args.get('include_irv_extra', True))
-                resconduit = resconduit.update_IRV_result(
-                    jabmod, include_irv_extra=include_irv_extra, transform_ballots=transform_ballots)
-                irv_time = time.time() - t_irv
-                print(
-                    f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]")
-                debug_output += f" 00007 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [IRV: {irv_time:.2f}s]\n"
+                def _run_irv():
+                    nonlocal resconduit
+                    include_irv_extra = bool(request.args.get('include_irv_extra', True))
+                    resconduit = resconduit.update_IRV_result(
+                        jabmod,
+                        include_irv_extra=include_irv_extra,
+                        transform_ballots=transform_ballots
+                    )
+                    return resconduit
 
-            # Pairwise/Condorcet (only if requested/all)
+                _, irv_time = profiler.time_block(
+                    'IRV',
+                    _run_irv,
+                    log_fields={'transform_ballots': transform_ballots, 'function': 'conduits.ResultConduit.update_IRV_result'}
+                )
+                profiler.debug_checkpoint("00007", f"get_by_id() [IRV: {irv_time:.2f}s]")
+            else:
+                profiler.log_skip('IRV', reason='resulttype filter')
+
             if do_pairwise:
-                t_pairwise = time.time()
-                # Build pairwise result and summaries using the consistent colors
-                # Update conduit to capture notices and core results (matrix + notices)
-                resconduit = resconduit.update_pairwise_result(jabmod, transform_ballots=transform_ballots)
-                # Harmonize: use the same pairwise matrix computed by conduits
-                pairwise_dict = resconduit.resblob.get('pairwise_dict', {})
-                wltdict = winlosstie_dict_from_pairdict(
-                    jabmod['candidates'], pairwise_dict)
-                resblob = resconduit.resblob
-                # Ensure notices structure exists to satisfy template expectations
-                if 'notices' not in resblob:
-                    resblob['notices'] = {}
-                resblob['notices'].setdefault('pairwise', [])
-                # Copecount-derived fields
-                from abiflib import full_copecount_from_abifmodel, get_Copeland_winners, copecount_diagram
-                copecount = full_copecount_from_abifmodel(jabmod, pairdict=pairwise_dict)
-                copewinners = get_Copeland_winners(copecount)
-                resblob['copewinners'] = copewinners
-                resblob['copewinnerstring'] = ", ".join(copewinners)
-                resblob['is_copeland_tie'] = len(copewinners) > 1
+                def _run_pairwise():
+                    nonlocal resconduit
+                    resconduit = resconduit.update_pairwise_result(jabmod, transform_ballots=transform_ballots)
+                    resblob_local = resconduit.resblob
+                    pairwise_dict_local = resblob_local.get('pairwise_dict', {})
+                    wltdict_local = winlosstie_dict_from_pairdict(
+                        jabmod['candidates'], pairwise_dict_local)
+                    if 'notices' not in resblob_local:
+                        resblob_local['notices'] = {}
+                    resblob_local['notices'].setdefault('pairwise', [])
+                    copecount_local = full_copecount_from_abifmodel(jabmod, pairdict=pairwise_dict_local)
+                    copewinners_local = get_Copeland_winners(copecount_local)
+                    resblob_local['copewinners'] = copewinners_local
+                    resblob_local['copewinnerstring'] = ", ".join(copewinners_local)
+                    resblob_local['is_copeland_tie'] = len(copewinners_local) > 1
 
-                # Pairwise/Copeland tie notices are generated in abiflib.pairwise_tally
+                    resblob_local['dotsvg_html'] = copecount_diagram(copecount_local, outformat='svg')
+                    resblob_local['pairwise_dict'] = pairwise_dict_local
+                    resblob_local['pairwise_html'] = jinja_pairwise_snippet(
+                        jabmod,
+                        pairwise_dict_local,
+                        wltdict_local,
+                        colordict=consistent_colordict,
+                        add_desc=True,
+                        svg_text=None,
+                        is_copeland_tie=resblob_local.get('is_copeland_tie', False),
+                        paircells=resblob_local.get('paircells')
+                    )
+                    resblob_local['pairwise_summary_html'] = jinja_pairwise_summary_only(
+                        jabmod,
+                        pairwise_dict_local,
+                        wltdict_local,
+                        colordict=consistent_colordict,
+                        is_copeland_tie=resblob_local.get('is_copeland_tie', False),
+                        copewinnerstring=resblob_local.get('copewinnerstring', ''),
+                        copewinners=resblob_local.get('copewinners', [])
+                    )
+                    return resconduit
 
-                resblob['dotsvg_html'] = copecount_diagram(copecount, outformat='svg')
-                resblob['pairwise_dict'] = pairwise_dict
-                resblob['pairwise_html'] = jinja_pairwise_snippet(
-                    jabmod,
-                    pairwise_dict,
-                    wltdict,
-                    colordict=consistent_colordict,
-                    add_desc=True,
-                    svg_text=None,
-                    is_copeland_tie=resblob.get('is_copeland_tie', False),
-                    paircells=resblob.get('paircells')
+                _, pairwise_time = profiler.time_block(
+                    'pairwise',
+                    _run_pairwise,
+                    log_fields={'transform_ballots': transform_ballots, 'function': 'conduits.ResultConduit.update_pairwise_result'}
                 )
-                resblob['pairwise_summary_html'] = jinja_pairwise_summary_only(
-                    jabmod,
-                    pairwise_dict,
-                    wltdict,
-                    colordict=consistent_colordict,
-                    is_copeland_tie=resblob.get('is_copeland_tie', False),
-                    copewinnerstring=resblob.get('copewinnerstring', ''),
-                    copewinners=resblob.get('copewinners', [])
-                )
-                pairwise_time = time.time() - t_pairwise
-                print(
-                    f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]")
-                debug_output += f" 00008 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Pairwise: {pairwise_time:.2f}s]\n"
+                profiler.debug_checkpoint("00008", f"get_by_id() [Pairwise: {pairwise_time:.2f}s]")
+            else:
+                profiler.log_skip('pairwise', reason='resulttype filter')
 
-            # STAR (only if requested/all)
+            ratedjabmod = None
             if do_STAR:
-                t_starprep = time.time()
-                ratedjabmod = add_ratings_to_jabmod_votelines(jabmod)
-                starprep_time = time.time() - t_starprep
-                print(
-                    f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]")
-                debug_output += f" 00009 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR prep: {starprep_time:.2f}s]\n"
+                ratedjabmod, starprep_time = profiler.time_block(
+                    'STAR_prep',
+                    lambda: add_ratings_to_jabmod_votelines(jabmod),
+                    log_fields={'function': 'abiflib.add_ratings_to_jabmod_votelines'}
+                )
+                profiler.debug_checkpoint("00009", f"get_by_id() [STAR prep: {starprep_time:.2f}s]")
 
-                t_star = time.time()
-                resconduit = resconduit.update_STAR_result(
-                    ratedjabmod, consistent_colordict)
-                resconduit.resblob['STAR_html'] = jinja_scorestar_snippet(ratedjabmod)
-                star_time = time.time() - t_star
-                print(
-                    f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]")
-                debug_output += f" 00010 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [STAR: {star_time:.2f}s]\n"
+                def _run_star():
+                    nonlocal resconduit
+                    resconduit = resconduit.update_STAR_result(
+                        ratedjabmod, consistent_colordict)
+                    resconduit.resblob['STAR_html'] = jinja_scorestar_snippet(ratedjabmod)
+                    return resconduit
 
-            # Approval (only if requested/all)
+                _, star_time = profiler.time_block(
+                    'STAR',
+                    _run_star,
+                    log_fields={'function': 'conduits.ResultConduit.update_STAR_result'}
+                )
+                profiler.debug_checkpoint("00010", f"get_by_id() [STAR: {star_time:.2f}s]")
+            else:
+                profiler.log_skip('STAR', reason='resulttype filter')
+
             if do_approval:
-                t_approval = time.time()
-                approval_input = jabmod
-                try:
-                    _bt = find_ballot_type(jabmod)
-                except Exception:
-                    _bt = None
-                # When transforms are disabled, use simple ranked→choose_many pre-transform
-                if (not transform_ballots) and _bt and _bt != 'choose_many':
+                def _run_approval():
+                    nonlocal resconduit
+                    approval_input_local = jabmod
                     try:
-                        from abiflib.transform_core import ranked_to_choose_many_all_ranked_approved
-                        approval_input = ranked_to_choose_many_all_ranked_approved(jabmod)
+                        ballot_type = find_ballot_type(jabmod)
                     except Exception:
-                        approval_input = jabmod
-                resconduit = resconduit.update_approval_result(approval_input, transform_ballots=transform_ballots)
-                approval_time = time.time() - t_approval
-                print(
-                    f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Approval: {approval_time:.2f}s]")
-                debug_output += f" 00011 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id() [Approval: {approval_time:.2f}s]\n"
+                        ballot_type = None
+                    if (not transform_ballots) and ballot_type and ballot_type != 'choose_many':
+                        try:
+                            from abiflib.transform_core import ranked_to_choose_many_all_ranked_approved
+                            approval_input_local = ranked_to_choose_many_all_ranked_approved(jabmod)
+                        except Exception:
+                            approval_input_local = jabmod
+                    resconduit_local = resconduit.update_approval_result(
+                        approval_input_local, transform_ballots=transform_ballots)
+                    return resconduit_local
+
+                _, approval_time = profiler.time_block(
+                    'approval',
+                    _run_approval,
+                    log_fields={'transform_ballots': transform_ballots, 'function': 'conduits.ResultConduit.update_approval_result'}
+                )
+                profiler.debug_checkpoint("00011", f"get_by_id() [Approval: {approval_time:.2f}s]")
+            else:
+                profiler.log_skip('approval', reason='resulttype filter')
 
             resblob = resconduit.resblob
-
-            # Store the consistent colordict and candidate order
             resblob['colordict'] = consistent_colordict
             resblob['candidate_order'] = candidate_order
+
             if not resulttype or resulttype == 'all':
-                # Use dynamic method ordering based on metadata and ballot type
                 base_methods = ['FPTP', 'IRV', 'STAR', 'approval', 'wlt']
                 ordered_methods = get_method_ordering(jabmod, base_methods)
-                # Insert 'dot' before 'wlt' to keep Condorcet methods together
                 rtypelist = []
                 for method in ordered_methods:
                     if method == 'wlt':
                         rtypelist.append('dot')
                         rtypelist.append('wlt')
-                    elif method != 'dot':  # Skip 'dot' since we handle it with 'wlt'
+                    elif method != 'dot':
                         rtypelist.append(method)
             else:
                 if resulttype == 'pairwise':
@@ -1239,14 +1296,12 @@ def get_by_id(identifier, resulttype=None):
                 else:
                     rtypelist = [resulttype]
 
-            debug_output += pformat(resblob.keys()) + "\n"
-            debug_output += f"result_types (dynamic order): {rtypelist}\n"
+            profiler.debug_checkpoint("00012", f"get_by_id() methods ready ({rtypelist})")
 
-            print(
-                f" 00012 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()")
-            debug_output += f" 00012 ---->  [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] get_by_id()\n"
+            nav_base = ['FPTP', 'IRV', 'approval', 'STAR', 'wlt']
+            nav_order = get_method_ordering(jabmod, nav_base)
+            nav_methods = ['pairwise' if m == 'wlt' else m for m in nav_order]
 
-            # --- Build Open Graph metadata strings ---
             if get_election_preview_metadata is not None:
                 try:
                     og_metadata = get_election_preview_metadata(identifier)
@@ -1254,36 +1309,14 @@ def get_by_id(identifier, resulttype=None):
                     msgs['og_description'] = og_metadata['og_description']
                     msgs['og_image'] = f"{webenv['base_url']}{og_metadata['og_image']}"
                 except Exception:
-                    # Fail quietly; base.html will fall back to defaults
                     pass
 
             if prof:
                 prof.disable()
                 prof.dump_stats(cprof_path)
-                print(f"[SERVER PROFILE] Profile saved to {cprof_path}")
-            # Build dynamic method ordering list
-            if not resulttype or resulttype == 'all':
-                # Use dynamic method ordering based on metadata and ballot type
-                base_methods = ['FPTP', 'IRV', 'STAR', 'approval', 'wlt']
-                ordered_methods = get_method_ordering(jabmod, base_methods)
-                # Insert 'dot' before 'wlt' to keep Condorcet methods together
-                rtypelist = []
-                for method in ordered_methods:
-                    if method == 'wlt':
-                        rtypelist.append('dot')
-                        rtypelist.append('wlt')
-                    elif method != 'dot':  # Skip 'dot' since we handle it with 'wlt'
-                        rtypelist.append(method)
-            else:
-                if resulttype == 'pairwise':
-                    rtypelist = ['dot', 'wlt']
-                else:
-                    rtypelist = [resulttype]
+                profiler.log("cprofile saved", output=cprof_path)
 
-            # Navigation ordering (map wlt to single 'pairwise' nav item)
-            nav_base = ['FPTP', 'IRV', 'approval', 'STAR', 'wlt']
-            nav_order = get_method_ordering(jabmod, nav_base)
-            nav_methods = ['pairwise' if m == 'wlt' else m for m in nav_order]
+            debug_output = profiler.render_debug_output(debug_intro)
 
             return render_template('results-index.html',
                                    abifinput=fileentry['text'],
@@ -1323,18 +1356,9 @@ def get_by_id(identifier, resulttype=None):
                                    debug_flag=webenv['debugFlag'],
                                    resulttype=resulttype,
                                    nav_methods=nav_methods,
-                                   )
-        else:
-            msgs['pagetitle'] = "NOT FOUND"
-            msgs['lede'] = (
-                "I'm not sure what you're looking for, " +
-                "but you shouldn't look here."
-            )
-            return render_template('not-found.html',
-                                   identifier=identifier,
-                                   msgs=msgs,
-                                   webenv=webenv
-                                   ), 404
+                                   ), 200
+        finally:
+            profiler.finalize()
 
     # Debug JSON mode
     if request.args.get('debug') == 'json':
