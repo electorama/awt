@@ -98,8 +98,19 @@ class RouteProfiler:
             if route and query:
                 route = f"{route}?{query}"
             b1060 = _now_b1060()
+            total_val = payload.pop('total', None)
+            steps_val = payload.pop('steps', None)
+            other_val = payload.pop('other', None)
             extras = self._format_fields(payload)
-            parts = [f"[{self.req_id}]", b1060, route, message, extras]
+            parts = [f"[{self.req_id}]", b1060, route, message]
+            if total_val is not None:
+                parts.append(f"total={total_val}")
+            if steps_val:
+                parts.append(f"steps={steps_val}")
+            if other_val:
+                parts.append(f"other:{other_val}")
+            if extras:
+                parts.append(extras)
             line = ' '.join(part for part in parts if part).strip()
             ABIFLIB_LOGGER(line, showframeinfo=False)
         except Exception:  # pragma: no cover - logging should not raise
@@ -166,18 +177,22 @@ class RouteProfiler:
 
     def finalize(self) -> float:
         total = time.perf_counter() - self.started
-        summary = ', '.join(
-            f"{name}:{sum(values):.3f}s/{len(values)}x"
-            for name, values in sorted(self.spans.items())
-        )
+        summary_parts = []
+        for name, values in sorted(self.spans.items()):
+            span_total = sum(values)
+            count = len(values)
+            part = f"{name}:{span_total:.3f}s"
+            if count > 1:
+                part += f"/{count}x"
+            summary_parts.append(part)
+        summary = ', '.join(summary_parts)
         measured = sum(sum(values) for values in self.spans.values())
         other = max(total - measured, 0.0)
         fields = {
             "total": f"{total:.3f}",
             "steps": summary or "none",
-            "other": f"{other:.3f}",
+            "other": f"{other:.3f}s",
         }
         self.log('request complete', **fields)
         self._log_to_abiflib('request complete', **fields)
         return total
-

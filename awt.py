@@ -1097,7 +1097,14 @@ def get_by_id(identifier, resulttype=None):
             if jabmod is None:
                 raise convert_exc or RuntimeError("convert_abif_to_jabmod returned no data")
 
-            resconduit = conduits.ResultConduit(jabmod=jabmod)
+            def _init_result_conduit():
+                return conduits.ResultConduit(jabmod=jabmod)
+
+            resconduit, rc_elapsed = profiler.time_block(
+                'result_conduit_init',
+                _init_result_conduit,
+                log_fields={'function': 'conduits.ResultConduit.__init__'}
+            )
             try:
                 msgs['ballot_type'] = find_ballot_type(jabmod) if jabmod else None
             except Exception:
@@ -1146,8 +1153,18 @@ def get_by_id(identifier, resulttype=None):
                     candidate_order = []
 
             from conduits import get_canonical_candidate_order
-            canonical_order = get_canonical_candidate_order(jabmod)
-            consistent_colordict = generate_candidate_colors(canonical_order)
+
+            canonical_order, canonical_elapsed = profiler.time_block(
+                'canonical_order',
+                lambda: get_canonical_candidate_order(jabmod),
+                log_fields={'function': 'conduits.get_canonical_candidate_order'}
+            )
+
+            consistent_colordict, color_elapsed = profiler.time_block(
+                'generate_colors',
+                lambda: generate_candidate_colors(canonical_order),
+                log_fields={'function': 'html_util.generate_candidate_colors'}
+            )
 
             _tb_val = request.args.get('transform_ballots')
             if _tb_val is None:
@@ -1304,7 +1321,19 @@ def get_by_id(identifier, resulttype=None):
 
             if get_election_preview_metadata is not None:
                 try:
-                    og_metadata = get_election_preview_metadata(identifier)
+                    def _preview_metadata():
+                        return get_election_preview_metadata(
+                            identifier,
+                            fileentry=fileentry,
+                            jabmod=jabmod,
+                            resblob=resblob,
+                        )
+
+                    og_metadata, preview_elapsed = profiler.time_block(
+                        'preview_metadata',
+                        _preview_metadata,
+                        log_fields={'function': 'linkpreview.get_election_preview_metadata'}
+                    )
                     msgs['og_title'] = og_metadata['og_title']
                     msgs['og_description'] = og_metadata['og_description']
                     msgs['og_image'] = f"{webenv['base_url']}{og_metadata['og_image']}"
@@ -1318,45 +1347,49 @@ def get_by_id(identifier, resulttype=None):
 
             debug_output = profiler.render_debug_output(debug_intro)
 
-            return render_template('results-index.html',
-                                   abifinput=fileentry['text'],
-                                   abif_id=identifier,
-                                   election_list=election_list,
-                                   transform_ballots=transform_ballots,
-                                   copewinnerstring=resblob.get('copewinnerstring', ''),
-                                   copewinners=resblob.get('copewinners', []),
-                                   dotsvg_html=resblob.get('dotsvg_html', ''),
-                                   error_html=resblob.get('error_html'),
-                                   IRV_dict=resblob.get('IRV_dict', {}),
-                                   IRV_text=resblob.get('IRV_text', ''),
-                                   IRV_candnames=jabmod.get(
-                                       'candidates', {}) if jabmod else {},
-                                   FPTP_candnames=jabmod.get(
-                                       'candidates', {}) if jabmod else {},
-                                   lower_abif_caption="Input",
-                                   lower_abif_text=fileentry['text'],
-                                   msgs=msgs,
-                                   pairwise_dict=resblob.get('pairwise_dict', {}),
-                                   pairwise_html=resblob.get('pairwise_html', ''),
-                                   pairwise_summary_html=resblob.get('pairwise_summary_html', ''),
-                                   resblob=resblob,
-                                   result_types=rtypelist,
-                                   STAR_html=resblob.get('STAR_html', ''),
-                                   approval_result=resblob.get('approval_result', {}),
-                                   approval_text=resblob.get('approval_text', ''),
-                                   approval_notices=resblob.get('approval_notices', []),
-                                   approval_candnames=jabmod.get(
-                                       'candidates', {}) if jabmod else {},
-                                   scorestardict=resblob.get('scorestardict', {}),
-                                   colordict=resblob.get('colordict', {}),
-                                   candidate_order=resblob.get(
-                                       'candidate_order', []),
-                                   webenv=webenv,
-                                   debug_output=debug_output,
-                                   debug_flag=webenv['debugFlag'],
-                                   resulttype=resulttype,
-                                   nav_methods=nav_methods,
-                                   ), 200
+            def _render_results():
+                return render_template('results-index.html',
+                                       abifinput=fileentry['text'],
+                                       abif_id=identifier,
+                                       election_list=election_list,
+                                       transform_ballots=transform_ballots,
+                                       copewinnerstring=resblob.get('copewinnerstring', ''),
+                                       copewinners=resblob.get('copewinners', []),
+                                       dotsvg_html=resblob.get('dotsvg_html', ''),
+                                       error_html=resblob.get('error_html'),
+                                       IRV_dict=resblob.get('IRV_dict', {}),
+                                       IRV_text=resblob.get('IRV_text', ''),
+                                       IRV_candnames=jabmod.get('candidates', {}) if jabmod else {},
+                                       FPTP_candnames=jabmod.get('candidates', {}) if jabmod else {},
+                                       lower_abif_caption="Input",
+                                       lower_abif_text=fileentry['text'],
+                                       msgs=msgs,
+                                       pairwise_dict=resblob.get('pairwise_dict', {}),
+                                       pairwise_html=resblob.get('pairwise_html', ''),
+                                       pairwise_summary_html=resblob.get('pairwise_summary_html', ''),
+                                       resblob=resblob,
+                                       result_types=rtypelist,
+                                       STAR_html=resblob.get('STAR_html', ''),
+                                       approval_result=resblob.get('approval_result', {}),
+                                       approval_text=resblob.get('approval_text', ''),
+                                       approval_notices=resblob.get('approval_notices', []),
+                                       approval_candnames=jabmod.get('candidates', {}) if jabmod else {},
+                                       scorestardict=resblob.get('scorestardict', {}),
+                                       colordict=resblob.get('colordict', {}),
+                                       candidate_order=resblob.get('candidate_order', []),
+                                       webenv=webenv,
+                                       debug_output=debug_output,
+                                       debug_flag=webenv['debugFlag'],
+                                       resulttype=resulttype,
+                                       nav_methods=nav_methods,
+                                       )
+
+            rendered_response, render_elapsed = profiler.time_block(
+                'render_results',
+                _render_results,
+                log_fields={'function': 'flask.render_template'}
+            )
+            return rendered_response, 200
         finally:
             profiler.finalize()
 

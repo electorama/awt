@@ -8,7 +8,7 @@ link previews (Facebook, Slack, Discord, etc.).
 import os
 from pathlib import Path
 from html import escape
-from typing import Optional, Dict, List, Tuple
+from typing import Optional, Dict, List, Tuple, Any
 
 # Optional dependency - check availability at module level
 try:
@@ -529,11 +529,20 @@ def render_generic_preview_png() -> bytes:
     return cairosvg.svg2png(url=str(generic_svg_path))
 
 
-def get_election_preview_metadata(identifier: str) -> Dict[str, str]:
+def get_election_preview_metadata(
+    identifier: str,
+    *,
+    fileentry: Optional[Dict[str, Any]] = None,
+    jabmod: Optional[Dict[str, Any]] = None,
+    resblob: Optional[Dict[str, Any]] = None,
+) -> Dict[str, str]:
     """Get Open Graph metadata for an election.
 
     Args:
         identifier: Election ID
+        fileentry: Optional precached election entry from the catalog.
+        jabmod: Optional pre-parsed jabmod structure for the election.
+        resblob: Optional precomputed results blob (from ResultConduit).
 
     Returns:
         Dict with og_title, og_description, og_image keys
@@ -541,24 +550,33 @@ def get_election_preview_metadata(identifier: str) -> Dict[str, str]:
     Raises:
         ValueError: If election not found
     """
-    # Import here to avoid circular imports
-    from awt import build_election_list, get_fileentry_from_election_list, convert_abif_to_jabmod
-    from conduits import ResultConduit
-    from html_util import get_method_ordering
+    candnames: Dict[str, str]
 
-    election_list = build_election_list()
-    fileentry = get_fileentry_from_election_list(identifier, election_list)
-    if not fileentry:
-        raise ValueError(f"Election not found: {identifier}")
+    if jabmod is None or resblob is None or fileentry is None:
+        # Import here to avoid circular imports
+        from awt import (
+            build_election_list,
+            get_fileentry_from_election_list,
+            convert_abif_to_jabmod,
+        )
+        from conduits import get_complete_resblob_for_linkpreview
 
-    jabmod = convert_abif_to_jabmod(fileentry['text'], cleanws=True)
-    candnames = jabmod.get('candidates', {})
+        election_list = build_election_list()
+        fileentry = get_fileentry_from_election_list(identifier, election_list)
+        if not fileentry:
+            raise ValueError(f"Election not found: {identifier}")
 
-    # Use conduits.py to get all results (same pattern as awt.py election pages)
-    from conduits import get_complete_resblob_for_linkpreview, get_winners_by_method
-    resblob = get_complete_resblob_for_linkpreview(jabmod)
+        if jabmod is None:
+            jabmod = convert_abif_to_jabmod(fileentry['text'], cleanws=True)
+
+        if resblob is None:
+            resblob = get_complete_resblob_for_linkpreview(jabmod)
+
+    candnames = jabmod.get('candidates', {}) if jabmod else {}
+
+    from conduits import get_winners_by_method
+
     winners_by_method = get_winners_by_method(resblob, jabmod)
-
     title_plain = fileentry.get('title') or identifier
 
     # Build description using standardized winner data
