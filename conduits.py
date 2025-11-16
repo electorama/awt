@@ -26,6 +26,51 @@ from dataclasses import dataclass, field
 from typing import Dict, Any
 
 
+def _cached_result(abif_hash, method_name, params, compute_fn):
+    """Return cached result or compute and cache it.
+
+    Uses the result_cache instance from awt (separate from page cache).
+    Falls back to direct computation if cache unavailable.
+
+    Import timing (avoids circular import):
+    1. awt.py imports conduits at module level
+    2. This function is defined but not called yet
+    3. awt.py finishes loading and creates result_cache
+    4. Later, at request time, this function is called
+    5. NOW we import result_cache (it exists)
+
+    Args:
+        abif_hash: SHA256 hash of the ABIF source text (from jabmod['_awt_abif_hash'])
+        method_name: Name of the voting method ('IRV', 'approval', etc.)
+        params: Tuple of parameters that affect the result
+        compute_fn: Function to call if cache miss
+
+    Returns:
+        The computed or cached result
+    """
+    if abif_hash is None:
+        return compute_fn()
+
+    try:
+        from awt import result_cache
+        from flask import has_app_context
+
+        # Only use cache if we're in an app context
+        if not has_app_context():
+            return compute_fn()
+
+        cache_key = f"result:{abif_hash}:{method_name}:{params}"
+
+        result = result_cache.get(cache_key)
+        if result is None:
+            result = compute_fn()
+            result_cache.set(cache_key, result)
+        return result
+    except (ImportError, AttributeError, RuntimeError, KeyError):
+        # result_cache not available or not properly initialized - fallback
+        return compute_fn()
+
+
 def get_canonical_candidate_order(jabmod):
     """
     Get consistent candidate ordering based on FPTP vote totals.
@@ -236,7 +281,14 @@ class ResultConduit:
 
     def update_FPTP_result(self, jabmod) -> "ResultConduit":
         """Add FPTP result to resblob"""
-        fptp_result = FPTP_result_from_abifmodel(jabmod)
+        abif_hash = jabmod.get('_awt_abif_hash')
+        params = ()  # FPTP has no parameters
+
+        fptp_result = _cached_result(
+            abif_hash, 'FPTP', params,
+            lambda: FPTP_result_from_abifmodel(jabmod)
+        )
+
         self.resblob['FPTP_result'] = fptp_result
         self._extract_notices('fptp', fptp_result)
         # self.resblob['FPTP_text'] = get_FPTP_report(jabmod)
@@ -245,19 +297,27 @@ class ResultConduit:
     def update_IRV_result(self, jabmod, include_irv_extra=False, transform_ballots=True) -> "ResultConduit":
         """Add IRV result to resblob, delegating transforms/notices to abiflib."""
 
-        # Backwards compatibility with abiflib v0.32.0
-        try:
-            # TODO: rename to "IRV_result"
-            # Build IRV result (handles optional transform + notices)
-            irv_result = IRV_result_from_abifmodel(jabmod, transform_ballots=transform_ballots, include_irv_extra=include_irv_extra)
-            self.resblob['IRV_result'] = irv_result
-            self.resblob['IRV_dict'] = irv_result['irv_dict']
-        except TypeError as e:
-            import datetime
-            print(f" ------------ [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] "
-                  f"Upgrade abiflib to v0.32.1 or later for IRVextra support.")
-            self.resblob['IRV_dict'] = IRV_dict_from_jabmod(jabmod)
-            self.resblob['IRV_result'] = IRV_result_from_abifmodel(jabmod, transform_ballots=transform_ballots)
+        abif_hash = jabmod.get('_awt_abif_hash')
+        params = (transform_ballots, include_irv_extra)
+
+        def _compute_irv():
+            # Backwards compatibility with abiflib v0.32.0
+            try:
+                # Build IRV result (handles optional transform + notices)
+                irv_result = IRV_result_from_abifmodel(jabmod, transform_ballots=transform_ballots, include_irv_extra=include_irv_extra)
+                return irv_result
+            except TypeError as e:
+                import datetime
+                print(f" ------------ [{datetime.datetime.now():%d/%b/%Y %H:%M:%S}] "
+                      f"Upgrade abiflib to v0.32.1 or later for IRVextra support.")
+                irv_result = IRV_result_from_abifmodel(jabmod, transform_ballots=transform_ballots)
+                if 'irv_dict' not in irv_result:
+                    irv_result['irv_dict'] = IRV_dict_from_jabmod(jabmod)
+                return irv_result
+
+        irv_result = _cached_result(abif_hash, 'IRV', params, _compute_irv)
+        self.resblob['IRV_result'] = irv_result
+        self.resblob['IRV_dict'] = irv_result.get('irv_dict', IRV_dict_from_jabmod(jabmod))
 
         # Convert sets to lists for JSON serialization in templates
         irv_dict = self.resblob['IRV_dict']
@@ -294,7 +354,13 @@ class ResultConduit:
 
     def update_pairwise_result(self, jabmod, transform_ballots: bool = False) -> "ResultConduit":
         # Get pairwise result with notices first
-        pairwise_result = pairwise_result_from_abifmodel(jabmod, transform_ballots=transform_ballots)
+        abif_hash = jabmod.get('_awt_abif_hash')
+        params = (transform_ballots,)
+
+        pairwise_result = _cached_result(
+            abif_hash, 'pairwise', params,
+            lambda: pairwise_result_from_abifmodel(jabmod, transform_ballots=transform_ballots)
+        )
         pairwise_matrix = pairwise_result['pairwise_matrix']
 
         # Use the same pairwise matrix for copecount to ensure consistency
@@ -376,11 +442,28 @@ class ResultConduit:
         return self
 
     def update_STAR_result(self, jabmod, colordict=None) -> "ResultConduit":
+        abif_hash = jabmod.get('_awt_abif_hash')
+
         scorestar = {}
-        self.resblob['STAR_html'] = html_score_and_star(jabmod)
-        scoremodel = STAR_result_from_abifmodel(jabmod)
+
+        # Cache STAR HTML
+        self.resblob['STAR_html'] = _cached_result(
+            abif_hash, 'STAR_html', (),
+            lambda: html_score_and_star(jabmod)
+        )
+
+        # Cache STAR result
+        scoremodel = _cached_result(
+            abif_hash, 'STAR_result', (),
+            lambda: STAR_result_from_abifmodel(jabmod)
+        )
         scorestar['scoremodel'] = scoremodel
-        stardict = scaled_scores(jabmod, target_scale=50)
+
+        # Cache scaled scores
+        stardict = _cached_result(
+            abif_hash, 'STAR_scaled', (50,),
+            lambda: scaled_scores(jabmod, target_scale=50)
+        )
         from awt import add_html_hints_to_stardict
         scorestar['starscale'] = \
             add_html_hints_to_stardict(
@@ -407,9 +490,20 @@ class ResultConduit:
         When transform_ballots is True and source is not choose_many, also
         record a transformed ABIF for the Approval method accordion.
         """
-        approval_result = approval_result_from_abifmodel(jabmod)
+        abif_hash = jabmod.get('_awt_abif_hash')
+        params = ()  # Approval has no parameters
+
+        approval_result = _cached_result(
+            abif_hash, 'approval_result', params,
+            lambda: approval_result_from_abifmodel(jabmod)
+        )
         self.resblob['approval_result'] = approval_result
-        self.resblob['approval_text'] = get_approval_report(jabmod)
+
+        approval_text = _cached_result(
+            abif_hash, 'approval_text', params,
+            lambda: get_approval_report(jabmod)
+        )
+        self.resblob['approval_text'] = approval_text
         # Extract notices using consistent method
         self._extract_notices('approval', approval_result)
         # Keep backward compatibility

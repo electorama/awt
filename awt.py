@@ -406,6 +406,23 @@ app.config['CACHE_DEFAULT_TIMEOUT'] = int(
 
 cache.init_app(app)
 
+# --- Result Cache Initialization (separate from page cache) ---
+# This cache stores computation results (IRV, STAR, etc.) independently from
+# HTTP response caching. Always uses FileSystemCache for disk persistence.
+# Derives directory from main cache directory by appending '-results'.
+result_cache = Cache()
+result_cache_dir = app.config['CACHE_DIR'] + '-results'
+try:
+    os.makedirs(result_cache_dir, exist_ok=True)
+except Exception:
+    pass
+
+result_cache.init_app(app, config={
+    'CACHE_TYPE': 'flask_caching.backends.FileSystemCache',
+    'CACHE_DIR': result_cache_dir,
+    'CACHE_DEFAULT_TIMEOUT': app.config.get('CACHE_DEFAULT_TIMEOUT', AWT_DEFAULT_CACHE_TIMEOUT)
+})
+
 # Enable passive SQLite request logging by default when using FileSystemCache
 if app.config.get('CACHE_TYPE') == 'flask_caching.backends.FileSystemCache':
     try:
@@ -723,6 +740,8 @@ def list_all_tags():
             f"[DEBUG] Entering purge logic for path: {canonical_path}")
         from cache_awt import purge_cache_entries_by_path
         purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Note: result_cache persists across individual election purges
+        # Use --cache-purge to clear all result cache entries
         # Redirect to same URL without ?action=purge
         return redirect(url_for(request.endpoint, **args))
 
@@ -770,6 +789,8 @@ def list_elections(tag=None):
             f"[DEBUG] Entering purge logic for path: {canonical_path}")
         from cache_awt import purge_cache_entries_by_path
         purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Note: result_cache persists across individual election purges
+        # Use --cache-purge to clear all result cache entries
         # Redirect to same URL without ?action=purge
         return redirect(url_for(request.endpoint, **args))
 
@@ -888,6 +909,8 @@ def browse_elections():
         logging.getLogger('awt.cache').info(
             f"[DEBUG] Entering purge logic for path: {canonical_path}")
         purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Note: result_cache persists across individual election purges
+        # Use --cache-purge to clear all result cache entries
         # Redirect to same URL without ?action=purge
         return redirect(url_for(request.endpoint, **args))
     msgs = {}
@@ -925,6 +948,8 @@ def id_no_identifier():
             f"[DEBUG] Entering purge logic for path: {canonical_path}")
         from cache_awt import purge_cache_entries_by_path
         purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Note: result_cache persists across individual election purges
+        # Use --cache-purge to clear all result cache entries
         # Redirect to same URL without ?action=purge
         return redirect(url_for(request.endpoint, **args))
     msgs = {}
@@ -994,6 +1019,8 @@ def get_by_id(identifier, resulttype=None):
             f"[DEBUG] Entering purge logic for path: {canonical_path}")
         from cache_awt import purge_cache_entries_by_path
         purge_cache_entries_by_path(cache, canonical_path, cache_dir)
+        # Note: result_cache persists across individual election purges
+        # Use --cache-purge to clear all result cache entries
         # Redirect to same URL without ?action=purge
         return redirect(url_for(request.endpoint, identifier=identifier, resulttype=resulttype, **args))
     # Only cache normal GET requests
@@ -1084,6 +1111,12 @@ def get_by_id(identifier, resulttype=None):
                 error_html = exc.message
                 profiler.debug_checkpoint("00004", f"convert_abif_to_jabmod failed: {exc}")
             else:
+                # Add ABIF hash for result caching
+                source_text = fileentry.get('text', '')
+                if source_text:
+                    import hashlib
+                    jabmod['_awt_abif_hash'] = hashlib.sha256(source_text.encode('utf-8')).hexdigest()
+
                 if fileentry.get('desc'):
                     jabmod['desc'] = fileentry['desc']
                 if fileentry.get('title'):
@@ -1461,6 +1494,10 @@ def awt_post():
         abifmodel = None
         error_html = e.message
     if abifmodel:
+        # Add ABIF hash for result caching
+        import hashlib
+        abifmodel['_awt_abif_hash'] = hashlib.sha256(abifinput.encode('utf-8')).hexdigest()
+
         if request.form.get('include_dotsvg'):
             rtypelist.append('dot')
             copecount = full_copecount_from_abifmodel(abifmodel)
@@ -1689,15 +1726,34 @@ def main():
 
     cache.init_app(app)
 
-    # Optional: purge cache at startup
+    # Also initialize result_cache (same as above, always uses FileSystemCache)
+    # Derive result cache directory from configured cache directory
+    result_cache_dir = app.config['CACHE_DIR'] + '-results'
+    try:
+        os.makedirs(result_cache_dir, exist_ok=True)
+    except Exception:
+        pass
+
+    result_cache.init_app(app, config={
+        'CACHE_TYPE': 'flask_caching.backends.FileSystemCache',
+        'CACHE_DIR': result_cache_dir,
+        'CACHE_DEFAULT_TIMEOUT': app.config['CACHE_DEFAULT_TIMEOUT']
+    })
+
+    # Optional: purge both page and result caches at startup
+    # Note: Individual election purges (?action=purge) do NOT clear result_cache
+    # Only --cache-purge clears result cache (expensive elections like SF 2024 mayor
+    # persist across individual purges)
     if args.cache_purge:
         try:
             cache.clear()
+            result_cache.clear()
             cache_dir = app.config.get('CACHE_DIR')
             if cache_dir:
-                print(f"[awt.py] Cache purged (dir={cache_dir})")
+                print(f"[awt.py] Page cache purged (dir={cache_dir})")
+                print(f"[awt.py] Result cache purged (dir={result_cache_dir})")
             else:
-                print("[awt.py] Cache purged")
+                print("[awt.py] Caches purged")
         except Exception as e:
             print(f"[awt.py] Cache purge failed: {e}")
 
