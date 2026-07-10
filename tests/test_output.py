@@ -285,3 +285,19 @@ def test_debug_tnexample_structure(dummy):
     margin_elements = soup.find_all(string=lambda text: text and "margin" in text)
     print(f"Elements with 'margin': {[elem.strip() for elem in margin_elements]}")
     print("========================\n")
+
+
+def test_star_finalist_detail_marks_tally_winner():
+    """The first scoring finalist is not necessarily the runoff winner."""
+    if BeautifulSoup is None:
+        pytest.skip("BeautifulSoup4 is required for HTML output tests")
+
+    html = get_html_from_awt(
+        url_path="/id/TNexampleSTARdiff/STAR?winner_regression=1")
+    soup = BeautifulSoup(html, "html.parser")
+    detail = soup.select_one("#STAR-section .flex-container > div:last-child")
+    winner_marker = detail.find(string=lambda text: text and "winner" in text)
+
+    assert winner_marker is not None
+    assert winner_marker.parent.find("b").get_text(strip=True) == \
+        "Chattanooga, TN"
